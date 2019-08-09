@@ -29,6 +29,11 @@ Our tick loop is intended to segregate object initialization, functional actions
 4) Scheduler updates priorities
     - For remaining processes, see if we have enough non-CPU resources to run them.  If so, increment its priority (in the metadata)
 
+## OS Notes
+
+### Priority
+
+Anything at or above 1000 stays where it is.  Nothing can be promoted above 1000.  This is used for processes that _need_ to run at or near the beginning of every tick.
 
 ## Goals
 
