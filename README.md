@@ -28,3 +28,20 @@ Our tick loop is intended to segregate object initialization, functional actions
 
 4) Scheduler updates priorities
     - For remaining processes, see if we have enough non-CPU resources to run them.  If so, increment its priority (in the metadata)
+
+
+## Goals
+
+### MVP
+
+- Able to add processes
+- Able to run processes
+- Able to add too many processes for one tick and have them run over the course of multiple ticks
+
+
+### V1
+
+- Able to add subprocesses
+- Able to postpone running processes because we don't have enough resources
+    - Need to be able to assign different amounts of resources based upon different criteria.  Initially just different resources per class type.  For example, gatherers vs combat.  Eventually we need to do that on the room AND role level
+- Able to have processes sleep
