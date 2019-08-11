@@ -22,6 +22,8 @@ var processTypeMap = {
     "BootStrapper": BootStrapper
 };
 
+var DEBUGGING = true;
+
 class Scheduler {
     constructor () {
         if( Memory.processes === undefined || 
@@ -63,17 +65,27 @@ class Scheduler {
             else {
                 var activeProcess = new processTypeMap[processClass](activeProcessMetadata['pid'], this);
         
-                try {
+                if(DEBUGGING) {
                     activeProcess.update();
                     var processResult = activeProcess.finish();
     
                     if(processResult == 'exit') {
                         this.removeProcess(activeProcessMetadata['pid']);
                     }
-                } 
-                catch (error) {
-                    console.log('Error running ' + activeProcess['pid']);
-                    console.log(error);
+                }
+                else {
+                    try {
+                        activeProcess.update();
+                        var processResult = activeProcess.finish();
+        
+                        if(processResult == 'exit') {
+                            this.removeProcess(activeProcessMetadata['pid']);
+                        }
+                    } 
+                    catch (error) {
+                        console.log('!!!!!Error running ' + activeProcess['pid']);
+                        console.log(error);
+                    }
                 }
             }
 

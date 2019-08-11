@@ -92,3 +92,4 @@ Processes need to keep track of their own created child processes.  This is used
 ## Things we need
 
 - Colonies need to return sources as being available only if there's an open spot next to them
+- Need a generic way of creating states, transitions, etc

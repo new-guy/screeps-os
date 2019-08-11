@@ -6,6 +6,7 @@ require('constants');
 //Creep abilities
 require('Targets');
 require('Mining');
+require('Upgrading');
 
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
@@ -62,6 +63,7 @@ function initCreeps() {
     for(var creepName in Game.creeps) {
         var creep = Game.creeps[creepName];
 
+        creep.hasNoEnergy = (creep.carry[RESOURCE_ENERGY] === 0);
         creep.hasEnergy = (creep.carry[RESOURCE_ENERGY] > 0);
         creep.hasFullEnergy = (creep.carry[RESOURCE_ENERGY] === creep.carryCapacity);
     }

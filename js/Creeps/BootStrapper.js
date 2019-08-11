@@ -5,29 +5,36 @@ class BootStrapper extends CreepProcess {
         super(...args);
     }
 
-    update() {
-        if(super.update() == 'exit') {
-            return 'exit';
+    updateStateTransitions() {
+        var state = this.creep.memory.state;
+        if(state == undefined) {
+            state = 'mineEnergy';
         }
 
-        if(this.creep.hasFullEnergy) {
-            this.creep.say('Ready');
+        if(state === 'mineEnergy') {
+            if(this.creep.hasFullEnergy) {
+                state = 'work'
+            }
         }
 
-        else {
-            this.creep.say('NeedEng');
+        else if(state === 'work') {
+            if(this.creep.hasNoEnergy) {
+                state = 'mineEnergy'
+            }
+        }
 
+        this.creep.memory.state = state;
+    }
+
+    performStateActions() {
+        var state = this.creep.memory.state;
+        if(state === 'mineEnergy') {
             this.mineEnergy();
         }
-        //If no energy
-            //Go mining
-        //If energy
-            //Save the controller <- allow this to override current targets
 
-            //Unless no target
-                //Fill Extensions
-                //Build Stuff
-                //
+        else if(state === 'work') {
+            this.work();
+        }
     }
 
     mineEnergy() {
@@ -56,6 +63,31 @@ class BootStrapper extends CreepProcess {
                 this.creep.say('NoSrc');
             }
         }
+    }
+
+    work() {
+        var targetRoom = Game.rooms[this.creep.memory.targetRoom];
+
+        if(targetRoom === undefined) {
+            this.creep.moveTo(new RoomPosition(24, 24, this.creep.targetRoom));
+        }
+
+        else if(targetRoom.controller !== undefined && (targetRoom.controller.needsSaving() || this.creep.memory.savingRoom === true))
+        {
+            this.creep.say("SaveCont");
+            this.creep.upgradeThisController(targetRoom.controller);
+        }
+
+        else {
+            this.creep.say('Upgrade');
+            this.creep.upgradeThisController(targetRoom.controller);
+        }
+        //Save the controller <- allow this to override current targets
+
+        //Unless no target
+            //Fill Extensions
+            //Build Stuff
+            //Upgrade controller
     }
 }
 

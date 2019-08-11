@@ -18,8 +18,17 @@ class CreepProcess extends Process {
         }
 
         else {
-            this.creep.say('sup')
+            this.updateStateTransitions();
+            this.performStateActions();
         }
+    }
+
+    updateStateTransitions() {
+        this.creep.say('nostates');
+    }
+
+    performStateActions() {
+
     }
 
     processShouldDie() {
