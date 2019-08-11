@@ -2,7 +2,10 @@
 //Initialize the scheduler.  Load PID metadata from memory & sort it
 //Run main scheduler loop
 require('constants');
+
+//Creep abilities
 require('Targets');
+require('Mining');
 
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
@@ -60,5 +63,6 @@ function initCreeps() {
         var creep = Game.creeps[creepName];
 
         creep.hasEnergy = (creep.carry[RESOURCE_ENERGY] > 0);
+        creep.hasFullEnergy = (creep.carry[RESOURCE_ENERGY] === creep.carryCapacity);
     }
 }

@@ -10,7 +10,7 @@ class BootStrapper extends CreepProcess {
             return 'exit';
         }
 
-        if(this.creep.hasEnergy) {
+        if(this.creep.hasFullEnergy) {
             this.creep.say('Ready');
         }
 
@@ -31,8 +31,12 @@ class BootStrapper extends CreepProcess {
     }
 
     mineEnergy() {
-        if(this.creep.hasTargetOfClass('Source')) {
+        if(this.creep.hasTargetOfClass(Source)) {
             this.creep.say('HasSrc');
+
+            var targetSource = this.creep.getTarget();
+
+            this.creep.harvestFrom(targetSource);
         }
 
         else {

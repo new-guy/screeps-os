@@ -41,9 +41,7 @@ Creep.prototype.hasTargetOfClass = function(targetClass)
     else {
         var target = this.getTarget();
 
-        console.log(target.constructor.name);
-
-        return target.constructor.name === targetClass;
+        return target instanceof targetClass;
     }
 }
 
