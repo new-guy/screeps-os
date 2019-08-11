@@ -5,7 +5,10 @@ class CreepProcess extends Process {
         super(...args);
 
         this.creep = Game.creeps[this.memory.creepName];
-        this.spawningColony = Game.colonies[this.creep.memory.spawningColonyName];
+
+        if(this.creep !== undefined) {
+            this.spawningColony = Game.colonies[this.creep.memory.spawningColonyName];
+        }
     }
 
     update() {

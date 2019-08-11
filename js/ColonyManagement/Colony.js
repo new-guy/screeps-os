@@ -94,6 +94,7 @@ class Colony {
 
                 var pid = 'creep|' + creepName;
                 scheduler.addProcess(pid, creepProcessClass, {'creepName': creepName}, creepPriority);
+                this.availableSpawns.shift();
             }
 
             else {

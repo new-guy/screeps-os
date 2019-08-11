@@ -82,12 +82,6 @@ class BootStrapper extends CreepProcess {
             this.creep.say('Upgrade');
             this.creep.upgradeThisController(targetRoom.controller);
         }
-        //Save the controller <- allow this to override current targets
-
-        //Unless no target
-            //Fill Extensions
-            //Build Stuff
-            //Upgrade controller
     }
 }
 

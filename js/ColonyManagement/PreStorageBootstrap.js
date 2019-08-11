@@ -1,5 +1,7 @@
 const Process = require('Process');
 
+var BOOTSTRAPPERS_TO_SPAWN = 5;
+
 class PreStorageBootstrap extends Process {
     constructor (...args) {
         super(...args);
@@ -13,28 +15,20 @@ class PreStorageBootstrap extends Process {
             return 'exit';
         }
 
-
-        // this.colony = Game.colonies[this.memory.colonyName];
-        // this.creepName = this.memory.creepName;
-        // this.creepBodyType = this.memory.creepBodyType;
-        // this.creepProcessClass = this.memory.creepProcessClass;
-
-        var data = {
-            'colonyName': this.memory.spawnColonyName, 
-            'creepName': 'bootstrapper|' + this.targetRoom.name,
-            'creepBodyType': 'BootStrapper',
-            'creepProcessClass': 'BootStrapper',
-            'creepMemory': {
-                'targetRoom': this.targetRoom.name
-            },
-            'creepPriority': NECESSARY_CREEPS_PRIORITY
-        };
-        var spawnPID = 'spawnPreStorBoot|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
-        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
-
-        //All of the spawner processes that are created need to be children of this process
-        //Ensure N processes for spawning bootstrapper creeps.  
-            //It should be a generic SpawnCreep process that takes in the body of the creep and its data, then feeds that to a colony's spawn process
+        for(var i = 0; i < BOOTSTRAPPERS_TO_SPAWN; i++) {
+            var data = {
+                'colonyName': this.memory.spawnColonyName, 
+                'creepName': 'bootstrapper|' + this.targetRoom.name + '|' + i,
+                'creepBodyType': 'BootStrapper',
+                'creepProcessClass': 'BootStrapper',
+                'creepMemory': {
+                    'targetRoom': this.targetRoom.name
+                },
+                'creepPriority': NECESSARY_CREEPS_PRIORITY
+            };
+            var spawnPID = 'spawnPreStorBoot|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName + '|' + i;
+            this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
+        }
     }
 
     processShouldDie() {
