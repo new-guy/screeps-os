@@ -2,7 +2,7 @@
 
 The overarching goal here is to build an AI that is driven around running individual processes.  These individual processes will ideally be broken up into small chunks of logic that can reasonably be run independently of one another.  Additionally, we will decide whether or not to run each process based upon the resources available to us - both in terms of CPU and in terms of in-game resources such as Energy or Minerals.
 
-## Tick Loop
+## Tick Loop - sorta out of date
 
 Our tick loop is intended to segregate object initialization, functional actions, and state storage into separate stages.  The tick loop looks something like:
 
@@ -30,6 +30,12 @@ Our tick loop is intended to segregate object initialization, functional actions
     - For remaining processes, see if we have enough non-CPU resources to run them.  If so, increment its priority (in the metadata)
 
 ## OS Notes
+
+### Creating a new process
+
+- Copy the ExampleProcess.js class
+- Give it an exit condition
+- If it is going to create any child processes, use the ensureChildProcess command
 
 ### Priority
 
