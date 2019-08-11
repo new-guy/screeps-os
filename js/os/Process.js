@@ -32,10 +32,6 @@ class Process {
         }
     }
 
-    saveMemory() {
-        Memory.processes[this.pid]['data'] = this.memory;
-    }
-
     ensureChildProcess(pid, processClass, data, priority) {
         this.scheduler.ensureProcessExists(pid, processClass, data, priority);
 
@@ -46,6 +42,10 @@ class Process {
         if(!this.memory.children.includes(pid)) {
             this.memory.children.push(pid);
         }
+    }
+
+    saveMemory() {
+        Memory.processes[this.pid]['data'] = this.memory;
     }
 }
 

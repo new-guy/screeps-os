@@ -15,7 +15,9 @@ class PreStorageBootstrap extends Process {
             return 'exit';
         }
 
-        //All of the spawner processes that are created need to be children of this process - store that info in the child process.
+        //All of the spawner processes that are created need to be children of this process
+        //Ensure N processes for spawning bootstrapper creeps.  
+            //It should be a generic SpawnCreep process that takes in the body of the creep and its data, then feeds that to a colony's spawn process
     }
 
     processShouldDie() {
