@@ -9,6 +9,8 @@ const PreStorageBootstrap = require('PreStorageBootstrap');
 
 const SpawnCreep = require('SpawnCreep');
 
+const BootStrapper = require('BootStrapper');
+
 var processTypeMap = {
     "Process": Process,
     "SingleTickProcess": SingleTickProcess,
@@ -16,7 +18,8 @@ var processTypeMap = {
     "ColonyManager": ColonyManager,
     "PreStorageBootstrap": PreStorageBootstrap,
     "SingleTickChildTest": SingleTickChildTest,
-    "SpawnCreep": SpawnCreep
+    "SpawnCreep": SpawnCreep,
+    "BootStrapper": BootStrapper
 };
 
 class Scheduler {
@@ -43,7 +46,7 @@ class Scheduler {
     update () {
         //For each process, create a new object with that process type, update it, then finish it
         //If it finishes, remove its process metadata
-        console.log('#sched');
+        console.log('#######sched');
 
         while(this.shouldContinueProcessing()) {
             var activeProcessMetadata = this.sortedProcesses[this.programCounter]['metadata'];
@@ -118,6 +121,10 @@ class Scheduler {
 
             if(processMetadata.priority > newProcessData['metadata'].priority) {
                 this.sortedProcesses.splice(1, 0, newProcessData);
+
+                if(i <= this.programCounter) {
+                    this.programCounter += 1;
+                }
                 break;
             }
         }

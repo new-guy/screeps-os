@@ -87,3 +87,8 @@ Processes need to keep track of their own created child processes.  This is used
 ### Building Creation
 
 - Put the building creation logic from the old AI in here.
+
+
+## Things we need
+
+- Colony objects need memory getters and setters

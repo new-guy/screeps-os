@@ -7,8 +7,9 @@ class SpawnCreep extends Process {
         this.colony = Game.colonies[this.memory.colonyName];
         this.creepName = this.memory.creepName;
         this.creepBodyType = this.memory.creepBodyType;
-        this.creepProcessType = this.memory.creepProcessType;
+        this.creepProcessClass = this.memory.creepProcessClass;
         this.creepMemory = this.memory.creepMemory;
+        this.creepPriority = this.memory.creepPriority;
     }
 
     update() {
@@ -21,7 +22,7 @@ class SpawnCreep extends Process {
         }
 
         else if(this.colony.spawnIsAvailable()) {
-            this.colony.spawnCreep(this.creepName, this.creepBodyType, this.creepProcessType);
+            this.colony.spawnCreep(this.creepName, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.creepPriority, this.scheduler);
         }
     }
 

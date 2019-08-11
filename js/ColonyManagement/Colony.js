@@ -4,7 +4,7 @@
 //Needs a "homeroom" object
 
 var bodyTypes = {
-    "bootstrapper": [WORK, CARRY, MOVE, MOVE]
+    "BootStrapper": [WORK, CARRY, MOVE, MOVE]
 }
 
 class Colony {
@@ -38,7 +38,7 @@ class Colony {
         return (this.availableSpawns.length > 0);
     }
 
-    spawnCreep(creepName, creepBodyType, creepProcessType) {
+    spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, scheduler) {
         var spawn = this.availableSpawns[0];
 
         if(spawn === undefined) {
@@ -47,8 +47,20 @@ class Colony {
 
         else {
             var body = bodyTypes[creepBodyType];
-            
-            console.log('Would spawn creep ' + creepName);
+            //Try to spawn.  If we can, add the process to the scheduler.  If not, print why
+            var spawnResult = spawn.spawnCreep(body, creepName, {memory: creepMemory});
+
+            if(spawnResult === OK) {
+                console.log('Spawning creep ' + creepName);
+
+                var pid = 'creep|' + creepName;
+                scheduler.addProcess(pid, creepProcessClass, {'creepName': creepName}, creepPriority);
+            }
+
+            else {
+                console.log('Error spawning creep ' + spawnResult);
+                console.log('Creep Dump: ' + creepName + ' ' + body);
+            }
         }
     }
 }
