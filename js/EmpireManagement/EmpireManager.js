@@ -7,6 +7,10 @@ class EmpireManager extends Process {
 
     update() {
         console.log('Empire ' + this.pid);
+
+        for(var roomName in Game.empire.rooms) {
+            console.log('Room ' + roomName);
+        }
     }
     //Need an update function
 

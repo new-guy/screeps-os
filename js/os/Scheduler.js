@@ -60,7 +60,7 @@ class Scheduler {
     }
 
     shouldContinueProcessing() {
-        console.log(this.programCounter);
+        console.log("#PC: " + this.programCounter);
         return this.programCounter < this.sortedProcessMetadata.length;
     }
 
