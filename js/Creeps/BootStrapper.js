@@ -1,6 +1,6 @@
-const Creep = require('Creep');
+const CreepProcess = require('CreepProcess');
 
-class BootStrapper extends Creep {
+class BootStrapper extends CreepProcess {
     constructor (...args) {
         super(...args);
     }
@@ -8,6 +8,49 @@ class BootStrapper extends Creep {
     update() {
         if(super.update() == 'exit') {
             return 'exit';
+        }
+
+        if(this.creep.hasEnergy) {
+            this.creep.say('Ready');
+        }
+
+        else {
+            this.creep.say('NeedEng');
+
+            this.mineEnergy();
+        }
+        //If no energy
+            //Go mining
+        //If energy
+            //Save the controller <- allow this to override current targets
+
+            //Unless no target
+                //Fill Extensions
+                //Build Stuff
+                //
+    }
+
+    mineEnergy() {
+        if(this.creep.hasTargetOfClass('Source')) {
+            this.creep.say('HasSrc');
+        }
+
+        else {
+            if(this.creep.hasTarget()) {
+                this.creep.clearTarget();
+            }
+
+            var activeSources = this.spawningColony.activeSources;
+
+            var nearestSource = this.creep.pos.findClosestByPath(activeSources);
+
+            if(nearestSource !== null) {
+                this.creep.setTarget(nearestSource);
+            }
+
+            else {
+                this.creep.say('NoSrc');
+            }
         }
     }
 }

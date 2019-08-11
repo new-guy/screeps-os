@@ -63,11 +63,17 @@ class Scheduler {
             else {
                 var activeProcess = new processTypeMap[processClass](activeProcessMetadata['pid'], this);
         
-                activeProcess.update();
-                var processResult = activeProcess.finish();
-
-                if(processResult == 'exit') {
-                    this.removeProcess(activeProcessMetadata['pid']);
+                try {
+                    activeProcess.update();
+                    var processResult = activeProcess.finish();
+    
+                    if(processResult == 'exit') {
+                        this.removeProcess(activeProcessMetadata['pid']);
+                    }
+                } 
+                catch (error) {
+                    console.log('Error running ' + activeProcess['pid']);
+                    console.log(error);
                 }
             }
 

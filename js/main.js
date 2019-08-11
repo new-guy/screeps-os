@@ -2,6 +2,7 @@
 //Initialize the scheduler.  Load PID metadata from memory & sort it
 //Run main scheduler loop
 require('constants');
+require('Targets');
 
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
@@ -16,6 +17,7 @@ module.exports.loop = function() {
 
 function initCustomObjects() {
     initColonies();
+    initCreeps();
 }
 
 function initColonies() {
@@ -37,6 +39,7 @@ function initNewColonies() {
         if(room.controller !== undefined && room.controller.my && room.controller.level > 0) {
             if(Memory.colonies[roomName] === undefined) {
                 Memory.colonies[roomName] = {
+                    'name': roomName,
                     'homeRoomName': roomName
                 }
             }
@@ -48,6 +51,14 @@ function initGameColonies() {
     Game.colonies = {};
 
     for(var roomName in Memory.colonies) {
-        Game.colonies[roomName] = new Colony(Memory.colonies[roomName]);
+        Game.colonies[roomName] = new Colony(roomName);
+    }
+}
+
+function initCreeps() {
+    for(var creepName in Game.creeps) {
+        var creep = Game.creeps[creepName];
+
+        creep.hasEnergy = (creep.carry[RESOURCE_ENERGY] > 0);
     }
 }

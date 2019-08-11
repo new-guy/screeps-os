@@ -8,34 +8,70 @@ var bodyTypes = {
 }
 
 class Colony {
-    constructor(data) {
-        this.homeRoom = Game.rooms[data['homeRoomName']];
+    /*
+    this.homeRoom = Room
+    this.rooms = {roomName: Room}
 
+    this.availableSpawns = [];
+    this.timeTillAvailableSpawn = 0;
+    this.activeSources = [Source]
+    this.depletedSources = [Source]
+    */
+
+    constructor(name) {
+        this.name = name;
+        this.memory = Memory.colonies[name];
+        this.homeRoom = Game.rooms[this.memory['homeRoomName']];
+        this.rooms = {}
+        this.rooms[this.homeRoom.name] = this.homeRoom;
         this.initSpawnInfo();
+        this.initMiningInfo();
     }
 
     initSpawnInfo() {
         var spawns = this.homeRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
 
         this.availableSpawns = [];
-        this.timeTillWeCanSpawn = 1000;
+        this.timeTillAvailableSpawn = 1000;
         //How long till we can spawn, how many can we spawn?
         for(var i = 0; i < spawns.length; i++) {
             var spawn = spawns[i];
 
             if(spawn.spawning === null) {
-                this.timeTillWeCanSpawn = 0;
+                this.timeTillAvailableSpawn = 0;
                 this.availableSpawns.push(spawn);
             }
 
-            else if (this.timeTillWeCanSpawn > spawn.spawning.remainingTime) {
-                this.timeTillWeCanSpawn = spawn.spawning.remainingTime;
+            else if (this.timeTillAvailableSpawn > spawn.spawning.remainingTime) {
+                this.timeTillAvailableSpawn = spawn.spawning.remainingTime;
             }
         }
     }
 
     spawnIsAvailable() {
         return (this.availableSpawns.length > 0);
+    }
+
+    initMiningInfo() {
+        this.activeSources = [];
+        this.depletedSources = [];
+
+        for(var roomName in this.rooms) {
+            var room = this.rooms[roomName];
+            var sourcesInRoom = room.find(FIND_SOURCES);
+
+            for(var i = 0; i < sourcesInRoom.length; i++) {
+                var source = sourcesInRoom[i];
+
+                if(source.energy > 0) {
+                    this.activeSources.push(source);
+                }
+
+                else {
+                    this.depletedSources.push(source);
+                }
+            }
+        }
     }
 
     spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, scheduler) {
@@ -48,6 +84,9 @@ class Colony {
         else {
             var body = bodyTypes[creepBodyType];
             //Try to spawn.  If we can, add the process to the scheduler.  If not, print why
+
+            creepMemory['spawningColonyName'] = this.name;
+
             var spawnResult = spawn.spawnCreep(body, creepName, {memory: creepMemory});
 
             if(spawnResult === OK) {

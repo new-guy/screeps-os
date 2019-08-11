@@ -1,10 +1,11 @@
 const Process = require('Process');
 
-class Creep extends Process {
+class CreepProcess extends Process {
     constructor (...args) {
         super(...args);
 
         this.creep = Game.creeps[this.memory.creepName];
+        this.spawningColony = Game.colonies[this.creep.memory.spawningColonyName];
     }
 
     update() {
@@ -32,4 +33,4 @@ class Creep extends Process {
     }
 }
 
-module.exports = Creep;
+module.exports = CreepProcess;
