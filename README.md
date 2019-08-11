@@ -69,3 +69,7 @@ Each IPC object should have an array with a list of PIDs that use the IPC object
     - Need to be able to assign different amounts of resources based upon different criteria.  Initially just different resources per class type.  For example, gatherers vs combat.  Eventually we need to do that on the Colony AND role/objective (meaning attack, defend, economy) level
 - Able to have processes sleep
 - Able to sleep the BootstrapSpawner prcess when there are no available spawners in the Colony.
+
+### Building Creation
+
+- Put the building creation logic from the old AI in here.

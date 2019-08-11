@@ -1,12 +1,12 @@
 const Process = require('Process');
 
-class SingleTickProcess extends Process {
+class ColonyManager extends Process {
     constructor (...args) {
         super(...args);
     }
 
     update() {
-        console.log('Update ' + this.pid);
+        console.log('Colony ' + this.pid + ' HomeRoom: ' + this.memory.homeRoom);
     }
     //Need an update function
 
@@ -15,8 +15,8 @@ class SingleTickProcess extends Process {
 
         console.log('Finish ' + this.pid);
 
-        return 'exit';
+        return 'continue';
     }
 }
 
-module.exports = SingleTickProcess;
+module.exports = ColonyManager;

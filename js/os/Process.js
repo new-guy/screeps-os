@@ -1,9 +1,10 @@
 class Process {
-    constructor (pid) {
+    constructor (pid, scheduler) {
         //Take in a PID string as a constructor
         //Load Memory.processes[PID] into this.memory
         this.pid = pid;
-        this.memory = Memory.processes[pid];
+        this.memory = Memory.processes[pid]['data'];
+        this.scheduler = scheduler;
     }
 
     update() {
@@ -12,7 +13,7 @@ class Process {
     //Need an update function
 
     finish() {
-        Memory.processes[this.pid] = this.memory;
+        Memory.processes[this.pid]['data'] = this.memory;
 
         console.log('Finish ' + this.pid);
 

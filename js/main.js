@@ -14,20 +14,20 @@ module.exports.loop = function() {
 
 function initCustomObjects() {
     Game.empire = {
-        "rooms": getEmpireRooms()
+        "colonies": getEmpireColonies()
     };
 }
 
-function getEmpireRooms() {
-    var empireRooms = {};
+function getEmpireColonies() {
+    var empireColonies = {};
 
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
 
         if(room.controller !== undefined && room.controller.my && room.controller.level > 0) {
-            empireRooms[roomName] = room;
+            empireColonies[roomName] = room;
         }
     }
 
-    return empireRooms;
+    return empireColonies;
 }
