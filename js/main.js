@@ -4,30 +4,50 @@
 require('constants');
 
 const Scheduler = require('Scheduler');
+const Colony = require('Colony');
 
 module.exports.loop = function() {
     initCustomObjects();
 
     const scheduler = new Scheduler();
     scheduler.update();
+    scheduler.garbageCollect();
 }
 
 function initCustomObjects() {
-    Game.empire = {
-        "colonies": getEmpireColonies()
-    };
+    initColonies();
 }
 
-function getEmpireColonies() {
-    var empireColonies = {};
+function initColonies() {
+    initColonyMemory();
+    initNewColonies();
+    initGameColonies();
+}
 
+function initColonyMemory() {
+    if(Memory.colonies === undefined) {
+        Memory.colonies = {};
+    }
+}
+
+function initNewColonies() {
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
 
         if(room.controller !== undefined && room.controller.my && room.controller.level > 0) {
-            empireColonies[roomName] = room;
+            if(Memory.colonies[roomName] === undefined) {
+                Memory.colonies[roomName] = {
+                    'homeRoomName': roomName
+                }
+            }
         }
     }
+}
 
-    return empireColonies;
+function initGameColonies() {
+    Game.colonies = {};
+
+    for(var roomName in Memory.colonies) {
+        Game.colonies[roomName] = new Colony(Memory.colonies[roomName]);
+    }
 }

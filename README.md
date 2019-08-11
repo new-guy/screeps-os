@@ -39,6 +39,9 @@ Anything at or above 1000 stays where it is.  Nothing can be promoted above 1000
 
 Each IPC object should have an array with a list of PIDs that use the IPC object.  GC should check each IPC object once in a while and see if there are any processes that are still using it, then delete it if not.
 
+### Children
+
+Processes need to keep track of their own created child processes.  This is used for child process cleanup
 
 ## Goals
 

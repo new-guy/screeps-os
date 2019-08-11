@@ -9,19 +9,44 @@ class Process {
 
     update() {
         console.log('Update ' + this.pid);
+        if(this.processShouldDie()) {
+            return 'exit';
+        }
     }
-    //Need an update function
+
+    processShouldDie() {
+        return false;
+    }
 
     finish() {
-        Memory.processes[this.pid]['data'] = this.memory;
+        this.saveMemory();
 
-        console.log('Finish ' + this.pid);
+        if(this.processShouldDie()) {
+            console.log('Exit ' + this.pid);
+            return 'exit';
+        }
 
-        return 'continue';
+        else {
+            console.log('Continue ' + this.pid);
+            return 'continue';
+        }
     }
-    //Need a finish function that 
-        //saves its this.memory object to Memory.processes[PID]
-        //Returns whether 
+
+    saveMemory() {
+        Memory.processes[this.pid]['data'] = this.memory;
+    }
+
+    ensureChildProcess(pid, processClass, data, priority) {
+        this.scheduler.ensureProcessExists(pid, processClass, data, priority);
+
+        if(this.memory.children === undefined) {
+            this.memory.children = [];
+        }
+
+        if(!this.memory.children.includes(pid)) {
+            this.memory.children.push(pid);
+        }
+    }
 }
 
 module.exports = Process;

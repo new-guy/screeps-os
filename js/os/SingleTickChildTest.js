@@ -1,8 +1,13 @@
 const Process = require('Process');
 
-class SingleTickProcess extends Process {
+class SingleTickChildTest extends Process {
     constructor (...args) {
         super(...args);
+
+        for(var i = 0; i < 5; i++) {
+            var pid = 'child|' + i;
+            this.ensureChildProcess(pid, 'SingleTickProcess', {}, DEFAULT_PRIORITY);
+        }
     }
 
     update() {
@@ -17,4 +22,4 @@ class SingleTickProcess extends Process {
     }
 }
 
-module.exports = SingleTickProcess;
+module.exports = SingleTickChildTest;

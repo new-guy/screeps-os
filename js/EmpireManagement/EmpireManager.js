@@ -6,23 +6,20 @@ class EmpireManager extends Process {
     }
 
     update() {
-        console.log('Empire ' + this.pid);
+        if(super.update() == 'exit') {
+            return 'exit';
+        }
 
-        for(var roomName in Game.empire.colonies) {
+        for(var roomName in Game.colonies) {
             console.log('Colony ' + roomName);
 
             var pid = 'colman|' + roomName;
             this.scheduler.ensureProcessExists(pid, 'ColonyManager', {'homeRoom': roomName}, COLONY_MANAGEMENT_PRIORITY);
         }
     }
-    //Need an update function
 
-    finish() {
-        Memory.processes[this.pid]['data'] = this.memory;
-
-        console.log('Finish ' + this.pid);
-
-        return 'continue';
+    processShouldDie() {
+        return false;
     }
 }
 

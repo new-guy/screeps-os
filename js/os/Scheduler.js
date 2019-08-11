@@ -1,15 +1,19 @@
 const Process = require('Process');
 const SingleTickProcess = require('SingleTickProcess');
+const SingleTickChildTest = require('SingleTickChildTest');
 
 const EmpireManager = require('EmpireManager');
 
 const ColonyManager = require('ColonyManager');
+const PreStorageBootstrap = require('PreStorageBootstrap');
 
 var processTypeMap = {
     "Process": Process,
     "SingleTickProcess": SingleTickProcess,
     "EmpireManager": EmpireManager,
-    "ColonyManager": ColonyManager
+    "ColonyManager": ColonyManager,
+    "PreStorageBootstrap": PreStorageBootstrap,
+    "SingleTickChildTest": SingleTickChildTest
 };
 
 class Scheduler {
@@ -21,11 +25,13 @@ class Scheduler {
             Memory.ipc = {};
 
             this.addProcess("empireman", "EmpireManager", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
-            this.addProcess("single", "SingleTickProcess", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
+            this.addProcess("childTest", "SingleTickChildTest", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
         }
 
         this.sortedProcesses = this.getSortedProcesses();
         this.programCounter = 0;
+        this.processesBeingRemoved = [];
+
         //First thing - create some processes with a temporary function and sort them, 
         //then draw that with roomvisuals
         this.drawSortedProcesses('W7N4');
@@ -40,8 +46,12 @@ class Scheduler {
             var activeProcessMetadata = this.sortedProcesses[this.programCounter]['metadata'];
             var processClass = activeProcessMetadata['processClass'];
 
-            if(!processClass in processTypeMap) {
-                console.log("Error: process class " + processClass + " does not exist");
+            if(this.processesBeingRemoved.includes(activeProcessMetadata['pid'])) {
+                console.log('#Skipping because removal ' + activeProcessMetadata['pid']);
+            }
+
+            else if(!processClass in processTypeMap) {
+                console.log("#Error: process class " + processClass + " does not exist");
             }
 
             else {
@@ -56,6 +66,13 @@ class Scheduler {
             }
 
             this.programCounter += 1;
+        }
+    }
+
+    garbageCollect() {
+        for(var i = 0; i < this.processesBeingRemoved.length; i++) {
+            var pid = this.processesBeingRemoved[i];
+            Memory.processes[pid] = undefined
         }
     }
 
@@ -104,7 +121,21 @@ class Scheduler {
     }
 
     removeProcess(pid) {
-        Memory.processes[pid] = undefined;
+    //Recursively remove the process from memory, along with its child processes
+        if(Memory.processes[pid] !== undefined)
+        {
+            if(Memory.processes[pid]['children'] !== undefined) {
+                for(var i = 0; i < Memory.processes[pid]['children'].length; i++) {
+                    this.removeProcess(Memory.processes[pid]['children'][i]);
+                }
+            }
+
+            console.log('removing process ' + pid);
+    
+            Memory.processes[pid] = undefined;
+        }
+
+        this.processesBeingRemoved.push(pid);
     }
 
     getSortedProcesses() {
