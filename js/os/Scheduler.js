@@ -1,3 +1,13 @@
+const Process = require('Process');
+const SingleTickProcess = require('SingleTickProcess');
+const EmpireManager = require('EmpireManager');
+
+var processTypeMap = {
+    "Process": Process,
+    "SingleTickProcess": SingleTickProcess,
+    "EmpireManager": EmpireManager
+};
+
 class Scheduler {
     constructor () {
         if( Memory.processMetadata === undefined || 
@@ -8,15 +18,12 @@ class Scheduler {
             Memory.processes = {};
             Memory.ipc = {};
 
-            this.newProcess("empireman", "EmpireManager", {"test": "test"}, 1000)
-            this.newProcess("test", "EmpireManager", {"test": "test"}, 235)
-            this.newProcess("asdf", "EmpireManager", {"test": "test"}, 478)
-            this.newProcess("twert", "EmpireManager", {"test": "test"}, 123)
-            this.newProcess("urturt", "EmpireManager", {"test": "test"}, 6)
-            this.newProcess("yhnrth", "EmpireManager", {"test": "test"}, 777)
+            this.newProcess("empireman", "EmpireManager", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
+            this.newProcess("single", "SingleTickProcess", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
         }
 
         this.sortedProcessMetadata = this.getSortedProcessMetadata();
+        this.programCounter = 0;
         //First thing - create some processes with a temporary function and sort them, 
         //then draw that with roomvisuals
         console.log('sched');
@@ -25,7 +32,36 @@ class Scheduler {
     }
 
     update () {
+        //For each process, create a new object with that process type, update it, then finish it
+        //If it finishes, remove its process metadata
         console.log('update');
+
+        while(this.shouldContinueProcessing()) {
+            var activeProcessMetadata = this.sortedProcessMetadata[this.programCounter];
+            var processClass = activeProcessMetadata['processClass'];
+
+            if(!processClass in processTypeMap) {
+                console.log("Error: process class " + processClass + " does not exist");
+            }
+
+            else {
+                var activeProcess = new processTypeMap[processClass](activeProcessMetadata['pid']);
+        
+                activeProcess.update();
+                var processResult = activeProcess.finish();
+
+                if(processResult == 'exit') {
+                    this.removeProcess(activeProcessMetadata['pid']);
+                }
+            }
+
+            this.programCounter += 1;
+        }
+    }
+
+    shouldContinueProcessing() {
+        console.log(this.programCounter);
+        return this.programCounter < this.sortedProcessMetadata.length;
     }
 
     newProcess(pid, processClass, data, priority) {
@@ -36,6 +72,11 @@ class Scheduler {
         };
 
         Memory.processes[pid] = data;
+    }
+
+    removeProcess(pid) {
+        Memory.processMetadata[pid] = undefined;
+        Memory.processes[pid] = undefined;
     }
 
     getSortedProcessMetadata() {
