@@ -7,13 +7,16 @@ const EmpireManager = require('EmpireManager');
 const ColonyManager = require('ColonyManager');
 const PreStorageBootstrap = require('PreStorageBootstrap');
 
+const SpawnCreep = require('SpawnCreep');
+
 var processTypeMap = {
     "Process": Process,
     "SingleTickProcess": SingleTickProcess,
     "EmpireManager": EmpireManager,
     "ColonyManager": ColonyManager,
     "PreStorageBootstrap": PreStorageBootstrap,
-    "SingleTickChildTest": SingleTickChildTest
+    "SingleTickChildTest": SingleTickChildTest,
+    "SpawnCreep": SpawnCreep
 };
 
 class Scheduler {

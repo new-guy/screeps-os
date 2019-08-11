@@ -4,11 +4,12 @@ class ColonyManager extends Process {
     constructor (...args) {
         super(...args);
 
-        console.log('Colony ' + this.pid + ' HomeRoom: ' + this.memory.homeRoom);
         this.homeRoom = Game.rooms[this.memory.homeRoom];
     }
 
     update() {
+        console.log('Colony ' + this.pid + ' HomeRoom: ' + this.memory.homeRoom);
+        
         if(super.update() == 'exit') {
             return 'exit';
         }
