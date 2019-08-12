@@ -49,6 +49,14 @@ Each IPC object should have an array with a list of PIDs that use the IPC object
 
 Processes need to keep track of their own created child processes.  This is used for child process cleanup
 
+### CPU Usage 
+
+If we're above the high watermark, use up to 90% of the tickLimit
+
+If we're below the high watermark, use up to 90% of the limit
+
+If we're below the low watermark, use up to 50% of the limit
+
 ## Goals
 
 ### MVP
@@ -87,6 +95,7 @@ Processes need to keep track of their own created child processes.  This is used
 ### Building Creation
 
 - Put the building creation logic from the old AI in here.
+- One process per room.  Need sleeping logic
 
 
 ## Things we need

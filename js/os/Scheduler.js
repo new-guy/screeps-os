@@ -11,6 +11,8 @@ const SpawnCreep = require('SpawnCreep');
 
 const BootStrapper = require('BootStrapper');
 
+const CPUMetrics = require('CPUMetrics');
+
 var processTypeMap = {
     "Process": Process,
     "SingleTickProcess": SingleTickProcess,
@@ -50,6 +52,8 @@ class Scheduler {
         //If it finishes, remove its process metadata
         console.log('#######sched');
 
+        CPUMetrics.init();
+
         while(this.shouldContinueProcessing()) {
             var activeProcessMetadata = this.sortedProcesses[this.programCounter]['metadata'];
             var processClass = activeProcessMetadata['processClass'];
@@ -64,6 +68,8 @@ class Scheduler {
 
             else {
                 var activeProcess = new processTypeMap[processClass](activeProcessMetadata['pid'], this);
+
+                CPUMetrics.startProcess(activeProcessMetadata);
         
                 if(DEBUGGING) {
                     activeProcess.update();
@@ -87,10 +93,14 @@ class Scheduler {
                         console.log(error);
                     }
                 }
+
+                CPUMetrics.endProcess(activeProcessMetadata);
             }
 
             this.programCounter += 1;
         }
+
+        CPUMetrics.printProcessStats(this);
     }
 
     garbageCollect() {
@@ -122,6 +132,7 @@ class Scheduler {
             "metadata": {
                 "pid": pid,
                 "priority": priority,
+                "defaultPriority": priority,
                 "processClass": processClass
             },
             "data": data
