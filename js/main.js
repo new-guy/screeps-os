@@ -8,6 +8,12 @@ require('Targets');
 require('Mining');
 require('Upgrading');
 
+//Room functions
+require('HomeRoomConstructionTools');
+
+//RoomPosition
+require('RoomPositionTools');
+
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
 

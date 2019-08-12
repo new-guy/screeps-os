@@ -2,6 +2,18 @@
 
 The overarching goal here is to build an AI that is driven around running individual processes.  These individual processes will ideally be broken up into small chunks of logic that can reasonably be run independently of one another.  Additionally, we will decide whether or not to run each process based upon the resources available to us - both in terms of CPU and in terms of in-game resources such as Energy or Minerals.
 
+## How to play
+
+### Respawning
+- Look at the current heart definition picture to see how far you need to space things
+- Place the spawn & put !CHUNK|heart|ROOMNAME over it
+
+### High Level Controls
+- Building - !CHUNK|chunktype|UID
+	- Chunktypes are defined in constructionSiteManager.  Also there are some pictures of them
+	- Chunks are placed automatically, but we can only place one new chunk per RCL because we don't include future building locations in our chunk calculations
+	- Force recalculation with Room.prototype.forceBuildingRegeneration()
+
 ## Tick Loop - sorta out of date
 
 Our tick loop is intended to segregate object initialization, functional actions, and state storage into separate stages.  The tick loop looks something like:
@@ -79,9 +91,39 @@ If we're below the low watermark, use up to 50% of the limit
     - Deleting the ColonyManager should delete the BootstrapSpawner, but deleting the BootstrapSpawner should not delete the process for the bootstrapper creep.  BootstrapSpawner is a child of ColonyManager, but the bootstrapper creep can exist on its own, so it should not be a child process
 
 - Name-based spawning logic - use a Colony level spawnCreep function.
-- Able to have processes sleep
-- Able to sleep the BootstrapSpawner prcess when there are no available spawners in the Colony.
 - Bootstrapper creep needs to find a source with energy and an open spot, harvest, then build.  If there isn't one in this room, travel to an adjacent room
+
+### CPU Tracking
+- Keep track of CPU usage for each process type
+
+
+### Building Creation
+
+- Put the building creation logic from the old AI in here.
+- One process per room
+
+### Useful bootstrappers
+
+- They need to build
+- They need to refill spawn and extensions
+- They need to use multiple rooms for mining.  Colony object needs to give them sources that don't have fully blocked positions, and sources from outside of room.  This needs that the colony object needs to automatically send scouts outside of the room
+
+
+### Tidy UP
+
+- Need a higher level function for flag parsing, or turn flag parsers into their own object
+- Break the construction flag generator into its own process
+- Able to have processes sleep
+    - Set game time to sleep till.  Do not add to list of processes to run until we have passed that time
+- Able to sleep the BootstrapSpawner prcess when there are no available spawners in the Colony.
+- Use sleep to force building regeneration every once in a while
+
+## Things we need
+
+- Colonies need to return sources as being available only if there's an open spot next to them
+- Need a generic way of creating states, transitions, etc
+- Probably need to set process default priority by some sort of dictionary rather than depending on the process to be honest - this will allow us to update priorities without recreating the process tree.
+
 
 ### CPU Conservation & Resource handling
 
@@ -89,16 +131,4 @@ If we're below the low watermark, use up to 50% of the limit
 - Able to postpone running processes till the next tick because we don't have enough resources
     - Need a getCost() function for the process to allow it to calculate and return its cost
     - Need to be able to assign different amounts of resources based upon different criteria.  Initially just different resources per class type.  For example, gatherers vs combat.  Eventually we need to do that on the Colony AND role/objective (meaning attack, defend, economy) level
-- Able to add too many processes for one tick and have them run over the course of multiple ticks
-- Keep track of CPU usage for each process type.
-
-### Building Creation
-
-- Put the building creation logic from the old AI in here.
-- One process per room.  Need sleeping logic
-
-
-## Things we need
-
-- Colonies need to return sources as being available only if there's an open spot next to them
-- Need a generic way of creating states, transitions, etc
+- Able to add too many processes for one tick and have them run over the course of multiple ticks.

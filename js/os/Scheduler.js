@@ -6,6 +6,7 @@ const EmpireManager = require('EmpireManager');
 
 const ColonyManager = require('ColonyManager');
 const PreStorageBootstrap = require('PreStorageBootstrap');
+const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 
 const SpawnCreep = require('SpawnCreep');
 
@@ -21,7 +22,8 @@ var processTypeMap = {
     "PreStorageBootstrap": PreStorageBootstrap,
     "SingleTickChildTest": SingleTickChildTest,
     "SpawnCreep": SpawnCreep,
-    "BootStrapper": BootStrapper
+    "BootStrapper": BootStrapper,
+    "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor
 };
 
 var DEBUGGING = true;

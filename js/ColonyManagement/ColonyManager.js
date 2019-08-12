@@ -9,10 +9,12 @@ class ColonyManager extends Process {
 
     update() {
         console.log('Colony ' + this.pid + ' HomeRoom: ' + this.memory.homeRoom);
-        
+
         if(super.update() == 'exit') {
             return 'exit';
         }
+
+        this.ensureChildProcess(this.homeRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.homeRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
 
         if(this.roomIsPreStorage(this.homeRoom)) {
             var bootstrapPID = 'preStorBoot|' + this.homeRoom.name + '|' + this.homeRoom.name;
