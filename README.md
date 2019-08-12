@@ -71,43 +71,11 @@ If we're below the low watermark, use up to 50% of the limit
 
 ## Goals
 
-### MVP
-
-- Able to add processes
-- Able to run processes
-
-- Process is by default for long lived tasks
-- Extend it with a process that is for running one-tick functions
-
-### OS-V1
-
-- Able to add subprocesses - Scheduler needs both an "add subprocess" and an "add process" function - they should add the processes to both Memory.processMetadata, and to the current set of processes being run
-    - have EmpireManager ensure ColonyManager for each room that we have spawns in.  Eventually we can have the ability to designate a room as not being a separate colony.
-    - Subprocess add function will use two parts - adding the subprocess to the processmetadata object, and adding it to the current processArray
-
-### Heartbeat
-
-- ColonyManager ensures a BootstrapSpawner process when no storage exists
-    - Deleting the ColonyManager should delete the BootstrapSpawner, but deleting the BootstrapSpawner should not delete the process for the bootstrapper creep.  BootstrapSpawner is a child of ColonyManager, but the bootstrapper creep can exist on its own, so it should not be a child process
-
-- Name-based spawning logic - use a Colony level spawnCreep function.
-- Bootstrapper creep needs to find a source with energy and an open spot, harvest, then build.  If there isn't one in this room, travel to an adjacent room
-
-### CPU Tracking
-- Keep track of CPU usage for each process type
-
-
-### Building Creation
-
-- Put the building creation logic from the old AI in here.
-- One process per room
-
 ### Useful bootstrappers
 
 - They need to build
 - They need to refill spawn and extensions
-- They need to use multiple rooms for mining.  Colony object needs to give them sources that don't have fully blocked positions, and sources from outside of room.  This needs that the colony object needs to automatically send scouts outside of the room
-
+- Need to have procedural unit definitions
 
 ### Tidy UP
 
@@ -118,6 +86,20 @@ If we're below the low watermark, use up to 50% of the limit
 - Able to sleep the BootstrapSpawner prcess when there are no available spawners in the Colony.
 - Use sleep to force building regeneration every once in a while
 - Move room and creep property initialization somewhere better than main.js
+
+### Colony Scouting
+
+- Colonies need to understand rooms that are nearby.  This means that it needs to automatically scout rooms.
+    - Maybe have two different scouting control processes - one for when we have observer, and one for not.  Start with the latter (duh)
+    - Colonies need a memory object to keep track of scouting reports.  Something like 
+
+    {
+        "reportTime": Game.tick when created,
+        "info": {
+            //Info that's created by the scouting process
+        }
+    }
+- Need to automatically add sources in nearby rooms to the list of available sources.  This needs that the colony object needs to automatically send scouts outside of the room
 
 ## Things we need
 
