@@ -26,6 +26,8 @@ var processTypeMap = {
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor
 };
 
+var MAX_PROCESSES_TO_DISPLAY = 10;
+
 var DEBUGGING = true;
 
 class Scheduler {
@@ -71,32 +73,42 @@ class Scheduler {
             else {
                 var activeProcess = new processTypeMap[processClass](activeProcessMetadata['pid'], this);
 
-                CPUMetrics.startProcess(activeProcessMetadata);
-        
-                if(DEBUGGING) {
-                    activeProcess.update();
-                    var processResult = activeProcess.finish();
-    
-                    if(processResult == 'exit') {
-                        this.removeProcess(activeProcessMetadata['pid']);
-                    }
+                if(CPUMetrics.isPastSafeCPUUsage()) {
+                    activeProcessMetadata['priority'] += 1;
                 }
+
                 else {
-                    try {
+                    CPUMetrics.startProcess(activeProcessMetadata);
+            
+                    if(DEBUGGING) {
                         activeProcess.update();
                         var processResult = activeProcess.finish();
         
                         if(processResult == 'exit') {
                             this.removeProcess(activeProcessMetadata['pid']);
                         }
-                    } 
-                    catch (error) {
-                        console.log('!!!!!Error running ' + activeProcess['pid']);
-                        console.log(error);
                     }
+                    else {
+                        try {
+                            activeProcess.update();
+                            var processResult = activeProcess.finish();
+            
+                            if(processResult == 'exit') {
+                                this.removeProcess(activeProcessMetadata['pid']);
+                            }
+    
+                            else {
+                                activeProcessMetadata['priority'] = activeProcessMetadata['defaultPriority'];
+                            }
+                        } 
+                        catch (error) {
+                            console.log('!!!!!Error running ' + activeProcess['pid']);
+                            console.log(error);
+                        }
+                    }
+    
+                    CPUMetrics.endProcess(activeProcessMetadata);
                 }
-
-                CPUMetrics.endProcess(activeProcessMetadata);
             }
 
             this.programCounter += 1;
@@ -190,7 +202,7 @@ class Scheduler {
     drawSortedProcesses(roomName) {
         var PROCESS_START_POS = {"x": 10, "y": 16};
 
-        for(var i = 0; i < this.sortedProcesses.length; i++) {
+        for(var i = 0; i < Math.min(MAX_PROCESSES_TO_DISPLAY, this.sortedProcesses.length); i++) {
             var processMetadata = this.sortedProcesses[i]['metadata'];
             var processPos = {"x": PROCESS_START_POS['x'], "y": PROCESS_START_POS['y'] + i}
 

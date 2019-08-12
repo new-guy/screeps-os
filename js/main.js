@@ -6,6 +6,7 @@ require('constants');
 //Creep abilities
 require('Targets');
 require('Mining');
+require('GenericCreepAbilities');
 require('Upgrading');
 
 //Room functions
@@ -28,6 +29,7 @@ module.exports.loop = function() {
 function initCustomObjects() {
     initColonies();
     initCreeps();
+    initRooms();
 }
 
 function initColonies() {
@@ -72,5 +74,18 @@ function initCreeps() {
         creep.hasNoEnergy = (creep.carry[RESOURCE_ENERGY] === 0);
         creep.hasEnergy = (creep.carry[RESOURCE_ENERGY] > 0);
         creep.hasFullEnergy = (creep.carry[RESOURCE_ENERGY] === creep.carryCapacity);
+    }
+}
+
+function initRooms() {
+    for(var roomName in Game.rooms) {
+        var room = Game.rooms[roomName];
+        if(room.controller !== undefined && room.controller.my) {
+            if(room.energyAvailable < room.energyCapacityAvailable) {
+                room.nonFullFactories = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
+                    return (s.structureType === STRUCTURE_EXTENSION || s. structureType === STRUCTURE_SPAWN) && s.energy < s.energyCapacity;
+                }});
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 const Process = require('Process');
 
-var BOOTSTRAPPERS_TO_SPAWN = 5;
+var BOOTSTRAPPERS_TO_SPAWN = 10;
 
 class PreStorageBootstrap extends Process {
     constructor (...args) {

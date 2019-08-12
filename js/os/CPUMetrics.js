@@ -37,7 +37,6 @@ exports.endProcess = function(processMetadata) {
 exports.getBucketState = getBucketState;
 function getBucketState() {
     var bucketLevel = Game.cpu.bucket;
-    var cpuUsed = Game.cpu.getUsed();
 
     if(bucketLevel > BUCKET_HIGH_WATERMARK) {
         return "high";
@@ -54,6 +53,7 @@ function getBucketState() {
 
 exports.isPastSafeCPUUsage = function() {
     var bucketState = getBucketState();
+    var cpuUsed = Game.cpu.getUsed();
 
     if(bucketState === "high") {
         return (cpuUsed/Game.cpu.tickLimit > ABOVE_HIGH_PERCENT);
