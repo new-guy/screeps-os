@@ -86,6 +86,9 @@ If we're below the low watermark, use up to 50% of the limit
 - Able to sleep the BootstrapSpawner prcess when there are no available spawners in the Colony.
 - Use sleep to force building regeneration every once in a while
 - Move room and creep property initialization somewhere better than main.js
+- Creep Spawning should have a count of creeps to spawn rather than creating a separate processe for each creep
+- Move room tools from HRCT to RT
+- Break logic in PCFM into smaller parts
 
 ### Colony Scouting
 

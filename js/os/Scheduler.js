@@ -7,6 +7,7 @@ const EmpireManager = require('EmpireManager');
 const ColonyManager = require('ColonyManager');
 const PreStorageBootstrap = require('PreStorageBootstrap');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
+const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
 
 const SpawnCreep = require('SpawnCreep');
 
@@ -23,7 +24,8 @@ var processTypeMap = {
     "SingleTickChildTest": SingleTickChildTest,
     "SpawnCreep": SpawnCreep,
     "BootStrapper": BootStrapper,
-    "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor
+    "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
+    "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor
 };
 
 var MAX_PROCESSES_TO_DISPLAY = 10;

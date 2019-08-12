@@ -11,6 +11,7 @@ require('Upgrading');
 
 //Room functions
 require('HomeRoomConstructionTools');
+require('RoomTools');
 
 //RoomPosition
 require('RoomPositionTools');

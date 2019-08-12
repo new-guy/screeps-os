@@ -15,6 +15,7 @@ class ColonyManager extends Process {
         }
 
         this.ensureChildProcess(this.homeRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.homeRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
+        this.ensureChildProcess(this.homeRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.homeRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
 
         if(this.roomIsPreStorage(this.homeRoom)) {
             var bootstrapPID = 'preStorBoot|' + this.homeRoom.name + '|' + this.homeRoom.name;
