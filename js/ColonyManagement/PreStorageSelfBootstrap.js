@@ -1,6 +1,7 @@
 const Process = require('Process');
 const BodyGenerator = require('BodyGenerator');
 
+var MAX_TO_SPAWN = 20;
 var SPAWN_TICKS_TO_FILL = 1000;
 
 class PreStorageSelfBootstrap extends Process {
@@ -19,6 +20,7 @@ class PreStorageSelfBootstrap extends Process {
         var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.targetRoom.energyCapacityAvailable);
         var ticksToSpawn = BodyGenerator.getTicksToSpawn(bootstrapperBody);
         var bootstrappersToSpawn = Math.floor(SPAWN_TICKS_TO_FILL/ticksToSpawn);
+        bootstrappersToSpawn = Math.min(bootstrappersToSpawn, MAX_TO_SPAWN);
 
         var data = {
             'colonyName': this.memory.spawnColonyName,

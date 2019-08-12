@@ -49,12 +49,19 @@ class Process {
         }
     }
 
+    removeChildProcess(pid) {
+        _.remove(this.memory.children, function(proc) { return proc === pid; });
+        this.scheduler.removeProcess(pid);
+    }
+
     saveMemory() {
         Memory.processes[this.pid]['data'] = this.memory;
     }
 
     killNonEnsuredChildren() {
         //For each child, remove it if its pid is not in this.ensured
+        var childrenToKill = [];
+
         for(var i = 0; i < this.memory.children.length; i++) {
             var childPID = this.memory.children[i];
 
@@ -64,8 +71,12 @@ class Process {
 
             else {
                 console.log('Would kill child ' + childPID);
-                this.scheduler.removeProcess(childPID);
+                childrenToKill.push(childPID);
             }
+        }
+
+        for(var i = 0; i < childrenToKill.length; i++) {
+            this.removeChildProcess(childrenToKill[i]);
         }
     }
 }
