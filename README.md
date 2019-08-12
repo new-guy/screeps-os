@@ -71,10 +71,10 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### Useful bootstrappers
 
-- They need to repair roads
+- If a child is no longer ensured, it needs to be cleaned up
+- Creep Spawning should have a count of creeps to spawn rather than creating a separate process for each creep
 - Need to have procedural unit definitions
 - We need to spawn enough bootstrappers to fill the queue
-    - Creep Spawning should have a count of creeps to spawn rather than creating a separate process for each creep
     - The `ensureProcess` command should modify memory of the process being ensured
 
 ### Tidy UP

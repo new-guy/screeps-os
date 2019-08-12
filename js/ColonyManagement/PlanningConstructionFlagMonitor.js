@@ -50,7 +50,7 @@ class PlanningConstructionFlagMonitor extends Process {
         }
     }
 
-    convertPlanFlagToConstruction = function() {
+    convertPlanFlagToConstruction() {
         var planFlags = this.room.find(FIND_FLAGS, {filter: function(flag) { flag.name.startsWith('!PLAN') }});
     
         var fullStructTypes = [];

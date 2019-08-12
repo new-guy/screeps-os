@@ -14,21 +14,20 @@ class PreStorageBootstrap extends Process {
         if(super.update() == 'exit') {
             return 'exit';
         }
-
-        for(var i = 0; i < BOOTSTRAPPERS_TO_SPAWN; i++) {
-            var data = {
-                'colonyName': this.memory.spawnColonyName, 
-                'creepName': 'bootstrapper|' + this.targetRoom.name + '|' + i,
-                'creepBodyType': 'BootStrapper',
-                'creepProcessClass': 'BootStrapper',
-                'creepMemory': {
-                    'targetRoom': this.targetRoom.name
-                },
-                'creepPriority': NECESSARY_CREEPS_PRIORITY
-            };
-            var spawnPID = 'spawnPreStorBoot|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName + '|' + i;
-            this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
-        }
+        var data = {
+            'colonyName': this.memory.spawnColonyName,
+            'creepCount': BOOTSTRAPPERS_TO_SPAWN,
+            'creepNameBase': 'bootstrapper|' + this.targetRoom.name,
+            'creepBodyType': 'BootStrapper',
+            'creepProcessClass': 'BootStrapper',
+            'creepMemory': {
+                'targetRoom': this.targetRoom.name
+            },
+            'creepPriority': NECESSARY_CREEPS_PRIORITY
+        };
+        
+        var spawnPID = 'spawnPreStorBoot|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
     processShouldDie() {

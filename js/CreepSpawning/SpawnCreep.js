@@ -5,7 +5,8 @@ class SpawnCreep extends Process {
         super(...args);
 
         this.colony = Game.colonies[this.memory.colonyName];
-        this.creepName = this.memory.creepName;
+        this.creepCount = this.memory.creepCount;
+        this.creepNameBase = this.memory.creepNameBase;
         this.creepBodyType = this.memory.creepBodyType;
         this.creepProcessClass = this.memory.creepProcessClass;
         this.creepMemory = this.memory.creepMemory;
@@ -17,12 +18,18 @@ class SpawnCreep extends Process {
             return 'exit';
         }
 
-        if(Game.creeps[this.creepName] !== undefined) {
-            console.log('Creep is spawned for ' + this.pid);
-        }
-
-        else if(this.colony.spawnIsAvailable()) {
-            this.colony.spawnCreep(this.creepName, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.creepPriority, this.scheduler);
+        if(this.colony.spawnIsAvailable()) {
+            for(var i = 0; i < this.creepCount; i++) {
+                if(Game.creeps[this.creepNameBase] !== undefined) {
+                    //creep exists
+                    continue;
+                }
+        
+                var creepName = this.creepNameBase + "|" + i;
+                console.log(this.pid + ' trying to spawn ' + creepName);
+                this.colony.spawnCreep(creepName, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.creepPriority, this.scheduler);
+                break;
+            }
         }
     }
 
