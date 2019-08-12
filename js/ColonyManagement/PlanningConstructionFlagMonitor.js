@@ -12,7 +12,7 @@ class PlanningConstructionFlagMonitor extends Process {
             return 'exit';
         }
 
-        var constructionFlags = this.room.find(FIND_FLAGS, {filter: function(flag) { return flag.name.startsWith('!CONSTRUCTION') }});
+        var constructionFlags = this.room.find(FIND_FLAGS, {filter: function(flag) { return flag.name.startsWith('!CONSTRUCT') }});
         if(this.room.constructionSites.length == 0 && constructionFlags.length == 0) //Every other tick so we avoid double building
         {
             console.log('Trying to convert plan flag');
@@ -51,7 +51,7 @@ class PlanningConstructionFlagMonitor extends Process {
     }
 
     convertPlanFlagToConstruction() {
-        var planFlags = this.room.find(FIND_FLAGS, {filter: function(flag) { flag.name.startsWith('!PLAN') }});
+        var planFlags = this.room.find(FIND_FLAGS, {filter: function(flag) { return flag.name.startsWith('!PLAN') }});
     
         var fullStructTypes = [];
     
