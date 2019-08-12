@@ -69,18 +69,8 @@ If we're below the low watermark, use up to 50% of the limit
 
 ## Goals
 
-### Useful bootstrappers
-
-- If a child is no longer ensured, it needs to be cleaned up
-- Creep Spawning should have a count of creeps to spawn rather than creating a separate process for each creep
-- Need to have procedural unit definitions
-- We need to spawn enough bootstrappers to fill the queue
-    - The `ensureProcess` command should modify memory of the process being ensured
-
 ### Tidy UP
 
-- Break the construction flag generator into its own process
-- Need a higher level function for flag parsing, or turn flag parsers into their own object
 - Able to have processes sleep
     - Set game time to sleep till.  Do not add to list of processes to run until we have passed that time
 - Able to sleep the BootstrapSpawner prcess when there are no available spawners in the Colony.
@@ -88,6 +78,13 @@ If we're below the low watermark, use up to 50% of the limit
 - Move room and creep property initialization somewhere better than main.js
 - Move room tools from HRCT to RT
 - Break logic in PCFM into smaller parts
+
+### Towers
+
+- Balancers fill towers
+- Towers prioritize killing creeps
+- Towers heal own creeps otherwise
+- Towers repair roads
 
 ### Colony Scouting
 

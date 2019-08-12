@@ -76,9 +76,12 @@ exports.isPastSafeCPUUsage = function() {
 exports.printProcessStats = function(scheduler) {
     console.log("=======================");
 
+    var totalUsedByProcesses = 0;
+
     for(var processClass in processStats) {
         var stats = processStats[processClass];
         var sum = _.sum(stats).toFixed(2);
+        totalUsedByProcesses += _.sum(stats);
 
         var total = 0;
         for(var i = 0; i < stats.length; i++) {
@@ -89,8 +92,13 @@ exports.printProcessStats = function(scheduler) {
         console.log(processClass + " M: " + mean + " S: " + sum);
     }
 
+    var totalUsed = Game.cpu.getUsed().toFixed(2);
+    var overhead = (totalUsed - totalUsedByProcesses).toFixed(2);
+    totalUsedByProcesses = totalUsedByProcesses.toFixed(2);
+
     console.log("==========");
-    console.log("CPU Used: " + Game.cpu.getUsed().toFixed(2) + " Limit: " + Game.cpu.limit + " Tick Limit: " + Game.cpu.tickLimit);
+    console.log("CPU Used: " + totalUsed + " Limit: " + Game.cpu.limit + " Tick Limit: " + Game.cpu.tickLimit);
+    console.log("Overhead: " + overhead + " Process: " + totalUsedByProcesses);
     console.log("Bucket State: " + getBucketState() + " Level: " + Game.cpu.bucket);
     console.log("Processes Runnable: " + scheduler.sortedProcesses.length);
     console.log("Processes Finished: " + processesFinished);
