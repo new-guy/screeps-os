@@ -64,57 +64,99 @@ Processes need to keep track of their own created child processes.  This is used
 ### CPU Usage 
 
 If we're above the high watermark, use up to 90% of the tickLimit
-
 If we're below the high watermark, use up to 90% of the limit
-
 If we're below the low watermark, use up to 50% of the limit
 
 ## Goals
 
 ### Useful bootstrappers
 
-- They need to build
-- They need to refill spawn and extensions
+- They need to repair roads
 - Need to have procedural unit definitions
+- We need to spawn enough bootstrappers to fill the queue
+    - Creep Spawning should have a count of creeps to spawn rather than creating a separate process for each creep
+    - The `ensureProcess` command should modify memory of the process being ensured
 
 ### Tidy UP
 
-- Need a higher level function for flag parsing, or turn flag parsers into their own object
 - Break the construction flag generator into its own process
+- Need a higher level function for flag parsing, or turn flag parsers into their own object
 - Able to have processes sleep
     - Set game time to sleep till.  Do not add to list of processes to run until we have passed that time
 - Able to sleep the BootstrapSpawner prcess when there are no available spawners in the Colony.
 - Use sleep to force building regeneration every once in a while
 - Move room and creep property initialization somewhere better than main.js
-- Creep Spawning should have a count of creeps to spawn rather than creating a separate processe for each creep
 - Move room tools from HRCT to RT
 - Break logic in PCFM into smaller parts
 
 ### Colony Scouting
 
-- Colonies need to understand rooms that are nearby.  This means that it needs to automatically scout rooms.
-    - Maybe have two different scouting control processes - one for when we have observer, and one for not.  Start with the latter (duh)
-    - Colonies need a memory object to keep track of scouting reports.  Something like 
+- Create a colony scouting process that automatically sends out scouts whenever our scouting info is old
+    - Start off by scouting the surrounding 2 rooms
+    - Store scouting info in memory:
+        - How far away the sources are from the two different rooms' hearts
+        - Source location
+        - Whether or not it is an SK room
+        - room-level distance (how many rooms do I need to cross to get here?)
+- Update the Colony's get sources command (and the bootstrapper's knowledge of how to get sources) to include scouted sources if no valid ones can be found inside the colony
 
-    {
-        "reportTime": Game.tick when created,
-        "info": {
-            //Info that's created by the scouting process
-        }
-    }
-- Need to automatically add sources in nearby rooms to the list of available sources.  This needs that the colony object needs to automatically send scouts outside of the room
+### Room Pairs
 
 ## Things we need
 
-- Colonies need to return sources as being available only if there's an open spot next to them
 - Need a generic way of creating states, transitions, etc
 - Probably need to set process default priority by some sort of dictionary rather than depending on the process to be honest - this will allow us to update priorities without recreating the process tree.
+- Test out that CPU conservation works
 
+### Notes on what to build
 
-### CPU Conservation & Resource handling
+- Room Pairs
+    - Only do this if we have enough GCL
+    - Designate one as the primary and one as the secondary
+        - This is only used for upgrading.  Once both are RCL7, we should not treat them any differently
+    - Spawns from both are available to the colony
+    - High level plan for pair building
+        - Upon primary being above RCL2, us having enough GCL, and secondary room not being set
+            - Scout for adjacent room for Secondary
+            - If we can find a place to put its heart, it's a valid candidate
+            - Select the one with the most "plains" territory
+            - Send bootstrappers from primary.  Process dies when secondary's spawn is built
+        - Primary should be focused to RCL4
+            - Create a process specifically for bootstrappers for primary
+            - Second process to create individual bootstrapper for secondary
+        - Secondary should be focused to RCL4
+            - Reverse of above
+        - Primary should be focused to RCL7
+        - Secondary should be focused to RCL7
 
-- Able to skip running processes & promote their priority if we're low on CPU (have this theshold be controlled by a CONSTANT so that we can test out the functionality);
-- Able to postpone running processes till the next tick because we don't have enough resources
-    - Need a getCost() function for the process to allow it to calculate and return its cost
-    - Need to be able to assign different amounts of resources based upon different criteria.  Initially just different resources per class type.  For example, gatherers vs combat.  Eventually we need to do that on the Colony AND role/objective (meaning attack, defend, economy) level
-- Able to add too many processes for one tick and have them run over the course of multiple ticks.
+- Scouting
+    - Colonies need to understand rooms that are nearby.  This means that it needs to automatically scout rooms.
+        - Maybe have two different scouting control processes - one for when we have observer, and one for not.  Start with the latter (duh)
+        - Colonies need a memory object to keep track of scouting reports.  Something like 
+
+        {
+            "reportTime": Game.tick when created,
+            "info": {
+                //Info that's created by the scouting process
+            }
+        }
+    - Need to automatically add sources in nearby rooms to the list of available sources.  This needs that the colony object needs to automatically send scouts outside of the room
+
+- Mining
+    - Each mining operation should be its own process
+    - Colonies should have a mining manager process which controls the mining operations
+        - Mining operations should be started one by one.  New mining operations should only be started when the previous has all of its creeps being spawned or in existence
+        - New mining operations should only be created if the room is in the right state, and if there's room in the queue.  
+        - If we have a pair of rooms, we need to force the destination
+        - To create a route, have the manager check the colony's available sources (meaning not owned by SKs or other players) by order of nearest to either of the colony's storages one by one
+            - If there is a route for that source already, continue
+            - If there is not a route, create one.
+            - If we can't find any available sources, tell the colony that we need to scout
+    - Miners should just go to their assigned source, make sure a container is built, and mine
+    - Haulers should pick up from their assigned source, then deposit in the closest storage (this value should be cached)
+
+- Colony/Room States
+    - We effectively have two types of creeps - the necessary ones and the "gravy" ones
+    - We need to first ensure that rooms are trying to spawn the necessary ones
+    - Then, based upon room state, we spawn the gravy
+    - State is determine based upon different factors.  Whenever states change, though, we need to kill all of the processes from the previous state (they should all be children of that state), then start up the new state
