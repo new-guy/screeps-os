@@ -117,6 +117,7 @@ If we're below the low watermark, use up to 50% of the limit
     - Set game time to sleep till.  Do not add to list of processes to run until we have passed that time
 - Able to sleep the BootstrapSpawner prcess when there are no available spawners in the Colony.
 - Use sleep to force building regeneration every once in a while
+- Move room and creep property initialization somewhere better than main.js
 
 ## Things we need
 

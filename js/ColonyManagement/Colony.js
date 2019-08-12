@@ -63,7 +63,7 @@ class Colony {
             for(var i = 0; i < sourcesInRoom.length; i++) {
                 var source = sourcesInRoom[i];
 
-                if(source.energy > 0) {
+                if(source.energy > 0 && source.pos.hasOpenAdjacentTile()) {
                     this.activeSources.push(source);
                 }
 

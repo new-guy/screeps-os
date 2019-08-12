@@ -104,6 +104,10 @@ class BootStrapper extends CreepProcess {
             this.creep.putEnergyInTarget();
         }
 
+        else if(target instanceof ConstructionSite) {
+            this.creep.buildTarget();
+        }
+
         else {
             this.creep.say('Upgrade');
             this.creep.upgradeThisController(targetRoom.controller);
@@ -124,6 +128,10 @@ class BootStrapper extends CreepProcess {
             else {
                 console.log("Error finding nonfull factory for " + this.creep.name);
             }
+        }
+
+        else if(this.creep.room.constructionSites.length > 0) {
+            this.creep.setTarget(this.creep.room.mostBuiltConstructionSite);
         }
     }
 }
