@@ -11,6 +11,7 @@ class SpawnCreep extends Process {
         this.creepProcessClass = this.memory.creepProcessClass;
         this.creepMemory = this.memory.creepMemory;
         this.creepPriority = this.memory.creepPriority;
+        this.maxEnergyToSpend = this.memory.maxEnergyToSpend;
     }
 
     update() {
@@ -20,14 +21,14 @@ class SpawnCreep extends Process {
 
         if(this.colony.spawnIsAvailable()) {
             for(var i = 0; i < this.creepCount; i++) {
-                if(Game.creeps[this.creepNameBase] !== undefined) {
+                var creepName = this.creepNameBase + "|" + i;
+                if(Game.creeps[creepName] !== undefined) {
                     //creep exists
                     continue;
                 }
-        
-                var creepName = this.creepNameBase + "|" + i;
+                
                 console.log(this.pid + ' trying to spawn ' + creepName);
-                this.colony.spawnCreep(creepName, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.creepPriority, this.scheduler);
+                this.colony.spawnCreep(creepName, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.creepPriority, this.scheduler, this.maxEnergyToSpend);
                 break;
             }
         }

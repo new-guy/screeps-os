@@ -3,9 +3,7 @@
     //Need some ability to prevent it from attempting to spawn multiple creeps from one spawner
 //Needs a "homeroom" object
 
-var bodyTypes = {
-    "BootStrapper": [WORK, CARRY, MOVE, MOVE]
-}
+var BodyGenerator = require('BodyGenerator');
 
 class Colony {
     /*
@@ -31,6 +29,7 @@ class Colony {
     initSpawnInfo() {
         var spawns = this.homeRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
 
+        this.spawns = spawns;
         this.availableSpawns = [];
         this.timeTillAvailableSpawn = 1000;
         //How long till we can spawn, how many can we spawn?
@@ -44,6 +43,16 @@ class Colony {
 
             else if (this.timeTillAvailableSpawn > spawn.spawning.remainingTime) {
                 this.timeTillAvailableSpawn = spawn.spawning.remainingTime;
+            }
+        }
+
+        //Also Max Energy Capacity
+        this.maxEnergyCapacity = 0;
+
+        for(var i = 0; i < this.spawns.length; i++) {
+            var energyCapacity = this.spawns[i].room.energyCapacityAvailable;
+            if(energyCapacity > this.maxEnergyCapacity) {
+                this.maxEnergyCapacity = energyCapacity;
             }
         }
     }
@@ -74,7 +83,7 @@ class Colony {
         }
     }
 
-    spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, scheduler) {
+    spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, scheduler, maxEnergyToSpend=undefined) {
         var spawn = this.availableSpawns[0];
 
         if(spawn === undefined) {
@@ -82,7 +91,11 @@ class Colony {
         }
 
         else {
-            var body = bodyTypes[creepBodyType];
+            //Energy to spend is either the room's capacity, or min of max vs current
+
+            var energyToSpend = (maxEnergyToSpend === undefined) ? spawn.room.energyCapacityAvailable : Math.min(spawn.room.energyAvailable, maxEnergyToSpend);
+
+            var body = BodyGenerator.generateBody(creepBodyType, energyToSpend);
             //Try to spawn.  If we can, add the process to the scheduler.  If not, print why
 
             creepMemory['spawningColonyName'] = this.name;

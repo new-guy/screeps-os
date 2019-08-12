@@ -5,7 +5,7 @@ const SingleTickChildTest = require('SingleTickChildTest');
 const EmpireManager = require('EmpireManager');
 
 const ColonyManager = require('ColonyManager');
-const PreStorageBootstrap = require('PreStorageBootstrap');
+const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
 
@@ -20,7 +20,7 @@ var processTypeMap = {
     "SingleTickProcess": SingleTickProcess,
     "EmpireManager": EmpireManager,
     "ColonyManager": ColonyManager,
-    "PreStorageBootstrap": PreStorageBootstrap,
+    "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
     "SingleTickChildTest": SingleTickChildTest,
     "SpawnCreep": SpawnCreep,
     "BootStrapper": BootStrapper,
@@ -73,7 +73,6 @@ class Scheduler {
             }
 
             else {
-                var activeProcess = new processTypeMap[processClass](activeProcessMetadata['pid'], this);
 
                 if(CPUMetrics.isPastSafeCPUUsage()) {
                     activeProcessMetadata['priority'] += 1;
@@ -83,28 +82,14 @@ class Scheduler {
                     CPUMetrics.startProcess(activeProcessMetadata);
             
                     if(DEBUGGING) {
-                        activeProcess.update();
-                        var processResult = activeProcess.finish();
-        
-                        if(processResult == 'exit') {
-                            this.removeProcess(activeProcessMetadata['pid']);
-                        }
+                        this.executeProcess(processClass, activeProcessMetadata);
                     }
                     else {
                         try {
-                            activeProcess.update();
-                            var processResult = activeProcess.finish();
-            
-                            if(processResult == 'exit') {
-                                this.removeProcess(activeProcessMetadata['pid']);
-                            }
-    
-                            else {
-                                activeProcessMetadata['priority'] = activeProcessMetadata['defaultPriority'];
-                            }
+                            this.executeProcess(processClass, activeProcessMetadata);
                         } 
                         catch (error) {
-                            console.log('!!!!!Error running ' + activeProcess['pid']);
+                            console.log('!!!!!Error running ' + activeProcessMetadata['pid']);
                             console.log(error);
                         }
                     }
@@ -117,6 +102,20 @@ class Scheduler {
         }
 
         CPUMetrics.printProcessStats(this);
+    }
+
+    executeProcess(processClass, activeProcessMetadata) {
+        var activeProcess = new processTypeMap[processClass](activeProcessMetadata['pid'], this);
+        activeProcess.update();
+        var processResult = activeProcess.finish();
+
+        if(processResult == 'exit') {
+            this.removeProcess(activeProcessMetadata['pid']);
+        }
+
+        else {
+            activeProcessMetadata['priority'] = activeProcessMetadata['defaultPriority'];
+        }
     }
 
     garbageCollect() {

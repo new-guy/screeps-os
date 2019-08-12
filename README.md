@@ -98,7 +98,7 @@ If we're below the low watermark, use up to 50% of the limit
         - Source location
         - Whether or not it is an SK room
         - room-level distance (how many rooms do I need to cross to get here?)
-- Update the Colony's get sources command (and the bootstrapper's knowledge of how to get sources) to include scouted sources if no valid ones can be found inside the colony
+- Update the Colony's get sources command (and the mining ability's ability to navigate to sources) to include scouted sources if no valid ones can be found inside the colony
 
 ### Room Pairs
 

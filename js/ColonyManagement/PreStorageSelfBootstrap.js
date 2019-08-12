@@ -1,8 +1,9 @@
 const Process = require('Process');
+const BodyGenerator = require('BodyGenerator');
 
-var BOOTSTRAPPERS_TO_SPAWN = 10;
+var SPAWN_TICKS_TO_FILL = 1000;
 
-class PreStorageBootstrap extends Process {
+class PreStorageSelfBootstrap extends Process {
     constructor (...args) {
         super(...args);
         
@@ -14,9 +15,14 @@ class PreStorageBootstrap extends Process {
         if(super.update() == 'exit') {
             return 'exit';
         }
+
+        var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.targetRoom.energyCapacityAvailable);
+        var ticksToSpawn = BodyGenerator.getTicksToSpawn(bootstrapperBody);
+        var bootstrappersToSpawn = Math.floor(SPAWN_TICKS_TO_FILL/ticksToSpawn);
+
         var data = {
             'colonyName': this.memory.spawnColonyName,
-            'creepCount': BOOTSTRAPPERS_TO_SPAWN,
+            'creepCount': bootstrappersToSpawn,
             'creepNameBase': 'bootstrapper|' + this.targetRoom.name,
             'creepBodyType': 'BootStrapper',
             'creepProcessClass': 'BootStrapper',
@@ -26,7 +32,7 @@ class PreStorageBootstrap extends Process {
             'creepPriority': NECESSARY_CREEPS_PRIORITY
         };
         
-        var spawnPID = 'spawnPreStorBoot|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
+        var spawnPID = 'spawnPreStorSelfBoot|' + bootstrappersToSpawn + '|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
@@ -35,4 +41,4 @@ class PreStorageBootstrap extends Process {
     }
 }
 
-module.exports = PreStorageBootstrap;
+module.exports = PreStorageSelfBootstrap;

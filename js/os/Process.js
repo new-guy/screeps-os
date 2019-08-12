@@ -32,7 +32,6 @@ class Process {
         }
 
         else {
-            console.log('Continue ' + this.pid);
             return 'continue';
         }
     }
