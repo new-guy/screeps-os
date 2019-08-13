@@ -135,8 +135,6 @@ class Colony {
 
                 if(source.energy > 0 && source.pos.hasOpenAdjacentTile() && !isSkRoom) {
                     this.activeSources.push(source);
-
-                    source.bootstrapperAssigned = false;
                 }
 
                 else {
@@ -171,6 +169,17 @@ class Colony {
         }
     //     Add a 'bootstrapperFallbackSources' property to the Colony where it just has a list of all of the following sources:
     // - scoutedSource that we don't have vision of that isn't in an sk room
+    }
+
+    removeFromActiveSources(sourceToRemove) {
+        for(var i = 0; i < this.activeSources.length; i++) {
+            var activeSource = this.activeSources[i];
+
+            if(activeSource.id === sourceToRemove.id) {
+                this.activeSources.splice(i, 1);
+                break;
+            }
+        }
     }
 
     spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, scheduler, maxEnergyToSpend=undefined) {
