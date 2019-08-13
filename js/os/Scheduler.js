@@ -54,7 +54,9 @@ class Scheduler {
 
         //First thing - create some processes with a temporary function and sort them, 
         //then draw that with roomvisuals
-        this.drawSortedProcesses('W2N3');
+
+        
+        //this.drawSortedProcesses('W2N3');
     }
 
     update () {
