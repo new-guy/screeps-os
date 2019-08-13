@@ -79,7 +79,12 @@ class ColonyScoutingManager extends Process {
                     var source = sourcesInRoom[i];
     
                     sourceInfo[source.id] = {
-                        'distanceToPrimaryHeart': primaryHeartPos.findPathTo(source).length
+                        'distanceToPrimaryHeart': primaryHeartPos.findPathTo(source).length,
+                        'pos': {
+                            'x': source.pos.x,
+                            'y': source.pos.y,
+                            'roomName': source.pos.roomName
+                        } 
                     }
                 }
             }

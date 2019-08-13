@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class BootStrapper extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.targetRoom = Game.rooms[this.creep.memory.targetRoom];
     }
 
     updateStateTransitions() {
@@ -45,7 +46,17 @@ class BootStrapper extends CreepProcess {
 
             var targetSource = this.creep.getTarget();
 
-            this.creep.harvestFrom(targetSource);
+            if(this.creep.pos.getRangeTo(targetSource) > 1 && !targetSource.pos.hasOpenAdjacentTile()) {
+                this.creep.say('NoRoom');
+                this.creep.clearTarget();
+            }
+            else if(targetSource.energy === 0) {
+                this.creep.say('SrcEmpty');
+                this.creep.clearTarget();
+            }
+            else {
+                this.creep.harvestFrom(targetSource);
+            }
         }
 
         else {
@@ -55,7 +66,7 @@ class BootStrapper extends CreepProcess {
 
             var activeSources = this.spawningColony.activeSources;
 
-            var nearestSource = this.creep.pos.findClosestByPath(activeSources);
+            var nearestSource = this.creep.pos.multiRoomFindClosestByPath(activeSources);
 
             if(nearestSource !== null) {
                 this.creep.setTarget(nearestSource);
@@ -68,18 +79,17 @@ class BootStrapper extends CreepProcess {
     }
 
     work() {
-        var targetRoom = Game.rooms[this.creep.memory.targetRoom];
 
-        if(targetRoom === undefined) {
-            this.creep.moveTo(new RoomPosition(24, 24, this.creep.targetRoom));
+        if(this.targetRoom === undefined) {
+            this.creep.moveTo(new RoomPosition(24, 24, this.creep.memory.targetRoom));
             this.creep.say('NoVision');
             return;
         }
 
-        else if(targetRoom.controller !== undefined && (targetRoom.controller.needsSaving() || this.creep.memory.savingRoom === true))
+        else if(this.targetRoom.controller !== undefined && (this.targetRoom.controller.needsSaving() || this.creep.memory.savingRoom === true))
         {
             this.creep.say("SaveCont");
-            this.creep.upgradeThisController(targetRoom.controller);
+            this.creep.upgradeThisController(this.targetRoom.controller);
             return;
         }
 
@@ -110,7 +120,7 @@ class BootStrapper extends CreepProcess {
 
         else {
             this.creep.say('Upgrade');
-            this.creep.upgradeThisController(targetRoom.controller);
+            this.creep.upgradeThisController(this.targetRoom.controller);
         }
     }
 
@@ -119,8 +129,8 @@ class BootStrapper extends CreepProcess {
         //If there are any roads below 50%, repair them
         //If the room has any construction sites, build them
 
-        if(this.creep.room.energyAvailable < this.creep.room.energyCapacityAvailable) {
-            var closestNonFullFactory = this.creep.pos.findClosestByPath(this.creep.room.nonFullFactories);
+        if(this.targetRoom.energyAvailable < this.targetRoom.energyCapacityAvailable) {
+            var closestNonFullFactory = this.creep.pos.findClosestByPath(this.targetRoom.nonFullFactories);
 
             if(closestNonFullFactory !== null) {
                 this.creep.setTarget(closestNonFullFactory);
@@ -130,8 +140,8 @@ class BootStrapper extends CreepProcess {
             }
         }
 
-        else if(this.creep.room.constructionSites.length > 0) {
-            this.creep.setTarget(this.creep.room.mostBuiltConstructionSite);
+        else if(this.targetRoom.constructionSites !== undefined && this.targetRoom.constructionSites.length > 0) {
+            this.creep.setTarget(this.targetRoom.mostBuiltConstructionSite);
         }
     }
 }

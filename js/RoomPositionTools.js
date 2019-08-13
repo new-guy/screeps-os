@@ -31,6 +31,32 @@ RoomPosition.prototype.findFurthestByRange = function(type, opts = {})
 	return ret;
 }
 
+RoomPosition.prototype.multiRoomFindClosestByPath = function(objects) {
+	var closest = null;
+	var closestDistance = 10000000;
+
+	for(var i = 0; i < objects.length; i++) {
+		var testing = objects[0];
+		var testingPos = (testing.pos === undefined) ? testing : testing.pos;
+
+		try {
+			var pathToTesting = PathFinder.search(this, testingPos).path;
+			var testingDistance = pathToTesting.length;
+
+			if(testingDistance < closestDistance) {
+				closestDistance = testingDistance;
+				closest = testing;
+			}
+
+		} catch (error) {
+			console.log('Cannot find path to ' + testingPos.toString());
+			console.log(error);
+		}
+	}
+
+	return closest;
+}
+
 RoomPosition.prototype.creepExists = function()
 {
 	return this.lookFor(LOOK_CREEPS).length > 0;

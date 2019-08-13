@@ -6,7 +6,7 @@
 var BodyGenerator = require('BodyGenerator');
 
 var COLONY_MAX_RANGE = 2;
-var COLONY_MAX_ROOMS_TO_TRAVEL = 3;
+var COLONY_MAX_ROOMS_TO_TRAVEL = 2;
 
 class Colony {
     /*
@@ -118,7 +118,9 @@ class Colony {
             for(var i = 0; i < sourcesInRoom.length; i++) {
                 var source = sourcesInRoom[i];
 
-                if(source.energy > 0 && source.pos.hasOpenAdjacentTile()) {
+                var isSkRoom = (Memory.scouting.rooms[roomName] !== undefined && Memory.scouting.rooms[roomName]['isSkRoom'] === true);
+
+                if(source.energy > 0 && source.pos.hasOpenAdjacentTile() && !isSkRoom) {
                     this.activeSources.push(source);
                 }
 
@@ -127,6 +129,33 @@ class Colony {
                 }
             }
         }
+
+        this.fallbackSourcePositions = [];
+
+        for(var roomName in this.colonyRoomInfo) {
+            var roomInfo = Memory.scouting.rooms[roomName];
+            if(roomInfo === undefined) continue;
+
+            else if(Game.rooms[roomName] !== undefined) { //we have vision - that means that we would've found active sources
+                continue;
+            }
+
+            else if(roomInfo.isSkRoom === true) {
+                continue;
+            }
+
+            else {
+                for(var sourceId in roomInfo['sourceInfo']) {
+                    var sourceInfo = roomInfo['sourceInfo'][sourceId];
+
+                    var sourcePos = new RoomPosition(sourceInfo['pos']['x'], sourceInfo['pos']['y'], sourceInfo['pos']['roomName']);
+
+                    this.fallbackSourcePositions.push(sourcePos);
+                }
+            }
+        }
+    //     Add a 'bootstrapperFallbackSources' property to the Colony where it just has a list of all of the following sources:
+    // - scoutedSource that we don't have vision of that isn't in an sk room
     }
 
     spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, scheduler, maxEnergyToSpend=undefined) {

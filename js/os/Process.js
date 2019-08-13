@@ -10,7 +10,6 @@ class Process {
     }
 
     update() {
-        console.log('Update ' + this.pid);
         if(this.processShouldDie()) {
             return 'exit';
         }

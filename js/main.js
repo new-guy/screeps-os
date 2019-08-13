@@ -18,7 +18,6 @@ require('RoomPositionTools');
 
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
-require('Scouting');
 
 module.exports.loop = function() {
     initCustomObjects();
@@ -29,9 +28,20 @@ module.exports.loop = function() {
 }
 
 function initCustomObjects() {
+    initScouting();
     initColonies();
     initCreeps();
     initRooms();
+}
+
+function initScouting() {
+    if(Memory.scouting === undefined) {
+        Memory.scouting = {};
+    } 
+    
+    if(Memory.scouting.rooms === undefined) {
+        Memory.scouting.rooms = {};
+    } 
 }
 
 function initColonies() {
