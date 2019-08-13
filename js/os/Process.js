@@ -4,6 +4,7 @@ class Process {
         //Load Memory.processes[PID] into this.memory
         this.pid = pid;
         this.memory = Memory.processes[pid]['data'];
+        this.metadata = Memory.processes[pid]['metadata'];
         this.scheduler = scheduler;
         this.ensuredChildren = [];
     }
@@ -17,6 +18,12 @@ class Process {
 
     processShouldDie() {
         return false;
+    }
+
+    sleep(ticks) {
+        var wakeTick = Game.time + ticks;
+
+        this.metadata['wakeTick'] = wakeTick;
     }
 
     finish() {

@@ -7,11 +7,15 @@ var BELOW_LOW_PERCENT = 0.5;
 
 var processStartTime = 0;
 var processesFinished = 0;
+var processesSlept = 0;
+var processesSkipped = 0;
 var processStats = {};
 
 exports.init = function() {
     processStats = {};
     processesFinished = 0;
+    processesSlept = 0;
+    processesSkipped = 0;
 }
 
 exports.startProcess = function(processMetadata) {
@@ -32,6 +36,14 @@ exports.endProcess = function(processMetadata) {
     else {
         processStats[processClass].push(processRunTime);
     }
+}
+
+exports.sleepProcess = function(processMetadata) {
+    processesSlept++;
+}
+
+exports.skipProcess = function(processMetadata) {
+    processesSkipped++;
 }
 
 exports.getBucketState = getBucketState;
@@ -101,7 +113,7 @@ exports.printProcessStats = function(scheduler) {
     console.log("Overhead: " + overhead + " Process: " + totalUsedByProcesses);
     console.log("Bucket State: " + getBucketState() + " Level: " + Game.cpu.bucket);
     console.log("Processes Runnable: " + scheduler.sortedProcesses.length);
-    console.log("Processes Finished: " + processesFinished);
+    console.log("Processes Finished: " + processesFinished + " Slept: " + processesSlept + " Skipped: " + processesSkipped);
     console.log("=======================");
     //Calculate average and total for each process class
 }

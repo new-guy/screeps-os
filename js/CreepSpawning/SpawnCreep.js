@@ -32,6 +32,10 @@ class SpawnCreep extends Process {
                 break;
             }
         }
+
+        else {
+            this.sleep(this.colony.timeTillAvailableSpawn);
+        }
     }
 
     processShouldDie() {

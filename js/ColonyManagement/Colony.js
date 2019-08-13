@@ -41,7 +41,7 @@ class Colony {
                 this.availableSpawns.push(spawn);
             }
 
-            else if (this.timeTillAvailableSpawn > spawn.spawning.remainingTime) {
+            else if (spawn.spawning.remainingTime < this.timeTillAvailableSpawn) {
                 this.timeTillAvailableSpawn = spawn.spawning.remainingTime;
             }
         }

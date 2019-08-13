@@ -73,9 +73,14 @@ class Scheduler {
             }
 
             else {
+                if(shouldSleep(activeProcessMetadata)) {
 
-                if(CPUMetrics.isPastSafeCPUUsage()) {
+                    CPUMetrics.sleepProcess(activeProcessMetadata);
+                }
+
+                else if(CPUMetrics.isPastSafeCPUUsage()) {
                     activeProcessMetadata['priority'] += 1;
+                    CPUMetrics.skipProcess(activeProcessMetadata);
                 }
 
                 else {
@@ -102,6 +107,10 @@ class Scheduler {
         }
 
         CPUMetrics.printProcessStats(this);
+
+        function shouldSleep(processMetadata) {
+            return processMetadata['wakeTick'] !== undefined && processMetadata['wakeTick'] > Game.time; //Are we before the wake tick?
+        }
     }
 
     executeProcess(processClass, activeProcessMetadata) {
