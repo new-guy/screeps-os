@@ -31,11 +31,11 @@ Creep.prototype.buildTarget = function() {
         this.say('Move');
     }
 
-    else if(this.pos.getRangeTo(target) > 1) {
+    else if(this.pos.getRangeTo(target) > 2) {
         this.moveTo(target);
     }
 
-    else {
+    if(this.pos.getRangeTo(target) <= 3) {
         var buildResult = this.build(target);
 
         if(buildResult === 0 && this.carry[RESOURCE_ENERGY] === 0) {
