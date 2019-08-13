@@ -116,6 +116,7 @@ function initRooms() {
                 }
             }
             
+            room.towers = room.find(FIND_MY_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_TOWER }});
             room.halfFullTowers = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_TOWER && s.energy < s.energyCapacity/2 
             }});

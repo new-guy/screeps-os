@@ -108,12 +108,14 @@ If we're below the low watermark, use up to 50% of the limit
 - Things to update
     - Colony Scouting: We need to update source distance from heart of supporting room
     - Colony homeroom should be renamed to colony primary room
+- Need to move homeRoom management into homeRoom manager
 
 ### Tidy UP pt 2
 
 - Move room and creep property initialization somewhere better than main.js
 - Move room tools from HRCT to RT
 - Break logic in PCFM into smaller parts
+- Kill condition for HomeRoomManager - ColonyManager should kill it if it is bad
 
 ### Scouting Improvements
 
