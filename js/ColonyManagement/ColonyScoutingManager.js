@@ -1,6 +1,11 @@
 const Process = require('Process');
 
-var SCOUT_INTERVAL = 6000;
+var DEFAULT_SCOUT_INTERVAL = 6000;
+var DISTANCE_SCOUT_INTERVAL = {
+    "1": 50,
+    "2": 3000,
+    "3": DEFAULT_SCOUT_INTERVAL
+};
 
 class ColonyScoutingManager extends Process {
     constructor (...args) {
@@ -20,6 +25,9 @@ class ColonyScoutingManager extends Process {
 
         for(var distance in roomsByDistance) {
             console.log(distance)
+            var scoutInterval = DISTANCE_SCOUT_INTERVAL[distance];
+
+            if(scoutInterval === undefined) scoutInterval = DEFAULT_SCOUT_INTERVAL;
 
             for(var i in roomsByDistance[distance]) {
                 var roomName = roomsByDistance[distance][i].roomName;
@@ -51,7 +59,7 @@ class ColonyScoutingManager extends Process {
                         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_SCOUTING_PRIORITY);
                     }
 
-                    else if(Game.time - Memory.scouting.rooms[roomName].lastColonyScout > SCOUT_INTERVAL) {
+                    else if(Game.time - Memory.scouting.rooms[roomName].lastColonyScout > scoutInterval) {
                         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_SCOUTING_PRIORITY);
                     }
                 }
