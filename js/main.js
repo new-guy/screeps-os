@@ -115,6 +115,10 @@ function initRooms() {
                     room.mostBuiltConstructionSite = constructionSite;
                 }
             }
+            
+            room.halfFullTowers = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
+                return s.structureType === STRUCTURE_TOWER && s.energy < s.energyCapacity/2 
+            }});
         }
     }
 }
