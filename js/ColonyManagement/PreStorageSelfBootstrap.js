@@ -1,9 +1,9 @@
 const Process = require('Process');
 const BodyGenerator = require('BodyGenerator');
 
-var MAX_TO_SPAWN = 20;
+var MAX_TO_SPAWN = 30;
 var SPAWN_TICKS_TO_FILL = 1000;
-var MAX_ENERGY_TO_SPEND = 9000;
+var MAX_ENERGY_TO_SPEND = 12000;
 
 class PreStorageSelfBootstrap extends Process {
     constructor (...args) {

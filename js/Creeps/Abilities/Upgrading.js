@@ -11,7 +11,7 @@ Creep.prototype.upgradeThisController = function(controller) {
         this.upgradeController(controller);
     }
 
-    else {
+    if(this.pos.getRangeTo(controller) > 2) {
         this.moveTo(controller);
     }
 }
