@@ -135,6 +135,8 @@ class Colony {
 
                 if(source.energy > 0 && source.pos.hasOpenAdjacentTile() && !isSkRoom) {
                     this.activeSources.push(source);
+
+                    source.bootstrapperAssigned = false;
                 }
 
                 else {

@@ -83,8 +83,13 @@ class BootStrapper extends CreepProcess {
 
             var nearestSource = this.creep.pos.multiRoomFindClosestByPath(activeSources);
 
-            if(nearestSource !== null) {
+            if(nearestSource !== null && nearestSource.bootstrapperAssigned === true) {
+                this.creep.say('Wait');
+            }
+
+            else if(nearestSource !== null) {
                 this.creep.setTarget(nearestSource);
+                nearestSource.bootstrapperAssigned = true;
             }
 
             else {                
