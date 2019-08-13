@@ -69,15 +69,17 @@ If we're below the low watermark, use up to 50% of the limit
 
 ## Goals
 
-### Tidy UP
+### Colony Scouting
 
-- Able to have processes sleep
-    - Set game time to sleep till.  Do not add to list of processes to run until we have passed that time
-- Able to sleep the BootstrapSpawner prcess when there are no available spawners in the Colony.
-- Use sleep to force building regeneration every once in a while
-- Move room and creep property initialization somewhere better than main.js
-- Move room tools from HRCT to RT
-- Break logic in PCFM into smaller parts
+- Create a colony scouting process that automatically sends out scouts whenever our scouting info is old
+    - Start off by scouting the surrounding 2 rooms
+    - Store room info in memory:
+        - room-level distance (how many rooms do I need to cross to get here?)
+    - Store scouting info in memory:
+        - How far away the sources are from the two different rooms' hearts
+        - Source location
+        - Whether or not it is an SK room
+- Update the Colony's get sources command (and the mining ability's ability to navigate to sources) to include scouted sources if no valid ones can be found inside the colony
 
 ### Towers
 
@@ -86,16 +88,11 @@ If we're below the low watermark, use up to 50% of the limit
 - Towers heal own creeps otherwise
 - Towers repair roads
 
-### Colony Scouting
+### Tidy UP pt 2
 
-- Create a colony scouting process that automatically sends out scouts whenever our scouting info is old
-    - Start off by scouting the surrounding 2 rooms
-    - Store scouting info in memory:
-        - How far away the sources are from the two different rooms' hearts
-        - Source location
-        - Whether or not it is an SK room
-        - room-level distance (how many rooms do I need to cross to get here?)
-- Update the Colony's get sources command (and the mining ability's ability to navigate to sources) to include scouted sources if no valid ones can be found inside the colony
+- Move room and creep property initialization somewhere better than main.js
+- Move room tools from HRCT to RT
+- Break logic in PCFM into smaller parts
 
 ### Room Pairs
 

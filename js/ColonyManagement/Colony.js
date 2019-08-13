@@ -5,6 +5,9 @@
 
 var BodyGenerator = require('BodyGenerator');
 
+var COLONY_MAX_RANGE = 2;
+var COLONY_MAX_ROOMS_TO_TRAVEL = 3;
+
 class Colony {
     /*
     this.homeRoom = Room
@@ -14,6 +17,8 @@ class Colony {
     this.timeTillAvailableSpawn = 0;
     this.activeSources = [Source]
     this.depletedSources = [Source]
+
+    this.colonyRoomNames = [] //All rooms within range of COLONY_MAX_RANGE and COLONY_MAX_ROOMS_TO_TRAVEL
     */
 
     constructor(name) {
@@ -22,8 +27,47 @@ class Colony {
         this.homeRoom = Game.rooms[this.memory['homeRoomName']];
         this.rooms = {}
         this.rooms[this.homeRoom.name] = this.homeRoom;
+        this.initColonyRoomInfo();
         this.initSpawnInfo();
         this.initMiningInfo();
+    }
+
+    initColonyRoomInfo() {
+        if(this.memory.colonyRoomInfo === undefined) {
+            var colonyRoomInfo = {};
+            var roomsToSearch = Object.values(Game.map.describeExits(this.homeRoom.name));
+            var currentTravelDistance = 1;
+            var nextRoomsToSearch = [];
+
+            while(currentTravelDistance <= COLONY_MAX_ROOMS_TO_TRAVEL) {
+                for(var i = 0; i < roomsToSearch.length; i++) {
+                    var roomName = roomsToSearch[i];
+
+                    if(colonyRoomInfo[roomName] !== undefined) {
+                        continue;
+                    }
+
+                    else if(Game.map.getRoomLinearDistance(roomName, this.homeRoom.name) > COLONY_MAX_RANGE) {
+                        continue;
+                    }
+
+                    colonyRoomInfo[roomName] = {
+                        'travelDistance': currentTravelDistance
+                    };
+
+                    var adjacentRooms = Object.values(Game.map.describeExits(roomName));
+                    nextRoomsToSearch = nextRoomsToSearch.concat(adjacentRooms);
+                }
+
+                roomsToSearch = nextRoomsToSearch;
+                nextRoomsToSearch = [];
+                currentTravelDistance += 1;
+            }
+
+            this.memory.colonyRoomInfo = colonyRoomInfo;
+        }
+
+        this.colonyRoomInfo = this.memory.colonyRoomInfo;
     }
 
     initSpawnInfo() {
