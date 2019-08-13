@@ -26,24 +26,33 @@ Creep.prototype.buildTarget = function() {
     var target = this.getTarget();
 
     if(this.pos.getRangeTo(target) === 0) {
-        var movePath = PathFinder.search(this.pos, {pos: this.pos, range: 2}, {flee: true})['path'];
-        this.moveByPath(movePath);
+        this.moveRandom();        
         this.say('Move');
     }
 
-    else if(this.pos.getRangeTo(target) > 2) {
-        this.moveTo(target);
-    }
-
-    if(this.pos.getRangeTo(target) <= 3) {
-        var buildResult = this.build(target);
-
-        if(buildResult === 0 && this.carry[RESOURCE_ENERGY] === 0) {
-            this.clearTarget();
+    else {
+        if(this.pos.getRangeTo(target) > 2) {
+            this.moveTo(target);
         }
 
-        else {
-            this.say(buildResult);
+        if(this.pos.getRangeTo(target) <= 3) {
+            var buildResult = this.build(target);
+    
+            if(buildResult === 0 && this.carry[RESOURCE_ENERGY] === 0) {
+                this.clearTarget();
+            }
+    
+            else {
+                this.say(buildResult);
+            }
         }
     }
+}
+
+Creep.prototype.moveRandom = function() {
+    var moveOptions = [TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT];
+
+    var moveDirection = moveOptions[Math.floor(Math.random() * moveOptions.length)];
+
+    this.move(moveDirection);
 }

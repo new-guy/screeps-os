@@ -95,7 +95,10 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### Towers
 
-- Balancers fill towers
+- Implement whitelisting
+    - Creep.prototype.isWhitelisted() -> check if the creep's owner is on a whitelist (or is me!)
+    - Room.prototype.enemyCreeps -> FIND_CREEPS and use custom function to see if they are on whitelist
+- BootStrappers fill towers
 - Towers prioritize killing creeps
 - Towers heal own creeps otherwise
 - Towers repair roads
