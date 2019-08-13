@@ -16,9 +16,7 @@ class ColonyScoutingManager extends Process {
             return 'exit';
         }
 
-        var roomsByDistance = _.groupBy(this.colony.colonyRoomInfo, function(roomInfo) {
-            return roomInfo.travelDistance.toString();
-        });
+        var roomsByDistance = this.colony.roomsByDistance;
 
         for(var distance in roomsByDistance) {
             console.log(distance)

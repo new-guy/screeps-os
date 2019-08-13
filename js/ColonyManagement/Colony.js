@@ -69,6 +69,19 @@ class Colony {
 
         this.colonyRoomInfo = this.memory.colonyRoomInfo;
     }
+    
+    get roomsByDistance() {
+        /*
+            for(var i in roomsByDistance[distance]) {
+                var roomName = roomsByDistance[distance][i].roomName;
+                ...
+            }
+        */
+
+        return _.groupBy(this.colonyRoomInfo, function(roomInfo) {
+            return roomInfo.travelDistance.toString();
+        });
+    }
 
     initSpawnInfo() {
         var spawns = this.homeRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});

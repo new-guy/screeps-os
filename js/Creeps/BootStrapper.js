@@ -75,8 +75,25 @@ class BootStrapper extends CreepProcess {
                 this.creep.setTarget(nearestSource);
             }
 
-            else {
-                this.creep.say('NoSrc');
+            else {                
+                var distance1Rooms = this.spawningColony.roomsByDistance['1'];
+
+                for(var i in distance1Rooms) {
+                    var roomName = distance1Rooms[i].roomName;
+
+                    if(Game.rooms[roomName] !== undefined) continue; //We have vision
+                    if(Memory.scouting.rooms[roomName] !== undefined && Memory.scouting.rooms[roomName].isSkRoom) continue; //We don't want to use SkRooms
+
+                    else {
+                        var posToMoveTo = new RoomPosition(25,25,roomName);
+                        this.creep.moveTo(posToMoveTo);
+                        this.creep.say('Mv|' + roomName);
+                        break;
+                    }
+                }
+                //Get distance 1 rooms from colony
+                //If we don't have vision and it's not SkRoom
+                    //Head to [0]
             }
         }
     }
