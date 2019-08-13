@@ -5,16 +5,32 @@ const SingleTickChildTest = require('SingleTickChildTest');
 const EmpireManager = require('EmpireManager');
 
 const ColonyManager = require('ColonyManager');
-const PreStorageBootstrap = require('PreStorageBootstrap');
+const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
+const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
+const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
+
+const SpawnCreep = require('SpawnCreep');
+
+const BootStrapper = require('BootStrapper');
+
+const CPUMetrics = require('CPUMetrics');
 
 var processTypeMap = {
     "Process": Process,
     "SingleTickProcess": SingleTickProcess,
     "EmpireManager": EmpireManager,
     "ColonyManager": ColonyManager,
-    "PreStorageBootstrap": PreStorageBootstrap,
-    "SingleTickChildTest": SingleTickChildTest
+    "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
+    "SingleTickChildTest": SingleTickChildTest,
+    "SpawnCreep": SpawnCreep,
+    "BootStrapper": BootStrapper,
+    "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
+    "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor
 };
+
+var MAX_PROCESSES_TO_DISPLAY = 10;
+
+var DEBUGGING = true;
 
 class Scheduler {
     constructor () {
@@ -40,7 +56,9 @@ class Scheduler {
     update () {
         //For each process, create a new object with that process type, update it, then finish it
         //If it finishes, remove its process metadata
-        console.log('#sched');
+        console.log('#######sched');
+
+        CPUMetrics.init();
 
         while(this.shouldContinueProcessing()) {
             var activeProcessMetadata = this.sortedProcesses[this.programCounter]['metadata'];
@@ -55,17 +73,48 @@ class Scheduler {
             }
 
             else {
-                var activeProcess = new processTypeMap[processClass](activeProcessMetadata['pid'], this);
-        
-                activeProcess.update();
-                var processResult = activeProcess.finish();
 
-                if(processResult == 'exit') {
-                    this.removeProcess(activeProcessMetadata['pid']);
+                if(CPUMetrics.isPastSafeCPUUsage()) {
+                    activeProcessMetadata['priority'] += 1;
+                }
+
+                else {
+                    CPUMetrics.startProcess(activeProcessMetadata);
+            
+                    if(DEBUGGING) {
+                        this.executeProcess(processClass, activeProcessMetadata);
+                    }
+                    else {
+                        try {
+                            this.executeProcess(processClass, activeProcessMetadata);
+                        } 
+                        catch (error) {
+                            console.log('!!!!!Error running ' + activeProcessMetadata['pid']);
+                            console.log(error);
+                        }
+                    }
+    
+                    CPUMetrics.endProcess(activeProcessMetadata);
                 }
             }
 
             this.programCounter += 1;
+        }
+
+        CPUMetrics.printProcessStats(this);
+    }
+
+    executeProcess(processClass, activeProcessMetadata) {
+        var activeProcess = new processTypeMap[processClass](activeProcessMetadata['pid'], this);
+        activeProcess.update();
+        var processResult = activeProcess.finish();
+
+        if(processResult == 'exit') {
+            this.removeProcess(activeProcessMetadata['pid']);
+        }
+
+        else {
+            activeProcessMetadata['priority'] = activeProcessMetadata['defaultPriority'];
         }
     }
 
@@ -98,6 +147,7 @@ class Scheduler {
             "metadata": {
                 "pid": pid,
                 "priority": priority,
+                "defaultPriority": priority,
                 "processClass": processClass
             },
             "data": data
@@ -115,6 +165,10 @@ class Scheduler {
 
             if(processMetadata.priority > newProcessData['metadata'].priority) {
                 this.sortedProcesses.splice(1, 0, newProcessData);
+
+                if(i <= this.programCounter) {
+                    this.programCounter += 1;
+                }
                 break;
             }
         }
@@ -149,7 +203,7 @@ class Scheduler {
     drawSortedProcesses(roomName) {
         var PROCESS_START_POS = {"x": 10, "y": 16};
 
-        for(var i = 0; i < this.sortedProcesses.length; i++) {
+        for(var i = 0; i < Math.min(MAX_PROCESSES_TO_DISPLAY, this.sortedProcesses.length); i++) {
             var processMetadata = this.sortedProcesses[i]['metadata'];
             var processPos = {"x": PROCESS_START_POS['x'], "y": PROCESS_START_POS['y'] + i}
 

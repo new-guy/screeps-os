@@ -4,7 +4,6 @@ class ExampleProcess extends Process {
     constructor (...args) {
         super(...args);
 
-        console.log('printing stuff about this process');
         this.stuff = Game.rooms[this.memory.stuff];
     }
 
@@ -12,6 +11,7 @@ class ExampleProcess extends Process {
         if(super.update() == 'exit') {
             return 'exit';
         }
+        console.log('printing stuff about this process');
     }
 
     someOtherFunction() {
