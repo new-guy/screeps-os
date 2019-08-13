@@ -36,7 +36,7 @@ RoomPosition.prototype.multiRoomFindClosestByPath = function(objects) {
 	var closestDistance = 10000000;
 
 	for(var i = 0; i < objects.length; i++) {
-		var testing = objects[0];
+		var testing = objects[i];
 		var testingPos = (testing.pos === undefined) ? testing : testing.pos;
 
 		try {

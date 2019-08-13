@@ -44,12 +44,23 @@ class BootStrapper extends CreepProcess {
     }
 
     mineEnergy() {
-        if(this.creep.hasTargetOfClass(Source)) {
-            this.creep.say('HasSrc');
+        if(this.creep.memory.roomToExplore !== undefined) {
+            var roomName = this.creep.memory.roomToExplore;
+            if(Game.rooms[roomName] !== undefined || this.creep.hasTargetOfClass(Source)) {
+                this.creep.memory.roomToExplore = undefined;
+            }
 
+            else {
+                var posToMoveTo = new RoomPosition(25,25,roomName);
+                this.creep.moveTo(posToMoveTo);
+                this.creep.say('Mv|' + roomName);
+            }
+        }
+
+        if(this.creep.hasTargetOfClass(Source)) {
             var targetSource = this.creep.getTarget();
 
-            if(this.creep.pos.getRangeTo(targetSource) > 1 && !targetSource.pos.hasOpenAdjacentTile()) {
+            if(this.creep.pos.getRangeTo(targetSource) > 1 && this.creep.pos.getRangeTo(targetSource) < 5 && !targetSource.pos.hasOpenAdjacentTile()) {
                 this.creep.say('NoRoom');
                 this.creep.clearTarget();
             }
@@ -58,6 +69,7 @@ class BootStrapper extends CreepProcess {
                 this.creep.clearTarget();
             }
             else {
+                this.creep.say('HasSrc');
                 this.creep.harvestFrom(targetSource);
             }
         }
@@ -76,30 +88,27 @@ class BootStrapper extends CreepProcess {
             }
 
             else {                
-                var distance1Rooms = this.spawningColony.roomsByDistance['1'];
+                var distanceOneRooms = this.spawningColony.roomsByDistance['1'];
 
-                for(var i in distance1Rooms) {
-                    var roomName = distance1Rooms[i].roomName;
+                for(var i in distanceOneRooms) {
+                    var roomName = distanceOneRooms[i].roomName;
 
                     if(Game.rooms[roomName] !== undefined) continue; //We have vision
                     if(Memory.scouting.rooms[roomName] !== undefined && Memory.scouting.rooms[roomName].isSkRoom) continue; //We don't want to use SkRooms
 
-                    else {
+                    else if(this.creep.memory.roomToExplore === undefined) {
                         var posToMoveTo = new RoomPosition(25,25,roomName);
                         this.creep.moveTo(posToMoveTo);
                         this.creep.say('Mv|' + roomName);
+                        this.creep.memory.roomToExplore = roomName;
                         break;
                     }
                 }
-                //Get distance 1 rooms from colony
-                //If we don't have vision and it's not SkRoom
-                    //Head to [0]
             }
         }
     }
 
     work() {
-
         if(this.targetRoom === undefined) {
             this.creep.moveTo(new RoomPosition(24, 24, this.creep.memory.targetRoom));
             this.creep.say('NoVision');
