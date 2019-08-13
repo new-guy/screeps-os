@@ -3,7 +3,10 @@ const CreepProcess = require('CreepProcess');
 class BootStrapper extends CreepProcess {
     constructor (...args) {
         super(...args);
-        this.targetRoom = Game.rooms[this.creep.memory.targetRoom];
+
+        if(this.creep !== undefined) {
+            this.targetRoom = Game.rooms[this.creep.memory.targetRoom];
+        }
     }
 
     updateStateTransitions() {

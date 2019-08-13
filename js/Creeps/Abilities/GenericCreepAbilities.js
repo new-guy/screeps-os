@@ -25,7 +25,13 @@ Creep.prototype.putEnergyInTarget = function() {
 Creep.prototype.buildTarget = function() {
     var target = this.getTarget();
 
-    if(this.pos.getRangeTo(target) > 1) {
+    if(this.pos.getRangeTo(target) === 0) {
+        var movePath = PathFinder.search(this.pos, {pos: this.pos, range: 2}, {flee: true})['path'];
+        this.moveByPath(movePath);
+        this.say('Move');
+    }
+
+    else if(this.pos.getRangeTo(target) > 1) {
         this.moveTo(target);
     }
 
