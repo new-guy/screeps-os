@@ -18,6 +18,7 @@ require('RoomPositionTools');
 
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
+require('Scouting');
 
 module.exports.loop = function() {
     initCustomObjects();
