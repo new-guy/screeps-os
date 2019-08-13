@@ -38,7 +38,7 @@ Creep.prototype.buildTarget = function() {
     else {
         var buildResult = this.build(target);
 
-        if(buildResult === 0) {
+        if(buildResult === 0 && this.carry[RESOURCE_ENERGY] === 0) {
             this.clearTarget();
         }
 
