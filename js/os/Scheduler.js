@@ -13,6 +13,7 @@ const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor
 const SpawnCreep = require('SpawnCreep');
 
 const BootStrapper = require('BootStrapper');
+const Scout = require('Scout');
 
 const CPUMetrics = require('CPUMetrics');
 
@@ -26,6 +27,7 @@ var processTypeMap = {
     "SingleTickChildTest": SingleTickChildTest,
     "SpawnCreep": SpawnCreep,
     "BootStrapper": BootStrapper,
+    "Scout": Scout,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
     "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor
 };

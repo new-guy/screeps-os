@@ -33,7 +33,7 @@ class Colony {
     initColonyRoomInfo() {
         if(this.memory.colonyRoomInfo === undefined) {
             var colonyRoomInfo = {};
-            colonyRoomInfo[this.homeRoom.name] = {'travelDistance': 0};
+            colonyRoomInfo[this.homeRoom.name] = {'roomName': this.homeRoom.name, 'travelDistance': 0};
             var roomsToSearch = Object.values(Game.map.describeExits(this.homeRoom.name));
             var currentTravelDistance = 1;
             var nextRoomsToSearch = [];
@@ -112,7 +112,7 @@ class Colony {
         for(var roomName in this.colonyRoomInfo) {
             var room = Game.rooms[roomName];
             if(room === undefined) continue;
-            
+
             var sourcesInRoom = room.find(FIND_SOURCES);
 
             for(var i = 0; i < sourcesInRoom.length; i++) {
