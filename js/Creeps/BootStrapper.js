@@ -46,7 +46,7 @@ class BootStrapper extends CreepProcess {
     mineEnergy() {
         if(this.creep.memory.roomToExplore !== undefined) {
             var roomName = this.creep.memory.roomToExplore;
-            if(Game.rooms[roomName] !== undefined || this.creep.hasTargetOfClass(Source)) {
+            if(Game.rooms[roomName] !== undefined && this.creep.room.name === roomName && !this.creep.pos.isEdge()) {
                 this.creep.memory.roomToExplore = undefined;
             }
 
@@ -57,7 +57,7 @@ class BootStrapper extends CreepProcess {
             }
         }
 
-        if(this.creep.hasTargetOfClass(Source)) {
+        else if(this.creep.hasTargetOfClass(Source)) {
             var targetSource = this.creep.getTarget();
 
             if(this.creep.pos.getRangeTo(targetSource) > 1 && this.creep.pos.getRangeTo(targetSource) < 5 && !targetSource.pos.hasOpenAdjacentTile()) {

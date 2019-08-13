@@ -197,3 +197,7 @@ RoomPosition.prototype.lookForAdjacent = function(lookType) {
 
 	return results;
 }
+
+RoomPosition.prototype.isEdge = function() {
+	return this.x === 49 || this.x === 0 || this.y === 49 || this.y === 0;
+}
