@@ -124,6 +124,10 @@ class BootStrapper extends CreepProcess {
         //If target is a building, build it
         //Else, upgrade the controller
 
+        if((target instanceof StructureSpawn || target instanceof StructureExtension) && this.creep.carry[RESOURCE_ENERGY] <= this.creep.carryCapacity/2) {
+            this.creep.clearTarget();
+        }
+
         if((target instanceof StructureSpawn || target instanceof StructureExtension) && this.creep.carry[RESOURCE_ENERGY] > this.creep.carryCapacity/2) {
             this.creep.say('Balance');
             this.creep.putEnergyInTarget();
@@ -144,7 +148,7 @@ class BootStrapper extends CreepProcess {
         //If there are any roads below 50%, repair them
         //If the room has any construction sites, build them
 
-        if(this.targetRoom.energyAvailable < this.targetRoom.energyCapacityAvailable) {
+        if(this.targetRoom.energyAvailable < this.targetRoom.energyCapacityAvailable && this.creep.carry[RESOURCE_ENERGY] > this.creep.carryCapacity/2) {
             var closestNonFullFactory = this.creep.pos.findClosestByPath(this.targetRoom.nonFullFactories);
 
             if(closestNonFullFactory !== null) {
