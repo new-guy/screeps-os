@@ -60,7 +60,7 @@ class BootStrapper extends CreepProcess {
         else if(this.creep.hasTargetOfClass(Source)) {
             var targetSource = this.creep.getTarget();
 
-            if(this.creep.pos.getRangeTo(targetSource) > 1 && this.creep.pos.getRangeTo(targetSource) < 5 && !targetSource.pos.hasOpenAdjacentTile()) {
+            if(this.creep.pos.getRangeTo(targetSource) > 1 && !targetSource.pos.hasOpenAdjacentTile()) {
                 this.creep.say('NoRoom');
                 this.creep.clearTarget();
             }
