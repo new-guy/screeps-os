@@ -3,6 +3,7 @@ const BodyGenerator = require('BodyGenerator');
 
 var MAX_TO_SPAWN = 20;
 var SPAWN_TICKS_TO_FILL = 1000;
+var MAX_ENERGY_TO_SPEND = 9000;
 
 class PreStorageSelfBootstrap extends Process {
     constructor (...args) {
@@ -19,8 +20,13 @@ class PreStorageSelfBootstrap extends Process {
 
         var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.targetRoom.energyCapacityAvailable);
         var ticksToSpawn = BodyGenerator.getTicksToSpawn(bootstrapperBody);
-        var bootstrappersToSpawn = Math.floor(SPAWN_TICKS_TO_FILL/ticksToSpawn);
-        bootstrappersToSpawn = Math.min(bootstrappersToSpawn, MAX_TO_SPAWN);
+        var bootstrappersToSpawn = Math.floor(SPAWN_TICKS_TO_FILL/ticksToSpawn); //Do not spawn more than a single spawner can support
+
+        var bodyCost = BodyGenerator.getCostOfBody(bootstrapperBody);
+        var maxWeCanAfford = Math.floor(MAX_ENERGY_TO_SPEND/bodyCost);
+        bootstrappersToSpawn = Math.min(bootstrappersToSpawn, maxWeCanAfford);//Do not spawn more than we can afford
+
+        bootstrappersToSpawn = Math.min(bootstrappersToSpawn, MAX_TO_SPAWN); //Do not spawn more than the max
 
         var data = {
             'colonyName': this.memory.spawnColonyName,
