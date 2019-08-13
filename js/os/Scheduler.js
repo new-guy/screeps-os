@@ -5,6 +5,7 @@ const SingleTickChildTest = require('SingleTickChildTest');
 const EmpireManager = require('EmpireManager');
 
 const ColonyManager = require('ColonyManager');
+const ColonyScoutingManager = require('ColonyScoutingManager');
 const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
@@ -12,6 +13,7 @@ const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor
 const SpawnCreep = require('SpawnCreep');
 
 const BootStrapper = require('BootStrapper');
+const Scout = require('Scout');
 
 const CPUMetrics = require('CPUMetrics');
 
@@ -20,10 +22,12 @@ var processTypeMap = {
     "SingleTickProcess": SingleTickProcess,
     "EmpireManager": EmpireManager,
     "ColonyManager": ColonyManager,
+    "ColonyScoutingManager": ColonyScoutingManager,
     "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
     "SingleTickChildTest": SingleTickChildTest,
     "SpawnCreep": SpawnCreep,
     "BootStrapper": BootStrapper,
+    "Scout": Scout,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
     "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor
 };
@@ -50,7 +54,9 @@ class Scheduler {
 
         //First thing - create some processes with a temporary function and sort them, 
         //then draw that with roomvisuals
-        this.drawSortedProcesses('W7N4');
+
+        
+        //this.drawSortedProcesses('W2N3');
     }
 
     update () {

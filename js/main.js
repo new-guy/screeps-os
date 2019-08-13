@@ -28,9 +28,20 @@ module.exports.loop = function() {
 }
 
 function initCustomObjects() {
+    initScouting();
     initColonies();
     initCreeps();
     initRooms();
+}
+
+function initScouting() {
+    if(Memory.scouting === undefined) {
+        Memory.scouting = {};
+    } 
+    
+    if(Memory.scouting.rooms === undefined) {
+        Memory.scouting.rooms = {};
+    } 
 }
 
 function initColonies() {
@@ -81,6 +92,12 @@ function initCreeps() {
 function initRooms() {
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
+
+        room.mapPos = {
+            'x': roomName.split(/[EWNS]+/)[1],
+            'y': roomName.split(/[EWNS]+/)[2]
+        };
+
         if(room.controller !== undefined && room.controller.my) {
             if(room.energyAvailable < room.energyCapacityAvailable) {
                 room.nonFullFactories = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 

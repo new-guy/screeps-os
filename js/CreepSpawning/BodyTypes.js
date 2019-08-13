@@ -11,3 +11,13 @@ exports.BootStrapper = {
 		"move": 10
 	}
 };
+
+exports.Scout = {
+	"segment": ["move"],
+	"min": {
+		"move": 1
+	},
+	"max": {
+		"move": 1
+	}
+}
