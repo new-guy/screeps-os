@@ -72,14 +72,24 @@ If we're below the low watermark, use up to 50% of the limit
 ### Colony Scouting
 
 - Create a colony scouting process that automatically sends out scouts whenever our scouting info is old
-    - Start off by scouting the surrounding 2 rooms
+    - For each roomName in our list of colonyRoom
+        - Do we have vision on it?
+            - Update our info on it & update [SCOUTING_INFO].colonyScouted
+        - Need to check if the scouting info exists
+            - If not, send scout
+            - If so, and the last time we [SCOUTING_INFO].colonyScouted is past MAX_SCOUT_INTERVAL
+                - send scout
     - Store room info in memory:
         - room-level distance (how many rooms do I need to cross to get here?)
     - Store scouting info in memory:
         - How far away the sources are from the two different rooms' hearts
         - Source location
         - Whether or not it is an SK room
-- Update the Colony's get sources command (and the mining ability's ability to navigate to sources) to include scouted sources if no valid ones can be found inside the colony
+- Update the Colony's activeSources property to instead be a bootstrapperSourcePos array.  
+    - For each room in our colony's set of roomInfo add sources to it if
+        - We have vision of the room and the source is available
+        - The source position has been recorded in memory and is not in an SK room
+- Update the Colony's activeSources (and the mining ability's ability to navigate to sources) to include scouted sources if no valid ones can be found inside the colony
 
 ### Towers
 

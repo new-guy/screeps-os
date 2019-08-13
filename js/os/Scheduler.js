@@ -5,6 +5,7 @@ const SingleTickChildTest = require('SingleTickChildTest');
 const EmpireManager = require('EmpireManager');
 
 const ColonyManager = require('ColonyManager');
+const ColonyScoutingManager = require('ColonyScoutingManager');
 const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
@@ -20,6 +21,7 @@ var processTypeMap = {
     "SingleTickProcess": SingleTickProcess,
     "EmpireManager": EmpireManager,
     "ColonyManager": ColonyManager,
+    "ColonyScoutingManager": ColonyScoutingManager,
     "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
     "SingleTickChildTest": SingleTickChildTest,
     "SpawnCreep": SpawnCreep,

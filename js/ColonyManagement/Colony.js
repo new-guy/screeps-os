@@ -18,15 +18,13 @@ class Colony {
     this.activeSources = [Source]
     this.depletedSources = [Source]
 
-    this.colonyRoomNames = [] //All rooms within range of COLONY_MAX_RANGE and COLONY_MAX_ROOMS_TO_TRAVEL
+    this.colonyRoomInfo = {} //Info about all rooms near colony
     */
 
     constructor(name) {
         this.name = name;
         this.memory = Memory.colonies[name];
         this.homeRoom = Game.rooms[this.memory['homeRoomName']];
-        this.rooms = {}
-        this.rooms[this.homeRoom.name] = this.homeRoom;
         this.initColonyRoomInfo();
         this.initSpawnInfo();
         this.initMiningInfo();
@@ -35,6 +33,7 @@ class Colony {
     initColonyRoomInfo() {
         if(this.memory.colonyRoomInfo === undefined) {
             var colonyRoomInfo = {};
+            colonyRoomInfo[this.homeRoom.name] = {'travelDistance': 0};
             var roomsToSearch = Object.values(Game.map.describeExits(this.homeRoom.name));
             var currentTravelDistance = 1;
             var nextRoomsToSearch = [];
@@ -43,7 +42,7 @@ class Colony {
                 for(var i = 0; i < roomsToSearch.length; i++) {
                     var roomName = roomsToSearch[i];
 
-                    if(colonyRoomInfo[roomName] !== undefined) {
+                    if(colonyRoomInfo[roomName] !== undefined || roomName === this.homeRoom.name) {
                         continue;
                     }
 
@@ -52,6 +51,7 @@ class Colony {
                     }
 
                     colonyRoomInfo[roomName] = {
+                        'roomName': roomName,
                         'travelDistance': currentTravelDistance
                     };
 
@@ -109,8 +109,10 @@ class Colony {
         this.activeSources = [];
         this.depletedSources = [];
 
-        for(var roomName in this.rooms) {
-            var room = this.rooms[roomName];
+        for(var roomName in this.colonyRoomInfo) {
+            var room = Game.rooms[roomName];
+            if(room === undefined) continue;
+            
             var sourcesInRoom = room.find(FIND_SOURCES);
 
             for(var i = 0; i < sourcesInRoom.length; i++) {

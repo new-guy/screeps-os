@@ -5,6 +5,7 @@ class ColonyManager extends Process {
         super(...args);
 
         this.homeRoom = Game.rooms[this.memory.homeRoom];
+        this.name = this.homeRoom.name;
     }
 
     update() {
@@ -16,6 +17,7 @@ class ColonyManager extends Process {
 
         this.ensureChildProcess(this.homeRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.homeRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
         this.ensureChildProcess(this.homeRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.homeRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
+        this.ensureChildProcess(this.homeRoom.name + '|scoutingManager', 'ColonyScoutingManager', {'colonyName': this.name}, COLONY_SCOUTING_PRIORITY);
 
         if(this.roomIsPreStorage(this.homeRoom)) {
             var bootstrapPID = 'preStorSelfBoot|' + this.homeRoom.name + '|' + this.homeRoom.name;
