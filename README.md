@@ -96,6 +96,15 @@ If we're below the low watermark, use up to 50% of the limit
 - Break logic in PCFM into smaller parts
 - Kill condition for HomeRoomManager - ColonyManager should kill it if it is bad
 
+### Post RCL4 - this is (duh) big.
+    - Mining
+    - Other shit
+
+### Defenses
+    - Just do a rampart + wall alternating defense (maybe r-r-w-w-r-r-w-w)
+    - Second row of ramparts behind
+    - Ramparts on top of all important buildings
+
 ## Things we need
 
 - Need a generic way of creating states, transitions, etc
