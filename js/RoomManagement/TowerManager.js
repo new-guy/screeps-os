@@ -26,7 +26,7 @@ class TowerManager extends Process {
         if(this.room.enemies.length > 0) {
             var closestEnemy = tower.pos.findClosestByRange(this.room.enemies);
 
-            //tower.attack(closestEnemy);
+            tower.attack(closestEnemy);
         }
 
         else if(this.room.damagedFriendlies.length > 0) {
