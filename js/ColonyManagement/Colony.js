@@ -10,7 +10,7 @@ var COLONY_MAX_ROOMS_TO_TRAVEL = 2;
 
 class Colony {
     /*
-    this.homeRoom = Room
+    this.primaryRoom = Room
     this.rooms = {roomName: Room}
 
     this.availableSpawns = [];
@@ -24,7 +24,7 @@ class Colony {
     constructor(name) {
         this.name = name;
         this.memory = Memory.colonies[name];
-        this.homeRoom = Game.rooms[this.memory['homeRoomName']];
+        this.primaryRoom = Game.rooms[this.memory['primaryRoomName']];
         this.initColonyRoomInfo();
         this.initSpawnInfo();
         this.initMiningInfo();
@@ -33,8 +33,8 @@ class Colony {
     initColonyRoomInfo() {
         if(this.memory.colonyRoomInfo === undefined) {
             var colonyRoomInfo = {};
-            colonyRoomInfo[this.homeRoom.name] = {'roomName': this.homeRoom.name, 'travelDistance': 0};
-            var roomsToSearch = Object.values(Game.map.describeExits(this.homeRoom.name));
+            colonyRoomInfo[this.primaryRoom.name] = {'roomName': this.primaryRoom.name, 'travelDistance': 0};
+            var roomsToSearch = Object.values(Game.map.describeExits(this.primaryRoom.name));
             var currentTravelDistance = 1;
             var nextRoomsToSearch = [];
 
@@ -42,11 +42,11 @@ class Colony {
                 for(var i = 0; i < roomsToSearch.length; i++) {
                     var roomName = roomsToSearch[i];
 
-                    if(colonyRoomInfo[roomName] !== undefined || roomName === this.homeRoom.name) {
+                    if(colonyRoomInfo[roomName] !== undefined || roomName === this.primaryRoom.name) {
                         continue;
                     }
 
-                    else if(Game.map.getRoomLinearDistance(roomName, this.homeRoom.name) > COLONY_MAX_RANGE) {
+                    else if(Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name) > COLONY_MAX_RANGE) {
                         continue;
                     }
 
@@ -84,7 +84,7 @@ class Colony {
     }
 
     initSpawnInfo() {
-        var spawns = this.homeRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
+        var spawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
 
         this.spawns = spawns;
         this.availableSpawns = [];
@@ -167,8 +167,6 @@ class Colony {
                 }
             }
         }
-    //     Add a 'bootstrapperFallbackSources' property to the Colony where it just has a list of all of the following sources:
-    // - scoutedSource that we don't have vision of that isn't in an sk room
     }
 
     removeFromActiveSources(sourceToRemove) {
@@ -186,7 +184,7 @@ class Colony {
         var spawn = this.availableSpawns[0];
 
         if(spawn === undefined) {
-            console.log('No spawn available for ' + this.homeRoom.name);
+            console.log('No spawn available for ' + this.primaryRoom.name);
         }
 
         else {

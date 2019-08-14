@@ -77,7 +77,7 @@ class ColonyScoutingManager extends Process {
             
         if(scoutingInfo.sourceInfo === undefined) {
             var sourceInfo = {};
-            var primaryHeartPos = this.colony.homeRoom.find(FIND_FLAGS, {filter: function(f) { return f.name.startsWith('!CHUNK|heart') }})[0].pos;
+            var primaryHeartPos = this.colony.primaryRoom.find(FIND_FLAGS, {filter: function(f) { return f.name.startsWith('!CHUNK|heart') }})[0].pos;
     
             if(primaryHeartPos !== undefined) {
                 var sourcesInRoom = room.find(FIND_SOURCES);

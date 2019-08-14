@@ -4,32 +4,36 @@ class ColonyManager extends Process {
     constructor (...args) {
         super(...args);
 
-        this.homeRoom = Game.rooms[this.memory.homeRoom];
-        this.name = this.homeRoom.name;
+        this.primaryRoom = Game.rooms[this.memory.primaryRoom];
+        this.name = this.primaryRoom.name;
+
+        //if(this.memory.secondaryRoom) 
     }
 
     update() {
-        console.log('Colony ' + this.pid + ' HomeRoom: ' + this.memory.homeRoom);
+        console.log('Colony ' + this.pid + ' HomeRoom: ' + this.memory.primaryRoom);
 
         if(super.update() == 'exit') {
             return 'exit';
         }
 
-        this.ensureChildProcess(this.homeRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.homeRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
-        this.ensureChildProcess(this.homeRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.homeRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
-        this.ensureChildProcess(this.homeRoom.name + '|scoutingManager', 'ColonyScoutingManager', {'colonyName': this.name}, COLONY_SCOUTING_PRIORITY);
+        this.ensureChildProcess(this.primaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.primaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
+        this.ensureChildProcess(this.primaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.primaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
+        this.ensureChildProcess(this.primaryRoom.name + '|scoutingManager', 'ColonyScoutingManager', {'colonyName': this.name}, COLONY_SCOUTING_PRIORITY);
 
-        this.ensureChildProcess(this.homeRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.homeRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
+        this.ensureChildProcess(this.primaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.primaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
 
-        if(this.roomIsPreStorage(this.homeRoom)) {
-            var bootstrapPID = 'preStorSelfBoot|' + this.homeRoom.name + '|' + this.homeRoom.name;
-            var data = {'targetRoomName': this.homeRoom.name, 'spawnColonyName': this.homeRoom.name};
+        if(this.roomIsPreStorage(this.primaryRoom)) {
+            var bootstrapPID = 'preStorSelfBoot|' + this.primaryRoom.name + '|' + this.primaryRoom.name;
+            var data = {'targetRoomName': this.primaryRoom.name, 'spawnColonyName': this.primaryRoom.name};
             this.ensureChildProcess(bootstrapPID, 'PreStorageSelfBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
         }
 
         else {
             console.log('Need to implement post-storage functionality');
         }
+
+
         //If we're pre-storage, bootstrap
     }
 
@@ -38,7 +42,7 @@ class ColonyManager extends Process {
     }
 
     processShouldDie() {
-        return this.homeRoom === undefined;
+        return this.primaryRoom === undefined;
     }
 }
 

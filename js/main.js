@@ -59,28 +59,24 @@ function initScouting() {
 
 function initColonies() {
     initColonyMemory();
-    initNewColonies();
     initGameColonies();
 }
 
 function initColonyMemory() {
     if(Memory.colonies === undefined) {
         Memory.colonies = {};
+
+        var spawn1 = Game.spawns['Spawn1'];
+        Game.addColony(spawn1.room.name);
+
+        spawn1.pos.createFlag('!CHUNK|heart|' + spawn1.room.name, COLOR_RED);
     }
 }
 
-function initNewColonies() {
-    for(var roomName in Game.rooms) {
-        var room = Game.rooms[roomName];
-
-        if(room.controller !== undefined && room.controller.my && room.controller.level > 0) {
-            if(Memory.colonies[roomName] === undefined) {
-                Memory.colonies[roomName] = {
-                    'name': roomName,
-                    'homeRoomName': roomName
-                }
-            }
-        }
+Game.addColony = function(roomName) {
+    Memory.colonies[roomName] = {
+        'name': roomName,
+        'primaryRoomName': roomName
     }
 }
 
