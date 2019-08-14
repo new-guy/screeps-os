@@ -25,6 +25,11 @@ class Colony {
         this.name = name;
         this.memory = Memory.colonies[name];
         this.primaryRoom = Game.rooms[this.memory['primaryRoomName']];
+
+        if(this.memory['primaryRoomName'] !== undefined) {
+            this.secondaryRoom = Game.rooms[this.memory['secondaryRoomName']];
+        }
+
         this.initColonyRoomInfo();
         this.initSpawnInfo();
         this.initMiningInfo();
