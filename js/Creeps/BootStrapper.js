@@ -133,6 +133,11 @@ class BootStrapper extends CreepProcess {
             this.creep.putEnergyInTarget();
         }
 
+        else if(target instanceof StructureTower) {
+            this.creep.say('Tower');
+            this.creep.putEnergyInTarget();
+        }
+
         else if(target instanceof ConstructionSite) {
             this.creep.buildTarget();
         }
@@ -156,6 +161,17 @@ class BootStrapper extends CreepProcess {
             }
             else {
                 console.log("Error finding nonfull factory for " + this.creep.name);
+            }
+        }
+
+        else if(this.targetRoom.halfFullTowers.length > 0) {
+            var closestTower = this.creep.pos.findClosestByPath(this.targetRoom.halfFullTowers);
+
+            if(closestTower !== null) {
+                this.creep.setTarget(closestTower)
+            }
+            else {
+                console.log("Error finding half full tower for " + this.creep.name);
             }
         }
 

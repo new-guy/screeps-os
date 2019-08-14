@@ -108,12 +108,14 @@ If we're below the low watermark, use up to 50% of the limit
 - Things to update
     - Colony Scouting: We need to update source distance from heart of supporting room
     - Colony homeroom should be renamed to colony primary room
+- Need to move homeRoom management into homeRoom manager
 
 ### Tidy UP pt 2
 
 - Move room and creep property initialization somewhere better than main.js
 - Move room tools from HRCT to RT
 - Break logic in PCFM into smaller parts
+- Kill condition for HomeRoomManager - ColonyManager should kill it if it is bad
 
 ### Scouting Improvements
 
@@ -125,6 +127,7 @@ If we're below the low watermark, use up to 50% of the limit
 - Need a generic way of creating states, transitions, etc
 - Probably need to set process default priority by some sort of dictionary rather than depending on the process to be honest - this will allow us to update priorities without recreating the process tree.
 - Test out that CPU conservation works
+- Whitelisting for enemy buildings
 
 ### Notes on what to build
 

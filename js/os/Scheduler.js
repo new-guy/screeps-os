@@ -7,6 +7,9 @@ const EmpireManager = require('EmpireManager');
 const ColonyManager = require('ColonyManager');
 const ColonyScoutingManager = require('ColonyScoutingManager');
 const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
+
+const HomeRoomManager = require('HomeRoomManager');
+const TowerManager = require('TowerManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
 
@@ -28,6 +31,8 @@ var processTypeMap = {
     "SpawnCreep": SpawnCreep,
     "BootStrapper": BootStrapper,
     "Scout": Scout,
+    "HomeRoomManager": HomeRoomManager,
+    "TowerManager": TowerManager,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
     "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor
 };
