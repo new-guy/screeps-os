@@ -112,6 +112,7 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### Tidy UP pt 2
 
+- Visualize creep paths
 - Move room and creep property initialization somewhere better than main.js
 - Move room tools from HRCT to RT
 - Break logic in PCFM into smaller parts

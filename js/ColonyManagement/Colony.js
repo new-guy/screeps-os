@@ -33,7 +33,7 @@ class Colony {
     initColonyRoomInfo() {
         if(this.memory.colonyRoomInfo === undefined) {
             var colonyRoomInfo = {};
-            colonyRoomInfo[this.primaryRoom.name] = {'roomName': this.primaryRoom.name, 'travelDistance': 0};
+            colonyRoomInfo[this.primaryRoom.name] = {'roomName': this.primaryRoom.name, 'distanceFromPrimary': 0};
             var roomsToSearch = Object.values(Game.map.describeExits(this.primaryRoom.name));
             var currentTravelDistance = 1;
             var nextRoomsToSearch = [];
@@ -52,7 +52,7 @@ class Colony {
 
                     colonyRoomInfo[roomName] = {
                         'roomName': roomName,
-                        'travelDistance': currentTravelDistance
+                        'distanceFromPrimary': currentTravelDistance
                     };
 
                     var adjacentRooms = Object.values(Game.map.describeExits(roomName));
@@ -79,7 +79,7 @@ class Colony {
         */
 
         return _.groupBy(this.colonyRoomInfo, function(roomInfo) {
-            return roomInfo.travelDistance.toString();
+            return roomInfo.distanceFromPrimary.toString();
         });
     }
 

@@ -6,6 +6,7 @@ const EmpireManager = require('EmpireManager');
 
 const ColonyManager = require('ColonyManager');
 const ColonyScoutingManager = require('ColonyScoutingManager');
+const SecondaryRoomFinder = require('SecondaryRoomFinder');
 const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
 
 const HomeRoomManager = require('HomeRoomManager');
@@ -23,11 +24,12 @@ const CPUMetrics = require('CPUMetrics');
 var processTypeMap = {
     "Process": Process,
     "SingleTickProcess": SingleTickProcess,
+    "SingleTickChildTest": SingleTickChildTest,
     "EmpireManager": EmpireManager,
     "ColonyManager": ColonyManager,
     "ColonyScoutingManager": ColonyScoutingManager,
+    "SecondaryRoomFinder": SecondaryRoomFinder,
     "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
-    "SingleTickChildTest": SingleTickChildTest,
     "SpawnCreep": SpawnCreep,
     "BootStrapper": BootStrapper,
     "Scout": Scout,

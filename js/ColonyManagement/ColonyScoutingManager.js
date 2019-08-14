@@ -65,7 +65,6 @@ class ColonyScoutingManager extends Process {
                 }
             }
         }
-
     }
 
     updateScoutingInfo(room) {
@@ -98,12 +97,8 @@ class ColonyScoutingManager extends Process {
             scoutingInfo.sourceInfo = sourceInfo;
         }
 
-        if(scoutingInfo.skLairs === undefined) {
-            var skLairs = room.find(FIND_HOSTILE_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_KEEPER_LAIR }});
-    
-            var isSkRoom = skLairs.length > 0;
-    
-            scoutingInfo.isSkRoom = isSkRoom;
+        if(scoutingInfo.skLairs === undefined) {    
+            scoutingInfo.isSkRoom = room.hasSourceKeepers;
         }
 
         scoutingInfo.lastColonyScout = Game.time;

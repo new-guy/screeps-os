@@ -7,3 +7,18 @@ Room.prototype.hasNoBuildingSlots = function(structureType) {
 
 	return builtStructCount == structureCountMax;
 }
+
+Room.prototype.getPlainsPercentage = function() {
+	var tilesInRoom = 2500;
+	var numPlains = 0;
+
+	for(var x = 0; x < 49; x++) {
+		for(var y = 0; y < 49; y++) {
+			if(this.getTerrain().get(x, y) === 0) {
+				numPlains++;
+			}
+		}
+	}
+
+	return numPlains/tilesInRoom;
+}

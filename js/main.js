@@ -138,5 +138,7 @@ function initRooms() {
         room.rampartsNeedingRepair = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
             return s.structureType === STRUCTURE_RAMPART && s.hits < RAMPART_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
         }});
+
+        room.hasSourceKeepers = room.find(FIND_HOSTILE_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_KEEPER_LAIR }}).length > 0;
     }
 }

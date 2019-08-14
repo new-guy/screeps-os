@@ -7,7 +7,9 @@ class ColonyManager extends Process {
         this.primaryRoom = Game.rooms[this.memory.primaryRoom];
         this.name = this.primaryRoom.name;
 
-        //if(this.memory.secondaryRoom) 
+        if(this.memory.secondaryRoom !== undefined) {
+            this.secondaryRoom = Game.rooms[this.primaryRoom.memory.secondaryRoom];
+        }
     }
 
     update() {
@@ -33,8 +35,14 @@ class ColonyManager extends Process {
             console.log('Need to implement post-storage functionality');
         }
 
-
-        //If we're pre-storage, bootstrap
+        if(this.primaryRoom.memory.secondaryRoom === undefined) { //If we have not figured out the secondaryRoom name, ensure a process to find the room
+            this.ensureChildProcess(this.primaryRoom.name + '|secondaryRoomFinder', 'SecondaryRoomFinder', {'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
+        }
+        
+        if(this.secondaryRoom !== undefined) {
+            //Do Secondary Room Control
+            console.log('Secondary Room');
+        }
     }
 
     roomIsPreStorage(room) {
