@@ -39,8 +39,14 @@ class ColonyManager extends Process {
         if(this.colony.memory.secondaryRoomName === undefined) { //If we have not figured out the secondaryRoom name, ensure a process to find the room
             this.ensureChildProcess(this.primaryRoom.name + '|secondaryRoomFinder', 'SecondaryRoomFinder', {'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
         }
+
+        else if(this.secondaryRoom === undefined || !this.secondaryRoom.controller.my) {
+            var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
+            var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
+            this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
+        }
         
-        if(this.secondaryRoom !== undefined) {
+        else if(this.secondaryRoom !== undefined) {
             //Do Secondary Room Control
             console.log('Secondary Room');
         }

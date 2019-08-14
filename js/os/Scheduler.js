@@ -19,6 +19,8 @@ const SpawnCreep = require('SpawnCreep');
 const BootStrapper = require('BootStrapper');
 const Scout = require('Scout');
 
+const ExpansionBootstrap = require('ExpansionBootstrap');
+
 const CPUMetrics = require('CPUMetrics');
 
 var processTypeMap = {
@@ -33,6 +35,7 @@ var processTypeMap = {
     "SpawnCreep": SpawnCreep,
     "BootStrapper": BootStrapper,
     "Scout": Scout,
+    "ExpansionBootstrap": ExpansionBootstrap,
     "HomeRoomManager": HomeRoomManager,
     "TowerManager": TowerManager,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
