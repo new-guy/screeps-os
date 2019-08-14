@@ -127,6 +127,7 @@ If we're below the low watermark, use up to 50% of the limit
 - Need a generic way of creating states, transitions, etc
 - Probably need to set process default priority by some sort of dictionary rather than depending on the process to be honest - this will allow us to update priorities without recreating the process tree.
 - Test out that CPU conservation works
+- Whitelisting for enemy buildings
 
 ### Notes on what to build
 

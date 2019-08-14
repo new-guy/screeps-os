@@ -9,6 +9,7 @@ const ColonyScoutingManager = require('ColonyScoutingManager');
 const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
 
 const HomeRoomManager = require('HomeRoomManager');
+const TowerManager = require('TowerManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
 
@@ -31,6 +32,7 @@ var processTypeMap = {
     "BootStrapper": BootStrapper,
     "Scout": Scout,
     "HomeRoomManager": HomeRoomManager,
+    "TowerManager": TowerManager,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
     "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor
 };

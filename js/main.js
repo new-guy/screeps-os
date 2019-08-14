@@ -2,12 +2,14 @@
 //Initialize the scheduler.  Load PID metadata from memory & sort it
 //Run main scheduler loop
 require('constants');
+require('whitelist');
 
 //Creep abilities
 require('Targets');
 require('Mining');
 require('GenericCreepAbilities');
 require('Upgrading');
+require('CreepTools');
 
 //Room functions
 require('HomeRoomConstructionTools');
@@ -18,6 +20,17 @@ require('RoomPositionTools');
 
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
+
+const RAMPART_UPGRADE_SCHEDULE = {
+    "1": 5000,
+    "2": 5000,
+    "3": 20000,
+    "4": 50000,
+    "5": 150000,
+    "6": 500000,
+    "7": 1500000,
+    "8": 25000000,
+};
 
 module.exports.loop = function() {
     initCustomObjects();
@@ -121,5 +134,13 @@ function initRooms() {
                 return s.structureType === STRUCTURE_TOWER && s.energy < s.energyCapacity/2 
             }});
         }
+
+        room.enemies = room.find(FIND_CREEPS, {filter: function(c) { return c.isHostile(); }});
+        room.friendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly(); }});
+        room.damagedFriendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly() && c.hits < c.hitsMax; }});
+        room.damagedRoads = room.find(FIND_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax; }});
+        room.rampartsNeedingRepair = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
+            return s.structureType === STRUCTURE_RAMPART && s.hits < RAMPART_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
+        }});
     }
 }
