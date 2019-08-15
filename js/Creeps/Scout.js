@@ -19,8 +19,6 @@ class Scout extends CreepProcess {
         if(Game.rooms[this.creep.memory.targetRoom] === undefined || this.creep.pos.getRangeTo(destination) > 5) {
             var movePath = this.creep.getSafePath(destination, 5);
             this.creep.say(this.creep.moveByPath(movePath));
-
-            this.creep.room.visual.poly(movePath, {lineStyle: 'dashed'});
         }
     }
 }

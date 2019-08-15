@@ -12,6 +12,6 @@ Creep.prototype.upgradeThisController = function(controller) {
     }
 
     if(this.pos.getRangeTo(controller) > 2) {
-        this.moveTo(controller);
+        this.moveTo(controller, {visualizePathStyle: {stroke: "#2dd", opacity: .3}});
     }
 }

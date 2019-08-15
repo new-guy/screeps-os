@@ -6,7 +6,7 @@ Creep.prototype.putEnergyInTarget = function() {
     }
 
     else if(this.pos.getRangeTo(target) > 1) {
-        this.moveTo(target);
+        this.moveTo(target, {visualizePathStyle: {stroke: "#881", opacity: .2}});
     }
 
     else {
@@ -32,7 +32,7 @@ Creep.prototype.buildTarget = function() {
 
     else {
         if(this.pos.getRangeTo(target) > 2) {
-            this.moveTo(target);
+            this.moveTo(target, {visualizePathStyle: {stroke: "#1c1", opacity: .3}});
         }
 
         if(this.pos.getRangeTo(target) <= 3) {
