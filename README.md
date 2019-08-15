@@ -71,14 +71,10 @@ If we're below the low watermark, use up to 50% of the limit
 ### Room Pairs <--------------- current
 
 - Remaining work:
-    - Initial claiming & bootstrapper build.  
-        - Need to fix all creep spawning logic to support multiple rooms/different energy levels.
-            - The Colony.availableSpawns property needs to instead be getAvailableSpawns(energyLevel)
-                - When we use a spawn currently, we remove that spawn from availableSpawns so that it can't be used by another process
-                - That functionality needs to be replicated
-            - Spawn from the lowest energyCapacity possible
-        - Need to spawn claimer
-        - Need to spawn bootstrappers (appears to be finished)
+    - RECURSIVE CHILD PROCESS CLEANUP DOES NOT WORK - EXAMPLE IS THE EXPANSION BOOTSTRAPPER AND EXPANSION CLAIMER - THEY DID NOT DIE UPON EXPANSION
+        - This should be fixed
+
+    - GCL Protection
 
     - Probably should make a generic bootstrapping process that takes in the number to spawn, the spawn colony, and the targetRoom
     
@@ -91,6 +87,8 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### Tidy UP pt 2
 
+- RECURSIVE CHILD PROCESS CLEANUP DOES NOT WORK - EXAMPLE IS THE EXPANSION BOOTSTRAPPER AND EXPANSION CLAIMER - THEY DID NOT DIE UPON EXPANSION
+    - This should be fixed
 - Visualize creep paths
 - Move room and creep property initialization somewhere better than main.js
 - Move room tools from HRCT to RT
