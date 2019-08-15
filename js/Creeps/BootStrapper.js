@@ -61,15 +61,14 @@ class BootStrapper extends CreepProcess {
             var targetSource = this.creep.getTarget();
 
             if(this.creep.pos.getRangeTo(targetSource) > 1 && !targetSource.pos.hasOpenAdjacentTile()) {
-                this.creep.say('NoRoom');
+                this.creep.curse();
                 this.creep.clearTarget();
             }
             else if(targetSource.energy === 0) {
-                this.creep.say('SrcEmpty');
+                this.creep.curse();
                 this.creep.clearTarget();
             }
             else {
-                this.creep.say('HasSrc');
                 this.creep.harvestFrom(targetSource);
             }
         }
@@ -129,7 +128,6 @@ class BootStrapper extends CreepProcess {
         }
 
         if((target instanceof StructureSpawn || target instanceof StructureExtension) && this.creep.carry[RESOURCE_ENERGY] > this.creep.carryCapacity/2) {
-            this.creep.say('Balance');
             this.creep.putEnergyInTarget();
         }
 
@@ -143,7 +141,6 @@ class BootStrapper extends CreepProcess {
         }
 
         else {
-            this.creep.say('Upgrade');
             this.creep.upgradeThisController(this.targetRoom.controller);
         }
     }

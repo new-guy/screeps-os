@@ -41,3 +41,17 @@ Creep.prototype.getSafePath = function(targetPosition, range=0) {
 
     return ret.path;
 }
+
+Creep.prototype.curse = function() {
+    this.sayInOrder(['Fuck', 'Shit!', 'Dang', 'Dag', 'Wtf?', 'Wut']);
+}
+
+Creep.prototype.sayInOrder = function(words) {
+    if(this.memory.talkStart === undefined) {
+        this.memory.talkStart = Game.time;
+    }
+
+    var index = (Game.time + this.memory.talkStart) % words.length;
+
+    this.say(words[index]);
+}

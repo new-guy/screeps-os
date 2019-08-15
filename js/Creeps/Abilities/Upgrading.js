@@ -7,7 +7,7 @@ StructureController.prototype.needsSaving = function() {
 
 Creep.prototype.upgradeThisController = function(controller) {
     if(this.pos.getRangeTo(controller) <= 3) {
-        this.say('inrange');
+        this.sayInOrder(['Praise', 'the', 'sun', '!!!']);
         this.upgradeController(controller);
     }
 

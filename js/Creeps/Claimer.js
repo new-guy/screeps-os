@@ -27,7 +27,7 @@ class Claimer extends CreepProcess {
             }
             
             else {
-                this.creep.claim(targetRoom.controller);
+                this.creep.claimController(targetRoom.controller);
             }
         }
     }

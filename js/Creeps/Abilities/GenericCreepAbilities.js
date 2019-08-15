@@ -1,5 +1,6 @@
 Creep.prototype.putEnergyInTarget = function() {
     var target = this.getTarget();
+    this.sayInOrder(['The', 'swarm', 'must', 'grow']);
 
     if(target.energy === target.energyCapacity) {
         this.clearTarget();
@@ -26,7 +27,7 @@ Creep.prototype.buildTarget = function() {
     var target = this.getTarget();
 
     if(this.pos.getRangeTo(target) === 0) {
-        this.moveRandom();        
+        this.moveRandom();
         this.say('Move');
     }
 
@@ -43,7 +44,7 @@ Creep.prototype.buildTarget = function() {
             }
     
             else {
-                this.say(buildResult);
+                this.sayInOrder(['Grab', 'the', 'hammer', '!', 'Hit', 'that', 'bit', 'over', 'there']);
             }
         }
     }

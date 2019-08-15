@@ -8,8 +8,8 @@ class ColonyManager extends Process {
         this.primaryRoom = Game.rooms[this.memory.primaryRoom];
         this.name = this.primaryRoom.name;
 
-        if(this.colony.memory.secondaryRoom !== undefined) {
-            this.secondaryRoom = Game.rooms[this.colony.memory.secondaryRoom];
+        if(this.colony.memory.secondaryRoomName !== undefined) {
+            this.secondaryRoom = Game.rooms[this.colony.memory.secondaryRoomName];
         }
     }
 
@@ -46,8 +46,8 @@ class ColonyManager extends Process {
     }
 
     ensureSecondaryRoom() {
-        if( Game.empire.hasSpareGCL && this.secondaryRoom === undefined || 
-            !this.secondaryRoom.controller.my || this.secondaryRoom.controller.level < 2) {
+        if( this.secondaryRoom === undefined || 
+            this.secondaryRoom !== undefined && (!this.secondaryRoom.controller.my || this.secondaryRoom.controller.level < 2)) {
             var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
             var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
             this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
@@ -58,7 +58,9 @@ class ColonyManager extends Process {
             console.log('Secondary Room');
         }
 
+        console.log(this.secondaryRoom);
         if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my && this.secondaryRoom.controller.level > 0) {
+            console.log('hi');
             this.ensureChildProcess(this.secondaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
             this.ensureChildProcess(this.secondaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
         }
