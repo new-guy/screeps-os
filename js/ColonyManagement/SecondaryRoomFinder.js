@@ -83,7 +83,7 @@ class SecondaryRoomFinder extends Process {
                 var candidateRoom = Game.rooms[currentCandidate];
 
                 if(candidateRoom !== undefined) {
-                    if(this.placeHeart()) {
+                    if(this.placeHeart(candidateRoom)) {
                         this.colony.memory['secondaryRoomName'] = currentCandidate;
                     }
                 }
