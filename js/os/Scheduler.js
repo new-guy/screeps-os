@@ -15,6 +15,7 @@ const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
 
 const SpawnCreep = require('SpawnCreep');
+const BootstrapSpawner = require('BootstrapSpawner');
 
 const BootStrapper = require('BootStrapper');
 const Scout = require('Scout');
@@ -34,6 +35,7 @@ var processTypeMap = {
     "SecondaryRoomFinder": SecondaryRoomFinder,
     "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
     "SpawnCreep": SpawnCreep,
+    "BootstrapSpawner" :BootstrapSpawner,
     "BootStrapper": BootStrapper,
     "Scout": Scout,
     "Claimer": Claimer,

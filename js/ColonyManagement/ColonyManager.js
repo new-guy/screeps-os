@@ -46,24 +46,63 @@ class ColonyManager extends Process {
     }
 
     ensureSecondaryRoom() {
-        if( this.secondaryRoom === undefined || 
-            this.secondaryRoom !== undefined && (!this.secondaryRoom.controller.my || this.secondaryRoom.controller.level < 2)) {
-            var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
-            var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
-            this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
-        }
-        
-        else if(this.secondaryRoom !== undefined) {
-            //Do Secondary Room Control
-            console.log('Secondary Room');
+        if(this.secondaryRoom !== undefined && !this.secondaryRoom.controller.my && Game.empire.hasSpareGCL) {
+            this.spawnSecondaryRoomClaimer();
         }
 
         console.log(this.secondaryRoom);
-        if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my && this.secondaryRoom.controller.level > 0) {
-            console.log('hi');
-            this.ensureChildProcess(this.secondaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
-            this.ensureChildProcess(this.secondaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
+        if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my) {
+            //Secondary Room Self-Management
+            if(this.secondaryRoom.controller.level > 0) {
+                this.ensureChildProcess(this.secondaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
+                this.ensureChildProcess(this.secondaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
+                this.ensureChildProcess(this.primaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.primaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
+            }
+            
+            if(this.secondaryRoom.controller.level < 4) {
+                this.ensureSecondaryRoomSelfBootstrap();
+            }
+
+            //Bootstrap Scheduling
+            if(this.secondaryRoom.controller.level < 2) {
+                var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
+                var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
+                this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
+            }
         }
+    }
+
+    spawnSecondaryRoomClaimer() {
+        var data = {
+            'colonyName': this.memory.spawnColonyName,
+            'creepCount': 1,
+            'creepNameBase': 'expandClaimer|' + this.memory.targetRoomName,
+            'creepBodyType': 'Claimer',
+            'creepProcessClass': 'Claimer',
+            'creepMemory': {
+                'targetRoom': this.memory.targetRoomName
+            },
+            'creepPriority': NECESSARY_CREEPS_PRIORITY
+        };
+        
+        var spawnPID = 'spawnExpansionClaimer|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
+    }
+
+    ensureSecondaryRoomSelfBootstrap() {
+        var bootstrappersToSpawn = 5;
+
+        var data = {
+            'targetRoomName': this.secondaryRoom.name,
+            'spawnColonyName': this.name,
+            'maxToSpawn': bootstrappersToSpawn,
+            'maxTicksToUse': 500,
+            'maxEnergy': 3000,
+            'creepNameBase': 'secondarySelf'
+        };
+        
+        var spawnPID = 'secondarySelfBootstrap|' + bootstrappersToSpawn + '|' + this.name + '|' + this.secondaryRoom.name;
+        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
     roomIsPreStorage(room) {

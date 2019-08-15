@@ -56,7 +56,7 @@ class Process {
     }
 
     removeChildProcess(pid) {
-        _.remove(this.memory.children, function(proc) { return proc === pid; });
+        this.memory.children = _.remove(this.memory.children, function(proc) { return proc === pid; });
         this.scheduler.removeProcess(pid);
     }
 
