@@ -100,7 +100,7 @@ class BootStrapper extends CreepProcess {
             return;
         }
 
-        else if(this.targetRoom.controller !== undefined && (this.targetRoom.controller.needsSaving() || this.creep.memory.savingRoom === true))
+        else if(this.targetRoom.controller !== undefined && this.targetRoom.controller.needsSaving())
         {
             this.creep.say("SaveCont");
             this.creep.upgradeThisController(this.targetRoom.controller);
