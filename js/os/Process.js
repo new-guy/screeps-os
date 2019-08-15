@@ -43,6 +43,7 @@ class Process {
     }
 
     ensureChildProcess(pid, processClass, data, priority) {
+        console.log(this.pid + ' ensuring child ' + pid);
         this.scheduler.ensureProcessExists(pid, processClass, data, priority);
         this.ensuredChildren.push(pid);
 
@@ -53,6 +54,8 @@ class Process {
         if(!this.memory.children.includes(pid)) {
             this.memory.children.push(pid);
         }
+
+        console.log(this.pid + ' children: ' + this.memory.children);
     }
 
     removeChildProcess(pid) {
