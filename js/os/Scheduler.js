@@ -209,19 +209,12 @@ class Scheduler {
     //Recursively remove the process from memory, along with its child processes
         if(Memory.processes[pid] !== undefined)
         {
-            console.log('Found process to remove ' + pid);
-            console.log('Process children: ' + Memory.processes[pid]['data']['children'])
-
             if(Memory.processes[pid]['data']['children'] !== undefined) {
                 for(var i = 0; i < Memory.processes[pid]['data']['children'].length; i++) {
                     var childProcessPid = Memory.processes[pid]['data']['children'][i];
                     this.removeProcess(childProcessPid);
-
-                    console.log('Recursing on child process ' + childProcessPid);
                 }
             }
-
-            console.log('Removing process ' + pid);
     
             Memory.processes[pid] = undefined;
         }
