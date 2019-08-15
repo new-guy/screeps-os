@@ -1,6 +1,7 @@
 const Process = require('Process');
 const SingleTickProcess = require('SingleTickProcess');
 const SingleTickChildTest = require('SingleTickChildTest');
+const RecursiveChildTest = require('RecursiveChildTest');
 
 const EmpireManager = require('EmpireManager');
 
@@ -29,6 +30,7 @@ var processTypeMap = {
     "Process": Process,
     "SingleTickProcess": SingleTickProcess,
     "SingleTickChildTest": SingleTickChildTest,
+    "RecursiveChildTest": RecursiveChildTest,
     "EmpireManager": EmpireManager,
     "ColonyManager": ColonyManager,
     "ColonyScoutingManager": ColonyScoutingManager,
@@ -59,7 +61,7 @@ class Scheduler {
             Memory.ipc = {};
 
             this.addProcess("empireman", "EmpireManager", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
-            this.addProcess("childTest", "SingleTickChildTest", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
+            this.addProcess("recursiveChildTest", "RecursiveChildTest", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
         }
 
         this.sortedProcesses = this.getSortedProcesses();
@@ -207,13 +209,12 @@ class Scheduler {
     //Recursively remove the process from memory, along with its child processes
         if(Memory.processes[pid] !== undefined)
         {
-            if(Memory.processes[pid]['children'] !== undefined) {
-                for(var i = 0; i < Memory.processes[pid]['children'].length; i++) {
-                    this.removeProcess(Memory.processes[pid]['children'][i]);
+            if(Memory.processes[pid]['data']['children'] !== undefined) {
+                for(var i = 0; i < Memory.processes[pid]['data']['children'].length; i++) {
+                    var childProcessPid = Memory.processes[pid]['data']['children'][i];
+                    this.removeProcess(childProcessPid);
                 }
             }
-
-            console.log('removing process ' + pid);
     
             Memory.processes[pid] = undefined;
         }
