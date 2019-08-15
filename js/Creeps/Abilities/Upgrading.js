@@ -1,5 +1,5 @@
-var SAVE_LOWER_THRESHOLD = 6000;
-var SAVE_UPPER_THRESHOLD = 9000;
+var SAVE_LOWER_THRESHOLD = 3000;
+var SAVE_UPPER_THRESHOLD = 4000;
 
 StructureController.prototype.needsSaving = function() {
     return this.my && this.ticksToDowngrade < SAVE_LOWER_THRESHOLD;
