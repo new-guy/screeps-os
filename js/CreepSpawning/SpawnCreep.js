@@ -19,7 +19,7 @@ class SpawnCreep extends Process {
             return 'exit';
         }
 
-        if(this.colony.spawnIsAvailable()) {
+        if(this.colony.spawnIsAvailable(this.creepBodyType, this.maxEnergyToSpend)) {
             for(var i = 0; i < this.creepCount; i++) {
                 var creepName = this.creepNameBase + "|" + i;
                 if(Game.creeps[creepName] !== undefined) {

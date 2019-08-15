@@ -164,7 +164,7 @@ class BootStrapper extends CreepProcess {
             }
         }
 
-        else if(this.targetRoom.halfFullTowers.length > 0) {
+        else if(this.targetRoom.halfFullTowers !== undefined && this.targetRoom.halfFullTowers.length > 0) {
             var closestTower = this.creep.pos.findClosestByPath(this.targetRoom.halfFullTowers);
 
             if(closestTower !== null) {

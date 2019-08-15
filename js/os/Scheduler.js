@@ -18,6 +18,7 @@ const SpawnCreep = require('SpawnCreep');
 
 const BootStrapper = require('BootStrapper');
 const Scout = require('Scout');
+const Claimer = require('Claimer');
 
 const ExpansionBootstrap = require('ExpansionBootstrap');
 
@@ -35,6 +36,7 @@ var processTypeMap = {
     "SpawnCreep": SpawnCreep,
     "BootStrapper": BootStrapper,
     "Scout": Scout,
+    "Claimer": Claimer,
     "ExpansionBootstrap": ExpansionBootstrap,
     "HomeRoomManager": HomeRoomManager,
     "TowerManager": TowerManager,

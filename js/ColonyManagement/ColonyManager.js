@@ -40,7 +40,14 @@ class ColonyManager extends Process {
             this.ensureChildProcess(this.primaryRoom.name + '|secondaryRoomFinder', 'SecondaryRoomFinder', {'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
         }
 
-        else if(this.secondaryRoom === undefined || !this.secondaryRoom.controller.my) {
+        else if(this.colony.primaryRoom.energyCapacityAvailable >= 650 || (this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.controller.my)) {
+            this.ensureSecondaryRoom()
+        }
+    }
+
+    ensureSecondaryRoom() {
+        if( Game.empire.hasSpareGCL && this.secondaryRoom === undefined || 
+            !this.secondaryRoom.controller.my || this.secondaryRoom.controller.level < 2) {
             var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
             var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
             this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_MANAGEMENT_PRIORITY);

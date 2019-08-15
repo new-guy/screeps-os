@@ -42,6 +42,7 @@ module.exports.loop = function() {
 
 function initCustomObjects() {
     initScouting();
+    initEmpire();
     initColonies();
     initCreeps();
     initRooms();
@@ -55,6 +56,14 @@ function initScouting() {
     if(Memory.scouting.rooms === undefined) {
         Memory.scouting.rooms = {};
     } 
+}
+
+function initEmpire() {
+    Game.empire = {};
+
+    var ownedRooms = _.filter(Game.rooms, function(r) { return r.controller !== undefined && r.controller.my && r.controller.level > 0 });
+
+    Game.empire.hasSpareGCL = ownedRooms < Game.gcl;
 }
 
 function initColonies() {

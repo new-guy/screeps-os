@@ -76,6 +76,7 @@ If we're below the low watermark, use up to 50% of the limit
             - The Colony.availableSpawns property needs to instead be getAvailableSpawns(energyLevel)
                 - When we use a spawn currently, we remove that spawn from availableSpawns so that it can't be used by another process
                 - That functionality needs to be replicated
+            - Spawn from the lowest energyCapacity possible
         - Need to spawn claimer
         - Need to spawn bootstrappers (appears to be finished)
 

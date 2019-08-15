@@ -19,10 +19,11 @@ class ExpansionBootstrap extends Process {
         }
 
         this.spawnBootstrappers();
+        this.spawnClaimer();
     }
 
     spawnBootstrappers() {
-        var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.targetRoom.energyCapacityAvailable);
+        var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.spawnColony.primaryRoom.energyCapacityAvailable);
         var ticksToSpawn = BodyGenerator.getTicksToSpawn(bootstrapperBody);
         var bootstrappersToSpawn = Math.floor(SPAWN_TICKS_TO_FILL/ticksToSpawn); //Do not spawn more than this many ticks
 
@@ -35,11 +36,11 @@ class ExpansionBootstrap extends Process {
         var data = {
             'colonyName': this.memory.spawnColonyName,
             'creepCount': bootstrappersToSpawn,
-            'creepNameBase': 'expandBootstrap|' + this.targetRoom.name,
+            'creepNameBase': 'expandBootstrap|' + this.memory.targetRoomName,
             'creepBodyType': 'BootStrapper',
             'creepProcessClass': 'BootStrapper',
             'creepMemory': {
-                'targetRoom': this.targetRoom.name
+                'targetRoom': this.memory.targetRoomName
             },
             'creepPriority': NECESSARY_CREEPS_PRIORITY
         };
@@ -48,8 +49,25 @@ class ExpansionBootstrap extends Process {
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
+    spawnClaimer() {
+        var data = {
+            'colonyName': this.memory.spawnColonyName,
+            'creepCount': 1,
+            'creepNameBase': 'expandClaimer|' + this.memory.targetRoomName,
+            'creepBodyType': 'Claimer',
+            'creepProcessClass': 'Claimer',
+            'creepMemory': {
+                'targetRoom': this.memory.targetRoomName
+            },
+            'creepPriority': NECESSARY_CREEPS_PRIORITY
+        };
+        
+        var spawnPID = 'spawnExpansionClaimer|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
+    }
+
     processShouldDie() {
-        return (this.targetRoom.controller.level > 5 || this.targetRoom.storage !== undefined);
+        return false;
     }
 }
 

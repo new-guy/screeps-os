@@ -13,7 +13,10 @@ class Colony {
     this.primaryRoom = Room
     this.rooms = {roomName: Room}
 
-    this.availableSpawns = [];
+    this.availableSpawns = {
+        'ENERGY_CAPACITY1': [],
+        'ENERGY_CAPACITY2': []
+    };
     this.timeTillAvailableSpawn = 0;
     this.activeSources = [Source]
     this.depletedSources = [Source]
@@ -92,7 +95,7 @@ class Colony {
         var spawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
 
         this.spawns = spawns;
-        this.availableSpawns = [];
+        this.availableSpawns = {};
         this.timeTillAvailableSpawn = 1000;
         //How long till we can spawn, how many can we spawn?
         for(var i = 0; i < spawns.length; i++) {
@@ -100,7 +103,16 @@ class Colony {
 
             if(spawn.spawning === null) {
                 this.timeTillAvailableSpawn = 0;
-                this.availableSpawns.push(spawn);
+
+                var energyCapacity = spawn.room.energyCapacityAvailable.toString();
+
+                if(this.availableSpawns[energyCapacity] === undefined) {
+                    this.availableSpawns[energyCapacity] = [spawn];
+                }
+                
+                else {
+                    this.availableSpawns[energyCapacity].push(spawn);
+                }
             }
 
             else if (spawn.spawning.remainingTime < this.timeTillAvailableSpawn) {
@@ -119,8 +131,68 @@ class Colony {
         }
     }
 
-    spawnIsAvailable() {
-        return (this.availableSpawns.length > 0);
+    spawnIsAvailable(creepBodyType, energyRequired=undefined) {
+        if(energyRequired === undefined) {
+            energyRequired = 0;
+        }
+        var body = BodyGenerator.generateBody(creepBodyType, energyRequired);
+
+        var energyToSpend = BodyGenerator.getCostOfBody(body);
+
+        for(var energyCapacity in this.availableSpawns) {
+            if(parseInt(energyCapacity) < energyToSpend) {
+                continue;
+            }
+
+            if(this.availableSpawns[energyCapacity].length > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    getCapableSpawn(creepBodyType, energyRequired=undefined) {
+        if(energyRequired === undefined) {
+            energyRequired = 0;
+        }
+        var body = BodyGenerator.generateBody(creepBodyType, energyRequired);
+
+        var energyToSpend = BodyGenerator.getCostOfBody(body);
+
+        for(var energyCapacity in this.availableSpawns) {
+            if(parseInt(energyCapacity) < energyToSpend) {
+                continue;
+            }
+
+            if(this.availableSpawns[energyCapacity].length > 0) {
+                return this.availableSpawns[energyCapacity][0];
+            }
+        }
+
+        return false;
+    }
+
+    removeCapableSpawn(creepBodyType, energyRequired=undefined) {
+        if(energyRequired === undefined) {
+            energyRequired = 0;
+        }
+        var body = BodyGenerator.generateBody(creepBodyType, energyRequired);
+
+        var energyToSpend = BodyGenerator.getCostOfBody(body);
+
+        for(var energyCapacity in this.availableSpawns) {
+            if(parseInt(energyCapacity) < energyToSpend) {
+                continue;
+            }
+
+            if(this.availableSpawns[energyCapacity].length > 0) {
+                this.availableSpawns[energyCapacity].shift();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     initMiningInfo() {
@@ -186,13 +258,9 @@ class Colony {
     }
 
     spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, scheduler, maxEnergyToSpend=undefined) {
-        var spawn = this.availableSpawns[0];
+        var spawn = this.getCapableSpawn(creepBodyType, energyToSpend);
 
-        if(spawn === undefined) {
-            console.log('No spawn available for ' + this.primaryRoom.name);
-        }
-
-        else {
+        if(spawn !== false) {
             //Energy to spend is either the room's capacity, or min of max vs current
 
             var energyToSpend = (maxEnergyToSpend === undefined) ? spawn.room.energyCapacityAvailable : Math.min(spawn.room.energyAvailable, maxEnergyToSpend);
@@ -209,7 +277,7 @@ class Colony {
 
                 var pid = 'creep|' + creepName;
                 scheduler.addProcess(pid, creepProcessClass, {'creepName': creepName}, creepPriority);
-                this.availableSpawns.shift();
+                this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
             }
 
             else {
