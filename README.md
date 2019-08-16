@@ -95,6 +95,8 @@ If we're below the low watermark, use up to 50% of the limit
 - Break logic in PCFM into smaller parts
 - Kill condition for HomeRoomManager - ColonyManager should kill it if it is bad
 - Need GCL Protection for secondary room expansion
+- Scheduler should be reference from Game.scheduler
+- Remove creep process delay
 
 ### Post RCL4 - this is (duh) big.
     - Mining

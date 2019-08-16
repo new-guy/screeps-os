@@ -28,7 +28,7 @@ class SpawnCreep extends Process {
                 }
                 
                 console.log(this.pid + ' trying to spawn ' + creepName);
-                this.colony.spawnCreep(creepName, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.creepPriority, this.scheduler, this.maxEnergyToSpend);
+                this.colony.spawnCreep(creepName, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.creepPriority, this.maxEnergyToSpend);
                 break;
             }
         }

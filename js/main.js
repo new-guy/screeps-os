@@ -20,6 +20,7 @@ require('RoomPositionTools');
 
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
+const CreepProcessHelper = require('CreepProcessHelper');
 
 const RAMPART_UPGRADE_SCHEDULE = {
     "1": 5000,
@@ -36,6 +37,8 @@ module.exports.loop = function() {
     initCustomObjects();
 
     const scheduler = new Scheduler();
+    Game.scheduler = scheduler;
+    CreepProcessHelper.ensureCreepProcesses();
     scheduler.update();
     scheduler.garbageCollect();
 }
