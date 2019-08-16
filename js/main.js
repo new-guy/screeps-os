@@ -64,9 +64,9 @@ function initScouting() {
 function initEmpire() {
     Game.empire = {};
 
-    var ownedRooms = _.filter(Game.rooms, function(r) { return r.controller !== undefined && r.controller.my && r.controller.level > 0 });
+    var ownedRooms = _.filter(Game.rooms, function(r) { return r.controller !== undefined && r.controller.my && r.controller.level > 0 }).length;
 
-    Game.empire.hasSpareGCL = ownedRooms < Game.gcl;
+    Game.empire.hasSpareGCL = ownedRooms < Game.gcl.level;
 }
 
 function initColonies() {

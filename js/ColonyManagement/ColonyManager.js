@@ -47,10 +47,10 @@ class ColonyManager extends Process {
 
     ensureSecondaryRoom() {
         if(this.secondaryRoom !== undefined && !this.secondaryRoom.controller.my && Game.empire.hasSpareGCL) {
+            console.log('hi');
             this.spawnSecondaryRoomClaimer();
         }
 
-        console.log(this.secondaryRoom);
         if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my) {
             //Secondary Room Self-Management
             if(this.secondaryRoom.controller.level > 0) {
@@ -83,18 +83,18 @@ class ColonyManager extends Process {
 
     spawnSecondaryRoomClaimer() {
         var data = {
-            'colonyName': this.memory.spawnColonyName,
+            'colonyName': this.colony.name,
             'creepCount': 1,
-            'creepNameBase': 'expandClaimer|' + this.memory.targetRoomName,
+            'creepNameBase': 'expandClaimer|' + this.secondaryRoom.name,
             'creepBodyType': 'Claimer',
             'creepProcessClass': 'Claimer',
             'creepMemory': {
-                'targetRoom': this.memory.targetRoomName
+                'targetRoom': this.secondaryRoom.name
             },
             'creepPriority': NECESSARY_CREEPS_PRIORITY
         };
         
-        var spawnPID = 'spawnExpansionClaimer|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
+        var spawnPID = 'spawnExpansionClaimer|' + this.colony.name + '|' + this.secondaryRoom.name;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
     }
 

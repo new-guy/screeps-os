@@ -50,7 +50,7 @@ var processTypeMap = {
 
 var MAX_PROCESSES_TO_DISPLAY = 10;
 
-var DEBUGGING = true;
+var DEBUGGING = false;
 
 class Scheduler {
     constructor () {
@@ -85,6 +85,7 @@ class Scheduler {
         while(this.shouldContinueProcessing()) {
             var activeProcessMetadata = this.sortedProcesses[this.programCounter]['metadata'];
             var processClass = activeProcessMetadata['processClass'];
+            console.log("#PC: " + this.programCounter + " | " + activeProcessMetadata['pid']);
 
             if(this.processesBeingRemoved.includes(activeProcessMetadata['pid'])) {
                 console.log('#Skipping because removal ' + activeProcessMetadata['pid']);
@@ -157,7 +158,6 @@ class Scheduler {
     }
 
     shouldContinueProcessing() {
-        console.log("#PC: " + this.programCounter);
         return this.programCounter < this.sortedProcesses.length;
     }
 

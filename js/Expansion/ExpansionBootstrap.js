@@ -20,9 +20,9 @@ class ExpansionBootstrap extends Process {
         var data = {
             'targetRoomName': this.targetRoom.name,
             'spawnColonyName': this.spawnColony.name,
-            'maxToSpawn': 2,
+            'maxToSpawn': 5,
             'maxTicksToUse': 200,
-            'maxEnergy': 3000,
+            'maxEnergy': 5000,
             'creepNameBase': 'expansion'
         };
         
