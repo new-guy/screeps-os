@@ -69,6 +69,15 @@ class ColonyManager extends Process {
                 var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
                 this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
             }
+
+            //Bootstrap Scheduling
+            if(this.secondaryRoom.controller.level >= 2 && this.primaryRoom.controller.level <= 4 && this.primaryRoom.storage === undefined) {
+                this.supportBootstrap(this.primaryRoom);
+            }
+
+            else if(this.secondaryRoom.controller.level >= 2 && this.secondaryRoom.storage === undefined && this.primaryRoom.storage !== undefined) {
+                this.supportBootstrap(this.secondaryRoom);
+            }
         }
     }
 
@@ -104,6 +113,22 @@ class ColonyManager extends Process {
         var spawnPID = 'secondarySelfBootstrap|' + bootstrappersToSpawn + '|' + this.name + '|' + this.secondaryRoom.name;
         this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_MANAGEMENT_PRIORITY);
     }
+
+    supportBootstrap(roomToSupport) {
+        var bootstrappersToSpawn = 10;
+
+        var data = {
+            'targetRoomName': roomToSupport.name,
+            'spawnColonyName': this.name,
+            'maxToSpawn': bootstrappersToSpawn,
+            'maxTicksToUse': 500,
+            'maxEnergy': 3000,
+            'creepNameBase': 'support' + roomToSupport.name
+        };
+        
+        var spawnPID = 'supportBootstrap|' + bootstrappersToSpawn + '|' + this.name + '|' + roomToSupport.name;
+        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_MANAGEMENT_PRIORITY);
+    } 
 
     roomIsPreStorage(room) {
         return (room.controller.level < 5 && room.storage === undefined);
