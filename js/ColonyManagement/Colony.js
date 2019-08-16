@@ -258,7 +258,7 @@ class Colony {
     }
 
     spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, maxEnergyToSpend=undefined) {
-        var spawn = this.getCapableSpawn(creepBodyType, energyToSpend);
+        var spawn = this.getCapableSpawn(creepBodyType, maxEnergyToSpend);
 
         if(spawn !== false) {
             //Energy to spend is either the room's capacity, or min of max vs current
