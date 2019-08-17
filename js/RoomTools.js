@@ -23,7 +23,7 @@ Room.prototype.getPlainsPercentage = function() {
 	return numPlains/tilesInRoom;
 }
 
-var WORK_PARTS_FOR_SAFE = 5;
+var WORK_PARTS_FOR_SAFE = 3;
 var MINIMUM_ENERGY_FOR_SAFE = 10000;
 
 Room.prototype.isInComa = function() {
