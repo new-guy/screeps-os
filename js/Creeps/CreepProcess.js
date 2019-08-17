@@ -1,7 +1,5 @@
 const Process = require('Process');
 
-const TIME_TO_WAIT_FOR_CREEP = 100;
-
 class CreepProcess extends Process {
     constructor (...args) {
         super(...args);
@@ -45,18 +43,10 @@ class CreepProcess extends Process {
     processShouldDie() {
         var myCreepExists = (this.creep !== undefined);
 
-        if(this.memory.timeWaited === undefined) {
-            this.memory.timeWaited = 0;
-        }
-
-        var timeWaited = this.memory.timeWaited;
-
-        var shouldDie = !myCreepExists && timeWaited > TIME_TO_WAIT_FOR_CREEP;
+        var shouldDie = !myCreepExists;
         if(shouldDie) {
             console.log('Killing process ' + this.pid + ' because creep does not exist');
         }
-
-        this.memory.timeWaited = this.memory.timeWaited + 1;
 
         return shouldDie;
     }

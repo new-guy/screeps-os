@@ -1,6 +1,6 @@
 const Process = require('Process');
 
-var CREEPS_TO_SPAWN = 5;
+var CREEPS_TO_SPAWN = 10;
 
 class ComaRecovery extends Process {
     constructor (...args) {

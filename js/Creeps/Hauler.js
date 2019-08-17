@@ -4,11 +4,13 @@ class Hauler extends CreepProcess {
     constructor (...args) {
         super(...args);
 
-        this.targetStorage = Game.getObjectById(this.creep.memory['targetStorageId']);
-        this.containerPos = new RoomPosition(this.creep.memory['containerPos']['x'], this.creep.memory['containerPos']['y'], this.creep.memory['containerPos']['roomName'])
+        if(this.creep !== undefined) {
+            this.targetStorage = Game.getObjectById(this.creep.memory['targetStorageId']);
+            this.containerPos = new RoomPosition(this.creep.memory['containerPos']['x'], this.creep.memory['containerPos']['y'], this.creep.memory['containerPos']['roomName'])
 
-        if(Game.rooms[this.containerPos.roomName] !== undefined) {
-            this.container = this.containerPos.getStructure(STRUCTURE_CONTAINER);
+            if(Game.rooms[this.containerPos.roomName] !== undefined) {
+                this.container = this.containerPos.getStructure(STRUCTURE_CONTAINER);
+            }
         }
     }
 
