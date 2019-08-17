@@ -16,7 +16,11 @@ class Miner extends CreepProcess {
     }
 
     performStateActions() {
-        if(this.creep.pos.getRangeTo(this.containerPos) > 0) {
+        if(this.targetSource === undefined) {
+            this.creep.moveTo(containerPos);
+        }
+
+        else if(this.creep.pos.getRangeTo(this.containerPos) > 0) {
             this.creep.moveTo(this.containerPos);
             this.creep.say('Move')
         }

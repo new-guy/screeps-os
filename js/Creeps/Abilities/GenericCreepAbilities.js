@@ -2,7 +2,7 @@ Creep.prototype.putEnergyInTarget = function() {
     var target = this.getTarget();
     this.sayInOrder(['Knock', 'knock', 'delivery', 'here!']);
 
-    if(target.energy === target.energyCapacity) {
+    if((target.store === undefined && target.energy === target.energyCapacity) || this.carry[RESOURCE_ENERGY] === 0) {
         this.clearTarget();
     }
 

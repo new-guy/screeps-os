@@ -1,4 +1,5 @@
 const Process = require('Process');
+const BodyGenerator = require('BodyGenerator');
 
 class EnergyRouteManager extends Process {
     constructor (...args) {
@@ -27,10 +28,30 @@ class EnergyRouteManager extends Process {
     }
 
     isOperational() {
+        if(this.targetSource === null) {
+            return false;
+        }
+
         var minerName = this.targetSource.pos.readableString() +'|Miner|0';
         var haulerName = this.targetSource.pos.readableString() +'|Hauler|0';
 
         return (Game.creeps[minerName] !== undefined && Game.creeps[haulerName] !== undefined);
+    }
+
+    getUsedTicks() {
+        var energyCapacity = this.spawnColony.primaryRoom.energyCapacityAvailable;
+
+        if(this.spawnColony.secondaryRoom !== undefined && this.spawnColony.secondaryRoom.energyCapacityAvailable > energyCapacity) {
+            energyCapacity = this.spawnColony.secondaryRoom.energyCapacityAvailable;;
+        }
+
+        var haulerBody = BodyGenerator.generateBody('Hauler', energyCapacity);
+        var ticksToSpawn = BodyGenerator.getTicksToSpawn(haulerBody);
+
+        var minerBody = BodyGenerator.generateBody('Miner', energyCapacity);
+        ticksToSpawn += BodyGenerator.getTicksToSpawn(minerBody);
+
+        return ticksToSpawn;
     }
 
     spawnMiner() {
@@ -70,7 +91,6 @@ class EnergyRouteManager extends Process {
     }
 
     determineContainerPos() {
-        console.log('recalculating');
         var containerPos = this.targetSource.pos.getOpenAdjacentPos();
 
         this.memory.containerPos = {

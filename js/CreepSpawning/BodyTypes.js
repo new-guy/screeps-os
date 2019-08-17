@@ -42,9 +42,9 @@ exports.Miner = {
 		"move": 1
 	},
 	"max": {
-		"work": 10,
+		"work": 8,
 		"carry": 2,
-		"move": 6
+		"move": 5
 	}
 }
 

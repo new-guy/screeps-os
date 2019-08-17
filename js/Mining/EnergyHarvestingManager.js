@@ -1,5 +1,8 @@
 const Process = require('Process');
 
+var MAX_TICKS_TO_USE_PER_SPAWN = 600;
+var TARGET_ROUTES_PER_STORAGE = 4;
+
 class EnergyHarvestingManager extends Process {
     constructor (...args) {
         super(...args);
@@ -42,23 +45,6 @@ class EnergyHarvestingManager extends Process {
             //For each Colony.safeSource, calculate the distance to all available storages.  Select the one that's closest
             //Use this to select our first mining route
             //Mining route ensures that the miner and harvester are spawned, along with designating where the container should be
-
-        /*
-        - Each mining operation should be its own process
-            - Update the "Ensure Child Process" function so that it returns the child process if it exists
-            - The mining route process should be able to return information about the mining route, such as if it is in full operation
-        - Colonies should have a mining manager process which controls the mining operations
-            - Mining routes should be created
-                - High priority for the room's own sources
-                - Up to a maximum number of ticks per spawner
-                    - This should be able to be controlled by a variable so that we can control it based upon state
-                    - We need to know how many ticks a mining operation will consume
-            - Mining operations should be started one by one.  New mining operations should only be started when the previous has all of its creeps being spawned or in existence
-            - To create a route, have the manager check the colony's available sources (meaning not owned by SKs or other players) by order of nearest to either of the colony's storages one by one
-                - If there is a route for that source already, continue
-                - If there is not a route, create one.
-                - If we can't find any available sources, tell the colony that we need to scout
-        */
     }
 
     ensureMiningRoutes() {
@@ -89,7 +75,27 @@ class EnergyHarvestingManager extends Process {
     }
 
     canCreateNewMiningRoute() {
-        return (this.memory.children === undefined || this.memory.children.length < 2);
+        if(this.memory.children === undefined) return true;
+
+        var totalTicksUsed = 0;
+        for(var i = 0; i < this.memory.children.length; i++) {
+            var childProcess = this.scheduler.getProcess(this.memory.children[i]);
+            var ticksUsed = childProcess.getUsedTicks();
+            totalTicksUsed += ticksUsed
+
+            console.log(childProcess.pid + ': ' + ticksUsed);
+        }
+
+        var totalRoutes = this.memory.children.length;
+        var targetRoutes = this.colony.primaryRoom.storage === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        targetRoutes += this.colony.secondaryRoom.storage === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+
+        var totalMaxTicks = this.colony.spawns.length * MAX_TICKS_TO_USE_PER_SPAWN;
+
+        console.log('Routes: ' + totalRoutes + ' Target: ' + targetRoutes);
+        console.log('Ticks: ' + totalTicksUsed + ' Max: ' + totalMaxTicks);
+
+        return (totalRoutes < targetRoutes && totalTicksUsed < totalMaxTicks);
     }
 
     findSourceToHarvest() {
@@ -100,6 +106,7 @@ class EnergyHarvestingManager extends Process {
             var source = this.colony.safeSources[i];
 
             if(this.routeExistsForSource(source)) {
+                console.log('Skipping ' + source.pos.readableString());
                 continue;
             }
 
@@ -136,11 +143,12 @@ class EnergyHarvestingManager extends Process {
             priority = COLONY_NECESSARY_ENERGY_PRIORITY;
         }
 
-        this.ensureChildProcess(this.getPidForSource(source) + '|energyRoute', 'EnergyRouteManager', data, priority);
+        this.ensureChildProcess(this.getPidForSource(source), 'EnergyRouteManager', data, priority);
     }
 
     routeExistsForSource(source) {
         var sourcePid = this.getPidForSource(source);
+        console.log('Pid: ' + sourcePid);
         return Memory.processes[sourcePid] !== undefined;
     }
 

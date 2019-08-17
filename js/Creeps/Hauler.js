@@ -1,12 +1,15 @@
 const CreepProcess = require('CreepProcess');
 
-class Miner extends CreepProcess {
+class Hauler extends CreepProcess {
     constructor (...args) {
         super(...args);
 
         this.targetStorage = Game.getObjectById(this.creep.memory['targetStorageId']);
         this.containerPos = new RoomPosition(this.creep.memory['containerPos']['x'], this.creep.memory['containerPos']['y'], this.creep.memory['containerPos']['roomName'])
-        this.container = this.containerPos.getStructure(STRUCTURE_CONTAINER);
+
+        if(Game.rooms[this.containerPos.roomName] !== undefined) {
+            this.container = this.containerPos.getStructure(STRUCTURE_CONTAINER);
+        }
     }
 
     update() {
@@ -45,18 +48,21 @@ class Miner extends CreepProcess {
         }
 
         else if(state === 'dropoffEnergy') {
-            this.creep.putEnergyInTarget(this.storage);
+            this.creep.setTarget(this.targetStorage);
+            this.creep.putEnergyInTarget();
         }
     }
 
     pickupFromContainer() {
-        if(this.container === null && this.creep.pos.getRangeTo(this.containerPos) > 4) {
+        if(this.container === undefined) {
             this.creep.moveTo(this.containerPos);
-            this.creep.say(this.container);
+        }
+
+        else if(this.container === null && this.creep.pos.getRangeTo(this.containerPos) > 4) {
+            this.creep.moveTo(this.containerPos);
         }
 
         else {
-            this.creep.say(this.container);
             if(this.creep.pos.getRangeTo(this.container) > 1) {
                 this.creep.moveTo(this.container);
             }
@@ -68,4 +74,4 @@ class Miner extends CreepProcess {
     }
 }
 
-module.exports = Miner;
+module.exports = Hauler;

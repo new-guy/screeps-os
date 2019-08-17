@@ -163,32 +163,35 @@ class Colony {
 
         var energyToSpend = BodyGenerator.getCostOfBody(body);
 
+        var spawnToUse = false;
+
         for(var energyCapacity in this.availableSpawns) {
             if(parseInt(energyCapacity) < energyToSpend) {
                 continue;
             }
 
             if(this.availableSpawns[energyCapacity].length > 0) {
-                return this.availableSpawns[energyCapacity][0];
+                var firstSpawnInRoom = this.availableSpawns[energyCapacity][0];
+                spawnToUse = firstSpawnInRoom;
+
+                if(firstSpawnInRoom.room.energyAvailable >= energyToSpend)  {
+                    break;
+                }
             }
         }
 
-        return false;
+        return spawnToUse;
     }
 
     removeCapableSpawn(creepBodyType, energyRequired=undefined) {
         if(energyRequired === undefined) {
             energyRequired = 0;
         }
-        var body = BodyGenerator.generateBody(creepBodyType, energyRequired);
 
-        var energyToSpend = BodyGenerator.getCostOfBody(body);
+        var spawn = this.getCapableSpawn(creepBodyType, energyRequired);
 
-        for(var energyCapacity in this.availableSpawns) {
-            if(parseInt(energyCapacity) < energyToSpend) {
-                continue;
-            }
-
+        if(spawn !== false) {
+            var energyCapacity = spawn.room.energyCapacityAvailable;
             if(this.availableSpawns[energyCapacity].length > 0) {
                 this.availableSpawns[energyCapacity].shift();
                 return true;
@@ -313,6 +316,7 @@ class Colony {
             else if(spawnResult === ERR_NOT_ENOUGH_ENERGY) {
                 //Draw the name of the creep your'e trying to spawn
                 console.log("Waiting for energy for creep " + creepName);
+                console.log('Creep Dump: ' + creepName + ' ' + body);
 
                 spawn.room.visual.text(creepName, spawn.pos);
                 this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
