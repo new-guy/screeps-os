@@ -1,6 +1,7 @@
 const Process = require('Process');
 
 var HEART_MAX_DISTANCE = 15;
+var MAX_DISTANCE_FROM_PRIMARY = 1;
 
 class SecondaryRoomFinder extends Process {
     constructor (...args) {
@@ -33,7 +34,7 @@ class SecondaryRoomFinder extends Process {
                 hasCheckedAll = false;
             }
 
-            if(colonyRoomInfo['distanceFromPrimary'] > 2) {
+            if(colonyRoomInfo['distanceFromPrimary'] > MAX_DISTANCE_FROM_PRIMARY) {
                 continue;
             }
 

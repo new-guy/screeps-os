@@ -7,7 +7,10 @@ class Miner extends CreepProcess {
         if(this.creep !== undefined) {
             this.targetSource = Game.getObjectById(this.creep.memory['targetSourceId']);
             this.containerPos = new RoomPosition(this.creep.memory['containerPos']['x'], this.creep.memory['containerPos']['y'], this.creep.memory['containerPos']['roomName'])
-            this.container = this.containerPos.getStructure(STRUCTURE_CONTAINER);
+
+            if(Game.rooms[this.containerPos.roomName] !== undefined) {
+                this.container = this.containerPos.getStructure(STRUCTURE_CONTAINER);
+            }
         }
     }
 
@@ -48,8 +51,15 @@ class Miner extends CreepProcess {
                 }
 
                 else {
-                    this.creep.drop(RESOURCE_ENERGY);
-                    this.creep.say('Drop');
+                    if(this.container.hits < this.container.hitsMax) {
+                        this.creep.repair(this.container);
+                        this.creep.say('Rep');
+                    } 
+
+                    else {
+                        this.creep.drop(RESOURCE_ENERGY);
+                        this.creep.say('Drop');
+                    }
                 }
             }
         }
