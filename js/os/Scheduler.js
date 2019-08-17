@@ -9,6 +9,8 @@ const ColonyManager = require('ColonyManager');
 const ColonyScoutingManager = require('ColonyScoutingManager');
 const SecondaryRoomFinder = require('SecondaryRoomFinder');
 const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
+const EnergyHarvestingManager = require('EnergyHarvestingManager');
+const EnergyRouteManager = require('EnergyRouteManager');
 
 const HomeRoomManager = require('HomeRoomManager');
 const ComaRecovery = require('ComaRecovery');
@@ -37,6 +39,8 @@ var processTypeMap = {
     "ColonyScoutingManager": ColonyScoutingManager,
     "SecondaryRoomFinder": SecondaryRoomFinder,
     "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
+    "EnergyHarvestingManager": EnergyHarvestingManager,
+    "EnergyRouteManager": EnergyRouteManager,
     "SpawnCreep": SpawnCreep,
     "BootstrapSpawner" :BootstrapSpawner,
     "BootStrapper": BootStrapper,
@@ -52,7 +56,7 @@ var processTypeMap = {
 
 var MAX_PROCESSES_TO_DISPLAY = 10;
 
-var DEBUGGING = false;
+var DEBUGGING = true;
 
 class Scheduler {
     constructor () {
@@ -150,6 +154,16 @@ class Scheduler {
         else {
             activeProcessMetadata['priority'] = activeProcessMetadata['defaultPriority'];
         }
+    }
+
+    getProcess(pid) {
+        var processMemory = Memory.processes[pid];
+
+        if(processMemory === undefined) {
+            return undefined;
+        }
+
+        return new processTypeMap[processMemory['metadata']['processClass']](pid, this);
     }
 
     garbageCollect() {

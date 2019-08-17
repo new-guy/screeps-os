@@ -21,7 +21,7 @@ class ColonyManager extends Process {
         }
 
         this.ensureRoomManagement();
-        //this.ensureMiningRoutes();
+        this.ensureMiningRoutes();
 
         if(this.primaryRoom.isInComa() || (this.secondaryRoom !== undefined && this.secondaryRoom.isInComa())) {
             this.comaRecovery();
@@ -41,6 +41,12 @@ class ColonyManager extends Process {
             this.ensureChildProcess(this.secondaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
             this.ensureChildProcess(this.secondaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
             this.ensureChildProcess(this.secondaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.secondaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
+        }
+    }
+
+    ensureMiningRoutes() {
+        if(this.primaryRoom.storage !== undefined || (this.secondaryRoom !== undefined && this.secondaryRoom.storage !== undefined)) {
+            this.ensureChildProcess(this.name + '|energyHarvestingManager', 'EnergyHarvestingManager', {'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
         }
     }
 

@@ -54,6 +54,10 @@ class Process {
             this.memory.children.push(pid);
         }
     }
+    
+    ensureChildByPid(pid) {
+        this.ensuredChildren.push(pid);
+    }
 
     removeChildProcess(pid) {
         this.memory.children = _.remove(this.memory.children, function(proc) { return proc === pid; });

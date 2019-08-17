@@ -198,9 +198,30 @@ class Colony {
         return false;
     }
 
+    getClosestStorage(position) {
+        var closestStorage = undefined;
+        var distance = 0;
+
+        if(this.primaryRoom.storage !== undefined) {
+            distance = position.findPathTo(this.primaryRoom.storage).length;
+            closestStorage = this.primaryRoom.storage;
+        }
+
+        if(this.secondaryRoom !== undefined && this.secondaryRoom.storage !== undefined) {
+            var secondaryDistance = position.findPathTo(this.secondaryRoom.storage).length;
+
+            if(secondaryDistance < distance) {
+                closestStorage = this.secondaryRoom.storage;
+            }
+        }
+
+        return closestStorage;
+    }
+
     initMiningInfo() {
         this.activeSources = [];
         this.depletedSources = [];
+        this.safeSources = [];
 
         for(var roomName in this.colonyRoomInfo) {
             var room = Game.rooms[roomName];
@@ -219,6 +240,10 @@ class Colony {
 
                 else {
                     this.depletedSources.push(source);
+                }
+
+                if(!isSkRoom) {
+                    this.safeSources.push(source);
                 }
             }
         }

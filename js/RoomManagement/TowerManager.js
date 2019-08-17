@@ -36,13 +36,29 @@ class TowerManager extends Process {
         }
 
         else if(this.room.damagedRoads.length > 0) {
-            var mostDamaged = _.minBy(this.room.damagedRoads, function(r) { return r.hits; });
+            var mostDamaged = this.room.damagedRoads[0];
+
+            for(var i = 1; i < this.room.damagedRoads.length; i++) {
+                var road = this.room.damagedRoads[i];
+
+                if(road.hits < mostDamaged.hits) {
+                    mostDamaged = road;
+                }
+            }
 
             tower.repair(mostDamaged);
         }
 
         else if(this.room.rampartsNeedingRepair.length > 0) {
-            var mostDamaged = _.minBy(this.room.rampartsNeedingRepair, function(r) { return r.hits; });
+            var mostDamaged = this.room.rampartsNeedingRepair[0];
+
+            for(var i = 1; i < this.room.rampartsNeedingRepair.length; i++) {
+                var rampart = this.room.rampartsNeedingRepair[i];
+
+                if(rampart.hits < mostDamaged.hits) {
+                    mostDamaged = rampart;
+                }
+            }
 
             tower.repair(mostDamaged);
         }
