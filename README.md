@@ -111,6 +111,9 @@ If we're below the low watermark, use up to 50% of the limit
 
 - Favor 2 sources over 1
 - Update scouting to include the secondary room
+- When spawning
+    - If no energy max defined, spawn from biggest available spawner
+    - If energy max defined, spawn from smallest that can support it
 
 ### Tidy UP pt 2
 
@@ -119,6 +122,7 @@ If we're below the low watermark, use up to 50% of the limit
 - Break logic in PCFM into smaller parts
 - Remove creep process delay
 - Need a consistent process naming scheme
+- Combine room tools getConstructionSite & constructionSiteExists
 
 ### Post RCL4 - this is (duh) big.
 

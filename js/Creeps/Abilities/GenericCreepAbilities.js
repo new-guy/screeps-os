@@ -1,6 +1,6 @@
 Creep.prototype.putEnergyInTarget = function() {
     var target = this.getTarget();
-    this.sayInOrder(['The', 'swarm', 'must', 'grow']);
+    this.sayInOrder(['Knock', 'knock', 'delivery', 'here!']);
 
     if(target.energy === target.energyCapacity) {
         this.clearTarget();

@@ -24,6 +24,8 @@ const BootstrapSpawner = require('BootstrapSpawner');
 const BootStrapper = require('BootStrapper');
 const Scout = require('Scout');
 const Claimer = require('Claimer');
+const Miner = require('Miner');
+const Hauler = require('Hauler');
 
 const ExpansionBootstrap = require('ExpansionBootstrap');
 
@@ -46,6 +48,8 @@ var processTypeMap = {
     "BootStrapper": BootStrapper,
     "Scout": Scout,
     "Claimer": Claimer,
+    "Miner": Miner,
+    "Hauler": Hauler,
     "ExpansionBootstrap": ExpansionBootstrap,
     "HomeRoomManager": HomeRoomManager,
     "ComaRecovery": ComaRecovery,

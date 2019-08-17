@@ -15,7 +15,7 @@ class EnergyHarvestingManager extends Process {
         //CHECK IF MINING ROUTE SHOULD BE ENSURED
             //If we are not in coma, ensure all existing routes
             //If we are in coma, only ensure the interior ones
-        if(this.children !== undefined) {
+        if(this.memory.children !== undefined) {
             this.ensureMiningRoutes();
         }
 
@@ -24,12 +24,18 @@ class EnergyHarvestingManager extends Process {
             return 'continue'
         }
 
-        //Only generate the first mining route initially
+        //Ensure the interior mining routes for rooms with storage
+
+        //
 
         if(this.canCreateNewMiningRoute()) {
             var sourceToHarvest = this.findSourceToHarvest();
             console.log(sourceToHarvest.pos.roomName + ' ' + sourceToHarvest.pos.x + 'x ' + sourceToHarvest.pos.y + 'y');
             this.createNewRoute(sourceToHarvest);
+        }
+
+        else {
+            console.log('Cannot create new mining route');
         }
 
         //We need to be able to calculate mining route information
@@ -56,28 +62,34 @@ class EnergyHarvestingManager extends Process {
     }
 
     ensureMiningRoutes() {
-        for(var i = 0; i < this.children.length; i++) {
-            this.ensureChildByPid(this.children[i]);
+        for(var i = 0; i < this.memory.children.length; i++) {
+            this.ensureChildByPid(this.memory.children[i]);
         }
     }
 
     allMiningRoutesAreOperational() {
         var areOperational = true;
 
-        if(this.children === undefined) {
-            return areOperational
+        if(this.memory.children === undefined) {
+            return areOperational;
         }
 
-        for(var i = 0; i < this.children.length; i++) {
-            var childProcess = this.scheduler.getProcess(this.children[i]);
-            console.log('CHECKING CHILD ' + childProcess.pid);
+        for(var i = 0; i < this.memory.children.length; i++) {
+            var childProcess = this.scheduler.getProcess(this.memory.children[i]);
+
+            console.log(this.memory.children[i] + ' operational: ' + childProcess.isOperational());
+
+            if(!childProcess.isOperational()) {
+                areOperational = false;
+                break;
+            }
         }
 
-        return false;
+        return areOperational;
     }
 
     canCreateNewMiningRoute() {
-        return (this.children === undefined || this.children.length < 1);
+        return (this.memory.children === undefined || this.memory.children.length < 2);
     }
 
     findSourceToHarvest() {
@@ -86,6 +98,10 @@ class EnergyHarvestingManager extends Process {
 
         for(var i = 1; i < this.colony.safeSources.length; i++) {
             var source = this.colony.safeSources[i];
+
+            if(this.routeExistsForSource(source)) {
+                continue;
+            }
 
             var closestStorage = this.colony.getClosestStorage(source.pos);
             var distanceToStorage = closestStorage.pos.findPathTo(source).length;
@@ -110,7 +126,26 @@ class EnergyHarvestingManager extends Process {
             'targetStorageId': closestStorage.id,
             'spawnColonyName': this.colony.name
         };
-        this.ensureChildProcess(source.pos.readableString() + '|energyRoute', 'EnergyRouteManager', data, COLONY_NECESSARY_ENERGY_PRIORITY);
+
+        //If the source is in the same room as a storage, set it to necessary energy
+        //If not, set it to extra energy
+
+        var priority = COLONY_EXTRA_ENERGY_PRIORITY;
+
+        if(source.pos.roomName === closestStorage.pos.roomName) {
+            priority = COLONY_NECESSARY_ENERGY_PRIORITY;
+        }
+
+        this.ensureChildProcess(this.getPidForSource(source) + '|energyRoute', 'EnergyRouteManager', data, priority);
+    }
+
+    routeExistsForSource(source) {
+        var sourcePid = this.getPidForSource(source);
+        return Memory.processes[sourcePid] !== undefined;
+    }
+
+    getPidForSource(source) {
+        return source.pos.readableString() + '|energyRoute';
     }
 
     processShouldDie() {

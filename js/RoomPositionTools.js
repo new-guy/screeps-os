@@ -104,6 +104,19 @@ RoomPosition.prototype.structureExists = function(structureType)
 	return ret;
 }
 
+RoomPosition.prototype.getConstructionSite = function(structureType)
+{
+	var constructionSite = this.lookFor(LOOK_CONSTRUCTION_SITES)[0];
+
+	if(constructionSite === undefined || constructionSite.structureType !== structureType) {
+		return null;
+	}
+
+	else {
+		return constructionSite;
+	}
+}
+
 RoomPosition.prototype.constructionSiteExists = function(structureType)
 {
 	var constructionSiteArray = this.lookFor(LOOK_CONSTRUCTION_SITES);
