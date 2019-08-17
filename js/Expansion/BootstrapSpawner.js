@@ -36,7 +36,7 @@ class BootstrapSpawner extends Process {
     }
 
     spawnBootstrappers() {
-        var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.spawnColony.primaryRoom.energyCapacityAvailable);
+        var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.targetRoom.energyCapacityAvailable);
         var ticksToSpawn = BodyGenerator.getTicksToSpawn(bootstrapperBody);
         var bootstrappersToSpawn = Math.floor(this.maxTicksToUse/ticksToSpawn); //Do not spawn more than this many ticks
 

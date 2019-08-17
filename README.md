@@ -71,19 +71,16 @@ If we're below the low watermark, use up to 50% of the limit
 ### Room Pairs <--------------- current
 
 - Remaining work:
-    - RECURSIVE CHILD PROCESS CLEANUP DOES NOT WORK - EXAMPLE IS THE EXPANSION BOOTSTRAPPER AND EXPANSION CLAIMER - THEY DID NOT DIE UPON EXPANSION
-        - This should be fixed
-
-    - GCL Protection
-
-    - Probably should make a generic bootstrapping process that takes in the number to spawn, the spawn colony, and the targetRoom
-    
     - Need to set up the support back and forth 
         - Primary helps secondary get started
         - Secondary gets up to level 2, then puts itself on minimal bootstrap
         - Secondary helps Primary after level 2 until Primary is level 4
         - Primary helps Secondary up to level 4
         - "help" in this context means sends bootstrappers
+    
+    - Need a coma recovery process for both rooms 
+        - Current one is shit.  We should be checking for coma and stopping all spawning if we are in coma
+    - Move construction room manager and construction flag converter into homeRoomManager
 
 ### Tidy UP pt 2
 

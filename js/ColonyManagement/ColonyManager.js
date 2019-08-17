@@ -20,11 +20,47 @@ class ColonyManager extends Process {
             return 'exit';
         }
 
+        this.ensureRoomManagement();
+
+        if(this.primaryRoom.isInComa() || (this.secondaryRoom !== undefined && this.secondaryRoom.isInComa())) {
+            this.comaRecovery();
+        }
+
+        else {
+            this.normalBehavior();
+        }
+    }
+
+    ensureRoomManagement() {
         this.ensureChildProcess(this.primaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.primaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
         this.ensureChildProcess(this.primaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.primaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
-        this.ensureChildProcess(this.primaryRoom.name + '|scoutingManager', 'ColonyScoutingManager', {'colonyName': this.name}, COLONY_SCOUTING_PRIORITY);
-
         this.ensureChildProcess(this.primaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.primaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
+
+        if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my && this.secondaryRoom.controller.level > 0) {
+            this.ensureChildProcess(this.secondaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
+            this.ensureChildProcess(this.secondaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
+            this.ensureChildProcess(this.secondaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.secondaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
+        }
+    }
+
+    comaRecovery() {
+        this.ensureChildProcess(this.primaryRoom.name + '|comaRecovery', 'ComaRecovery', {
+            'targetRoomName': this.primaryRoom.name,
+            'spawnColonyName': this.name,
+            'creepNameBase': this.primaryRoom.name + '|comaRecovery'
+        }, HIGHEST_PROMOTABLE_PRIORITY);
+
+        if(this.secondaryRoom !== undefined) {
+            this.ensureChildProcess(this.secondaryRoom.name + '|comaRecovery', 'ComaRecovery', {
+                'targetRoomName': this.secondaryRoom.name,
+                'spawnColonyName': this.name,
+                'creepNameBase': this.secondaryRoom.name + '|comaRecovery'
+            }, HIGHEST_PROMOTABLE_PRIORITY);
+        }
+    }
+
+    normalBehavior() {
+        this.ensureChildProcess(this.primaryRoom.name + '|scoutingManager', 'ColonyScoutingManager', {'colonyName': this.name}, COLONY_SCOUTING_PRIORITY);
 
         if(this.roomIsPreStorage(this.primaryRoom)) {
             var bootstrapPID = 'preStorSelfBoot|' + this.primaryRoom.name + '|' + this.primaryRoom.name;
@@ -52,13 +88,7 @@ class ColonyManager extends Process {
         }
 
         if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my) {
-            //Secondary Room Self-Management
-            if(this.secondaryRoom.controller.level > 0) {
-                this.ensureChildProcess(this.secondaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
-                this.ensureChildProcess(this.secondaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
-                this.ensureChildProcess(this.primaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.primaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
-            }
-            
+            //Secondary Room Self-Management            
             if(this.secondaryRoom.controller.level < 4) {
                 this.ensureSecondaryRoomSelfBootstrap();
             }

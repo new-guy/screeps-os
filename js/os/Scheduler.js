@@ -11,6 +11,7 @@ const SecondaryRoomFinder = require('SecondaryRoomFinder');
 const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
 
 const HomeRoomManager = require('HomeRoomManager');
+const ComaRecovery = require('ComaRecovery');
 const TowerManager = require('TowerManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
@@ -43,6 +44,7 @@ var processTypeMap = {
     "Claimer": Claimer,
     "ExpansionBootstrap": ExpansionBootstrap,
     "HomeRoomManager": HomeRoomManager,
+    "ComaRecovery": ComaRecovery,
     "TowerManager": TowerManager,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
     "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor

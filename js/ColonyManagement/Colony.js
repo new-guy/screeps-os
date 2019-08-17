@@ -92,7 +92,10 @@ class Colony {
     }
 
     initSpawnInfo() {
-        var spawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
+        var primaryRoomSpawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
+        var secondaryRoomSpawns = this.secondaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
+
+        var spawns = primaryRoomSpawns.concat(secondaryRoomSpawns);
 
         this.spawns = spawns;
         this.availableSpawns = {};
@@ -272,6 +275,7 @@ class Colony {
             creepMemory['pid'] = 'creep|' + creepName;
             creepMemory['creepProcessClass'] = creepProcessClass;
             creepMemory['creepPriority'] = creepPriority;
+            creepMemory['bodyType'] = creepBodyType;
 
             var spawnResult = spawn.spawnCreep(body, creepName, {memory: creepMemory});
 

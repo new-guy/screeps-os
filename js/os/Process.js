@@ -72,7 +72,7 @@ class Process {
             var childPID = this.memory.children[i];
 
             if(this.ensuredChildren.includes(childPID)) {
-                console.log('Not killing child ' + childPID);
+                //console.log('Not killing child ' + childPID);
             }
 
             else {

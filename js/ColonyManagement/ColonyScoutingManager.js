@@ -32,8 +32,6 @@ class ColonyScoutingManager extends Process {
             for(var i in roomsByDistance[distance]) {
                 var roomName = roomsByDistance[distance][i].roomName;
 
-                console.log('Checking if we should scout ' + roomName);
-
                 var room = Game.rooms[roomName];
 
                 if(room !== undefined) {
