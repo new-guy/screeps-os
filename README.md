@@ -121,7 +121,8 @@ If we're below the low watermark, use up to 50% of the limit
 - When spawning
     - If no energy max defined, spawn from biggest available spawner
     - If energy max defined, spawn from smallest that can support it
-- Delete all mining routes every N ticks
+- Delete all mining routes every N ticksr
+- Update mining route creator to use scouting info rather than looking at sources that are visible
 
 ### Tidy UP pt 2
 

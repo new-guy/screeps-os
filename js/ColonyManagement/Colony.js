@@ -93,9 +93,12 @@ class Colony {
 
     initSpawnInfo() {
         var primaryRoomSpawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
-        var secondaryRoomSpawns = this.secondaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
+        var spawns = primaryRoomSpawns;
 
-        var spawns = primaryRoomSpawns.concat(secondaryRoomSpawns);
+        if(this.secondaryRoom !== undefined) {
+            var secondaryRoomSpawns = this.secondaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
+            spawns = primaryRoomSpawns.concat(secondaryRoomSpawns);
+        }
 
         this.spawns = spawns;
         this.availableSpawns = {};
