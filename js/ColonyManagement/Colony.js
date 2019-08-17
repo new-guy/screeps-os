@@ -10,10 +10,13 @@ var COLONY_MAX_ROOMS_TO_TRAVEL = 2;
 
 class Colony {
     /*
-    this.homeRoom = Room
+    this.primaryRoom = Room
     this.rooms = {roomName: Room}
 
-    this.availableSpawns = [];
+    this.availableSpawns = {
+        'ENERGY_CAPACITY1': [],
+        'ENERGY_CAPACITY2': []
+    };
     this.timeTillAvailableSpawn = 0;
     this.activeSources = [Source]
     this.depletedSources = [Source]
@@ -24,7 +27,12 @@ class Colony {
     constructor(name) {
         this.name = name;
         this.memory = Memory.colonies[name];
-        this.homeRoom = Game.rooms[this.memory['homeRoomName']];
+        this.primaryRoom = Game.rooms[this.memory['primaryRoomName']];
+
+        if(this.memory['primaryRoomName'] !== undefined) {
+            this.secondaryRoom = Game.rooms[this.memory['secondaryRoomName']];
+        }
+
         this.initColonyRoomInfo();
         this.initSpawnInfo();
         this.initMiningInfo();
@@ -33,8 +41,8 @@ class Colony {
     initColonyRoomInfo() {
         if(this.memory.colonyRoomInfo === undefined) {
             var colonyRoomInfo = {};
-            colonyRoomInfo[this.homeRoom.name] = {'roomName': this.homeRoom.name, 'travelDistance': 0};
-            var roomsToSearch = Object.values(Game.map.describeExits(this.homeRoom.name));
+            colonyRoomInfo[this.primaryRoom.name] = {'roomName': this.primaryRoom.name, 'distanceFromPrimary': 0};
+            var roomsToSearch = Object.values(Game.map.describeExits(this.primaryRoom.name));
             var currentTravelDistance = 1;
             var nextRoomsToSearch = [];
 
@@ -42,17 +50,17 @@ class Colony {
                 for(var i = 0; i < roomsToSearch.length; i++) {
                     var roomName = roomsToSearch[i];
 
-                    if(colonyRoomInfo[roomName] !== undefined || roomName === this.homeRoom.name) {
+                    if(colonyRoomInfo[roomName] !== undefined || roomName === this.primaryRoom.name) {
                         continue;
                     }
 
-                    else if(Game.map.getRoomLinearDistance(roomName, this.homeRoom.name) > COLONY_MAX_RANGE) {
+                    else if(Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name) > COLONY_MAX_RANGE) {
                         continue;
                     }
 
                     colonyRoomInfo[roomName] = {
                         'roomName': roomName,
-                        'travelDistance': currentTravelDistance
+                        'distanceFromPrimary': currentTravelDistance
                     };
 
                     var adjacentRooms = Object.values(Game.map.describeExits(roomName));
@@ -79,15 +87,18 @@ class Colony {
         */
 
         return _.groupBy(this.colonyRoomInfo, function(roomInfo) {
-            return roomInfo.travelDistance.toString();
+            return roomInfo.distanceFromPrimary.toString();
         });
     }
 
     initSpawnInfo() {
-        var spawns = this.homeRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
+        var primaryRoomSpawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
+        var secondaryRoomSpawns = this.secondaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
+
+        var spawns = primaryRoomSpawns.concat(secondaryRoomSpawns);
 
         this.spawns = spawns;
-        this.availableSpawns = [];
+        this.availableSpawns = {};
         this.timeTillAvailableSpawn = 1000;
         //How long till we can spawn, how many can we spawn?
         for(var i = 0; i < spawns.length; i++) {
@@ -95,7 +106,16 @@ class Colony {
 
             if(spawn.spawning === null) {
                 this.timeTillAvailableSpawn = 0;
-                this.availableSpawns.push(spawn);
+
+                var energyCapacity = spawn.room.energyCapacityAvailable.toString();
+
+                if(this.availableSpawns[energyCapacity] === undefined) {
+                    this.availableSpawns[energyCapacity] = [spawn];
+                }
+                
+                else {
+                    this.availableSpawns[energyCapacity].push(spawn);
+                }
             }
 
             else if (spawn.spawning.remainingTime < this.timeTillAvailableSpawn) {
@@ -114,8 +134,68 @@ class Colony {
         }
     }
 
-    spawnIsAvailable() {
-        return (this.availableSpawns.length > 0);
+    spawnIsAvailable(creepBodyType, energyRequired=undefined) {
+        if(energyRequired === undefined) {
+            energyRequired = 0;
+        }
+        var body = BodyGenerator.generateBody(creepBodyType, energyRequired);
+
+        var energyToSpend = BodyGenerator.getCostOfBody(body);
+
+        for(var energyCapacity in this.availableSpawns) {
+            if(parseInt(energyCapacity) < energyToSpend) {
+                continue;
+            }
+
+            if(this.availableSpawns[energyCapacity].length > 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    getCapableSpawn(creepBodyType, energyRequired=undefined) {
+        if(energyRequired === undefined) {
+            energyRequired = 0;
+        }
+        var body = BodyGenerator.generateBody(creepBodyType, energyRequired);
+
+        var energyToSpend = BodyGenerator.getCostOfBody(body);
+
+        for(var energyCapacity in this.availableSpawns) {
+            if(parseInt(energyCapacity) < energyToSpend) {
+                continue;
+            }
+
+            if(this.availableSpawns[energyCapacity].length > 0) {
+                return this.availableSpawns[energyCapacity][0];
+            }
+        }
+
+        return false;
+    }
+
+    removeCapableSpawn(creepBodyType, energyRequired=undefined) {
+        if(energyRequired === undefined) {
+            energyRequired = 0;
+        }
+        var body = BodyGenerator.generateBody(creepBodyType, energyRequired);
+
+        var energyToSpend = BodyGenerator.getCostOfBody(body);
+
+        for(var energyCapacity in this.availableSpawns) {
+            if(parseInt(energyCapacity) < energyToSpend) {
+                continue;
+            }
+
+            if(this.availableSpawns[energyCapacity].length > 0) {
+                this.availableSpawns[energyCapacity].shift();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     initMiningInfo() {
@@ -167,8 +247,6 @@ class Colony {
                 }
             }
         }
-    //     Add a 'bootstrapperFallbackSources' property to the Colony where it just has a list of all of the following sources:
-    // - scoutedSource that we don't have vision of that isn't in an sk room
     }
 
     removeFromActiveSources(sourceToRemove) {
@@ -182,14 +260,10 @@ class Colony {
         }
     }
 
-    spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, scheduler, maxEnergyToSpend=undefined) {
-        var spawn = this.availableSpawns[0];
+    spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, maxEnergyToSpend=undefined) {
+        var spawn = this.getCapableSpawn(creepBodyType, maxEnergyToSpend);
 
-        if(spawn === undefined) {
-            console.log('No spawn available for ' + this.homeRoom.name);
-        }
-
-        else {
+        if(spawn !== false) {
             //Energy to spend is either the room's capacity, or min of max vs current
 
             var energyToSpend = (maxEnergyToSpend === undefined) ? spawn.room.energyCapacityAvailable : Math.min(spawn.room.energyAvailable, maxEnergyToSpend);
@@ -198,15 +272,25 @@ class Colony {
             //Try to spawn.  If we can, add the process to the scheduler.  If not, print why
 
             creepMemory['spawningColonyName'] = this.name;
+            creepMemory['pid'] = 'creep|' + creepName;
+            creepMemory['creepProcessClass'] = creepProcessClass;
+            creepMemory['creepPriority'] = creepPriority;
+            creepMemory['bodyType'] = creepBodyType;
 
             var spawnResult = spawn.spawnCreep(body, creepName, {memory: creepMemory});
 
             if(spawnResult === OK) {
                 console.log('Spawning creep ' + creepName);
 
-                var pid = 'creep|' + creepName;
-                scheduler.addProcess(pid, creepProcessClass, {'creepName': creepName}, creepPriority);
-                this.availableSpawns.shift();
+                this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
+            }
+            
+            else if(spawnResult === ERR_NOT_ENOUGH_ENERGY) {
+                //Draw the name of the creep your'e trying to spawn
+                console.log("Waiting for energy for creep " + creepName);
+
+                spawn.room.visual.text(creepName, spawn.pos);
+                this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
             }
 
             else {

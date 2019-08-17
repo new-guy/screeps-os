@@ -1,12 +1,13 @@
 Creep.prototype.putEnergyInTarget = function() {
     var target = this.getTarget();
+    this.sayInOrder(['The', 'swarm', 'must', 'grow']);
 
     if(target.energy === target.energyCapacity) {
         this.clearTarget();
     }
 
     else if(this.pos.getRangeTo(target) > 1) {
-        this.moveTo(target);
+        this.moveTo(target, {visualizePathStyle: {stroke: "#881", opacity: .2}});
     }
 
     else {
@@ -26,13 +27,13 @@ Creep.prototype.buildTarget = function() {
     var target = this.getTarget();
 
     if(this.pos.getRangeTo(target) === 0) {
-        this.moveRandom();        
+        this.moveRandom();
         this.say('Move');
     }
 
     else {
         if(this.pos.getRangeTo(target) > 2) {
-            this.moveTo(target);
+            this.moveTo(target, {visualizePathStyle: {stroke: "#1c1", opacity: .3}});
         }
 
         if(this.pos.getRangeTo(target) <= 3) {
@@ -43,7 +44,7 @@ Creep.prototype.buildTarget = function() {
             }
     
             else {
-                this.say(buildResult);
+                this.sayInOrder(['I\'ve', 'been', 'working', 'on', 'the', 'railroad', 'all', 'the', 'live', 'long', 'day', 'I\'ve', 'been', 'working', 'on', 'the', 'railroad', 'just', 'to', 'pass', 'the', 'time', 'away']);
             }
         }
     }

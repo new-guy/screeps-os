@@ -34,7 +34,7 @@ Room.prototype.updateConstructionSites = function() {
 
 		this.recalculateBuildingPlan();
 		this.createConstructionPlanFlags();
-		this.createRampartFlags();
+		//this.createRampartFlags();
 		this.createFunctionalFlags();
 		this.generateControllerSinkLinkPlan();
 		this.generateMineralMiningPlan();

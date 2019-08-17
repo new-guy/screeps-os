@@ -1,37 +1,50 @@
 const Process = require('Process');
 const SingleTickProcess = require('SingleTickProcess');
 const SingleTickChildTest = require('SingleTickChildTest');
+const RecursiveChildTest = require('RecursiveChildTest');
 
 const EmpireManager = require('EmpireManager');
 
 const ColonyManager = require('ColonyManager');
 const ColonyScoutingManager = require('ColonyScoutingManager');
+const SecondaryRoomFinder = require('SecondaryRoomFinder');
 const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
 
 const HomeRoomManager = require('HomeRoomManager');
+const ComaRecovery = require('ComaRecovery');
 const TowerManager = require('TowerManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
 
 const SpawnCreep = require('SpawnCreep');
+const BootstrapSpawner = require('BootstrapSpawner');
 
 const BootStrapper = require('BootStrapper');
 const Scout = require('Scout');
+const Claimer = require('Claimer');
+
+const ExpansionBootstrap = require('ExpansionBootstrap');
 
 const CPUMetrics = require('CPUMetrics');
 
 var processTypeMap = {
     "Process": Process,
     "SingleTickProcess": SingleTickProcess,
+    "SingleTickChildTest": SingleTickChildTest,
+    "RecursiveChildTest": RecursiveChildTest,
     "EmpireManager": EmpireManager,
     "ColonyManager": ColonyManager,
     "ColonyScoutingManager": ColonyScoutingManager,
+    "SecondaryRoomFinder": SecondaryRoomFinder,
     "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
-    "SingleTickChildTest": SingleTickChildTest,
     "SpawnCreep": SpawnCreep,
+    "BootstrapSpawner" :BootstrapSpawner,
     "BootStrapper": BootStrapper,
     "Scout": Scout,
+    "Claimer": Claimer,
+    "ExpansionBootstrap": ExpansionBootstrap,
     "HomeRoomManager": HomeRoomManager,
+    "ComaRecovery": ComaRecovery,
     "TowerManager": TowerManager,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
     "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor
@@ -39,7 +52,7 @@ var processTypeMap = {
 
 var MAX_PROCESSES_TO_DISPLAY = 10;
 
-var DEBUGGING = true;
+var DEBUGGING = false;
 
 class Scheduler {
     constructor () {
@@ -50,7 +63,7 @@ class Scheduler {
             Memory.ipc = {};
 
             this.addProcess("empireman", "EmpireManager", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
-            this.addProcess("childTest", "SingleTickChildTest", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
+            this.addProcess("recursiveChildTest", "RecursiveChildTest", {"test": "test"}, HIGHEST_PROMOTABLE_PRIORITY);
         }
 
         this.sortedProcesses = this.getSortedProcesses();
@@ -74,6 +87,7 @@ class Scheduler {
         while(this.shouldContinueProcessing()) {
             var activeProcessMetadata = this.sortedProcesses[this.programCounter]['metadata'];
             var processClass = activeProcessMetadata['processClass'];
+            console.log("#PC: " + this.programCounter + " | " + activeProcessMetadata['pid']);
 
             if(this.processesBeingRemoved.includes(activeProcessMetadata['pid'])) {
                 console.log('#Skipping because removal ' + activeProcessMetadata['pid']);
@@ -146,7 +160,6 @@ class Scheduler {
     }
 
     shouldContinueProcessing() {
-        console.log("#PC: " + this.programCounter);
         return this.programCounter < this.sortedProcesses.length;
     }
 
@@ -198,13 +211,12 @@ class Scheduler {
     //Recursively remove the process from memory, along with its child processes
         if(Memory.processes[pid] !== undefined)
         {
-            if(Memory.processes[pid]['children'] !== undefined) {
-                for(var i = 0; i < Memory.processes[pid]['children'].length; i++) {
-                    this.removeProcess(Memory.processes[pid]['children'][i]);
+            if(Memory.processes[pid]['data']['children'] !== undefined) {
+                for(var i = 0; i < Memory.processes[pid]['data']['children'].length; i++) {
+                    var childProcessPid = Memory.processes[pid]['data']['children'][i];
+                    this.removeProcess(childProcessPid);
                 }
             }
-
-            console.log('removing process ' + pid);
     
             Memory.processes[pid] = undefined;
         }

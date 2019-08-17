@@ -3,14 +3,12 @@ const Process = require('Process');
 class SingleTickChildTest extends Process {
     constructor (...args) {
         super(...args);
-
-        for(var i = 0; i < 5; i++) {
-            var pid = 'child|' + i;
-            this.ensureChildProcess(pid, 'SingleTickProcess', {}, DEFAULT_PRIORITY);
-        }
     }
 
     update() {
+        var pid = 'child';
+        this.ensureChildProcess(pid, 'SingleTickProcess', {}, DEFAULT_PRIORITY);
+
         if(super.update() == 'exit') {
             return 'exit';
         }
@@ -18,7 +16,7 @@ class SingleTickChildTest extends Process {
     //Need an update function
 
     processShouldDie() {
-        return true;
+        return false;
     }
 }
 

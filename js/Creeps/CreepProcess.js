@@ -1,5 +1,7 @@
 const Process = require('Process');
 
+const TIME_TO_WAIT_FOR_CREEP = 100;
+
 class CreepProcess extends Process {
     constructor (...args) {
         super(...args);
@@ -16,7 +18,11 @@ class CreepProcess extends Process {
             return 'exit';
         }
 
-        if(this.creep.spawning) {
+        if(this.creep === undefined) {
+            console.log(this.memory.creepName + ' is not defined');
+        }
+
+        else if(this.creep !== undefined && this.creep.spawning) {
             console.log(this.creep.name + ' is spawning');
         }
 
@@ -27,7 +33,9 @@ class CreepProcess extends Process {
     }
 
     updateStateTransitions() {
-        this.creep.say('nostates');
+        if(this.creep !== undefined) {
+            this.creep.say('nostates');
+        }
     }
 
     performStateActions() {
@@ -37,11 +45,20 @@ class CreepProcess extends Process {
     processShouldDie() {
         var myCreepExists = (this.creep !== undefined);
 
-        if(!myCreepExists) {
+        if(this.memory.timeWaited === undefined) {
+            this.memory.timeWaited = 0;
+        }
+
+        var timeWaited = this.memory.timeWaited;
+
+        var shouldDie = !myCreepExists && timeWaited > TIME_TO_WAIT_FOR_CREEP;
+        if(shouldDie) {
             console.log('Killing process ' + this.pid + ' because creep does not exist');
         }
 
-        return !myCreepExists;
+        this.memory.timeWaited = this.memory.timeWaited + 1;
+
+        return shouldDie;
     }
 }
 

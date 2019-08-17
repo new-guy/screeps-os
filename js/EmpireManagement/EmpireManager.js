@@ -14,7 +14,7 @@ class EmpireManager extends Process {
             console.log('Colony ' + roomName);
 
             var pid = 'colman|' + roomName;
-            this.scheduler.ensureProcessExists(pid, 'ColonyManager', {'homeRoom': roomName}, COLONY_MANAGEMENT_PRIORITY);
+            this.scheduler.ensureProcessExists(pid, 'ColonyManager', {'primaryRoom': roomName}, COLONY_MANAGEMENT_PRIORITY);
         }
     }
 

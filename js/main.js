@@ -20,6 +20,7 @@ require('RoomPositionTools');
 
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
+const CreepProcessHelper = require('CreepProcessHelper');
 
 const RAMPART_UPGRADE_SCHEDULE = {
     "1": 5000,
@@ -36,12 +37,15 @@ module.exports.loop = function() {
     initCustomObjects();
 
     const scheduler = new Scheduler();
+    Game.scheduler = scheduler;
+    CreepProcessHelper.ensureCreepProcesses();
     scheduler.update();
     scheduler.garbageCollect();
 }
 
 function initCustomObjects() {
     initScouting();
+    initEmpire();
     initColonies();
     initCreeps();
     initRooms();
@@ -57,30 +61,34 @@ function initScouting() {
     } 
 }
 
+function initEmpire() {
+    Game.empire = {};
+
+    var ownedRooms = _.filter(Game.rooms, function(r) { return r.controller !== undefined && r.controller.my && r.controller.level > 0 }).length;
+
+    Game.empire.hasSpareGCL = ownedRooms < Game.gcl.level;
+}
+
 function initColonies() {
     initColonyMemory();
-    initNewColonies();
     initGameColonies();
 }
 
 function initColonyMemory() {
     if(Memory.colonies === undefined) {
         Memory.colonies = {};
+
+        var spawn1 = Game.spawns['Spawn1'];
+        Game.addColony(spawn1.room.name);
+
+        spawn1.pos.createFlag('!CHUNK|heart|' + spawn1.room.name, COLOR_RED);
     }
 }
 
-function initNewColonies() {
-    for(var roomName in Game.rooms) {
-        var room = Game.rooms[roomName];
-
-        if(room.controller !== undefined && room.controller.my && room.controller.level > 0) {
-            if(Memory.colonies[roomName] === undefined) {
-                Memory.colonies[roomName] = {
-                    'name': roomName,
-                    'homeRoomName': roomName
-                }
-            }
-        }
+Game.addColony = function(roomName) {
+    Memory.colonies[roomName] = {
+        'name': roomName,
+        'primaryRoomName': roomName
     }
 }
 
@@ -142,5 +150,7 @@ function initRooms() {
         room.rampartsNeedingRepair = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
             return s.structureType === STRUCTURE_RAMPART && s.hits < RAMPART_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
         }});
+
+        room.hasSourceKeepers = room.find(FIND_HOSTILE_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_KEEPER_LAIR }}).length > 0;
     }
 }

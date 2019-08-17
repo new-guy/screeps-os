@@ -3,12 +3,6 @@ const CreepProcess = require('CreepProcess');
 class Scout extends CreepProcess {
     constructor (...args) {
         super(...args);
-
-        this.creep = Game.creeps[this.memory.creepName];
-
-        if(this.creep !== undefined) {
-            this.spawningColony = Game.colonies[this.creep.memory.spawningColonyName];
-        }
     }
 
     update() {
@@ -22,8 +16,16 @@ class Scout extends CreepProcess {
 
         this.creep.say('Scouting');
 
-        if(this.creep.pos.getRangeTo(destination) > 5) {
-            this.creep.moveTo(destination);
+        if(Game.rooms[this.creep.memory.targetRoom] === undefined || this.creep.pos.getRangeTo(destination) > 5) {
+            if(this.creep.room.enemies.length > 0) {
+                var movePath = this.creep.getSafePath(destination, 5);
+                this.creep.say(this.creep.moveByPath(movePath));
+            }
+
+            else {
+                this.creep.moveTo(destination);
+            }
+
         }
     }
 }

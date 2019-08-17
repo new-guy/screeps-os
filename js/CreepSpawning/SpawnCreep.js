@@ -19,7 +19,7 @@ class SpawnCreep extends Process {
             return 'exit';
         }
 
-        if(this.colony.spawnIsAvailable()) {
+        if(this.colony.spawnIsAvailable(this.creepBodyType, this.maxEnergyToSpend)) {
             for(var i = 0; i < this.creepCount; i++) {
                 var creepName = this.creepNameBase + "|" + i;
                 if(Game.creeps[creepName] !== undefined) {
@@ -28,7 +28,7 @@ class SpawnCreep extends Process {
                 }
                 
                 console.log(this.pid + ' trying to spawn ' + creepName);
-                this.colony.spawnCreep(creepName, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.creepPriority, this.scheduler, this.maxEnergyToSpend);
+                this.colony.spawnCreep(creepName, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.creepPriority, this.maxEnergyToSpend);
                 break;
             }
         }

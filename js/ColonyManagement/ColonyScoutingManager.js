@@ -32,8 +32,6 @@ class ColonyScoutingManager extends Process {
             for(var i in roomsByDistance[distance]) {
                 var roomName = roomsByDistance[distance][i].roomName;
 
-                console.log('Checking if we should scout ' + roomName);
-
                 var room = Game.rooms[roomName];
 
                 if(room !== undefined) {
@@ -65,7 +63,6 @@ class ColonyScoutingManager extends Process {
                 }
             }
         }
-
     }
 
     updateScoutingInfo(room) {
@@ -77,7 +74,7 @@ class ColonyScoutingManager extends Process {
             
         if(scoutingInfo.sourceInfo === undefined) {
             var sourceInfo = {};
-            var primaryHeartPos = this.colony.homeRoom.find(FIND_FLAGS, {filter: function(f) { return f.name.startsWith('!CHUNK|heart') }})[0].pos;
+            var primaryHeartPos = this.colony.primaryRoom.find(FIND_FLAGS, {filter: function(f) { return f.name.startsWith('!CHUNK|heart') }})[0].pos;
     
             if(primaryHeartPos !== undefined) {
                 var sourcesInRoom = room.find(FIND_SOURCES);
@@ -98,12 +95,8 @@ class ColonyScoutingManager extends Process {
             scoutingInfo.sourceInfo = sourceInfo;
         }
 
-        if(scoutingInfo.skLairs === undefined) {
-            var skLairs = room.find(FIND_HOSTILE_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_KEEPER_LAIR }});
-    
-            var isSkRoom = skLairs.length > 0;
-    
-            scoutingInfo.isSkRoom = isSkRoom;
+        if(scoutingInfo.skLairs === undefined) {    
+            scoutingInfo.isSkRoom = room.hasSourceKeepers;
         }
 
         scoutingInfo.lastColonyScout = Game.time;

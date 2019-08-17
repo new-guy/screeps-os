@@ -21,3 +21,15 @@ exports.Scout = {
 		"move": 1
 	}
 }
+
+exports.Claimer = {
+	"segment": ["move", "claim"],
+	"min": {
+		"move": 1,
+		"claim": 1
+	},
+	"max": {
+		"move": 5,
+		"claim": 1
+	}
+}

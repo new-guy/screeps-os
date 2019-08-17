@@ -13,7 +13,7 @@ class SingleTickProcess extends Process {
     //Need an update function
 
     processShouldDie() {
-        return true;
+        return false;
     }
 }
 
