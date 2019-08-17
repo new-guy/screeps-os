@@ -24,6 +24,7 @@ class ColonyManager extends Process {
         this.ensureMiningRoutes();
 
         if(this.primaryRoom.isInComa() || (this.secondaryRoom !== undefined && this.secondaryRoom.isInComa())) {
+            console.log('Coma Recovery');
             this.comaRecovery();
         }
 

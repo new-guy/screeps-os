@@ -34,12 +34,8 @@ Room.prototype.isInComa = function() {
 	if(this.storage === undefined) {
 		var workPartCount = 0;
 
-		console.log('sup')
-
 		for(var i = 0; i < this.friendlies.length; i++) {
 			var creep = this.friendlies[i];
-
-			console.log(creep.name);
 
 			var workParts = _.filter(creep.body, function(part) { return part.type === 'work' }).length;
 
@@ -50,6 +46,6 @@ Room.prototype.isInComa = function() {
 	}
 
 	else  {
-		return this.storage.energy < MINIMUM_ENERGY_FOR_SAFE;
+		return this.storage.store[RESOURCE_ENERGY] < MINIMUM_ENERGY_FOR_SAFE;
 	}
 }

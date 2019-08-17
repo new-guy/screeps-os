@@ -167,9 +167,11 @@ class Scheduler {
     }
 
     garbageCollect() {
+        console.log('GC Start');
         for(var i = 0; i < this.processesBeingRemoved.length; i++) {
             var pid = this.processesBeingRemoved[i];
-            Memory.processes[pid] = undefined
+            Memory.processes[pid] = undefined;
+            console.log('GC: ' + pid);
         }
     }
 

@@ -60,7 +60,12 @@ class Process {
     }
 
     removeChildProcess(pid) {
-        this.memory.children = _.remove(this.memory.children, function(proc) { return proc === pid; });
+        var pidIndex = this.memory.children.indexOf(pid);
+
+        if(pidIndex > -1) {
+            this.memory.children.splice(pidIndex, 1);
+        }
+
         this.scheduler.removeProcess(pid);
     }
 
