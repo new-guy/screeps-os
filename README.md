@@ -105,6 +105,12 @@ If we're below the low watermark, use up to 50% of the limit
     - Miners should just go to their assigned source, make sure a container is built, and mine
     - Haulers should pick up from their assigned source, then deposit in the closest storage (this value should be cached)
 
+### Post RCL4 - Upgraders
+- Just do feeders + upgraders
+    - Spawn N if over X energy
+    - Spawn 1 if under X
+    - Spawn size 1,1,1 if in coma
+
 ### Post RCL4 - Roads
 
 ### Post RCL4 - Secondary Room Improvements
@@ -114,6 +120,7 @@ If we're below the low watermark, use up to 50% of the limit
 - When spawning
     - If no energy max defined, spawn from biggest available spawner
     - If energy max defined, spawn from smallest that can support it
+- Need to refresh all mining routes whenever we get the new room.  Just delete all of the current mining routes
 
 ### Tidy UP pt 2
 
@@ -123,6 +130,8 @@ If we're below the low watermark, use up to 50% of the limit
 - Remove creep process delay
 - Need a consistent process naming scheme
 - Combine room tools getConstructionSite & constructionSiteExists
+
+### MMO Ready
 
 ### Post RCL4 - this is (duh) big.
 

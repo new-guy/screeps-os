@@ -1,6 +1,8 @@
 const Process = require('Process');
 const BodyGenerator = require('BodyGenerator');
 
+var HAULER_COUNT = 2;
+
 class EnergyRouteManager extends Process {
     constructor (...args) {
         super(...args);
@@ -33,9 +35,16 @@ class EnergyRouteManager extends Process {
         }
 
         var minerName = this.targetSource.pos.readableString() +'|Miner|0';
-        var haulerName = this.targetSource.pos.readableString() +'|Hauler|0';
 
-        return (Game.creeps[minerName] !== undefined && Game.creeps[haulerName] !== undefined);
+        var allHaulersExist = true;
+        for(var i = 0; i < HAULER_COUNT; i++) {
+            var haulerName = this.targetSource.pos.readableString() +'|Hauler|' + i;
+            allHaulersExist = (Game.creeps[haulerName] !== undefined);
+
+            if(!allHaulersExist) break;
+        }
+
+        return (Game.creeps[minerName] !== undefined && allHaulersExist);
     }
 
     getUsedTicks() {
@@ -46,7 +55,7 @@ class EnergyRouteManager extends Process {
         }
 
         var haulerBody = BodyGenerator.generateBody('Hauler', energyCapacity);
-        var ticksToSpawn = BodyGenerator.getTicksToSpawn(haulerBody);
+        var ticksToSpawn = HAULER_COUNT * BodyGenerator.getTicksToSpawn(haulerBody);
 
         var minerBody = BodyGenerator.generateBody('Miner', energyCapacity);
         ticksToSpawn += BodyGenerator.getTicksToSpawn(minerBody);
@@ -75,7 +84,7 @@ class EnergyRouteManager extends Process {
     spawnHauler() {
         var data = {
             'colonyName': this.memory.spawnColonyName,
-            'creepCount': 1,
+            'creepCount': HAULER_COUNT,
             'creepNameBase': this.targetSource.pos.readableString() +'|Hauler',
             'creepBodyType': 'Hauler',
             'creepProcessClass': 'Hauler',
@@ -92,6 +101,12 @@ class EnergyRouteManager extends Process {
 
     determineContainerPos() {
         var containerPos = this.targetSource.pos.getOpenAdjacentPos();
+
+        var container = this.targetSource.pos.getAdjacentStructures(STRUCTURE_CONTAINER)[0];
+
+        if(container !== undefined) {
+            containerPos = container.pos;
+        }
 
         this.memory.containerPos = {
             'roomName': containerPos.roomName,

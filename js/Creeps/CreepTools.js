@@ -55,3 +55,62 @@ Creep.prototype.sayInOrder = function(words) {
 
     this.say(words[index]);
 }
+
+Creep.prototype.isFull = function()
+{
+	return (_.sum(this.carry) === this.carryCapacity);
+}
+
+Creep.prototype.isEmpty = function()
+{
+	return(_.sum(this.carry) === 0);
+}
+
+Creep.prototype.fillAdjacentFactories = function()
+{
+	var adjacentStructureArray = this.getAdjacentStructureArray();
+
+	for(var i = 0; i < adjacentStructureArray.length; i++)
+	{
+		var workingStructure = adjacentStructureArray[i];
+
+		if ((workingStructure.structureType === STRUCTURE_EXTENSION || 
+			(this.room.storage !== undefined && workingStructure.structureType === STRUCTURE_SPAWN)) && 
+			workingStructure.energy < workingStructure.energyCapacity)
+		{
+			this.cancelOrder('move');
+			return (this.transfer(workingStructure, RESOURCE_ENERGY) == 0);
+		}
+	}
+}
+
+Creep.prototype.getAdjacentStructureArray = function()
+{
+	var top = Math.max(0, this.pos.y-1);
+	var left = Math.max(0, this.pos.x-1);
+	var bottom = Math.min(49, this.pos.y+1);
+	var right = Math.min(49, this.pos.x+1);
+
+	var adjacentStructureObject = this.room.lookForAtArea('structure', top, left, bottom, right);
+
+	var adjacentStructureArray = [];
+
+	for(var row_coord in adjacentStructureObject)
+	{
+		var row = adjacentStructureObject[row_coord];
+
+		for(var column in row)
+		{
+			var cell = row[column];
+
+			if(cell === undefined) continue;
+
+			for(var i = 0; i < cell.length; i++)
+			{
+				adjacentStructureArray.push(cell[i]);
+			}
+		}
+	}
+
+	return adjacentStructureArray;
+}

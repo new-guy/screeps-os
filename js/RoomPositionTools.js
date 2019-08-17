@@ -237,6 +237,18 @@ RoomPosition.prototype.lookForAdjacent = function(lookType) {
 	return results;
 }
 
+RoomPosition.prototype.getAdjacentStructures = function(structureType) {
+	var adjacentStructures = this.lookForAdjacent(LOOK_STRUCTURES);
+	var structuresToReturn = [];
+
+	for(var i = 0; i < adjacentStructures.length; i++) {
+		if(adjacentStructures[i] === undefined) continue;
+		if(adjacentStructures[i].structureType === structureType) structuresToReturn.push(adjacentStructures[i]);
+	}
+
+	return structuresToReturn;
+}
+
 RoomPosition.prototype.isEdge = function() {
 	return this.x === 49 || this.x === 0 || this.y === 49 || this.y === 0;
 }

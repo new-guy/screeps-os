@@ -1,7 +1,7 @@
 const Process = require('Process');
 
 var MAX_TICKS_TO_USE_PER_SPAWN = 600;
-var TARGET_ROUTES_PER_STORAGE = 4;
+var TARGET_ROUTES_PER_STORAGE = 6;
 
 class EnergyHarvestingManager extends Process {
     constructor (...args) {
