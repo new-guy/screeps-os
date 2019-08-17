@@ -82,6 +82,36 @@ If we're below the low watermark, use up to 50% of the limit
         - Current one is shit.  We should be checking for coma and stopping all spawning if we are in coma
     - Move construction room manager and construction flag converter into homeRoomManager
 
+### Post RCL4 - Bootstrappers + Miners
+
+- While in coma post RCL4, we spawn bootstrappers and mining routes one by one.
+- Start off with spawning bootstrappers
+    - Coma bootstrappers
+- Then figure out mining route logic
+    - Each mining operation should be its own process
+        - Update the "Ensure Child Process" function so that it returns the child process if it exists
+        - The mining route process should be able to return information about the mining route, such as if it is in full operation
+    - Colonies should have a mining manager process which controls the mining operations
+        - Mining routes should be created
+            - High priority for the room's own sources
+            - Up to a maximum number of ticks per spawner
+                - This should be able to be controlled by a variable so that we can control it based upon state
+                - We need to know how many ticks a mining operation will consume
+        - Mining operations should be started one by one.  New mining operations should only be started when the previous has all of its creeps being spawned or in existence
+        - To create a route, have the manager check the colony's available sources (meaning not owned by SKs or other players) by order of nearest to either of the colony's storages one by one
+            - If there is a route for that source already, continue
+            - If there is not a route, create one.
+            - If we can't find any available sources, tell the colony that we need to scout
+    - Miners should just go to their assigned source, make sure a container is built, and mine
+    - Haulers should pick up from their assigned source, then deposit in the closest storage (this value should be cached)
+
+### Post RCL4 - Roads
+
+### Post RCL4 - Secondary Room Improvements
+
+- Favor 2 sources over 1
+- Update scouting to include the secondary room
+
 ### Tidy UP pt 2
 
 - Move room and creep property initialization somewhere better than main.js
@@ -90,8 +120,13 @@ If we're below the low watermark, use up to 50% of the limit
 - Remove creep process delay
 
 ### Post RCL4 - this is (duh) big.
-    - Mining
-    - Other shit
+
+We enter coma immediately.  Coma recovery should be bootstrappers + mining route introduction
+
+1) Start with bootstrappers + mining routes
+2) Then move on to new balancers + all of the old creeps
+
+WE JUST WANT TO GET THINGS TO PAR WITH THE PREVIOUS AI WHILE STILL KEEPING GOOD QUALITY
 
 ### Defenses
     - Just do a rampart + wall alternating defense (maybe r-r-w-w-r-r-w-w)
@@ -140,17 +175,6 @@ If we're below the low watermark, use up to 50% of the limit
     - Need to automatically add sources in nearby rooms to the list of available sources.  This needs that the colony object needs to automatically send scouts outside of the room
 
 - Mining
-    - Each mining operation should be its own process
-    - Colonies should have a mining manager process which controls the mining operations
-        - Mining operations should be started one by one.  New mining operations should only be started when the previous has all of its creeps being spawned or in existence
-        - New mining operations should only be created if the room is in the right state, and if there's room in the queue.  
-        - If we have a pair of rooms, we need to force the destination
-        - To create a route, have the manager check the colony's available sources (meaning not owned by SKs or other players) by order of nearest to either of the colony's storages one by one
-            - If there is a route for that source already, continue
-            - If there is not a route, create one.
-            - If we can't find any available sources, tell the colony that we need to scout
-    - Miners should just go to their assigned source, make sure a container is built, and mine
-    - Haulers should pick up from their assigned source, then deposit in the closest storage (this value should be cached)
 
 - Colony/Room States
     - We effectively have two types of creeps - the necessary ones and the "gravy" ones

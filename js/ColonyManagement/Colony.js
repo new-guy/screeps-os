@@ -284,6 +284,14 @@ class Colony {
 
                 this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
             }
+            
+            else if(spawnResult === ERR_NOT_ENOUGH_ENERGY) {
+                //Draw the name of the creep your'e trying to spawn
+                console.log("Waiting for energy for creep " + creepName);
+
+                spawn.room.visual.text(creepName, spawn.pos);
+                this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
+            }
 
             else {
                 console.log('Error spawning creep ' + spawnResult);

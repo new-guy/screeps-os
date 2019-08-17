@@ -21,6 +21,7 @@ class ColonyManager extends Process {
         }
 
         this.ensureRoomManagement();
+        //this.ensureMiningRoutes();
 
         if(this.primaryRoom.isInComa() || (this.secondaryRoom !== undefined && this.secondaryRoom.isInComa())) {
             this.comaRecovery();
@@ -135,7 +136,7 @@ class ColonyManager extends Process {
             'targetRoomName': this.secondaryRoom.name,
             'spawnColonyName': this.name,
             'maxToSpawn': bootstrappersToSpawn,
-            'maxTicksToUse': 500,
+            'maxTicksToUse': 400,
             'maxEnergy': 3000,
             'creepNameBase': 'secondarySelf'
         };
@@ -145,14 +146,14 @@ class ColonyManager extends Process {
     }
 
     supportBootstrap(roomToSupport) {
-        var bootstrappersToSpawn = 10;
+        var bootstrappersToSpawn = 15;
 
         var data = {
             'targetRoomName': roomToSupport.name,
             'spawnColonyName': this.name,
             'maxToSpawn': bootstrappersToSpawn,
-            'maxTicksToUse': 500,
-            'maxEnergy': 3000,
+            'maxTicksToUse': 1000,
+            'maxEnergy': 6000,
             'creepNameBase': 'support' + roomToSupport.name
         };
         
