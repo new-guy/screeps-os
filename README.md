@@ -121,7 +121,7 @@ If we're below the low watermark, use up to 50% of the limit
 - When spawning
     - If no energy max defined, spawn from biggest available spawner
     - If energy max defined, spawn from smallest that can support it
-- Need to refresh all mining routes whenever we get the new room.  Just delete all of the current mining routes
+- Delete all mining routes every N ticks
 
 ### Tidy UP pt 2
 
@@ -136,6 +136,10 @@ If we're below the low watermark, use up to 50% of the limit
 
 - Need defenses
 - We just need to be at the point where we can start to establish a room on the mmo
+
+### Tidy UP pt 3
+
+- Update mining route discovery to perform route discovery as a separate function, or cache the known paths
 
 ### Post RCL4 - this is (duh) big.
 

@@ -22,6 +22,8 @@ class ColonyManager extends Process {
 
         this.ensureRoomManagement();
         this.ensureMiningRoutes();
+        
+        this.ensureChildProcess(this.primaryRoom.name + '|scoutingManager', 'ColonyScoutingManager', {'colonyName': this.name}, COLONY_SCOUTING_PRIORITY);
 
         if(this.primaryRoom.isInComa() || (this.secondaryRoom !== undefined && this.secondaryRoom.isInComa())) {
             console.log('Coma Recovery');
@@ -68,8 +70,6 @@ class ColonyManager extends Process {
     }
 
     normalBehavior() {
-        this.ensureChildProcess(this.primaryRoom.name + '|scoutingManager', 'ColonyScoutingManager', {'colonyName': this.name}, COLONY_SCOUTING_PRIORITY);
-
         if(this.roomIsPreStorage(this.primaryRoom)) {
             var bootstrapPID = 'preStorSelfBoot|' + this.primaryRoom.name + '|' + this.primaryRoom.name;
             var data = {'targetRoomName': this.primaryRoom.name, 'spawnColonyName': this.primaryRoom.name};

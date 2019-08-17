@@ -33,8 +33,14 @@ class EnergyHarvestingManager extends Process {
 
         if(this.canCreateNewMiningRoute()) {
             var sourceToHarvest = this.findSourceToHarvest();
-            console.log(sourceToHarvest.pos.roomName + ' ' + sourceToHarvest.pos.x + 'x ' + sourceToHarvest.pos.y + 'y');
-            this.createNewRoute(sourceToHarvest);
+            if(sourceToHarvest === null) {
+                console.log('Could not find new source to mine');
+            }
+            
+            else {
+                console.log(sourceToHarvest.pos.roomName + ' ' + sourceToHarvest.pos.x + 'x ' + sourceToHarvest.pos.y + 'y');
+                this.createNewRoute(sourceToHarvest);
+            }
         }
 
         else {
@@ -99,10 +105,10 @@ class EnergyHarvestingManager extends Process {
     }
 
     findSourceToHarvest() {
-        var closestSource = this.colony.safeSources[0];
-        var closestDistance = this.colony.getClosestStorage(closestSource.pos).pos.findPathTo(closestSource).length;
+        var closestSource = null;
+        var closestDistance = 10000000000;
 
-        for(var i = 1; i < this.colony.safeSources.length; i++) {
+        for(var i = 0; i < this.colony.safeSources.length; i++) {
             var source = this.colony.safeSources[i];
 
             if(this.routeExistsForSource(source)) {
@@ -111,7 +117,7 @@ class EnergyHarvestingManager extends Process {
             }
 
             var closestStorage = this.colony.getClosestStorage(source.pos);
-            var distanceToStorage = closestStorage.pos.findPathTo(source).length;
+            var distanceToStorage = closestStorage.pos.findPathTo(source, {ignoreCreeps:true}).length;
 
             if(distanceToStorage < closestDistance) {
                 closestSource = source;
