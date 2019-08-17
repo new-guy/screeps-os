@@ -110,6 +110,7 @@ If we're below the low watermark, use up to 50% of the limit
     - Spawn N if over X energy
     - Spawn 1 if under X
     - Spawn size 1,1,1 if in coma
+- 
 
 ### Post RCL4 - Roads
 
@@ -132,6 +133,9 @@ If we're below the low watermark, use up to 50% of the limit
 - Combine room tools getConstructionSite & constructionSiteExists
 
 ### MMO Ready
+
+- Need defenses
+- We just need to be at the point where we can start to establish a room on the mmo
 
 ### Post RCL4 - this is (duh) big.
 
