@@ -1,11 +1,13 @@
 const Process = require('Process');
 
-var DEFAULT_SCOUT_INTERVAL = 6000;
+var DEFAULT_SCOUT_INTERVAL = 4000;
 var DISTANCE_SCOUT_INTERVAL = {
     "1": 50,
-    "2": 3000,
+    "2": 2000,
     "3": DEFAULT_SCOUT_INTERVAL
 };
+
+var ROOM_INFO_UPDATE_INTERVAL = 1000;
 
 class ColonyScoutingManager extends Process {
     constructor (...args) {
@@ -72,27 +74,33 @@ class ColonyScoutingManager extends Process {
 
         var scoutingInfo = Memory.scouting.rooms[room.name];
             
-        if(scoutingInfo.sourceInfo === undefined) {
-            var sourceInfo = {};
+        if(scoutingInfo.sourceInfo === undefined || scoutingInfo.lastFullColonyScout === undefined || Game.time - scoutingInfo.lastFullColonyScout > ROOM_INFO_UPDATE_INTERVAL) {
+            var fullSourceInfo = {};
             var primaryHeartPos = this.colony.primaryRoom.find(FIND_FLAGS, {filter: function(f) { return f.name.startsWith('!CHUNK|heart') }})[0].pos;
     
             if(primaryHeartPos !== undefined) {
                 var sourcesInRoom = room.find(FIND_SOURCES);
                 for(var i = 0; i < sourcesInRoom.length; i++) {
                     var source = sourcesInRoom[i];
-    
-                    sourceInfo[source.id] = {
-                        'distanceToPrimaryHeart': primaryHeartPos.findPathTo(source).length,
+                    var distToPrimary = PathFinder.search(source.pos, primaryHeartPos).path.length;
+                    fullSourceInfo[source.id] = {
+                        'distanceToPrimaryHeart': distToPrimary,
                         'pos': {
                             'x': source.pos.x,
                             'y': source.pos.y,
                             'roomName': source.pos.roomName
                         } 
                     }
+
+                    if(this.colony.secondaryRoom !== undefined) {
+                        var secondaryHeartPos = this.colony.secondaryRoom.find(FIND_FLAGS, {filter: function(f) { return f.name.startsWith('!CHUNK|heart') }})[0].pos;
+                        var distToSecondary = PathFinder.search(source.pos, secondaryHeartPos).path.length;
+                        fullSourceInfo[source.id]['distanceToSecondaryHeart'] = distToSecondary;
+                    }
                 }
             }
-
-            scoutingInfo.sourceInfo = sourceInfo;
+            scoutingInfo.lastFullColonyScout = Game.time;
+            scoutingInfo.sourceInfo = fullSourceInfo;
         }
 
         if(scoutingInfo.skLairs === undefined) {    

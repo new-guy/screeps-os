@@ -74,16 +74,19 @@ If we're below the low watermark, use up to 50% of the limit
     - Spawn N if over X energy
     - Spawn 1 if under X
     - Spawn size 1,1,1 if in coma
-- 
 
 ### Post RCL4 - Secondary Room Improvements
 
 - Favor adjacent room if one exists
-- Update scouting to include the secondary room
-- Delete all mining routes every N ticks - gotta keep them fresh
-- Update mining route creator to use scouting info rather than looking at sources that are visible
+- Update scouting to include info about the secondary room (see getClosestAvailableSafeSource of Colony.js)
+- Update colony room info to include info about the secondary room
 
-### Post RCL4 - Roads
+### Post RCL4 - More mining improvements
+
+- Friggin make the mining manager reserve rooms and favor rooms that are reserved for mining
+- Delete all mining routes every N ticks - gotta keep them fresh
+- Mining routes for both the energy harvesting manager and for bootstrappers should be based upon scouting info rather than looking at what we can see
+
 
 ### Tidy UP pt 2
 
@@ -98,6 +101,8 @@ If we're below the low watermark, use up to 50% of the limit
 
 - Need defenses
 - We just need to be at the point where we can start to establish a room on the mmo
+
+### Post RCL4 - Roads
 
 ### Tidy UP pt 3
 

@@ -29,7 +29,7 @@ class Colony {
         this.memory = Memory.colonies[name];
         this.primaryRoom = Game.rooms[this.memory['primaryRoomName']];
 
-        if(this.memory['primaryRoomName'] !== undefined) {
+        if(this.memory['secondaryRoomName'] !== undefined) {
             this.secondaryRoom = Game.rooms[this.memory['secondaryRoomName']];
         }
 
@@ -278,6 +278,69 @@ class Colony {
                 }
             }
         }
+
+        this.sortedSafeSources = this.getSafeSourcesByHeartDistance();
+        this.sortedAvailableSafeSources = this.getAvailableSafeSourcesByHeartDistance();
+    }
+
+    getColonyRoomScoutingInfo() {
+        var scoutingInfo = {};
+
+        for(var roomName in this.colonyRoomInfo) {
+            scoutingInfo[roomName] = Memory.scouting['rooms'][roomName]
+        }
+
+        return scoutingInfo;
+    }
+
+    getSafeSourcesByHeartDistance() {
+        var roomInfoArray = this.getColonyRoomScoutingInfo();
+
+        var colonySafeSourceInfo = [];
+
+        for(var roomName in roomInfoArray) {
+            var roomInfo = roomInfoArray[roomName];
+
+            if(roomInfo === undefined) continue;
+            if(roomInfo['isSkRoom'] === true) continue;
+
+            for(var sourceId in roomInfo['sourceInfo']) {
+                var sourceInfo = roomInfo['sourceInfo'][sourceId];
+
+                colonySafeSourceInfo.push(sourceInfo);
+            }
+        }
+
+        var sortedInfo = _.sortBy(colonySafeSourceInfo, [function(sourceInfo) { return sourceInfo['distanceToPrimaryHeart']; }]);
+
+        return sortedInfo;
+    }
+
+    getAvailableSafeSourcesByHeartDistance() {
+        var availableSafeSources = [];
+
+        for(var i = 0; i < this.sortedSafeSources.length; i++) {
+            var sourceInfo = this.sortedSafeSources[i];
+
+            var canSeeRoom = Game.rooms[sourceInfo.pos.roomName] !== undefined;
+            var hasOpenAdjacentTile = true; //Assume we do
+
+            if(canSeeRoom) {
+                var sourcePos = new RoomPosition(sourceInfo.pos.x, sourceInfo.pos.y, sourceInfo.pos.roomName);
+                hasOpenAdjacentTile = sourcePos.hasOpenAdjacentTile();
+            }
+            var sourceIsValid = (!canSeeRoom || hasOpenAdjacentTile);
+
+            if(sourceIsValid) {
+                availableSafeSources.push(sourceInfo);
+            }
+        }
+
+        return availableSafeSources;
+    }
+
+    shiftClosestAvailableSafeSourcePosition() {
+        return this.sortedAvailableSafeSources.shift();
     }
 
     removeFromActiveSources(sourceToRemove) {
