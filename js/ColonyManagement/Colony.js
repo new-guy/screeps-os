@@ -249,8 +249,7 @@ class Colony {
             }
         }
 
-        this.sortedSafeSources = this.getSafeSourcesByHeartDistance();
-        this.sortedAvailableSafeSources = this.getAvailableSafeSourcesByHeartDistance();
+        this.sortedSafeSourceInfo = this.getSafeSourceInfoByMineableDistance();
     }
 
     getColonyRoomScoutingInfo() {
@@ -263,7 +262,7 @@ class Colony {
         return scoutingInfo;
     }
 
-    getSafeSourcesByHeartDistance() {
+    getSafeSourceInfoByMineableDistance() {
         var roomInfoArray = this.getColonyRoomScoutingInfo();
 
         var colonySafeSourceInfo = [];
@@ -281,36 +280,18 @@ class Colony {
             }
         }
 
-        var sortedInfo = _.sortBy(colonySafeSourceInfo, [function(sourceInfo) { return sourceInfo['distanceToPrimaryHeart']; }]);
+        var secondaryRoom = this.secondaryRoom;
+
+        var sortedInfo = _.sortBy(colonySafeSourceInfo, [function(sourceInfo) {
+            var distance = sourceInfo['distanceToPrimaryHeart'];
+            var secondaryHeartDistance = sourceInfo['distanceToSecondaryHeart'];
+            if(secondaryRoom !== undefined && secondaryRoom.storage !== undefined && secondaryHeartDistance !== undefined && secondaryHeartDistance < distance) {
+                distance = secondaryHeartDistance;
+            }
+            return distance
+        }]);
 
         return sortedInfo;
-    }
-
-    getAvailableSafeSourcesByHeartDistance() {
-        var availableSafeSources = [];
-
-        for(var i = 0; i < this.sortedSafeSources.length; i++) {
-            var sourceInfo = this.sortedSafeSources[i];
-
-            var canSeeRoom = Game.rooms[sourceInfo.pos.roomName] !== undefined;
-            var hasOpenAdjacentTile = true; //Assume we do
-
-            if(canSeeRoom) {
-                var sourcePos = new RoomPosition(sourceInfo.pos.x, sourceInfo.pos.y, sourceInfo.pos.roomName);
-                hasOpenAdjacentTile = sourcePos.hasOpenAdjacentTile();
-            }
-            var sourceIsValid = (!canSeeRoom || hasOpenAdjacentTile);
-
-            if(sourceIsValid) {
-                availableSafeSources.push(sourceInfo);
-            }
-        }
-
-        return availableSafeSources;
-    }
-
-    shiftClosestAvailableSafeSourcePosition() {
-        return this.sortedAvailableSafeSources.shift();
     }
 
     removeFromActiveSources(sourceToRemove) {
