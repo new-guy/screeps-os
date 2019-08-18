@@ -1,7 +1,7 @@
 const Process = require('Process');
 
 var HEART_MAX_DISTANCE = 15;
-var MAX_DISTANCE_FROM_PRIMARY = 2;
+var MAX_DISTANCE_FROM_PRIMARY = 1;
 
 class SecondaryRoomFinder extends Process {
     constructor (...args) {
