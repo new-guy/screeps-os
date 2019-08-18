@@ -7,7 +7,7 @@ class EnergyRouteManager extends Process {
     constructor (...args) {
         super(...args);
         
-        this.targetSource = Game.getObjectById(this.memory.targetSourceId);
+        this.targetSourcePos = new RoomPosition(this.memory.targetSourcePos.x, this.memory.targetSourcePos.y, this.memory.targetSourcePos.roomName);
         this.targetStorage = Game.getObjectById(this.memory.targetStorageId);
         this.spawnColony = Game.colonies[this.memory.spawnColonyName];
 
@@ -21,7 +21,8 @@ class EnergyRouteManager extends Process {
             return 'exit';
         }
 
-        if(this.memory.containerPos === undefined || this.targetSource === null || this.targetStorage === null) {
+        if(this.memory.containerPos === undefined || this.targetStorage === null) {
+            this.spawnScout();
             return 'continue';
         }
 
@@ -30,15 +31,13 @@ class EnergyRouteManager extends Process {
     }
 
     isOperational() {
-        if(this.targetSource === null) {
-            return false;
-        }
+        if(this.memory.containerPos === undefined) return false;
 
-        var minerName = this.targetSource.pos.readableString() +'|Miner|0';
+        var minerName = this.targetSourcePos.readableString() +'|Miner|0';
 
         var allHaulersExist = true;
         for(var i = 0; i < HAULER_COUNT; i++) {
-            var haulerName = this.targetSource.pos.readableString() +'|Hauler|' + i;
+            var haulerName = this.targetSourcePos.readableString() +'|Hauler|' + i;
             allHaulersExist = (Game.creeps[haulerName] !== undefined);
 
             if(!allHaulersExist) break;
@@ -67,17 +66,21 @@ class EnergyRouteManager extends Process {
         var data = {
             'colonyName': this.memory.spawnColonyName,
             'creepCount': 1,
-            'creepNameBase': this.targetSource.pos.readableString() +'|Miner',
+            'creepNameBase': this.targetSourcePos.readableString() +'|Miner',
             'creepBodyType': 'Miner',
             'creepProcessClass': 'Miner',
             'creepMemory': {
-                'targetSourceId': this.targetSource.id,
+                'targetSourcePos': {
+                    'x': this.targetSourcePos.x,
+                    'y': this.targetSourcePos.y,
+                    'roomName': this.targetSourcePos.roomName
+                },
                 'containerPos': this.memory.containerPos
             },
             'creepPriority': this.metadata.defaultPriority
         };
         
-        var spawnPID = 'SpawnMiner|' + this.targetSource.pos.readableString() + '|' + this.memory.spawnColonyName;
+        var spawnPID = 'SpawnMiner|' + this.targetSourcePos.readableString() + '|' + this.memory.spawnColonyName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, this.metadata.defaultPriority);
     }
 
@@ -85,7 +88,7 @@ class EnergyRouteManager extends Process {
         var data = {
             'colonyName': this.memory.spawnColonyName,
             'creepCount': HAULER_COUNT,
-            'creepNameBase': this.targetSource.pos.readableString() +'|Hauler',
+            'creepNameBase': this.targetSourcePos.readableString() +'|Hauler',
             'creepBodyType': 'Hauler',
             'creepProcessClass': 'Hauler',
             'creepMemory': {
@@ -95,14 +98,31 @@ class EnergyRouteManager extends Process {
             'creepPriority': this.metadata.defaultPriority
         };
         
-        var spawnPID = 'SpawnHauler|' + this.targetSource.pos.readableString() + '|' + this.memory.spawnColonyName;
+        var spawnPID = 'SpawnHauler|' + this.targetSourcePos.readableString() + '|' + this.memory.spawnColonyName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, this.metadata.defaultPriority);
     }
 
-    determineContainerPos() {
-        var containerPos = this.targetSource.pos.getOpenAdjacentPos();
+    spawnScout() {
+        var data = {
+            'colonyName': this.spawnColony.name,
+            'creepCount': 1,
+            'creepNameBase': 'miningScout|' + this.targetSourcePos.roomName,
+            'creepBodyType': 'Scout',
+            'creepProcessClass': 'Scout',
+            'creepMemory': {
+                'targetRoom': this.targetSourcePos.roomName
+            },
+            'creepPriority': COLONY_SCOUTING_PRIORITY
+        };
 
-        var container = this.targetSource.pos.getAdjacentStructures(STRUCTURE_CONTAINER)[0];
+        var spawnPID ='spawnMiningScout|' + this.targetSourcePos.roomName;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_SCOUTING_PRIORITY);
+    }
+
+    determineContainerPos() {
+        var containerPos = this.targetSourcePos.getOpenAdjacentPos();
+
+        var container = this.targetSourcePos.getAdjacentStructures(STRUCTURE_CONTAINER)[0];
 
         if(container !== undefined) {
             containerPos = container.pos;

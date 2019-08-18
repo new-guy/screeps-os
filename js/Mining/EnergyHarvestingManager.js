@@ -32,14 +32,14 @@ class EnergyHarvestingManager extends Process {
         //
 
         if(this.canCreateNewMiningRoute()) {
-            var sourceToHarvest = this.findSourceToHarvest();
-            if(sourceToHarvest === null) {
+            var sourcePos = this.findSourcePosToHarvest();
+            if(sourcePos === null) {
                 console.log('Could not find new source to mine');
             }
             
             else {
-                console.log(sourceToHarvest.pos.roomName + ' ' + sourceToHarvest.pos.x + 'x ' + sourceToHarvest.pos.y + 'y');
-                this.createNewRoute(sourceToHarvest);
+                console.log(sourcePos.readableString());
+                this.createNewRoute(sourcePos);
             }
         }
 
@@ -104,38 +104,44 @@ class EnergyHarvestingManager extends Process {
         return (totalRoutes < targetRoutes && totalTicksUsed < totalMaxTicks);
     }
 
-    findSourceToHarvest() {
-        var closestSource = null;
+    findSourcePosToHarvest() {
+        var closestSourcePos = null;
         var closestDistance = 10000000000;
 
-        for(var i = 0; i < this.colony.safeSources.length; i++) {
-            var source = this.colony.safeSources[i];
+        for(var i = 0; i < this.colony.sortedSafeSourceInfo.length; i++) {
+            var sourceInfo = this.colony.sortedSafeSourceInfo[i];
+            var sourcePos = new RoomPosition(sourceInfo['pos']['x'], sourceInfo['pos']['y'], sourceInfo['pos']['roomName']);
 
-            if(this.routeExistsForSource(source)) {
-                console.log('Skipping ' + source.pos.readableString());
+            if(this.routeExistsForSourcePos(sourcePos)) {
+                console.log('Skipping ' + sourcePos.readableString());
                 continue;
             }
 
-            var closestStorage = this.colony.getClosestStorage(source.pos);
-            var distanceToStorage = closestStorage.pos.findPathTo(source, {ignoreCreeps:true}).length;
+            var distance = sourceInfo['pos']['distanceToPrimaryHeart'];
 
-            if(distanceToStorage < closestDistance) {
-                closestSource = source;
-                closestDistance = distanceToStorage;
+            if(sourceInfo['distanceToSecondaryHeart'] !== undefined && sourceInfo['distanceToSecondaryHeart'] < distance) {
+                distance = sourceInfo['distanceToSecondaryHeart'];
             }
 
-            source.room.visual.text(distanceToStorage, source.pos.x, source.pos.y-0.3, {font: "#5555ff"});
+            if(distance < closestDistance) {
+                closestSourcePos = sourcePos;
+                closestDistance = distance;
+            }
         }
 
-        return closestSource;
+        return closestSourcePos;
     }
 
-    createNewRoute(source) {
-        var closestStorage = this.colony.getClosestStorage(source.pos);
+    createNewRoute(sourcePos) {
+        var closestStorage = this.colony.getClosestStorage(sourcePos);
         // - Miners should just go to their assigned source, make sure a container is built, and mine
         // - Haulers should pick up from their assigned source, then deposit in the closest storage (this value should be cached)
         var data = {
-            'targetSourceId': source.id,
+            'targetSourcePos': {
+                'x': sourcePos.x,
+                'y': sourcePos.y,
+                'roomName': sourcePos.roomName
+            },
             'targetStorageId': closestStorage.id,
             'spawnColonyName': this.colony.name
         };
@@ -145,21 +151,21 @@ class EnergyHarvestingManager extends Process {
 
         var priority = COLONY_EXTRA_ENERGY_PRIORITY;
 
-        if(source.pos.roomName === closestStorage.pos.roomName) {
+        if(sourcePos.roomName === closestStorage.pos.roomName) {
             priority = COLONY_NECESSARY_ENERGY_PRIORITY;
         }
 
-        this.ensureChildProcess(this.getPidForSource(source), 'EnergyRouteManager', data, priority);
+        this.ensureChildProcess(this.getPidForSourcePos(sourcePos), 'EnergyRouteManager', data, priority);
     }
 
-    routeExistsForSource(source) {
-        var sourcePid = this.getPidForSource(source);
+    routeExistsForSourcePos(sourcePos) {
+        var sourcePid = this.getPidForSourcePos(sourcePos);
         console.log('Pid: ' + sourcePid);
         return Memory.processes[sourcePid] !== undefined;
     }
 
-    getPidForSource(source) {
-        return source.pos.readableString() + '|energyRoute';
+    getPidForSourcePos(sourcePos) {
+        return sourcePos.readableString() + '|energyRoute';
     }
 
     processShouldDie() {

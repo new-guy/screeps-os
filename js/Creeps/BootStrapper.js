@@ -44,20 +44,6 @@ class BootStrapper extends CreepProcess {
     }
 
     mineEnergy() {
-        //Get rid of roomToExplore
-        //Get the closest available source position
-        //If we are in the same room as the position, set the target to the source
-        //If not, move to the position
-
-        if(this.creep.memory.closestSourceInfo === undefined) {
-            this.creep.memory.closestSourceInfo = this.spawningColony.shiftClosestAvailableSafeSourcePosition();
-        }
-
-        var sourceInfo = this.creep.memory.closestSourceInfo;
-        var closesetSourcePosition = new RoomPosition(sourceInfo['pos']['x'], sourceInfo['pos']['y'], sourceInfo['pos']['roomName']);
-
-        this.creep.say(closesetSourcePosition.readableString())
-
         if(this.creep.memory.roomToExplore !== undefined) {
             var roomName = this.creep.memory.roomToExplore;
             if(Game.rooms[roomName] !== undefined && this.creep.room.name === roomName && !this.creep.pos.isEdge()) {

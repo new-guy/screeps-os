@@ -209,12 +209,12 @@ class Colony {
         var distance = 0;
 
         if(this.primaryRoom.storage !== undefined) {
-            distance = position.findPathTo(this.primaryRoom.storage).length;
+            distance = PathFinder.search(position, this.primaryRoom.storage.pos).path.length;
             closestStorage = this.primaryRoom.storage;
         }
 
         if(this.secondaryRoom !== undefined && this.secondaryRoom.storage !== undefined) {
-            var secondaryDistance = position.findPathTo(this.secondaryRoom.storage).length;
+            var secondaryDistance = PathFinder.search(position, this.secondaryRoom.storage.pos).path.length;
 
             if(secondaryDistance < distance) {
                 closestStorage = this.secondaryRoom.storage;
