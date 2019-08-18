@@ -226,7 +226,6 @@ class Colony {
 
     initMiningInfo() {
         this.activeSources = [];
-        this.depletedSources = [];
         this.safeSources = [];
 
         for(var roomName in this.colonyRoomInfo) {
@@ -244,37 +243,8 @@ class Colony {
                     this.activeSources.push(source);
                 }
 
-                else {
-                    this.depletedSources.push(source);
-                }
-
                 if(!isSkRoom) {
                     this.safeSources.push(source);
-                }
-            }
-        }
-
-        this.fallbackSourcePositions = [];
-
-        for(var roomName in this.colonyRoomInfo) {
-            var roomInfo = Memory.scouting.rooms[roomName];
-            if(roomInfo === undefined) continue;
-
-            else if(Game.rooms[roomName] !== undefined) { //we have vision - that means that we would've found active sources
-                continue;
-            }
-
-            else if(roomInfo.isSkRoom === true) {
-                continue;
-            }
-
-            else {
-                for(var sourceId in roomInfo['sourceInfo']) {
-                    var sourceInfo = roomInfo['sourceInfo'][sourceId];
-
-                    var sourcePos = new RoomPosition(sourceInfo['pos']['x'], sourceInfo['pos']['y'], sourceInfo['pos']['roomName']);
-
-                    this.fallbackSourcePositions.push(sourcePos);
                 }
             }
         }

@@ -68,8 +68,13 @@ If we're below the low watermark, use up to 50% of the limit
 
 ## Goals
 
-### Post RCL4 - Upgraders <--------------- current
-- Need basic balancer to support new balancers
+### Post RCL4 - More mining improvements <--------------- current
+
+- Mining routes for the energy harvesting manager should be based upon scouting info rather than looking at what we can see
+- Friggin make the mining manager reserve rooms and favor rooms that are reserved for mining
+- Delete all mining routes every N ticks - gotta keep them fresh
+
+### Post RCL4 - Upgraders
 - Just do feeders + upgraders
     - Spawn N if over X energy
     - Spawn 1 if under X
@@ -78,14 +83,7 @@ If we're below the low watermark, use up to 50% of the limit
 ### Post RCL4 - Secondary Room Improvements
 
 - Favor adjacent room if one exists
-- Update scouting to include info about the secondary room (see getClosestAvailableSafeSource of Colony.js)
 - Update colony room info to include info about the secondary room
-
-### Post RCL4 - More mining improvements
-
-- Friggin make the mining manager reserve rooms and favor rooms that are reserved for mining
-- Delete all mining routes every N ticks - gotta keep them fresh
-- Mining routes for both the energy harvesting manager and for bootstrappers should be based upon scouting info rather than looking at what we can see
 
 
 ### Tidy UP pt 2
