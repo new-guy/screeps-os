@@ -26,7 +26,7 @@ class ExpansionBootstrap extends Process {
             'creepNameBase': 'expansion'
         };
         
-        var spawnPID = 'spawnExpansionBootstrap|' + bootstrappersToSpawn + '|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
+        var spawnPID = 'ExpansionBootstrapSpawner|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
         this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
