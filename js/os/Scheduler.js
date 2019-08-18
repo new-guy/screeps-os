@@ -62,7 +62,7 @@ var processTypeMap = {
 
 var MAX_PROCESSES_TO_DISPLAY = 10;
 
-var DEBUGGING = false;
+var DEBUGGING = true;
 
 class Scheduler {
     constructor () {

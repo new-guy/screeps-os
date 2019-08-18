@@ -120,6 +120,11 @@ class EnergyRouteManager extends Process {
     }
 
     determineContainerPos() {
+        if(Game.rooms[this.targetSourcePos.roomName] === undefined) {
+            console.log('Cannot reach room for target source');
+            return;
+        }
+
         var containerPos = this.targetSourcePos.getOpenAdjacentPos();
 
         var container = this.targetSourcePos.getAdjacentStructures(STRUCTURE_CONTAINER)[0];

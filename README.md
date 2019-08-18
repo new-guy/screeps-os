@@ -70,8 +70,9 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### Post RCL4 - More mining improvements <--------------- current
 
-- Mining routes for the energy harvesting manager should be based upon scouting info rather than looking at what we can see
-- Friggin make the mining manager reserve rooms and favor rooms that are reserved for mining
+- Friggin make the mining manager reserve rooms
+    - Energy Route Managers should check if the room is a homeroom.  If not, ensure that the claimer is spawned
+    - The route is only operational if the claimer is spawned or we have reserved the room
 - Delete all mining routes every N ticks - gotta keep them fresh
 
 ### Post RCL4 - Upgraders
