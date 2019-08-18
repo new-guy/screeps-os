@@ -137,13 +137,13 @@ class ColonyManager extends Process {
     }
 
     ensureSecondaryRoomSelfBootstrap() {
-        var bootstrappersToSpawn = 5;
+        var bootstrappersToSpawn = 10;
 
         var data = {
             'targetRoomName': this.secondaryRoom.name,
             'spawnColonyName': this.name,
             'maxToSpawn': bootstrappersToSpawn,
-            'maxTicksToUse': 400,
+            'maxTicksToUse': 600,
             'maxEnergy': 3000,
             'creepNameBase': 'secondarySelf'
         };
