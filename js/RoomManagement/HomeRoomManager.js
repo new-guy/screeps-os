@@ -1,5 +1,7 @@
 const RoomManager = require('RoomManager');
 
+var DOWNGRADE_TICKS_SAFEGUARD = 1000;
+
 class HomeRoomManager extends RoomManager {
     constructor (...args) {
         super(...args);
@@ -23,6 +25,10 @@ class HomeRoomManager extends RoomManager {
 
         if(this.room.storage !== undefined) {
             this.ensureBalancers();
+        }
+
+        if(this.room.controller.ticksToDowngrade < DOWNGRADE_TICKS_SAFEGUARD) {
+            this.ensureDowngradeSafeguard();
         }
     }
 
@@ -54,11 +60,28 @@ class HomeRoomManager extends RoomManager {
                 'startFlagName': startFlagName,
                 'endFlagName': endFlagName
             },
-            'creepPriority': NECESSARY_CREEPS_PRIORITY
+            'creepPriority': COLONY_MANAGEMENT_PRIORITY
         };
         
         var spawnPID = 'spawnBalancer|' + endFlagName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
+    }
+
+    ensureDowngradeSafeguard() {
+        var bootstrappersToSpawn = 1;
+
+        var data = {
+            'targetRoomName': this.room.name,
+            'spawnColonyName': this.colony.name,
+            'maxToSpawn': bootstrappersToSpawn,
+            'maxTicksToUse': 400,
+            'maxEnergy': 300,
+            'creepNameBase': 'downgradeSafeguard',
+            'maxEnergyPerCreep': 300
+        };
+        
+        var spawnPID = 'downgradeSafeguard|' + this.room.name;
+        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, HIGHEST_PROMOTABLE_PRIORITY);
     }
 }
 

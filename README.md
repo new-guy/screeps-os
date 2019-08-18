@@ -68,61 +68,22 @@ If we're below the low watermark, use up to 50% of the limit
 
 ## Goals
 
-### Room Pairs <--------------- current
-
-- Remaining work:
-    - Need to set up the support back and forth 
-        - Primary helps secondary get started
-        - Secondary gets up to level 2, then puts itself on minimal bootstrap
-        - Secondary helps Primary after level 2 until Primary is level 4
-        - Primary helps Secondary up to level 4
-        - "help" in this context means sends bootstrappers
-    
-    - Need a coma recovery process for both rooms 
-        - Current one is shit.  We should be checking for coma and stopping all spawning if we are in coma
-    - Move construction room manager and construction flag converter into homeRoomManager
-
-### Post RCL4 - Bootstrappers + Miners
-
-- While in coma post RCL4, we spawn bootstrappers and mining routes one by one.
-- Start off with spawning bootstrappers
-    - Coma bootstrappers
-- Then figure out mining route logic
-    - Each mining operation should be its own process
-        - Update the "Ensure Child Process" function so that it returns the child process if it exists
-        - The mining route process should be able to return information about the mining route, such as if it is in full operation
-    - Colonies should have a mining manager process which controls the mining operations
-        - Mining routes should be created
-            - High priority for the room's own sources
-            - Up to a maximum number of ticks per spawner
-                - This should be able to be controlled by a variable so that we can control it based upon state
-                - We need to know how many ticks a mining operation will consume
-        - Mining operations should be started one by one.  New mining operations should only be started when the previous has all of its creeps being spawned or in existence
-        - To create a route, have the manager check the colony's available sources (meaning not owned by SKs or other players) by order of nearest to either of the colony's storages one by one
-            - If there is a route for that source already, continue
-            - If there is not a route, create one.
-            - If we can't find any available sources, tell the colony that we need to scout
-    - Miners should just go to their assigned source, make sure a container is built, and mine
-    - Haulers should pick up from their assigned source, then deposit in the closest storage (this value should be cached)
-
-### Post RCL4 - Upgraders
+### Post RCL4 - Upgraders <--------------- current
+- Need basic balancer to support new balancers
 - Just do feeders + upgraders
     - Spawn N if over X energy
     - Spawn 1 if under X
     - Spawn size 1,1,1 if in coma
 - 
 
-### Post RCL4 - Roads
-
 ### Post RCL4 - Secondary Room Improvements
 
-- Favor 2 sources over 1
+- Favor adjacent room if one exists
 - Update scouting to include the secondary room
-- When spawning
-    - If no energy max defined, spawn from biggest available spawner
-    - If energy max defined, spawn from smallest that can support it
-- Delete all mining routes every N ticksr
+- Delete all mining routes every N ticks - gotta keep them fresh
 - Update mining route creator to use scouting info rather than looking at sources that are visible
+
+### Post RCL4 - Roads
 
 ### Tidy UP pt 2
 

@@ -61,13 +61,13 @@ exports.Hauler = {
 }
 
 exports.Balancer = {
-	"segment": ["carry", "move"],
+	"segment": ["carry", "carry", "move"],
 	"min": {
-		"carry": 1,
+		"carry": 2,
 		"move": 1
 	},
 	"max": {
-		"carry": 10,
-		"move": 10
+		"carry": 4,
+		"move": 2
 	}
 }

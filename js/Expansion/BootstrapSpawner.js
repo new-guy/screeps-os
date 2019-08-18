@@ -17,6 +17,7 @@ class BootstrapSpawner extends Process {
         maxTicksToUse
         maxEnergy
         creepNameBase
+        maxEnergyPerCreep <- optional
         */
         
         this.targetRoom = Game.rooms[this.memory.targetRoomName];
@@ -25,6 +26,7 @@ class BootstrapSpawner extends Process {
         this.maxTicksToUse = this.memory.maxTicksToUse ? this.memory.maxTicksToUse : DEFAULT_TICKS;
         this.maxEnergy = this.memory.maxEnergy ? this.memory.maxEnergy : DEFAULT_MAX_ENERGY;
         this.creepNameBase = this.memory.creepNameBase ? this.memory.creepNameBase + "|" : "";
+        this.maxEnergyPerCreep = this.memory.maxEnergyPerCreep ? this.memory.maxEnergyPerCreep : this.targetRoom.energyCapacityAvailable;
     }
 
     update() {
@@ -36,7 +38,7 @@ class BootstrapSpawner extends Process {
     }
 
     spawnBootstrappers() {
-        var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.targetRoom.energyCapacityAvailable);
+        var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.maxEnergyPerCreep);
         var ticksToSpawn = BodyGenerator.getTicksToSpawn(bootstrapperBody);
         var bootstrappersToSpawn = Math.floor(this.maxTicksToUse/ticksToSpawn); //Do not spawn more than this many ticks
 
@@ -55,7 +57,8 @@ class BootstrapSpawner extends Process {
             'creepMemory': {
                 'targetRoom': this.memory.targetRoomName
             },
-            'creepPriority': this.metadata.defaultPriority
+            'creepPriority': this.metadata.defaultPriority,
+            'maxEnergyToSpend': this.memory.maxEnergyPerCreep
         };
         
         var spawnPID = this.creepNameBase + 'SpawnBootstrap|' + bootstrappersToSpawn + '|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
