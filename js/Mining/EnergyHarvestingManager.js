@@ -106,26 +106,21 @@ class EnergyHarvestingManager extends Process {
 
     findSourcePosToHarvest() {
         var closestSourcePos = null;
-        var closestDistance = 10000000000;
 
-        for(var i = 0; i < this.colony.sortedSafeSourceInfo.length; i++) {
-            var sourceInfo = this.colony.sortedSafeSourceInfo[i];
+        var sourceInfoByDistance = this.colony.getSafeSourceInfoByMineableDistance();
+
+        for(var i = 0; i < sourceInfoByDistance.length; i++) {
+            var sourceInfo = sourceInfoByDistance[i];
             var sourcePos = new RoomPosition(sourceInfo['pos']['x'], sourceInfo['pos']['y'], sourceInfo['pos']['roomName']);
 
             if(this.routeExistsForSourcePos(sourcePos)) {
                 console.log('Skipping ' + sourcePos.readableString());
                 continue;
             }
-
-            var distance = sourceInfo['pos']['distanceToPrimaryHeart'];
-
-            if(sourceInfo['distanceToSecondaryHeart'] !== undefined && sourceInfo['distanceToSecondaryHeart'] < distance) {
-                distance = sourceInfo['distanceToSecondaryHeart'];
-            }
-
-            if(distance < closestDistance) {
+            
+            else {
                 closestSourcePos = sourcePos;
-                closestDistance = distance;
+                break;
             }
         }
 
