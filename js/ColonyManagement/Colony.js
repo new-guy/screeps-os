@@ -206,7 +206,7 @@ class Colony {
 
     getClosestStorage(position) {
         var closestStorage = undefined;
-        var distance = 0;
+        var distance = 10000000000;
 
         if(this.primaryRoom.storage !== undefined) {
             distance = PathFinder.search(position, this.primaryRoom.storage.pos).path.length;
@@ -282,14 +282,19 @@ class Colony {
 
         var secondaryRoom = this.secondaryRoom;
 
-        var sortedInfo = _.sortBy(colonySafeSourceInfo, [function(sourceInfo) {
+        var sortedInfo = _.sortBy(colonySafeSourceInfo, function(sourceInfo) {
             var distance = sourceInfo['distanceToPrimaryHeart'];
             var secondaryHeartDistance = sourceInfo['distanceToSecondaryHeart'];
             if(secondaryRoom !== undefined && secondaryRoom.storage !== undefined && secondaryHeartDistance !== undefined && secondaryHeartDistance < distance) {
                 distance = secondaryHeartDistance;
             }
-            return distance
-        }]);
+
+            console.log('hi');
+            console.log(sourceInfo.pos.roomName + " " + distance);
+            return distance;
+        });
+
+        console.log('Sup dood');
 
         return sortedInfo;
     }

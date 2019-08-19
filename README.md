@@ -86,7 +86,8 @@ If we're below the low watermark, use up to 50% of the limit
 
 - Favor adjacent room if one exists
 - Update colony room info to include info about the secondary room
-
+- Builders need to suicide or go somewhere safe when they are done
+- Optionally bigger balancers
 
 ### Tidy UP pt 2
 
