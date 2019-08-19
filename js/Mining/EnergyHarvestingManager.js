@@ -104,7 +104,8 @@ class EnergyHarvestingManager extends Process {
         };
 
         var visualStyle = {
-            align: 'left'
+            align: 'left',
+            color: '#cccc00'
         };
 
         var visual = new RoomVisual(this.colony.primaryRoom.name);
