@@ -28,12 +28,19 @@ class EnergyRouteManager extends Process {
             return 'continue';
         }
 
+        this.drawRouteInfo();
+
         this.spawnMiner();
         this.spawnHauler();
 
         if(this.shouldReserve()) {
             this.spawnReserver();
         }
+    }
+
+    drawRouteInfo() {
+        var format = {align: 'left'};
+        new RoomVisual(this.memory.containerPos['roomName']).text('Dest: ' + this.targetStorage.pos.roomName, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'], format);
     }
 
     isOperational() {
@@ -196,6 +203,12 @@ class EnergyRouteManager extends Process {
 
         if(container !== undefined) {
             containerPos = container.pos;
+        }
+
+        var containerConstructionSpot = this.targetSourcePos.getAdjacentConstructionSites(STRUCTURE_CONTAINER)[0];
+
+        if(containerConstructionSpot !== undefined) {
+            containerPos = containerConstructionSpot.pos;
         }
 
         this.memory.containerPos = {

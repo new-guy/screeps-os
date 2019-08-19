@@ -70,11 +70,6 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### Post RCL4 - More mining improvements <--------------- current
 
-- Delete all mining routes every N ticks - gotta keep them fresh
-- Ensure that we are regularly refreshing scouting info
-- Ensure that we are regularly refreshing colony room info
-- Make sure that the scouting manager considers the range from secondaryRoom as well
-
 - Print out the mining route's name next to the storage that it's delivering to, and the storage room next to the source
 
 
