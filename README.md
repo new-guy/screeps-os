@@ -70,10 +70,9 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### Post RCL4 - More mining improvements <--------------- current
 
-- Friggin make the mining manager reserve rooms
-    - Energy Route Managers should check if the room is a homeroom.  If not, ensure that the claimer is spawned
-    - The route is only operational if the claimer is spawned or we have reserved the room
 - Delete all mining routes every N ticks - gotta keep them fresh
+- Ensure that we are regularly refreshing scouting info
+- Ensure that we are regularly refreshing colony room info
 
 
 ### Post RCL4 - Upgraders
