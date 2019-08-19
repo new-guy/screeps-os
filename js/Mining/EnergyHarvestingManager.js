@@ -3,16 +3,28 @@ const Process = require('Process');
 var MAX_TICKS_TO_USE_PER_SPAWN = 600;
 var TARGET_ROUTES_PER_STORAGE = 6;
 
+var TIME_BETWEEN_PURGES = 500;
+
 class EnergyHarvestingManager extends Process {
     constructor (...args) {
         super(...args);
 
         this.colony = Game.colonies[this.memory.colonyName];
+
+        if(this.memory.timeSinceLastPurged === undefined) {
+            this.memory.timeSinceLastPurged = Game.time;
+        }
     }
 
     update() {
         if(super.update() == 'exit') {
             return 'exit';
+        }
+
+        if(this.shouldPurge()) {
+            this.killAllChildren();
+            this.memory.timeSinceLastPurged = Game.time;
+            return 'continue';
         }
 
         //CHECK IF MINING ROUTE SHOULD BE ENSURED
@@ -51,6 +63,10 @@ class EnergyHarvestingManager extends Process {
             //For each Colony.safeSource, calculate the distance to all available storages.  Select the one that's closest
             //Use this to select our first mining route
             //Mining route ensures that the miner and harvester are spawned, along with designating where the container should be
+    }
+
+    shouldPurge() {
+        return Game.time - this.memory.timeSinceLastPurged > TIME_BETWEEN_PURGES;
     }
 
     ensureMiningRoutes() {

@@ -54,13 +54,15 @@ class ColonyManager extends Process {
     }
 
     comaRecovery() {
-        this.ensureChildProcess(this.primaryRoom.name + '|comaRecovery', 'ComaRecovery', {
-            'targetRoomName': this.primaryRoom.name,
-            'spawnColonyName': this.name,
-            'creepNameBase': this.primaryRoom.name + '|comaRecovery'
-        }, HIGHEST_PROMOTABLE_PRIORITY);
+        if(this.primaryRoom.isInComa()) {
+            this.ensureChildProcess(this.primaryRoom.name + '|comaRecovery', 'ComaRecovery', {
+                'targetRoomName': this.primaryRoom.name,
+                'spawnColonyName': this.name,
+                'creepNameBase': this.primaryRoom.name + '|comaRecovery'
+            }, HIGHEST_PROMOTABLE_PRIORITY);
+        }
 
-        if(this.secondaryRoom !== undefined) {
+        if(this.secondaryRoom !== undefined && this.secondaryRoom.isInComa()) {
             this.ensureChildProcess(this.secondaryRoom.name + '|comaRecovery', 'ComaRecovery', {
                 'targetRoomName': this.secondaryRoom.name,
                 'spawnColonyName': this.name,
@@ -91,7 +93,6 @@ class ColonyManager extends Process {
 
     ensureSecondaryRoom() {
         if(this.secondaryRoom !== undefined && !this.secondaryRoom.controller.my && Game.empire.hasSpareGCL) {
-            console.log('hi');
             this.spawnSecondaryRoomClaimer();
         }
 

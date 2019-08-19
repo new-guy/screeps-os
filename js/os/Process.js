@@ -94,6 +94,13 @@ class Process {
             this.removeChildProcess(childrenToKill[i]);
         }
     }
+
+    killAllChildren() {
+        while(this.memory.children.length > 0) {
+            var pid = this.memory.children.shift();
+            this.scheduler.removeProcess(pid);
+        }
+    }
 }
 
 module.exports = Process;

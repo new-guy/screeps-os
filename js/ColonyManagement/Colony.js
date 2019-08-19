@@ -320,9 +320,6 @@ class Colony {
             if(secondaryRoom !== undefined && secondaryRoom.storage !== undefined && secondaryHeartDistance !== undefined && secondaryHeartDistance < distance) {
                 distance = secondaryHeartDistance;
             }
-
-            console.log('hi');
-            console.log(sourceInfo.pos.roomName + " " + distance);
             return distance;
         });
 
