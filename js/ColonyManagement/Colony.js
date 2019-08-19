@@ -8,6 +8,8 @@ var BodyGenerator = require('BodyGenerator');
 var COLONY_MAX_RANGE = 2;
 var COLONY_MAX_ROOMS_TO_TRAVEL = 2;
 
+var COLONY_INFO_UPDATE_FREQUENCY = 200; //Update every 100 ticks
+
 class Colony {
     /*
     this.primaryRoom = Room
@@ -33,49 +35,62 @@ class Colony {
             this.secondaryRoom = Game.rooms[this.memory['secondaryRoomName']];
         }
 
-        this.initColonyRoomInfo();
+        if(this.memory.colonyRoomInfo === undefined || Game.time % COLONY_INFO_UPDATE_FREQUENCY === 0) {
+            this.initColonyRoomInfo();
+        }
+        this.colonyRoomInfo = this.memory.colonyRoomInfo;
         this.initSpawnInfo();
         this.initMiningInfo();
+        //this.drawColonyInfo();
     }
 
     initColonyRoomInfo() {
-        if(this.memory.colonyRoomInfo === undefined) {
-            var colonyRoomInfo = {};
-            colonyRoomInfo[this.primaryRoom.name] = {'roomName': this.primaryRoom.name, 'distanceFromPrimary': 0};
-            var roomsToSearch = Object.values(Game.map.describeExits(this.primaryRoom.name));
-            var currentTravelDistance = 1;
-            var nextRoomsToSearch = [];
+        var colonyRoomInfo = {};
 
-            while(currentTravelDistance <= COLONY_MAX_ROOMS_TO_TRAVEL) {
-                for(var i = 0; i < roomsToSearch.length; i++) {
-                    var roomName = roomsToSearch[i];
+        var roomsToSearch = Object.values(Game.map.describeExits(this.primaryRoom.name));
 
-                    if(colonyRoomInfo[roomName] !== undefined || roomName === this.primaryRoom.name) {
-                        continue;
-                    }
+        //Shift roomsToSearch
+            //Check if it is defined in colonyRoomInfo - continue if so
+            //Check if it is far away from both the secondaryRoom and the primaryRoom
+            //If not, write down its name, and calculate its distanceFromPrimary & distanceFromSecondary
+                //Also put its exits into roomsToSearch
 
-                    else if(Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name) > COLONY_MAX_RANGE) {
-                        continue;
-                    }
+        var secondaryExists = (this.secondaryRoom !== undefined);
 
-                    colonyRoomInfo[roomName] = {
-                        'roomName': roomName,
-                        'distanceFromPrimary': currentTravelDistance
-                    };
+        while(roomsToSearch.length > 0) {
+            var roomName = roomsToSearch.shift();
 
-                    var adjacentRooms = Object.values(Game.map.describeExits(roomName));
-                    nextRoomsToSearch = nextRoomsToSearch.concat(adjacentRooms);
-                }
-
-                roomsToSearch = nextRoomsToSearch;
-                nextRoomsToSearch = [];
-                currentTravelDistance += 1;
+            if(colonyRoomInfo[roomName] !== undefined) {
+                continue;
             }
 
-            this.memory.colonyRoomInfo = colonyRoomInfo;
+            var distToRoom = Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name);
+
+            if(secondaryExists) {
+                var distToSecondary = Game.map.getRoomLinearDistance(roomName, this.secondaryRoom.name);
+                if(distToSecondary < distToRoom) {
+                    distToRoom = distToSecondary;
+                }
+            }
+
+            if(distToRoom > COLONY_MAX_RANGE) {
+                continue;
+            }
+
+            colonyRoomInfo[roomName] = {
+                'roomName': roomName,
+                'distanceFromPrimary': Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name)
+            };
+
+            if(secondaryExists) {
+                colonyRoomInfo[roomName]['distanceFromSecondary'] = Game.map.getRoomLinearDistance(roomName, this.secondaryRoom.name);
+            }
+
+            var adjacentRooms = Object.values(Game.map.describeExits(roomName));
+            roomsToSearch = roomsToSearch.concat(adjacentRooms);
         }
 
-        this.colonyRoomInfo = this.memory.colonyRoomInfo;
+        this.memory.colonyRoomInfo = colonyRoomInfo;
     }
     
     get roomsByDistance() {
