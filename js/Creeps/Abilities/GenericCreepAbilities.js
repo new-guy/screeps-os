@@ -50,10 +50,56 @@ Creep.prototype.buildTarget = function() {
     }
 }
 
+Creep.prototype.repairTarget = function() {
+    var target = this.getTarget();
+
+    if(this.pos.getRangeTo(target) === 0) {
+        this.moveRandom();
+        this.say('Move');
+    }
+
+    else {
+        if(this.pos.getRangeTo(target) > 2) {
+            this.moveTo(target, {visualizePathStyle: {stroke: "#333", opacity: .2}});
+        }
+
+        if(this.pos.getRangeTo(target) <= 3) {
+            var repairResult = this.repair(target);
+    
+            if(repairResult === 0 && this.carry[RESOURCE_ENERGY] === 0) {
+                this.clearTarget();
+            }
+    
+            else {
+                this.say('Rep');
+            }
+        }
+    }
+}
+
 Creep.prototype.moveRandom = function() {
     var moveOptions = [TOP, TOP_RIGHT, RIGHT, BOTTOM_RIGHT, BOTTOM, BOTTOM_LEFT, LEFT, TOP_LEFT];
 
     var moveDirection = moveOptions[Math.floor(Math.random() * moveOptions.length)];
 
     this.move(moveDirection);
+}
+
+Creep.prototype.getEnergyFromStorage = function(room) {
+    var storage = room.storage;
+
+    if(storage === undefined) {
+        this.say('NoStorage');
+        return;
+    }
+
+    else {
+        if(this.pos.getRangeTo(storage) > 1) {
+            this.moveTo(storage);
+        }
+
+        else {
+            this.withdraw(storage, RESOURCE_ENERGY);
+        }
+    }
 }

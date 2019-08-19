@@ -99,6 +99,9 @@ If we're below the low watermark, use up to 50% of the limit
 ### MMO Ready
 
 - Need defenses
+    - Just do a rampart + wall alternating defense (maybe r-r-w-w-r-r-w-w)
+    - Rooms need an attribute listing the walls that need repair
+    - Builders need to be able to repair walls
 - We just need to be at the point where we can start to establish a room on the mmo
 
 ### Post RCL4 - Roads
@@ -106,6 +109,7 @@ If we're below the low watermark, use up to 50% of the limit
 ### Tidy UP pt 3
 
 - Update mining route discovery to perform route discovery as a separate function, or cache the known paths
+- Ensure that we have unique and consistent PIDs.  Bootstrapper spawning, for example, is inconsistent
 
 ### Post RCL4 - this is (duh) big.
 
@@ -117,7 +121,6 @@ We enter coma immediately.  Coma recovery should be bootstrappers + mining route
 WE JUST WANT TO GET THINGS TO PAR WITH THE PREVIOUS AI WHILE STILL KEEPING GOOD QUALITY
 
 ### Defenses
-    - Just do a rampart + wall alternating defense (maybe r-r-w-w-r-r-w-w)
     - Second row of ramparts behind
     - Ramparts on top of all important buildings
 

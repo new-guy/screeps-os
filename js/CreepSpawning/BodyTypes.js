@@ -12,6 +12,20 @@ exports.BootStrapper = {
 	}
 };
 
+exports.Builder = {
+	"segment": ["work", "carry", "move"],
+	"min": {
+		"work": 1,
+		"carry": 1,
+		"move": 1
+	},
+	"max": {
+		"work": 10,
+		"carry": 10,
+		"move": 10
+	}
+};
+
 exports.Scout = {
 	"segment": ["move"],
 	"min": {
@@ -31,6 +45,18 @@ exports.Claimer = {
 	"max": {
 		"move": 5,
 		"claim": 1
+	}
+}
+
+exports.Reserver = {
+	"segment": ["move", "move", "claim", "claim"],
+	"min": {
+		"move": 2,
+		"claim": 2
+	},
+	"max": {
+		"move": 2,
+		"claim": 2
 	}
 }
 

@@ -151,6 +151,17 @@ function initRooms() {
             return s.structureType === STRUCTURE_RAMPART && s.hits < RAMPART_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
         }});
 
+        if(room.rampartsNeedingRepair.length > 0) {
+            room.leastBuiltRampart = room.rampartsNeedingRepair[0];
+    
+            for(var i = 1 ; i < room.rampartsNeedingRepair.length; i++) {
+                var rampart = room.rampartsNeedingRepair[i];
+                if(rampart.hits < room.leastBuiltRampart.hits) {
+                    room.leastBuiltRampart = rampart;
+                }
+            }
+        }
+
         room.hasSourceKeepers = room.find(FIND_HOSTILE_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_KEEPER_LAIR }}).length > 0;
     }
 }

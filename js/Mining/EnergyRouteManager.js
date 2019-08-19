@@ -3,6 +3,8 @@ const BodyGenerator = require('BodyGenerator');
 
 var HAULER_COUNT = 2;
 
+var REMAINING_TICKS_TO_SPAWN_RESERVER = 3000;
+
 class EnergyRouteManager extends Process {
     constructor (...args) {
         super(...args);
@@ -28,6 +30,11 @@ class EnergyRouteManager extends Process {
 
         this.spawnMiner();
         this.spawnHauler();
+
+        if(this.shouldReserve()) {
+            console.log('Would reserve ' + this.targetSourcePos.roomName);
+            console.log('Need to implement reserving logic');
+        }
     }
 
     isOperational() {
@@ -102,6 +109,22 @@ class EnergyRouteManager extends Process {
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, this.metadata.defaultPriority);
     }
 
+    shouldReserve() {
+        //Should reserve if it's not 
+        var room = Game.rooms[this.targetSourcePos.roomName];
+
+        if(room === undefined || room.controller === undefined) return false;
+
+        var isOneOfMyRooms = (room.controller !== undefined && room.controller.my && room.controller.level > 0);
+
+        if(isOneOfMyRooms) return false;
+
+        var reservation = room.controller.reservation;
+        if(reservation === undefined) return true;
+
+        return reservation.ticksToEnd < REMAINING_TICKS_TO_SPAWN_RESERVER;
+    }
+
     spawnScout() {
         var data = {
             'colonyName': this.spawnColony.name,
@@ -118,6 +141,23 @@ class EnergyRouteManager extends Process {
         var spawnPID ='spawnMiningScout|' + this.targetSourcePos.roomName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_SCOUTING_PRIORITY);
     }
+
+    // spawnReserver() {
+    //     var data = {
+    //         'colonyName': this.spawnColony.name,
+    //         'creepCount': 1,
+    //         'creepNameBase': 'reserver|' + this.targetSourcePos.roomName,
+    //         'creepBodyType': 'Reserver',
+    //         'creepProcessClass': 'Reserver',
+    //         'creepMemory': {
+    //             'targetRoom': this.targetSourcePos.roomName
+    //         },
+    //         'creepPriority': this.metadata.defaultPriority
+    //     };
+
+    //     var spawnPID ='spawnReserver|' + this.targetSourcePos.roomName;
+    //     this.ensureChildProcess(spawnPID, 'SpawnCreep', data, this.metadata.defaultPriority);
+    // }
 
     determineContainerPos() {
         if(Game.rooms[this.targetSourcePos.roomName] === undefined) {

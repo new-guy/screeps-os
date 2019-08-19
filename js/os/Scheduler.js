@@ -27,6 +27,7 @@ const Claimer = require('Claimer');
 const Miner = require('Miner');
 const Hauler = require('Hauler');
 const Balancer = require('Balancer');
+const Builder = require('Builder');
 
 const ExpansionBootstrap = require('ExpansionBootstrap');
 
@@ -52,6 +53,7 @@ var processTypeMap = {
     "Miner": Miner,
     "Hauler": Hauler,
     "Balancer": Balancer,
+    "Builder": Builder,
     "ExpansionBootstrap": ExpansionBootstrap,
     "HomeRoomManager": HomeRoomManager,
     "ComaRecovery": ComaRecovery,
