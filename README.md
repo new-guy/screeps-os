@@ -70,7 +70,7 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### Post RCL4 - More mining improvements <--------------- current
 
-- Print out the mining route's name next to the storage that it's delivering to, and the storage room next to the source
+- In the primaryRoom, print out the list of routes and the current #, tick consumption, and energy consumption
 
 
 ### Post RCL4 - Upgraders
@@ -82,7 +82,6 @@ If we're below the low watermark, use up to 50% of the limit
 ### Post RCL4 - Secondary Room Improvements
 
 - Favor adjacent room if one exists
-- Update colony room info to include info about the secondary room
 - Builders need to suicide or go somewhere safe when they are done
 - Optionally bigger balancers
 
@@ -106,6 +105,11 @@ If we're below the low watermark, use up to 50% of the limit
 - We just need to be at the point where we can start to establish a room on the mmo
 
 ### Post RCL4 - Roads
+
+- Have a roadmap object that can take in a room position and tell us if it is reserved for a road
+- Start by drawing roads between the primary and secondary room
+- Then draw roads from storage to controller
+- Then draw roads one by one to active mining routes
 
 ### Tidy UP pt 3
 
