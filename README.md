@@ -75,6 +75,7 @@ If we're below the low watermark, use up to 50% of the limit
     - The route is only operational if the claimer is spawned or we have reserved the room
 - Delete all mining routes every N ticks - gotta keep them fresh
 
+
 ### Post RCL4 - Upgraders
 - Just do feeders + upgraders
     - Spawn N if over X energy
@@ -110,6 +111,7 @@ If we're below the low watermark, use up to 50% of the limit
 
 - Update mining route discovery to perform route discovery as a separate function, or cache the known paths
 - Ensure that we have unique and consistent PIDs.  Bootstrapper spawning, for example, is inconsistent
+- Mining Mangers should remove mining routes that have been inoperational for N ticks
 
 ### Post RCL4 - this is (duh) big.
 

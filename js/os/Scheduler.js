@@ -24,6 +24,7 @@ const BootstrapSpawner = require('BootstrapSpawner');
 const BootStrapper = require('BootStrapper');
 const Scout = require('Scout');
 const Claimer = require('Claimer');
+const Reserver = require('Reserver');
 const Miner = require('Miner');
 const Hauler = require('Hauler');
 const Balancer = require('Balancer');
@@ -50,6 +51,7 @@ var processTypeMap = {
     "BootStrapper": BootStrapper,
     "Scout": Scout,
     "Claimer": Claimer,
+    "Reserver": Reserver,
     "Miner": Miner,
     "Hauler": Hauler,
     "Balancer": Balancer,

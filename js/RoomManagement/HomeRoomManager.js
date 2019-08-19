@@ -104,11 +104,11 @@ class HomeRoomManager extends RoomManager {
             'creepMemory': {
                 'targetRoom': this.room.name
             },
-            'creepPriority': COLONY_NONESSENTIAL_PRIORITY
+            'creepPriority': NECESSARY_CREEPS_PRIORITY
         };
 
         var spawnPID ='spawnBuilder|' + this.room.name;
-        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_NONESSENTIAL_PRIORITY);
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, NECESSARY_CREEPS_PRIORITY);
     }
 }
 
