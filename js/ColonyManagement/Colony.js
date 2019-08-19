@@ -41,7 +41,7 @@ class Colony {
         this.colonyRoomInfo = this.memory.colonyRoomInfo;
         this.initSpawnInfo();
         this.initMiningInfo();
-        //this.drawColonyInfo();
+        this.drawColonyInfo();
     }
 
     initColonyRoomInfo() {
@@ -92,6 +92,17 @@ class Colony {
 
         this.memory.colonyRoomInfo = colonyRoomInfo;
     }
+
+    drawColonyInfo() {
+        for(var roomName in this.colonyRoomInfo) {
+            var visual = new RoomVisual(roomName);
+            var colonyRoomInfo = this.colonyRoomInfo[roomName];
+
+            visual.text('Col: ' + this.name, 1, 1, {align: 'left'});
+            visual.text('Pri: ' + colonyRoomInfo['distanceFromPrimary'], 1, 2, {align: 'left'});
+            visual.text('Sec: ' + colonyRoomInfo['distanceFromSecondary'], 1, 3, {align: 'left'});
+        }
+    }
     
     get roomsByDistance() {
         /*
@@ -102,7 +113,13 @@ class Colony {
         */
 
         return _.groupBy(this.colonyRoomInfo, function(roomInfo) {
-            return roomInfo.distanceFromPrimary.toString();
+            var distance = roomInfo.distanceFromPrimary.toString();
+
+            if(roomInfo.distanceFromSecondary !== undefined && roomInfo.distanceFromSecondary < roomInfo.distanceFromPrimary) {
+                distance = roomInfo.distanceFromSecondary.toString();
+            } 
+
+            return distance
         });
     }
 
