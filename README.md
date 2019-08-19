@@ -99,6 +99,7 @@ If we're below the low watermark, use up to 50% of the limit
 - Remove creep process delay
 - Need a consistent process naming scheme
 - Combine room tools getConstructionSite & constructionSiteExists
+- Scouts need to be able to recognize when a room is unreachable and stop sending scouts there for N ticks
 
 ### MMO Ready
 
