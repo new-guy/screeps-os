@@ -77,13 +77,28 @@ class Colony {
                 continue;
             }
 
+            var stepsToRoom = Game.map.findRoute(roomName, this.primaryRoom.name).length;
+
+            if(secondaryExists) {
+                var stepsToSecondary = Game.map.findRoute(roomName, this.secondaryRoom.name).length;
+                if(stepsToSecondary < stepsToRoom) {
+                    stepsToRoom = stepsToSecondary;
+                }
+            }
+
+            if(stepsToRoom > COLONY_MAX_ROOMS_TO_TRAVEL) {
+                continue;
+            }
+
             colonyRoomInfo[roomName] = {
                 'roomName': roomName,
-                'distanceFromPrimary': Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name)
+                'distanceFromPrimary': Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name),
+                'stepsToPrimary': Game.map.findRoute(roomName, this.primaryRoom.name).length
             };
 
             if(secondaryExists) {
                 colonyRoomInfo[roomName]['distanceFromSecondary'] = Game.map.getRoomLinearDistance(roomName, this.secondaryRoom.name);
+                colonyRoomInfo[roomName]['stepsToSecondary'] = Game.map.findRoute(roomName, this.secondaryRoom.name).length;
             }
 
             var adjacentRooms = Object.values(Game.map.describeExits(roomName));
