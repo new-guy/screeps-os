@@ -113,6 +113,18 @@ exports.Hauler = {
 	}
 }
 
+exports.TowerFiller = {
+	"segment": ["carry", "move"],
+	"min": {
+		"carry": 1,
+		"move": 1
+	},
+	"max": {
+		"carry": 6,
+		"move": 6
+	}
+}
+
 exports.Balancer = {
 	"segment": ["carry", "carry", "move"],
 	"min": {

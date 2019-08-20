@@ -30,12 +30,20 @@ class HomeRoomManager extends RoomManager {
             this.ensureBalancers();
         }
 
+        if(this.room.halfFullTowers.length > 0) {
+            this.ensureTowerFillers();
+        }
+
         if(this.room.controller.ticksToDowngrade < DOWNGRADE_TICKS_SAFEGUARD) {
             this.ensureDowngradeSafeguard();
         }
 
         if(this.room.storage !== undefined && this.room.state === 'default') {
             this.ensureDefaultUnits();
+        }
+
+        if(this.room.storage !== undefined || this.room.controller.level >= 5) {
+            this.ensureDefenses();
         }
     }
 
@@ -73,6 +81,23 @@ class HomeRoomManager extends RoomManager {
         
         var spawnPID = 'spawnBalancer|' + endFlagName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
+    }
+
+    ensureTowerFillers() {
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': 1,
+            'creepNameBase': 'towerFiller|' + this.room.name,
+            'creepBodyType': 'TowerFiller',
+            'creepProcessClass': 'TowerFiller',
+            'creepMemory': {
+                'targetRoom': this.room.name
+            },
+            'creepPriority': NECESSARY_CREEPS_PRIORITY
+        };
+
+        var spawnPID ='spawnTowerFiller|' + this.room.name;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, NECESSARY_CREEPS_PRIORITY);
     }
 
     ensureDowngradeSafeguard() {
@@ -156,6 +181,10 @@ class HomeRoomManager extends RoomManager {
 
         var spawnPID ='spawnUpgradeFeeders|' + upgradeFeederCount + '|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, ROOM_UPGRADE_CREEPS_PRIORITY);
+    }
+
+    ensureDefenses() {
+        this.ensureChildProcess(this.name + '|defensePlanner', 'DefensePlanner', {'roomName': this.name}, COLONY_DEFENSE_PRIORITY);
     }
 }
 

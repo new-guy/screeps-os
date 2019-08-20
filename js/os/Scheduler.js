@@ -17,6 +17,7 @@ const ComaRecovery = require('ComaRecovery');
 const TowerManager = require('TowerManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
+const DefensePlanner = require('DefensePlanner');
 
 const SpawnCreep = require('SpawnCreep');
 const BootstrapSpawner = require('BootstrapSpawner');
@@ -31,6 +32,7 @@ const Balancer = require('Balancer');
 const Builder = require('Builder');
 const Upgrader = require('Upgrader');
 const UpgradeFeeder = require('UpgradeFeeder');
+const TowerFiller = require('TowerFiller');
 
 const ExpansionBootstrap = require('ExpansionBootstrap');
 
@@ -48,6 +50,12 @@ var processTypeMap = {
     "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
     "EnergyHarvestingManager": EnergyHarvestingManager,
     "EnergyRouteManager": EnergyRouteManager,
+    "HomeRoomManager": HomeRoomManager,
+    "ComaRecovery": ComaRecovery,
+    "TowerManager": TowerManager,
+    "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
+    "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor,
+    "DefensePlanner": DefensePlanner,
     "SpawnCreep": SpawnCreep,
     "BootstrapSpawner" :BootstrapSpawner,
     "BootStrapper": BootStrapper,
@@ -60,12 +68,8 @@ var processTypeMap = {
     "Builder": Builder,
     "Upgrader": Upgrader,
     "UpgradeFeeder": UpgradeFeeder,
-    "ExpansionBootstrap": ExpansionBootstrap,
-    "HomeRoomManager": HomeRoomManager,
-    "ComaRecovery": ComaRecovery,
-    "TowerManager": TowerManager,
-    "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
-    "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor
+    "TowerFiller": TowerFiller,
+    "ExpansionBootstrap": ExpansionBootstrap
 };
 
 var MAX_PROCESSES_TO_DISPLAY = 10;
