@@ -67,7 +67,8 @@ class HomeRoomManager extends RoomManager {
                 'startFlagName': startFlagName,
                 'endFlagName': endFlagName
             },
-            'creepPriority': COLONY_MANAGEMENT_PRIORITY
+            'creepPriority': COLONY_MANAGEMENT_PRIORITY,
+            'maxEnergyToSpend': Math.max(300, this.room.energyAvailable)
         };
         
         var spawnPID = 'spawnBalancer|' + endFlagName;
@@ -97,6 +98,7 @@ class HomeRoomManager extends RoomManager {
         }
 
         this.ensureUpgraders();
+        this.ensureUpgradeFeeders();
     }
 
     ensureBuilder() {
@@ -133,6 +135,26 @@ class HomeRoomManager extends RoomManager {
         };
 
         var spawnPID ='spawnUpgraders|' + upgraderCount + '|' + this.room.name;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, ROOM_UPGRADE_CREEPS_PRIORITY);
+    }
+
+    ensureUpgradeFeeders() {
+        var energyInStorage = this.room.storage.store[RESOURCE_ENERGY];
+        var upgradeFeederCount = Math.max(1, Math.floor(energyInStorage/ENERGY_PER_EXTRA_UPGRADER));
+
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': upgradeFeederCount,
+            'creepNameBase': 'upgraderFeeder|' + this.room.name,
+            'creepBodyType': 'UpgradeFeeder',
+            'creepProcessClass': 'UpgradeFeeder',
+            'creepMemory': {
+                'targetRoom': this.room.name
+            },
+            'creepPriority': ROOM_UPGRADE_CREEPS_PRIORITY
+        };
+
+        var spawnPID ='spawnUpgradeFeeders|' + upgradeFeederCount + '|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, ROOM_UPGRADE_CREEPS_PRIORITY);
     }
 }

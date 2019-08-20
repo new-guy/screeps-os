@@ -6,7 +6,7 @@ StructureController.prototype.needsSaving = function() {
 }
 
 Creep.prototype.upgradeThisController = function(controller) {
-    if(this.pos.getRangeTo(controller) <= 3 && this.creep.carry[RESOURCE_ENERGY] > 0) {
+    if(this.pos.getRangeTo(controller) <= 3 && this.carry[RESOURCE_ENERGY] > 0) {
         this.sayInOrder(['Praise', 'the', 'sun', '!!!']);
         this.upgradeController(controller);
     }

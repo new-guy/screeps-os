@@ -40,6 +40,18 @@ exports.Upgrader = {
 	}
 };
 
+exports.UpgradeFeeder = {
+	"segment": ["carry", "move"],
+	"min": {
+		"carry": 1,
+		"move": 1
+	},
+	"max": {
+		"carry": 10,
+		"move": 10
+	}
+}
+
 
 exports.Scout = {
 	"segment": ["move"],
@@ -108,7 +120,7 @@ exports.Balancer = {
 		"move": 1
 	},
 	"max": {
-		"carry": 4,
-		"move": 2
+		"carry": 8,
+		"move": 4
 	}
 }

@@ -67,12 +67,6 @@ If we're below the high watermark, use up to 90% of the limit
 If we're below the low watermark, use up to 50% of the limit
 
 ## Goals
-### Post RCL4 - Upgraders
-- Just do feeders + upgraders
-    - Spawn N if over X energy
-    - Spawn 1 if under X
-    - Spawn 0 if under K
-
 ### Post RCL4 - Secondary Room Improvements
 
 - Builders need to suicide or go somewhere safe when they are done

@@ -30,6 +30,7 @@ const Hauler = require('Hauler');
 const Balancer = require('Balancer');
 const Builder = require('Builder');
 const Upgrader = require('Upgrader');
+const UpgradeFeeder = require('UpgradeFeeder');
 
 const ExpansionBootstrap = require('ExpansionBootstrap');
 
@@ -58,6 +59,7 @@ var processTypeMap = {
     "Balancer": Balancer,
     "Builder": Builder,
     "Upgrader": Upgrader,
+    "UpgradeFeeder": UpgradeFeeder,
     "ExpansionBootstrap": ExpansionBootstrap,
     "HomeRoomManager": HomeRoomManager,
     "ComaRecovery": ComaRecovery,
