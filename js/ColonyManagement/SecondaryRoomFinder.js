@@ -26,6 +26,10 @@ class SecondaryRoomFinder extends Process {
                 continue;
             }
 
+            if(colonyRoomInfo['distanceFromPrimary'] > MAX_DISTANCE_FROM_PRIMARY) {
+                continue;
+            }
+
             if(colonyRoomInfo['checkedForSecondary'] === true) {
                 continue;
             }
@@ -34,12 +38,10 @@ class SecondaryRoomFinder extends Process {
                 hasCheckedAll = false;
             }
 
-            if(colonyRoomInfo['distanceFromPrimary'] > MAX_DISTANCE_FROM_PRIMARY) {
-                continue;
-            }
-
 
             var room = Game.rooms[roomName];
+
+            console.log(roomName);
 
             if(room === undefined) {
                 continue;
@@ -64,6 +66,7 @@ class SecondaryRoomFinder extends Process {
         }
 
         if(hasCheckedAll) {
+            console.log('hca');
             //Loop for selecting secondary room
             var currentCandidate = null;
             var currentPlainsPercent = 0.0;

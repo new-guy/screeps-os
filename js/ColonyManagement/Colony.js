@@ -45,7 +45,8 @@ class Colony {
     }
 
     initColonyRoomInfo() {
-        var colonyRoomInfo = {};
+        if(this.memory.colonyRoomInfo === undefined) this.memory.colonyRoomInfo = {};
+        var colonyRoomInfo = this.memory.colonyRoomInfo;
 
         var roomsToSearch = Object.values(Game.map.describeExits(this.primaryRoom.name));
 
@@ -56,11 +57,12 @@ class Colony {
                 //Also put its exits into roomsToSearch
 
         var secondaryExists = (this.secondaryRoom !== undefined);
+        var updatedRooms = [];
 
         while(roomsToSearch.length > 0) {
             var roomName = roomsToSearch.shift();
 
-            if(colonyRoomInfo[roomName] !== undefined) {
+            if(updatedRooms.includes(roomName)) {
                 continue;
             }
 
@@ -103,6 +105,8 @@ class Colony {
 
             var adjacentRooms = Object.values(Game.map.describeExits(roomName));
             roomsToSearch = roomsToSearch.concat(adjacentRooms);
+
+            updatedRooms.push(roomName);
         }
 
         this.memory.colonyRoomInfo = colonyRoomInfo;
