@@ -67,23 +67,29 @@ If we're below the high watermark, use up to 90% of the limit
 If we're below the low watermark, use up to 50% of the limit
 
 ## Goals
-
-### Post RCL4 - More mining improvements <--------------- current
-
-- In the primaryRoom, print out the list of routes and the current #, tick consumption, and energy consumption
-
-
 ### Post RCL4 - Upgraders
 - Just do feeders + upgraders
     - Spawn N if over X energy
     - Spawn 1 if under X
-    - Spawn size 1,1,1 if in coma
+    - Spawn 0 if under K
 
 ### Post RCL4 - Secondary Room Improvements
 
-- Favor adjacent room if one exists
 - Builders need to suicide or go somewhere safe when they are done
 - Optionally bigger balancers
+
+### MMO Ready
+
+- Need defenses
+    - Just do a rampart + wall alternating defense (maybe r-r-w-w-r-r-w-w)
+    - Rooms need an attribute listing the walls that need repair
+    - Builders need to be able to repair walls
+- Need invader defense
+- We just need to be at the point where we can start to establish a room on the mmo
+
+### Post RCL4 - Expansion
+
+- Need to be able to create a new colony and bootstrap it to RCL2
 
 ### Tidy UP pt 2
 
@@ -94,15 +100,6 @@ If we're below the low watermark, use up to 50% of the limit
 - Need a consistent process naming scheme
 - Combine room tools getConstructionSite & constructionSiteExists
 - Scouts need to be able to recognize when a room is unreachable and stop sending scouts there for N ticks
-
-### MMO Ready
-
-- Need defenses
-    - Just do a rampart + wall alternating defense (maybe r-r-w-w-r-r-w-w)
-    - Rooms need an attribute listing the walls that need repair
-    - Builders need to be able to repair walls
-- Need invader defense
-- We just need to be at the point where we can start to establish a room on the mmo
 
 ### Post RCL4 - Roads
 
@@ -118,17 +115,6 @@ If we're below the low watermark, use up to 50% of the limit
 - Mining Mangers should remove mining routes that have been inoperational for N ticks
 
 ### Post RCL4 - this is (duh) big.
-
-We enter coma immediately.  Coma recovery should be bootstrappers + mining route introduction
-
-1) Start with bootstrappers + mining routes
-2) Then move on to new balancers + all of the old creeps
-
-WE JUST WANT TO GET THINGS TO PAR WITH THE PREVIOUS AI WHILE STILL KEEPING GOOD QUALITY
-
-### Defenses
-    - Second row of ramparts behind
-    - Ramparts on top of all important buildings
 
 ## Things we need
 
