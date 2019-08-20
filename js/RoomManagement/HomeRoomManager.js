@@ -93,7 +93,7 @@ class HomeRoomManager extends RoomManager {
     }
 
     ensureDefaultUnits() {
-        if(this.room.constructionSites.length > 0 || this.room.rampartsNeedingRepair.length > 0) {
+        if(this.room.constructionSites.length > 0 || this.room.rampartsNeedingRepair.length > 0 || this.room.wallsNeedingRepair.length > 0) {
             this.ensureBuilder();
         }
 
