@@ -108,6 +108,7 @@ If we're below the low watermark, use up to 50% of the limit
 - Update mining route discovery to perform route discovery as a separate function, or cache the known paths
 - Ensure that we have unique and consistent PIDs.  Bootstrapper spawning, for example, is inconsistent
 - Mining Mangers should remove mining routes that have been inoperational for N ticks
+- Creeps that have nothing else to do should recycle themselves
 
 ### Post RCL4 - this is (duh) big.
 
