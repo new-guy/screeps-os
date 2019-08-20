@@ -168,7 +168,7 @@ Room.prototype.calculateChunkPositions = function(rclString) {
 
 		if(chunkType === 'heart') continue;
 
-		var chunkRoot = this.findRootForChunk(chunkType, heartPosition, searchDistance=10);
+		var chunkRoot = this.findRootForChunk(chunkType, heartPosition, searchDistance=20);
 
 		if(chunkRoot === null) {
 			continue;
