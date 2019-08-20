@@ -22,7 +22,7 @@ const Scheduler = require('Scheduler');
 const Colony = require('Colony');
 const CreepProcessHelper = require('CreepProcessHelper');
 
-const RAMPART_UPGRADE_SCHEDULE = {
+const DEFENSE_UPGRADE_SCHEDULE = {
     "1": 5000,
     "2": 5000,
     "3": 20000,
@@ -150,7 +150,7 @@ function initRooms() {
         room.damagedFriendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly() && c.hits < c.hitsMax; }});
         room.damagedRoads = room.find(FIND_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax; }});
         room.rampartsNeedingRepair = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
-            return s.structureType === STRUCTURE_RAMPART && s.hits < RAMPART_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
+            return s.structureType === STRUCTURE_RAMPART && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
         }});
 
         if(room.rampartsNeedingRepair.length > 0) {
@@ -160,6 +160,21 @@ function initRooms() {
                 var rampart = room.rampartsNeedingRepair[i];
                 if(rampart.hits < room.leastBuiltRampart.hits) {
                     room.leastBuiltRampart = rampart;
+                }
+            }
+        }
+
+        room.wallsNeedingRepair = room.find(FIND_STRUCTURES, {filter: function(s) { 
+            return s.structureType === STRUCTURE_WALL && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
+        }});
+
+        if(room.wallsNeedingRepair.length > 0) {
+            room.leastBuiltWall = room.wallsNeedingRepair[0];
+    
+            for(var i = 1 ; i < room.wallsNeedingRepair.length; i++) {
+                var wall = room.wallsNeedingRepair[i];
+                if(wall.hits < room.leastBuiltWall.hits) {
+                    room.leastBuiltWall = wall;
                 }
             }
         }

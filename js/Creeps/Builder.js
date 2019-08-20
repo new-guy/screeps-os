@@ -79,8 +79,16 @@ class Builder extends CreepProcess {
             this.creep.setTarget(this.targetRoom.mostBuiltConstructionSite);
         }
 
-        else if(this.targetRoom.rampartsNeedingRepair !== undefined && this.targetRoom.rampartsNeedingRepair.length > 0) {
-            this.creep.setTarget(this.targetRoom.leastBuiltRampart);
+        else if(this.targetRoom.rampartsNeedingRepair !== undefined && this.targetRoom.rampartsNeedingRepair.length > 0 ||
+                this.targetRoom.wallsNeedingRepair !== undefined && this.targetRoom.wallsNeedingRepair.length > 0) {
+            
+            var thingToRepair = this.targetRoom.leastBuiltRampart;
+
+            if(this.targetRoom.leastBuiltRampart === undefined || (this.targetRoom.leastBuiltWall !== undefined && this.targetRoom.leastBuiltWall.hits < this.targetRoom.leastBuiltRampart.hits)) {
+                thingToRepair = this.targetRoom.leastBuiltWall;
+            }
+
+            this.creep.setTarget(thingToRepair);
         }
     }
 }
