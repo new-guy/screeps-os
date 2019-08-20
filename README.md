@@ -67,24 +67,13 @@ If we're below the high watermark, use up to 90% of the limit
 If we're below the low watermark, use up to 50% of the limit
 
 ## Goals
-### Post RCL4 - Secondary Room Improvements
-
-- Builders need to suicide or go somewhere safe when they are done
-- Optionally bigger balancers
 
 ### MMO Ready
-
-- Need defenses
-    - Just do a rampart + wall alternating defense (maybe r-r-w-w-r-r-w-w)
-    - Rooms need an attribute listing the walls that need repair
-    - Builders need to be able to repair walls
-- Need invader defense
-- We just need to be at the point where we can start to establish a room on the mmo
 
 ### Post RCL4 - Expansion & Housekeeping
 
 - Need to be able to create a new colony and bootstrap it to RCL2
-- Need creep to fill the towers (generic helper unit)
+- Need invader defense
 
 ### Tidy UP pt 2
 
