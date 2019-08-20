@@ -98,7 +98,9 @@ class ColonyManager extends Process {
     }
 
     ensureSecondaryRoom() {
-        if(this.secondaryRoom !== undefined && !this.secondaryRoom.controller.my && Game.empire.hasSpareGCL) {
+        console.log('hi')
+        if(((this.secondaryRoomName !== undefined && this.secondaryRoom === undefined) || !this.secondaryRoom.controller.my) && Game.empire.hasSpareGCL) {
+            console.log('here')
             this.spawnSecondaryRoomClaimer();
         }
 
