@@ -33,6 +33,12 @@ class ColonyManager extends Process {
         else {
             this.normalBehavior();
         }
+
+        this.updateRoomStates(this.primaryRoom);
+
+        if(this.secondaryRoom !== undefined) {
+            this.updateRoomStates(this.secondaryRoom);
+        }
     }
 
     ensureRoomManagement() {
@@ -117,6 +123,18 @@ class ColonyManager extends Process {
             else if(this.secondaryRoom.controller.level >= 2 && this.secondaryRoom.storage === undefined && this.primaryRoom.storage !== undefined) {
                 this.supportBootstrap(this.secondaryRoom);
             }
+        }
+    }
+
+    updateRoomStates(room) {
+        //Set default if not in coma
+
+        if(room.isInComa()) {
+            room.memory.state = 'coma';
+        }
+
+        else {
+            room.memory.state = 'default';
         }
     }
 

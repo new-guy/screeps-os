@@ -2,6 +2,9 @@ const RoomManager = require('RoomManager');
 
 var DOWNGRADE_TICKS_SAFEGUARD = 1000;
 
+var MIN_ENERGY_TO_UPGRADE = 50000;
+var ENERGY_PER_EXTRA_UPGRADER = 100000;
+
 class HomeRoomManager extends RoomManager {
     constructor (...args) {
         super(...args);
@@ -31,8 +34,8 @@ class HomeRoomManager extends RoomManager {
             this.ensureDowngradeSafeguard();
         }
 
-        if(this.room.storage !== undefined && !this.room.isInComa()) {
-            this.ensureNormalUnits();
+        if(this.room.storage !== undefined && this.room.state === 'default') {
+            this.ensureDefaultUnits();
         }
     }
 
@@ -88,10 +91,12 @@ class HomeRoomManager extends RoomManager {
         this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, HIGHEST_PROMOTABLE_PRIORITY);
     }
 
-    ensureNormalUnits() {
+    ensureDefaultUnits() {
         if(this.room.constructionSites.length > 0 || this.room.rampartsNeedingRepair.length > 0) {
             this.ensureBuilder();
         }
+
+        this.ensureUpgraders();
     }
 
     ensureBuilder() {
@@ -109,6 +114,26 @@ class HomeRoomManager extends RoomManager {
 
         var spawnPID ='spawnBuilder|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, NECESSARY_CREEPS_PRIORITY);
+    }
+
+    ensureUpgraders() {
+        var energyInStorage = this.room.storage.store[RESOURCE_ENERGY];
+        var upgraderCount = Math.max(1, Math.floor(energyInStorage/ENERGY_PER_EXTRA_UPGRADER));
+
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': upgraderCount,
+            'creepNameBase': 'upgrader|' + this.room.name,
+            'creepBodyType': 'Upgrader',
+            'creepProcessClass': 'Upgrader',
+            'creepMemory': {
+                'targetRoom': this.room.name
+            },
+            'creepPriority': ROOM_UPGRADE_CREEPS_PRIORITY
+        };
+
+        var spawnPID ='spawnUpgraders|' + upgraderCount + '|' + this.room.name;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, ROOM_UPGRADE_CREEPS_PRIORITY);
     }
 }
 

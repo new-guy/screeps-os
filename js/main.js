@@ -114,6 +114,8 @@ function initRooms() {
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
 
+        room.state = room.memory.state;
+
         room.mapPos = {
             'x': roomName.split(/[EWNS]+/)[1],
             'y': roomName.split(/[EWNS]+/)[2]

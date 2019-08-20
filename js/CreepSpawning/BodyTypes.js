@@ -26,6 +26,21 @@ exports.Builder = {
 	}
 };
 
+exports.Upgrader = {
+	"segment": ["work", "carry", "move"],
+	"min": {
+		"work": 1,
+		"carry": 1,
+		"move": 1
+	},
+	"max": {
+		"work": 20,
+		"carry": 2,
+		"move": 6
+	}
+};
+
+
 exports.Scout = {
 	"segment": ["move"],
 	"min": {

@@ -62,7 +62,7 @@ Processes need to keep track of their own created child processes.  This is used
 
 ### CPU Usage 
 
-If we're above the high watermark, use up to 90% of the tickLimit
+If we're above the high watermark, use up to 80% of the tickLimit
 If we're below the high watermark, use up to 90% of the limit
 If we're below the low watermark, use up to 50% of the limit
 
@@ -87,9 +87,10 @@ If we're below the low watermark, use up to 50% of the limit
 - Need invader defense
 - We just need to be at the point where we can start to establish a room on the mmo
 
-### Post RCL4 - Expansion
+### Post RCL4 - Expansion & Housekeeping
 
 - Need to be able to create a new colony and bootstrap it to RCL2
+- Need creep to fill the towers (generic helper unit)
 
 ### Tidy UP pt 2
 
