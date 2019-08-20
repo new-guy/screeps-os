@@ -1,9 +1,10 @@
 const Process = require('Process');
 const BodyGenerator = require('BodyGenerator');
 
-var MAX_TO_SPAWN = 25;
+var MAX_TO_SPAWN = 20;
 var SPAWN_TICKS_TO_FILL = 1000;
 var MAX_ENERGY_TO_SPEND = 12000;
+var MAX_TINY_WORKERS = 10;
 
 class PreStorageSelfBootstrap extends Process {
     constructor (...args) {
@@ -27,6 +28,10 @@ class PreStorageSelfBootstrap extends Process {
         bootstrappersToSpawn = Math.min(bootstrappersToSpawn, maxWeCanAfford);//Do not spawn more than we can afford
 
         bootstrappersToSpawn = Math.min(bootstrappersToSpawn, MAX_TO_SPAWN); //Do not spawn more than the max
+
+        if(this.targetRoom.energyCapacityAvailable < 500) {
+            bootstrappersToSpawn = Math.min(bootstrappersToSpawn, MAX_TINY_WORKERS);
+        }
 
         var data = {
             'colonyName': this.memory.spawnColonyName,
