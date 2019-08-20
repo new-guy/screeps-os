@@ -24,7 +24,7 @@ Room.prototype.getPlainsPercentage = function() {
 }
 
 var WORK_PARTS_FOR_SAFE = 3;
-var MINIMUM_ENERGY_FOR_SAFE = 10000;
+var MINIMUM_ENERGY_FOR_SAFE = 50000;
 
 Room.prototype.isInComa = function() {
 	if(this.controller === undefined || !this.controller.my) {
