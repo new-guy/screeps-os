@@ -149,32 +149,35 @@ function initRooms() {
         room.friendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly(); }});
         room.damagedFriendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly() && c.hits < c.hitsMax; }});
         room.damagedRoads = room.find(FIND_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax; }});
-        room.rampartsNeedingRepair = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
-            return s.structureType === STRUCTURE_RAMPART && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
-        }});
 
-        if(room.rampartsNeedingRepair.length > 0) {
-            room.leastBuiltRampart = room.rampartsNeedingRepair[0];
+        if(room.controller !== undefined) {
+            room.rampartsNeedingRepair = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
+                return s.structureType === STRUCTURE_RAMPART && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
+            }});
     
-            for(var i = 1 ; i < room.rampartsNeedingRepair.length; i++) {
-                var rampart = room.rampartsNeedingRepair[i];
-                if(rampart.hits < room.leastBuiltRampart.hits) {
-                    room.leastBuiltRampart = rampart;
+            if(room.rampartsNeedingRepair.length > 0) {
+                room.leastBuiltRampart = room.rampartsNeedingRepair[0];
+        
+                for(var i = 1 ; i < room.rampartsNeedingRepair.length; i++) {
+                    var rampart = room.rampartsNeedingRepair[i];
+                    if(rampart.hits < room.leastBuiltRampart.hits) {
+                        room.leastBuiltRampart = rampart;
+                    }
                 }
             }
-        }
-
-        room.wallsNeedingRepair = room.find(FIND_STRUCTURES, {filter: function(s) { 
-            return s.structureType === STRUCTURE_WALL && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
-        }});
-
-        if(room.wallsNeedingRepair.length > 0) {
-            room.leastBuiltWall = room.wallsNeedingRepair[0];
     
-            for(var i = 1 ; i < room.wallsNeedingRepair.length; i++) {
-                var wall = room.wallsNeedingRepair[i];
-                if(wall.hits < room.leastBuiltWall.hits) {
-                    room.leastBuiltWall = wall;
+            room.wallsNeedingRepair = room.find(FIND_STRUCTURES, {filter: function(s) { 
+                return s.structureType === STRUCTURE_WALL && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
+            }});
+    
+            if(room.wallsNeedingRepair.length > 0) {
+                room.leastBuiltWall = room.wallsNeedingRepair[0];
+        
+                for(var i = 1 ; i < room.wallsNeedingRepair.length; i++) {
+                    var wall = room.wallsNeedingRepair[i];
+                    if(wall.hits < room.leastBuiltWall.hits) {
+                        room.leastBuiltWall = wall;
+                    }
                 }
             }
         }
