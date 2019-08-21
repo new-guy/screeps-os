@@ -30,9 +30,7 @@ class ColonyManager extends Process {
             this.comaRecovery();
         }
 
-        else {
-            this.normalBehavior();
-        }
+        this.normalBehavior();
 
         this.updateRoomStates(this.primaryRoom);
 
