@@ -4,11 +4,12 @@
 //Needs a "homeroom" object
 
 var BodyGenerator = require('BodyGenerator');
+var Roadmap = require('Roadmap');
 
 var COLONY_MAX_RANGE = 2;
 var COLONY_MAX_ROOMS_TO_TRAVEL = 2;
 
-var COLONY_INFO_UPDATE_FREQUENCY = 200; //Update every 100 ticks
+var COLONY_INFO_UPDATE_FREQUENCY = 200; //Update every N ticks
 
 class Colony {
     /*
@@ -42,6 +43,8 @@ class Colony {
         this.initSpawnInfo();
         this.initMiningInfo();
         this.drawColonyInfo();
+
+        this.roadmap = new Roadmap(this);
     }
 
     initColonyRoomInfo() {
@@ -92,11 +95,13 @@ class Colony {
                 continue;
             }
 
-            colonyRoomInfo[roomName] = {
-                'roomName': roomName,
-                'distanceFromPrimary': Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name),
-                'stepsToPrimary': Game.map.findRoute(roomName, this.primaryRoom.name).length
-            };
+            if(colonyRoomInfo[roomName] === undefined) {
+                colonyRoomInfo[roomName] = {};
+            }
+
+            colonyRoomInfo[roomName]['roomName'] = roomName;
+            colonyRoomInfo[roomName]['distanceFromPrimary'] = Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name);
+            colonyRoomInfo[roomName]['stepsToPrimary'] = Game.map.findRoute(roomName, this.primaryRoom.name).length;
 
             if(secondaryExists) {
                 colonyRoomInfo[roomName]['distanceFromSecondary'] = Game.map.getRoomLinearDistance(roomName, this.secondaryRoom.name);

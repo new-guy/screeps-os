@@ -109,7 +109,7 @@ class Scheduler {
         while(this.shouldContinueProcessing()) {
             var activeProcessMetadata = this.sortedProcesses[this.programCounter]['metadata'];
             var processClass = activeProcessMetadata['processClass'];
-            console.log("#PC: " + this.programCounter + " | " + activeProcessMetadata['pid']);
+            //console.log("#PC: " + this.programCounter + " | " + activeProcessMetadata['pid']);
 
             if(this.processesBeingRemoved.includes(activeProcessMetadata['pid'])) {
                 console.log('#Skipping because removal ' + activeProcessMetadata['pid']);

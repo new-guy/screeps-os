@@ -75,6 +75,10 @@ If we're below the low watermark, use up to 50% of the limit
 - Have a roadmap object per room in the colony in colonyInfo
     - Can take in a room position and tell us if it is reserved for a road
     - Can accept updates to designate road positions in a room
+- Roadmap object needs to be able to draw from one point to another
+    - Avoid SKs
+    - Include previous roads in the map
+    - Able to draw positions in roadmap
 - Start by drawing roads between the primary and secondary room
 - Then draw roads from storage to controller
 - Then draw roads one by one to active mining routes
