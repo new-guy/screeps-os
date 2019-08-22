@@ -93,6 +93,8 @@ class ColonyManager extends Process {
         else if(this.colony.primaryRoom.energyCapacityAvailable >= 650 || (this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.controller.my)) {
             this.ensureSecondaryRoom()
         }
+
+        this.ensureRoadGeneration();
     }
 
     ensureSecondaryRoom() {
@@ -185,7 +187,11 @@ class ColonyManager extends Process {
         
         var spawnPID = 'supportBootstrap|' + bootstrappersToSpawn + '|' + this.name + '|' + roomToSupport.name;
         this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, NECESSARY_CREEPS_PRIORITY);
-    } 
+    }
+
+    ensureRoadGeneration() {
+        this.ensureChildProcess(this.primaryRoom.name + '|roadGenerator', 'RoadGenerator', {'colonyName': this.name}, COLONY_NONESSENTIAL_PRIORITY);
+    }
 
     roomIsPreStorage(room) {
         return (room.controller.level < 5 && room.storage === undefined);

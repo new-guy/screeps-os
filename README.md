@@ -76,10 +76,17 @@ If we're below the low watermark, use up to 50% of the limit
     - Can take in a room position and tell us if it is reserved for a road
     - Can accept updates to designate road positions in a room
 
+- Need to generate roads from roadmap
+    - Just check every N ticks for each room to see if all of its roads are placed
+        - Store the last tick it was check at in roomInfo
+    - If not, place them
+
 - We need to implement road maintenance
     - Have a process that runs, then sleeps for N ticks
     - This process needs to evaluate how badly the room needs repairs or road construction
     - Send the road builder to whatever room has it the worst
+    - Road builder checks against the road map before repairing or building a road
+    - Towers do the same
 
 - Once we have road maintenace, we need to start automatically creating the roads
     - Start by drawing roads between the primary and secondary room
@@ -96,6 +103,8 @@ If we're below the low watermark, use up to 50% of the limit
 - Need to be able to create a new colony and bootstrap it to RCL2
 - Once we hit RCL4 in both bases, have the secondary feed the primary till the primary is RCL7
 - Creeps that have nothing else to do should recycle themselves
+    - Could have them go to the !BALSTART flag next to the storage, then die and have the balancer pick up their energy
+        - Balancer checks if there's energy on the ground.  If balancer is full, have it store its current energy
 
 ### Tidy UP pt 2
 
