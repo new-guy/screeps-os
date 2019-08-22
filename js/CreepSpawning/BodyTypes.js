@@ -15,7 +15,7 @@ exports.BootStrapper = {
 exports.Builder = {
 	"segment": ["work", "carry", "move"],
 	"min": {
-		"work": 1,
+		"work": 2,
 		"carry": 1,
 		"move": 1
 	},
@@ -29,7 +29,7 @@ exports.Builder = {
 exports.Upgrader = {
 	"segment": ["work", "carry", "move"],
 	"min": {
-		"work": 1,
+		"work": 2,
 		"carry": 1,
 		"move": 1
 	},
@@ -43,8 +43,8 @@ exports.Upgrader = {
 exports.UpgradeFeeder = {
 	"segment": ["carry", "move"],
 	"min": {
-		"carry": 1,
-		"move": 1
+		"carry": 2,
+		"move": 2
 	},
 	"max": {
 		"carry": 10,
@@ -90,7 +90,7 @@ exports.Reserver = {
 exports.Miner = {
 	"segment": ["work", "carry", "move"],
 	"min": {
-		"work": 1,
+		"work": 2,
 		"carry": 1,
 		"move": 1
 	},
@@ -104,8 +104,8 @@ exports.Miner = {
 exports.Hauler = {
 	"segment": ["carry", "move"],
 	"min": {
-		"carry": 1,
-		"move": 1
+		"carry": 3,
+		"move": 3
 	},
 	"max": {
 		"carry": 10,
@@ -116,20 +116,20 @@ exports.Hauler = {
 exports.TowerFiller = {
 	"segment": ["carry", "move"],
 	"min": {
-		"carry": 1,
+		"carry": 2,
 		"move": 1
 	},
 	"max": {
-		"carry": 6,
-		"move": 6
+		"carry": 4,
+		"move": 2
 	}
 }
 
 exports.Balancer = {
 	"segment": ["carry", "carry", "move"],
 	"min": {
-		"carry": 2,
-		"move": 1
+		"carry": 4,
+		"move": 2
 	},
 	"max": {
 		"carry": 8,
