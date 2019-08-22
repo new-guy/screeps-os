@@ -72,20 +72,19 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### Post RCL4 - Roads
 
-- Have a roadmap object per room in the colony in colonyInfo
+- We've made a roadmap object per room in the colony in colonyInfo
     - Can take in a room position and tell us if it is reserved for a road
     - Can accept updates to designate road positions in a room
-- Roadmap object needs to be able to draw from one point to another
-    - Avoid SKs
-    - Include previous roads in the map
-    - Able to draw positions in roadmap
-- Start by drawing roads between the primary and secondary room
-- Then draw roads from storage to controller
-- Then draw roads one by one to active mining routes
-- For road maintenance
+
+- We need to implement road maintenance
     - Have a process that runs, then sleeps for N ticks
     - This process needs to evaluate how badly the room needs repairs or road construction
     - Send the road builder to whatever room has it the worst
+
+- Once we have road maintenace, we need to start automatically creating the roads
+    - Start by drawing roads between the primary and secondary room
+    - Then draw roads from storage to controller
+    - Then draw roads one by one to active mining routes
 
 ### Post RCL4 - Scouting & Remote Improvements
 - Scouts need to be able to recognize when a room is unreachable and stop sending scouts there for N ticks
