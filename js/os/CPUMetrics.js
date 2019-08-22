@@ -117,3 +117,43 @@ exports.printProcessStats = function(scheduler) {
     console.log("=======================");
     //Calculate average and total for each process class
 }
+
+exports.recordProcessMetrics = function(scheduler) {
+    Memory.stats.processes = {};
+    Memory.stats.processes.classes = {}
+    var totalUsedByProcesses = 0;
+
+    for(var processClass in processStats) {
+        var stats = processStats[processClass];
+        var sum = _.sum(stats).toFixed(2);
+        totalUsedByProcesses += _.sum(stats);
+
+        var total = 0;
+        for(var i = 0; i < stats.length; i++) {
+            total += stats[i];
+        }
+
+        var mean = (total/stats.length).toFixed(2);
+
+        //Record the average, sum, and count
+        Memory.stats.processes.classes[processClass] = {
+            'mean': mean,
+            'sum': sum,
+            'count': stats.length
+        }
+    }
+
+    var totalUsed = Game.cpu.getUsed().toFixed(2);
+    var overhead = (totalUsed - totalUsedByProcesses).toFixed(2);
+    totalUsedByProcesses = totalUsedByProcesses.toFixed(2);
+
+    Memory.stats.processes.summary = {
+        'overhead': overhead,
+        'processCPU': totalUsedByProcesses,
+        'runnable': scheduler.sortedProcesses.length,
+        'finished': processesFinished,
+        'slept': processesSlept,
+        'skipped': processesSkipped
+    }
+    //Calculate average and total for each process class
+}

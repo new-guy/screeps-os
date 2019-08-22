@@ -153,6 +153,7 @@ class Scheduler {
             this.programCounter += 1;
         }
 
+        CPUMetrics.recordProcessMetrics(this);
         CPUMetrics.printProcessStats(this);
 
         function shouldSleep(processMetadata) {

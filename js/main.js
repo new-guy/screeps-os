@@ -22,6 +22,9 @@ const Scheduler = require('Scheduler');
 const Colony = require('Colony');
 const CreepProcessHelper = require('CreepProcessHelper');
 
+//Stats
+const Metrics = require('Metrics');
+
 const DEFENSE_UPGRADE_SCHEDULE = {
     "1": 5000,
     "2": 5000,
@@ -34,6 +37,7 @@ const DEFENSE_UPGRADE_SCHEDULE = {
 };
 
 module.exports.loop = function() {
+    Metrics.initForTick();
     initCustomObjects();
 
     const scheduler = new Scheduler();
@@ -41,6 +45,7 @@ module.exports.loop = function() {
     CreepProcessHelper.ensureCreepProcesses();
     scheduler.update();
     scheduler.garbageCollect();
+    Metrics.update();
 }
 
 function initCustomObjects() {
