@@ -76,7 +76,7 @@ If we're below the low watermark, use up to 50% of the limit
     - Can take in a room position and tell us if it is reserved for a road
     - Can accept updates to designate road positions in a room
 
-- Need to generate roads from roadmap
+- We are generating roads from roadmap
     - Just check every N ticks for each room to see if all of its roads are placed
         - Store the last tick it was check at in roomInfo
     - If not, place them
