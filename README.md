@@ -70,34 +70,43 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### MMO Ready
 
+### Post RCL4 - Roads
+
+- Have a roadmap object per room in the colony in colonyInfo
+    - Can take in a room position and tell us if it is reserved for a road
+    - Can accept updates to designate road positions in a room
+- Start by drawing roads between the primary and secondary room
+- Then draw roads from storage to controller
+- Then draw roads one by one to active mining routes
+- For road maintenance
+    - Have a process that runs, then sleeps for N ticks
+    - This process needs to evaluate how badly the room needs repairs or road construction
+    - Send the road builder to whatever room has it the worst
+
+### Post RCL4 - Scouting & Remote Improvements
+- Scouts need to be able to recognize when a room is unreachable and stop sending scouts there for N ticks
+- Avoid mining rooms that are owned by other people
+- Need invader defense - one defender per colony
+
 ### Post RCL4 - Expansion & Housekeeping
 
 - Need to be able to create a new colony and bootstrap it to RCL2
-- Need invader defense
+- Once we hit RCL4 in both bases, have the secondary feed the primary till the primary is RCL7
+- Creeps that have nothing else to do should recycle themselves
 
 ### Tidy UP pt 2
 
 - Move room and creep property initialization somewhere better than main.js
 - Move room tools from HRCT to RT
 - Break logic in PCFM into smaller parts
-- Remove creep process delay
 - Need a consistent process naming scheme
 - Combine room tools getConstructionSite & constructionSiteExists
-- Scouts need to be able to recognize when a room is unreachable and stop sending scouts there for N ticks
-
-### Post RCL4 - Roads
-
-- Have a roadmap object that can take in a room position and tell us if it is reserved for a road
-- Start by drawing roads between the primary and secondary room
-- Then draw roads from storage to controller
-- Then draw roads one by one to active mining routes
 
 ### Tidy UP pt 3
 
 - Update mining route discovery to perform route discovery as a separate function, or cache the known paths
 - Ensure that we have unique and consistent PIDs.  Bootstrapper spawning, for example, is inconsistent
 - Mining Mangers should remove mining routes that have been inoperational for N ticks
-- Creeps that have nothing else to do should recycle themselves
 
 ### Post RCL4 - this is (duh) big.
 
