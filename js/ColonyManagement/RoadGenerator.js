@@ -1,6 +1,6 @@
 const Process = require('Process');
 
-var TICKS_BETWEEN_ROAD_CONSTRUCTION_SITE_UPDATES = 10;
+var TICKS_BETWEEN_ROAD_CONSTRUCTION_SITE_UPDATES = 500;
 
 class RoadGenerator extends Process {
     constructor (...args) {
