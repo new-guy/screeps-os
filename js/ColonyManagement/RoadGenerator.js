@@ -1,6 +1,8 @@
 const Process = require('Process');
 
 var TICKS_BETWEEN_ROAD_CONSTRUCTION_SITE_UPDATES = 500;
+var TICKS_BETWEEN_FULL_ROAD_RECALCULATION = 1500;
+
 
 class RoadGenerator extends Process {
     constructor (...args) {
@@ -15,6 +17,11 @@ class RoadGenerator extends Process {
         }
 
         this.generateRoomsFromRoadmap();
+        
+        if(this.colony.memory['roadRegenerateTick'] === undefined) {
+            this.regenerateRoads();
+            this.colony.memory['roadRegenerateTick'] = Game.time;
+        }
         // - Need to generate roads from roadmap
         //     - Just check every N ticks for each room to see if all of its roads are placed
         //         - Store the last tick it was check at in roomInfo
@@ -48,6 +55,46 @@ class RoadGenerator extends Process {
                    pos.createConstructionSite(STRUCTURE_ROAD);
                }
             }
+        }
+    }
+
+    regenerateRoads() {
+        this.colony.roadmap.initAllMaps();
+        this.generateHeartHighway();
+        this.generateControllerRoad(this.colony.primaryRoom);
+        this.generateControllerRoad(this.colony.secondaryRoom);
+        this.generateMiningRouteRoads();
+    }
+
+    generateHeartHighway() {
+        if(this.colony.primaryRoom === undefined || this.colony.secondaryRoom === undefined) return;
+        var storageOne = this.colony.primaryRoom.storage;
+        var storageTwo = this.colony.secondaryRoom.storage;
+
+        this.colony.roadmap.makeRoad(storageOne.pos, storageTwo.pos);
+    }
+
+    generateControllerRoad(room) {
+        if(room === undefined || room.storage === undefined) return;
+
+        this.colony.roadmap.makeRoad(room.storage.pos, room.controller.pos);
+    }
+
+    generateMiningRouteRoads() {
+        //Get mining processes for this colony, create routes from the containerPos to the storage
+        var miningProcesses = this.colony.miningProcesses;
+
+        for(var i = 0; i < miningProcesses.length; i++) {
+            var process = miningProcesses[i];
+            var storage = Game.getObjectById(process.memory.targetStorageId);
+            
+            if(storage === null || process.memory.containerPos === undefined) {
+                continue;
+            }
+
+            var containerPos = new RoomPosition(process.memory.containerPos['x'], process.memory.containerPos['y'], process.memory.containerPos['roomName']);
+
+            this.colony.roadmap.makeRoad(storage.pos, containerPos);
         }
     }
 

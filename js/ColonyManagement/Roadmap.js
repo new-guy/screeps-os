@@ -104,7 +104,7 @@ class Roadmap {
     {
         var roadmap = this;
 
-        return PathFinder.search(startPos, {pos: endPos, range: 0}, {
+        return PathFinder.search(startPos, {pos: endPos, range: 1}, {
             // We need to set the defaults costs higher so that we
             // can set the road cost lower in `roomCallback`
             plainCost: 4,
@@ -133,6 +133,10 @@ class Roadmap {
                         }
 
                         if(roadmap.getPos(posToEvaluate) === 'road') {
+                            costs.set(x, y, 1);
+                        }
+
+                        if(posToEvaluate.structureExists(STRUCTURE_ROAD)) {
                             costs.set(x, y, 1);
                         }
                     }

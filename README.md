@@ -97,6 +97,8 @@ If we're below the low watermark, use up to 50% of the limit
     - Then draw roads from storage to controller
     - Then draw roads one by one to active mining routes
 
+- Add roads that are defined in construction to the roadmap
+
 ### Post RCL4 - Scouting & Remote Improvements
 - Scouts need to be able to recognize when a room is unreachable and stop sending scouts there for N ticks
 - Avoid mining rooms that are owned by other people

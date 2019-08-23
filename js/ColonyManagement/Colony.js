@@ -253,6 +253,18 @@ class Colony {
         return needyRoom;
     }
 
+    get miningProcesses() {
+        var miningManager = Game.scheduler.getProcess(this.name + '|energyHarvestingManager');
+        var miningProcesses = [];
+        if(miningManager.memory.children !== undefined) {
+            for(var i = 0; i < miningManager.memory.children.length; i++) {
+                miningProcesses.push(Game.scheduler.getProcess(miningManager.memory.children[i]));
+            }
+        }
+
+        return miningProcesses;
+    }
+
     initSpawnInfo() {
         var primaryRoomSpawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
         var spawns = primaryRoomSpawns;
