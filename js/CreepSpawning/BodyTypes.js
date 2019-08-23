@@ -104,12 +104,12 @@ exports.Miner = {
 exports.Hauler = {
 	"segment": ["carry", "move"],
 	"min": {
-		"carry": 3,
-		"move": 3
+		"carry": 4,
+		"move": 2
 	},
 	"max": {
-		"carry": 10,
-		"move": 10
+		"carry": 12,
+		"move": 6
 	}
 }
 
