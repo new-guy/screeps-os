@@ -153,18 +153,6 @@ function initRooms() {
         room.enemies = room.find(FIND_CREEPS, {filter: function(c) { return c.isHostile(); }});
         room.friendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly(); }});
         room.damagedFriendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly() && c.hits < c.hitsMax; }});
-        room.damagedRoads = room.find(FIND_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax; }});
-
-        if(room.damagedRoads.length > 0) {
-            room.mostDamagedRoad = room.damagedRoads[0];
-    
-            for(var i = 1 ; i < room.damagedRoads.length; i++) {
-                var road = room.damagedRoads[i];
-                if(road.hits < room.mostDamagedRoad.hits) {
-                    room.mostDamagedRoad = road;
-                }
-            }
-        }
 
         if(room.controller !== undefined && room.controller.my) {
             room.rampartsNeedingRepair = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 

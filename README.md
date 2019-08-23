@@ -81,7 +81,7 @@ If we're below the low watermark, use up to 50% of the limit
         - Store the last tick it was check at in roomInfo
     - If not, place them
 
-- New builders
+- New builders have been implemented
     - Colony-tier builders (get rid of room-tier)
     - Pick up energy from nearest non-empty storage
     - Room construction/repair priority
@@ -90,11 +90,7 @@ If we're below the low watermark, use up to 50% of the limit
         - Build in room that most needs construction
 
 - We need to implement road maintenance
-    - Have a process that runs, then sleeps for N ticks
-    - This process needs to evaluate how badly the room needs repairs or road construction
-    - Send the road builder to whatever room has it the worst
-    - Road builder checks against the road map before repairing or building a road
-    - Towers do the same
+    - Only add a road to the room's set of roads needing repair if the road is on the roadmap
 
 - Once we have road maintenace, we need to start automatically creating the roads
     - Start by drawing roads between the primary and secondary room

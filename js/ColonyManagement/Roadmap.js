@@ -88,6 +88,10 @@ class Roadmap {
         return roadmap[roomPosition.x][roomPosition.y];
     }
 
+    isRoad(roomPosition) {
+        return this.getPos(roomPosition) === 'road';
+    }
+
     makeRoad(startPos, endPos) {
         var path = this.findRoadPath(startPos, endPos);
 

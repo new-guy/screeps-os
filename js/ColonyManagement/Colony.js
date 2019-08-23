@@ -47,6 +47,7 @@ class Colony {
         this.drawColonyInfo();
 
         this.roadmap = new Roadmap(this);
+        this.updateRooms();
     }
 
     initColonyRoomInfo() {
@@ -117,6 +118,35 @@ class Colony {
         }
 
         this.memory.colonyRoomInfo = colonyRoomInfo;
+    }
+
+    updateRooms() {
+        var roadmap = this.roadmap;
+
+        for(var roomName in this.colonyRoomInfo) {
+            var room = Game.rooms[roomName];
+
+            if(room === undefined) continue;
+
+            console.log('Roads ' + roomName);
+
+            room.damagedRoads = room.find(FIND_STRUCTURES, {filter: function(s) { 
+                return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax && roadmap.isRoad(s.pos); 
+            }});
+
+            console.log('Damaged: ' + room.damagedRoads.length);
+    
+            if(room.damagedRoads.length > 0) {
+                room.mostDamagedRoad = room.damagedRoads[0];
+        
+                for(var i = 1 ; i < room.damagedRoads.length; i++) {
+                    var road = room.damagedRoads[i];
+                    if(road.hits < room.mostDamagedRoad.hits) {
+                        room.mostDamagedRoad = road;
+                    }
+                }
+            }
+        }
     }
 
     drawColonyInfo() {
