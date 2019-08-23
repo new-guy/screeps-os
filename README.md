@@ -81,6 +81,14 @@ If we're below the low watermark, use up to 50% of the limit
         - Store the last tick it was check at in roomInfo
     - If not, place them
 
+- New builders
+    - Colony-tier builders (get rid of room-tier)
+    - Pick up energy from nearest non-empty storage
+    - Room construction/repair priority
+        - Go to room that needs critical repairs
+        - Build/repair in current room
+        - Build in room that most needs construction
+
 - We need to implement road maintenance
     - Have a process that runs, then sleeps for N ticks
     - This process needs to evaluate how badly the room needs repairs or road construction

@@ -105,3 +105,22 @@ Creep.prototype.getEnergyFromStorage = function(room) {
         }
     }
 }
+
+Creep.prototype.getEnergyFromClosestColonyStorage = function(colony) {
+    var storage = colony.getClosestStorage(this.pos, this.carryCapacity);
+
+    if(storage === undefined) {
+        this.say('NoStorage');
+        return;
+    }
+
+    else {
+        if(this.pos.getRangeTo(storage) > 1) {
+            this.moveTo(storage);
+        }
+
+        else {
+            this.withdraw(storage, RESOURCE_ENERGY);
+        }
+    }
+}

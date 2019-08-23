@@ -11,6 +11,8 @@ var COLONY_MAX_ROOMS_TO_TRAVEL = 2;
 
 var COLONY_INFO_UPDATE_FREQUENCY = 200; //Update every N ticks
 
+var COLONY_ROAD_HITS_CRITICAL_THRESHOLD = 0.5;
+
 class Colony {
     /*
     this.primaryRoom = Room
@@ -147,6 +149,80 @@ class Colony {
         });
     }
 
+    get roomsNeedingBuilder() {
+        var rooms = [];
+        for(var roomName in this.colonyRoomInfo) {
+            var room = Game.rooms[roomName];
+
+            if(room === undefined) continue;
+
+            else {
+                if( room.constructionSites !== undefined && room.constructionSites.length > 0 || 
+                    room.rampartsNeedingRepair !== undefined && room.rampartsNeedingRepair.length > 0 || 
+                    room.wallsNeedingRepair !== undefined && room.wallsNeedingRepair.length > 0 || 
+                    room.damagedRoads !== undefined && room.damagedRoads.length > 0) {
+                    rooms.push(room);
+                }
+            }
+        }
+
+        return rooms;
+    }
+
+    get roomNeedingCriticalRepairs() {
+        var rooms = this.roomsNeedingBuilder;
+        // - Go to room that needs critical repairs
+
+        var needyRoom = undefined;
+
+        for(var i = 0; i < rooms.length; i++) {
+            var room = rooms[i];
+
+            if(room.mostDamagedRoad !== undefined && room.mostDamagedRoad.hits/room.mostDamagedRoad.hitsMax < COLONY_ROAD_HITS_CRITICAL_THRESHOLD) {
+                needyRoom = room;
+                break;
+            }
+        }
+
+        return needyRoom;
+    }
+
+    get roomMostNeedingBuilder() {
+        var rooms = this.roomsNeedingBuilder;
+        // - Build in room that has the least construction sites, then most repair sites
+
+        var needyRoom = undefined;
+        var constructionSites = 10000000000000000000;
+        var repairSites = 0;
+
+        for(var i = 0; i < rooms.length; i++) {
+            var room = rooms[i];
+
+            if(room.constructionSites !== undefined && room.constructionSites.length < constructionSites) {
+                needyRoom = room;
+                constructionSites = room.constructionSites.length;
+            }
+
+            else if( needyRoom !== undefined && needyRoom.constructionSites !== undefined && (
+                     room.rampartsNeedingRepair !== undefined && room.rampartsNeedingRepair.length > 0 || 
+                     room.wallsNeedingRepair !== undefined && room.wallsNeedingRepair.length > 0 || 
+                     room.damagedRoads !== undefined && room.damagedRoads.length > 0)) {
+                
+                var roomRepairSites = 0;
+                if(room.rampartsNeedingRepair !== undefined) roomRepairSites += room.rampartsNeedingRepair.length;
+                if(room.wallsNeedingRepair !== undefined) roomRepairSites += room.wallsNeedingRepair.length;
+                if(room.damagedRoads !== undefined) roomRepairSites += room.damagedRoads.length;
+
+                if(roomRepairSites > repairSites) {
+                    repairSites = roomRepairSites;
+                    needyRoom = room;
+                }
+            }
+        }
+
+        return needyRoom;
+    }
+
     initSpawnInfo() {
         var primaryRoomSpawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
         var spawns = primaryRoomSpawns;
@@ -260,16 +336,16 @@ class Colony {
         return false;
     }
 
-    getClosestStorage(position) {
+    getClosestStorage(position, energyNeeded=undefined) {
         var closestStorage = undefined;
         var distance = 10000000000;
 
-        if(this.primaryRoom.storage !== undefined) {
+        if(this.primaryRoom.storage !== undefined && (energyNeeded === undefined || this.primaryRoom.storage.store[RESOURCE_ENERGY] >= energyNeeded)) {
             distance = PathFinder.search(position, this.primaryRoom.storage.pos).path.length;
             closestStorage = this.primaryRoom.storage;
         }
 
-        if(this.secondaryRoom !== undefined && this.secondaryRoom.storage !== undefined) {
+        if(this.secondaryRoom !== undefined && this.secondaryRoom.storage !== undefined && (energyNeeded === undefined || this.secondaryRoom.storage.store[RESOURCE_ENERGY] >= energyNeeded)) {
             var secondaryDistance = PathFinder.search(position, this.secondaryRoom.storage.pos).path.length;
 
             if(secondaryDistance < distance) {

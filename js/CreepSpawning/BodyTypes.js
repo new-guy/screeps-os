@@ -12,7 +12,7 @@ exports.BootStrapper = {
 	}
 };
 
-exports.Builder = {
+exports.ColonyBuilder = {
 	"segment": ["work", "carry", "move"],
 	"min": {
 		"work": 2,
