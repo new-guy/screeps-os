@@ -146,6 +146,19 @@ class Colony {
                     }
                 }
             }
+
+            room.constructionSites = room.find(FIND_MY_CONSTRUCTION_SITES);
+            room.mostBuiltConstructionSite = room.constructionSites[0];
+
+            for(var i = 0; i < room.constructionSites.length; i++) {
+                var constructionSite = room.constructionSites[i];
+
+                if(constructionSite.progress > room.mostBuiltConstructionSite.progress) {
+                    room.mostBuiltConstructionSite = constructionSite;
+                }
+            }
+
+            console.log('Csites: ' + room.constructionSites.length);
         }
     }
 
@@ -228,12 +241,13 @@ class Colony {
         for(var i = 0; i < rooms.length; i++) {
             var room = rooms[i];
 
-            if(room.constructionSites !== undefined && room.constructionSites.length < constructionSites) {
+            if(room.constructionSites !== undefined && room.constructionSites.length > 0 && room.constructionSites.length < constructionSites) {
                 needyRoom = room;
                 constructionSites = room.constructionSites.length;
+                console.log('Set most needed to ' + room.name);
             }
 
-            else if( needyRoom !== undefined && needyRoom.constructionSites !== undefined && (
+            else if( needyRoom !== undefined && needyRoom.constructionSites === undefined && room.constructionSites.length > 0 && (
                      room.rampartsNeedingRepair !== undefined && room.rampartsNeedingRepair.length > 0 || 
                      room.wallsNeedingRepair !== undefined && room.wallsNeedingRepair.length > 0 || 
                      room.damagedRoads !== undefined && room.damagedRoads.length > 0)) {

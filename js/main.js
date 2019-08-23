@@ -132,17 +132,6 @@ function initRooms() {
                     return (s.structureType === STRUCTURE_EXTENSION || s. structureType === STRUCTURE_SPAWN) && s.energy < s.energyCapacity;
                 }});
             }
-
-            room.constructionSites = room.find(FIND_MY_CONSTRUCTION_SITES);
-            room.mostBuiltConstructionSite = room.constructionSites[0];
-
-            for(var i = 0; i < room.constructionSites.length; i++) {
-                var constructionSite = room.constructionSites[i];
-
-                if(constructionSite.progress > room.mostBuiltConstructionSite.progress) {
-                    room.mostBuiltConstructionSite = constructionSite;
-                }
-            }
             
             room.towers = room.find(FIND_MY_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_TOWER }});
             room.halfFullTowers = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 

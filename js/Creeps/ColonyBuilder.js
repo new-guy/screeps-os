@@ -44,12 +44,6 @@ class ColonyBuilder extends CreepProcess {
     }
 
     work() {
-        if(this.targetColony === undefined) {
-            this.creep.moveTo(new RoomPosition(24, 24, this.creep.memory.targetColony));
-            this.creep.say('NoVision');
-            return;
-        }
-
         var target = this.creep.getTarget();
 
         if(target === null) {
