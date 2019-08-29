@@ -87,6 +87,11 @@ class Balancer extends CreepProcess {
         if(energySource == null) {
             this.setEnergySource();
             energySource = Game.getObjectById(this.creep.memory.energySourceId);
+
+            if(energySource === null) {
+                this.creep.getEnergyFromStorage(this.creep.room);
+            }
+
             return;
         }
 
@@ -196,10 +201,12 @@ class Balancer extends CreepProcess {
     setEnergySource() {    
         if(this.startFlag === undefined) return;
     
-        var energySources = this.startFlag.pos.findInRange(FIND_MY_STRUCTURES, 1, {filter: function(structure) { return structure.structureType == STRUCTURE_LINK || structure.structureType == STRUCTURE_STORAGE }});
+        var energySources = this.startFlag.pos.findInRange(FIND_MY_STRUCTURES, 1, {filter: function(structure) { 
+            return (structure.structureType == STRUCTURE_LINK && structure.energy > 0) || (structure.structureType == STRUCTURE_STORAGE && structure.store.energy > 0) }});
     
         if(energySources.length == 0) {
             if(Game.time % 100 === 0) console.log('Cannot find energy source for ' + this.creep.name);
+
             return;
         }
     
