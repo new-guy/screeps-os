@@ -1,6 +1,6 @@
 const Process = require('Process');
 
-var TICKS_BETWEEN_ROAD_CONSTRUCTION_SITE_UPDATES = 500;
+var TICKS_BETWEEN_ROAD_CONSTRUCTION_SITE_UPDATES = 100;
 var TICKS_BETWEEN_FULL_ROAD_RECALCULATION = 1500;
 
 
@@ -18,7 +18,7 @@ class RoadGenerator extends Process {
 
         this.generateRoomsFromRoadmap();
         
-        if(this.colony.memory['roadRegenerateTick'] === undefined) {
+        if(this.colony.memory['roadRegenerateTick'] === undefined || Game.time - this.colony.memory['roadRegenerateTick'] > TICKS_BETWEEN_FULL_ROAD_RECALCULATION) {
             this.regenerateRoads();
             this.colony.memory['roadRegenerateTick'] = Game.time;
         }

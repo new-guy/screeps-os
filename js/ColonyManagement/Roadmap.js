@@ -132,11 +132,7 @@ class Roadmap {
                             costs.set(x, y, 0xff);
                         }
 
-                        if(roadmap.getPos(posToEvaluate) === 'road') {
-                            costs.set(x, y, 1);
-                        }
-
-                        if(posToEvaluate.structureExists(STRUCTURE_ROAD)) {
+                        else if(roadmap.getPos(posToEvaluate) === 'road' || posToEvaluate.structureExists(STRUCTURE_ROAD)) {
                             costs.set(x, y, 1);
                         }
                     }
