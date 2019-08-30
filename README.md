@@ -68,42 +68,6 @@ If we're below the low watermark, use up to 50% of the limit
 
 ## Goals
 
-### MMO Ready
-
-### Post RCL4 - Roads
-
-- We've made a roadmap object per room in the colony in colonyInfo
-    - Can take in a room position and tell us if it is reserved for a road
-    - Can accept updates to designate road positions in a room
-
-- We are generating roads from roadmap
-    - Just check every N ticks for each room to see if all of its roads are placed
-        - Store the last tick it was check at in roomInfo
-    - If not, place them
-
-- New builders have been implemented
-    - Colony-tier builders (get rid of room-tier)
-    - Pick up energy from nearest non-empty storage
-    - Room construction/repair priority
-        - Go to room that needs critical repairs
-        - Build/repair in current room
-        - Build in room that most needs construction
-
-- We need to implement road maintenance
-    - Only add a road to the room's set of roads needing repair if the road is on the roadmap
-
-- Once we have road maintenace, we need to start automatically creating the roads
-    - Start by drawing roads between the primary and secondary room
-    - Then draw roads from storage to controller
-    - Then draw roads one by one to active mining routes
-
-- Add roads that are defined in construction to the roadmap
-    - Have an "Add Planned Roads" function in Colony.js that looks through each colonyRoom's buildingPlan and adds each road to the roadmap
-        - For each room in the colony's list of rooms
-            - Open up the building plan
-                - For each x & y
-                    - If it's 'road', add it to the roadmap
-
 ### MMO Readiness
 - Need invader defense - one defender per colony
 - Need Link transferring

@@ -19,6 +19,7 @@ const TowerManager = require('TowerManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
 const DefensePlanner = require('DefensePlanner');
+const LinkFlagParser = require('LinkFlagParser');
 
 const SpawnCreep = require('SpawnCreep');
 const BootstrapSpawner = require('BootstrapSpawner');
@@ -58,6 +59,7 @@ var processTypeMap = {
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
     "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor,
     "DefensePlanner": DefensePlanner,
+    "LinkFlagParser": LinkFlagParser,
     "SpawnCreep": SpawnCreep,
     "BootstrapSpawner" :BootstrapSpawner,
     "BootStrapper": BootStrapper,

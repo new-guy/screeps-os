@@ -44,6 +44,7 @@ class HomeRoomManager extends RoomManager {
 
         if(this.room.storage !== undefined || this.room.controller.level >= 5) {
             this.ensureDefenses();
+            this.ensureLinkManagement();
         }
     }
 
@@ -185,6 +186,10 @@ class HomeRoomManager extends RoomManager {
 
     ensureDefenses() {
         this.ensureChildProcess(this.name + '|defensePlanner', 'DefensePlanner', {'roomName': this.name}, COLONY_DEFENSE_PRIORITY);
+    }
+
+    ensureLinkManagement() {
+        this.ensureChildProcess(this.name + '|linkFlagParser', 'LinkFlagParser', {'roomName': this.name}, COLONY_MANAGEMENT_PRIORITY);
     }
 }
 
