@@ -133,7 +133,7 @@ class Roadmap {
                         }
 
                         else if(roadmap.getPos(posToEvaluate) === 'road' || posToEvaluate.structureExists(STRUCTURE_ROAD)) {
-                            costs.set(x, y, 1);
+                            costs.set(x, y, 2);
                         }
                     }
                 }
