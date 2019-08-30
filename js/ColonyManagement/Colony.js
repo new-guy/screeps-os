@@ -11,7 +11,7 @@ var COLONY_MAX_ROOMS_TO_TRAVEL = 2;
 
 var COLONY_INFO_UPDATE_FREQUENCY = 200; //Update every N ticks
 
-var COLONY_ROAD_HITS_CRITICAL_THRESHOLD = 0.5;
+var COLONY_ROAD_HITS_CRITICAL_THRESHOLD = 0.2;
 
 class Colony {
     /*
@@ -126,15 +126,13 @@ class Colony {
         for(var roomName in this.colonyRoomInfo) {
             var room = Game.rooms[roomName];
 
-            if(room === undefined) continue;
+            this.addBuildingPlanRoadsToMap(roomName);
 
-            console.log('Roads ' + roomName);
+            if(room === undefined) continue;
 
             room.damagedRoads = room.find(FIND_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax && roadmap.isRoad(s.pos); 
             }});
-
-            console.log('Damaged: ' + room.damagedRoads.length);
     
             if(room.damagedRoads.length > 0) {
                 room.mostDamagedRoad = room.damagedRoads[0];
@@ -157,8 +155,27 @@ class Colony {
                     room.mostBuiltConstructionSite = constructionSite;
                 }
             }
+        }
+    }
 
-            console.log('Csites: ' + room.constructionSites.length);
+    addBuildingPlanRoadsToMap(roomName) {
+        // - Open up the building plan
+        //     - For each x & y
+        //         - If it's 'road', add it to the roadmap
+
+        var buildingPlan = Memory.rooms[roomName].buildingPlan;
+
+        if(buildingPlan === undefined) return;
+
+        for(var x = 0; x < buildingPlan.length; x++) {
+            for(var y = 0; y < buildingPlan[x].length; y++) {
+                var structureType = buildingPlan[x][y];
+
+                if(structureType === 'road') {
+                    var pos = new RoomPosition(x, y, roomName);
+                    this.roadmap.setRoad(pos);
+                }
+            }
         }
     }
 

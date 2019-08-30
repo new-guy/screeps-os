@@ -76,6 +76,7 @@ class ColonyBuilder extends CreepProcess {
         }
 
         else {
+            this.creep.say(targetRoom.name);
             if(targetRoom.constructionSites !== undefined && targetRoom.constructionSites.length > 0) {
                 this.creep.setTarget(targetRoom.mostBuiltConstructionSite);
             }
@@ -90,6 +91,10 @@ class ColonyBuilder extends CreepProcess {
                 }
     
                 this.creep.setTarget(thingToRepair);
+            }
+
+            else if(targetRoom.mostDamagedRoad !== undefined) {
+                this.creep.setTarget(targetRoom.mostDamagedRoad);
             }
         }
     }

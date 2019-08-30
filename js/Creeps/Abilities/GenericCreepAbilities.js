@@ -61,6 +61,11 @@ Creep.prototype.repairTarget = function() {
     }
 
     else {
+        if(target.hits == target.hitsMax) {
+            this.clearTarget();
+            return;
+        }
+
         if(this.pos.getRangeTo(target) > 1) {
             this.moveTo(target, {visualizePathStyle: {stroke: "#333", opacity: .2}});
         }
