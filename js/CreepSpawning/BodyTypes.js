@@ -41,14 +41,14 @@ exports.Upgrader = {
 };
 
 exports.UpgradeFeeder = {
-	"segment": ["carry", "move"],
+	"segment": ["carry", "carry", "move"],
 	"min": {
 		"carry": 2,
-		"move": 2
+		"move": 1
 	},
 	"max": {
 		"carry": 10,
-		"move": 10
+		"move": 5
 	}
 }
 
