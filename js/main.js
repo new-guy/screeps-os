@@ -137,6 +137,7 @@ function initRooms() {
             room.halfFullTowers = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_TOWER && s.energy < s.energyCapacity/2 
             }});
+            room.links = room.find(FIND_MY_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_LINK }});
         }
 
         room.enemies = room.find(FIND_CREEPS, {filter: function(c) { return c.isHostile(); }});

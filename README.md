@@ -71,6 +71,8 @@ If we're below the low watermark, use up to 50% of the limit
 ### MMO Readiness
 - Need invader defense - one defender per colony
 - Need Link transferring
+    - Close - just need to get link management and link filler spawning implemented
+- Colony builders are not repairing walls to their needed level
 - Ship energy from secondary to primary pre-RCL7, and back the other way until they're both at 7
 
 ### Post RCL4 - Scouting & Remote Improvements

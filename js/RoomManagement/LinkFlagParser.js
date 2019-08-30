@@ -1,6 +1,6 @@
 const Process = require('Process');
 
-var SLEEP_TIMING = 1;
+var SLEEP_TIMING = 50;
 
 class LinkFlagParser extends Process {
     constructor (...args) {

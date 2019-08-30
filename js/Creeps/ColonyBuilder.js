@@ -73,6 +73,10 @@ class ColonyBuilder extends CreepProcess {
 
         if(targetRoom === undefined) {
             this.creep.say('NoRoom');
+
+            if(this.creep.pos.getRangeTo(this.creep.room.controller) > 4) {
+                this.creep.moveTo(this.creep.room.controller);
+            }
         }
 
         else {

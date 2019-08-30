@@ -20,6 +20,7 @@ const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
 const DefensePlanner = require('DefensePlanner');
 const LinkFlagParser = require('LinkFlagParser');
+const LinkManager = require('LinkManager');
 
 const SpawnCreep = require('SpawnCreep');
 const BootstrapSpawner = require('BootstrapSpawner');
@@ -31,6 +32,7 @@ const Reserver = require('Reserver');
 const Miner = require('Miner');
 const Hauler = require('Hauler');
 const Balancer = require('Balancer');
+const LinkFiller = require('LinkFiller');
 const ColonyBuilder = require('ColonyBuilder');
 const Upgrader = require('Upgrader');
 const UpgradeFeeder = require('UpgradeFeeder');
@@ -60,6 +62,7 @@ var processTypeMap = {
     "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor,
     "DefensePlanner": DefensePlanner,
     "LinkFlagParser": LinkFlagParser,
+    "LinkManager": LinkManager,
     "SpawnCreep": SpawnCreep,
     "BootstrapSpawner" :BootstrapSpawner,
     "BootStrapper": BootStrapper,
@@ -69,6 +72,7 @@ var processTypeMap = {
     "Miner": Miner,
     "Hauler": Hauler,
     "Balancer": Balancer,
+    "LinkFiller": LinkFiller,
     "ColonyBuilder": ColonyBuilder,
     "Upgrader": Upgrader,
     "UpgradeFeeder": UpgradeFeeder,

@@ -264,7 +264,7 @@ class Colony {
                 console.log('Set most needed to ' + room.name);
             }
 
-            else if( needyRoom !== undefined && (needyRoom.constructionSites === undefined || room.constructionSites.length === 0) && (
+            else if(((needyRoom !== undefined && needyRoom.constructionSites === undefined) || room.constructionSites.length === 0) && (
                      room.rampartsNeedingRepair !== undefined && room.rampartsNeedingRepair.length > 0 || 
                      room.wallsNeedingRepair !== undefined && room.wallsNeedingRepair.length > 0 || 
                      room.damagedRoads !== undefined && room.damagedRoads.length > 0)) {
