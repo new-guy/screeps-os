@@ -107,11 +107,11 @@ If we're below the low watermark, use up to 50% of the limit
 ### MMO Readiness
 - Need invader defense - one defender per colony
 - Need Link transferring
+- Ship energy from secondary to primary pre-RCL7, and back the other way until they're both at 7
 
 ### Post RCL4 - Scouting & Remote Improvements
 - Scouts need to be able to recognize when a room is unreachable and stop sending scouts there for N ticks
 - Avoid mining rooms that are owned by other people
-
 
 ### Post RCL4 - Expansion & Housekeeping
 
@@ -120,6 +120,10 @@ If we're below the low watermark, use up to 50% of the limit
 - Creeps that have nothing else to do should recycle themselves
     - Could have them go to the !BALSTART flag next to the storage, then die and have the balancer pick up their energy
         - Balancer checks if there's energy on the ground.  If balancer is full, have it store its current energy
+
+### Post RCL4 - Stuff from old code
+
+- Terminals
 
 ### Tidy UP pt 2
 
