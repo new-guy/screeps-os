@@ -61,7 +61,12 @@ Creep.prototype.repairTarget = function() {
     }
 
     else {
-        if(this.pos.getRangeTo(target) > 2) {
+        if(target.hits == target.hitsMax) {
+            this.clearTarget();
+            return;
+        }
+
+        if(this.pos.getRangeTo(target) > 1) {
             this.moveTo(target, {visualizePathStyle: {stroke: "#333", opacity: .2}});
         }
 
@@ -89,6 +94,25 @@ Creep.prototype.moveRandom = function() {
 
 Creep.prototype.getEnergyFromStorage = function(room) {
     var storage = room.storage;
+
+    if(storage === undefined) {
+        this.say('NoStorage');
+        return;
+    }
+
+    else {
+        if(this.pos.getRangeTo(storage) > 1) {
+            this.moveTo(storage);
+        }
+
+        else {
+            this.withdraw(storage, RESOURCE_ENERGY);
+        }
+    }
+}
+
+Creep.prototype.getEnergyFromClosestColonyStorage = function(colony) {
+    var storage = colony.getClosestStorage(this.pos, this.carryCapacity);
 
     if(storage === undefined) {
         this.say('NoStorage');

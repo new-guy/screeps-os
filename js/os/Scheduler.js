@@ -9,6 +9,7 @@ const ColonyManager = require('ColonyManager');
 const ColonyScoutingManager = require('ColonyScoutingManager');
 const SecondaryRoomFinder = require('SecondaryRoomFinder');
 const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
+const RoadGenerator = require('RoadGenerator');
 const EnergyHarvestingManager = require('EnergyHarvestingManager');
 const EnergyRouteManager = require('EnergyRouteManager');
 
@@ -29,7 +30,7 @@ const Reserver = require('Reserver');
 const Miner = require('Miner');
 const Hauler = require('Hauler');
 const Balancer = require('Balancer');
-const Builder = require('Builder');
+const ColonyBuilder = require('ColonyBuilder');
 const Upgrader = require('Upgrader');
 const UpgradeFeeder = require('UpgradeFeeder');
 const TowerFiller = require('TowerFiller');
@@ -48,6 +49,7 @@ var processTypeMap = {
     "ColonyScoutingManager": ColonyScoutingManager,
     "SecondaryRoomFinder": SecondaryRoomFinder,
     "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
+    "RoadGenerator": RoadGenerator,
     "EnergyHarvestingManager": EnergyHarvestingManager,
     "EnergyRouteManager": EnergyRouteManager,
     "HomeRoomManager": HomeRoomManager,
@@ -65,7 +67,7 @@ var processTypeMap = {
     "Miner": Miner,
     "Hauler": Hauler,
     "Balancer": Balancer,
-    "Builder": Builder,
+    "ColonyBuilder": ColonyBuilder,
     "Upgrader": Upgrader,
     "UpgradeFeeder": UpgradeFeeder,
     "TowerFiller": TowerFiller,
@@ -109,7 +111,7 @@ class Scheduler {
         while(this.shouldContinueProcessing()) {
             var activeProcessMetadata = this.sortedProcesses[this.programCounter]['metadata'];
             var processClass = activeProcessMetadata['processClass'];
-            console.log("#PC: " + this.programCounter + " | " + activeProcessMetadata['pid']);
+            //console.log("#PC: " + this.programCounter + " | " + activeProcessMetadata['pid']);
 
             if(this.processesBeingRemoved.includes(activeProcessMetadata['pid'])) {
                 console.log('#Skipping because removal ' + activeProcessMetadata['pid']);

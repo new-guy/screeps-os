@@ -49,3 +49,21 @@ Room.prototype.isInComa = function() {
 		return this.storage.store[RESOURCE_ENERGY] < MINIMUM_ENERGY_FOR_SAFE;
 	}
 }
+
+Room.prototype.removeAllConstructionSites = function(structureType=undefined) {
+	if(this.constructionSites === undefined) return;
+
+	for(var i = 0; i < this.constructionSites.length; i++) {
+		var constructionSite = this.constructionSites[i];
+
+		if(constructionSite.progress > 0) continue;
+
+		if(structureType === undefined) {
+			constructionSite.remove();
+		}
+
+		else if(constructionSite.structureType === structureType) {
+			constructionSite.remove();
+		}
+	}
+}

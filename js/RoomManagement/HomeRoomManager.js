@@ -119,27 +119,27 @@ class HomeRoomManager extends RoomManager {
 
     ensureDefaultUnits() {
         if(this.room.constructionSites.length > 0 || this.room.rampartsNeedingRepair.length > 0 || this.room.wallsNeedingRepair.length > 0) {
-            this.ensureBuilder();
+            this.ensureColonyBuilder();
         }
 
         this.ensureUpgraders();
         this.ensureUpgradeFeeders();
     }
 
-    ensureBuilder() {
+    ensureColonyBuilder() {
         var data = {
             'colonyName': this.colony.name,
             'creepCount': 1,
-            'creepNameBase': 'builder|' + this.room.name,
-            'creepBodyType': 'Builder',
-            'creepProcessClass': 'Builder',
+            'creepNameBase': 'colonyBuilder|' + this.room.name,
+            'creepBodyType': 'ColonyBuilder',
+            'creepProcessClass': 'ColonyBuilder',
             'creepMemory': {
-                'targetRoom': this.room.name
+                'targetColony': this.colony.name
             },
             'creepPriority': NECESSARY_CREEPS_PRIORITY
         };
 
-        var spawnPID ='spawnBuilder|' + this.room.name;
+        var spawnPID ='spawnColonyBuilder|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, NECESSARY_CREEPS_PRIORITY);
     }
 

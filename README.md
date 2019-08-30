@@ -72,27 +72,54 @@ If we're below the low watermark, use up to 50% of the limit
 
 ### Post RCL4 - Roads
 
-- Have a roadmap object per room in the colony in colonyInfo
+- We've made a roadmap object per room in the colony in colonyInfo
     - Can take in a room position and tell us if it is reserved for a road
     - Can accept updates to designate road positions in a room
-- Start by drawing roads between the primary and secondary room
-- Then draw roads from storage to controller
-- Then draw roads one by one to active mining routes
-- For road maintenance
-    - Have a process that runs, then sleeps for N ticks
-    - This process needs to evaluate how badly the room needs repairs or road construction
-    - Send the road builder to whatever room has it the worst
+
+- We are generating roads from roadmap
+    - Just check every N ticks for each room to see if all of its roads are placed
+        - Store the last tick it was check at in roomInfo
+    - If not, place them
+
+- New builders have been implemented
+    - Colony-tier builders (get rid of room-tier)
+    - Pick up energy from nearest non-empty storage
+    - Room construction/repair priority
+        - Go to room that needs critical repairs
+        - Build/repair in current room
+        - Build in room that most needs construction
+
+- We need to implement road maintenance
+    - Only add a road to the room's set of roads needing repair if the road is on the roadmap
+
+- Once we have road maintenace, we need to start automatically creating the roads
+    - Start by drawing roads between the primary and secondary room
+    - Then draw roads from storage to controller
+    - Then draw roads one by one to active mining routes
+
+- Add roads that are defined in construction to the roadmap
+    - Have an "Add Planned Roads" function in Colony.js that looks through each colonyRoom's buildingPlan and adds each road to the roadmap
+        - For each room in the colony's list of rooms
+            - Open up the building plan
+                - For each x & y
+                    - If it's 'road', add it to the roadmap
+
+### MMO Readiness
+- Need invader defense - one defender per colony
+- Need Link transferring
 
 ### Post RCL4 - Scouting & Remote Improvements
 - Scouts need to be able to recognize when a room is unreachable and stop sending scouts there for N ticks
 - Avoid mining rooms that are owned by other people
-- Need invader defense - one defender per colony
+
 
 ### Post RCL4 - Expansion & Housekeeping
 
 - Need to be able to create a new colony and bootstrap it to RCL2
 - Once we hit RCL4 in both bases, have the secondary feed the primary till the primary is RCL7
 - Creeps that have nothing else to do should recycle themselves
+    - Could have them go to the !BALSTART flag next to the storage, then die and have the balancer pick up their energy
+        - Balancer checks if there's energy on the ground.  If balancer is full, have it store its current energy
 
 ### Tidy UP pt 2
 
@@ -116,6 +143,7 @@ If we're below the low watermark, use up to 50% of the limit
 - Probably need to set process default priority by some sort of dictionary rather than depending on the process to be honest - this will allow us to update priorities without recreating the process tree.
 - Test out that CPU conservation works
 - Whitelisting for enemy buildings
+- Building plans should be an object like roadmaps
 
 ### Notes on what to build
 
