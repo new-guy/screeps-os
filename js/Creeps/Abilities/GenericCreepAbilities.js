@@ -61,7 +61,7 @@ Creep.prototype.repairTarget = function() {
     }
 
     else {
-        if(target.hits == target.hitsMax) {
+        if(target === null || target.hits == target.hitsMax) {
             this.clearTarget();
             return;
         }
