@@ -4,3 +4,4 @@
 
 ## Tidy Up
 - Just do a pass of boolean logic and clean up the undefined BS
+- Move behavior config constants into constants.js
