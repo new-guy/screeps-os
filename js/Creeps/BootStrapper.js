@@ -149,8 +149,10 @@ class BootStrapper extends CreepProcess {
         //If the room is below energy capacity, find the closest spawn or extension
         //If there are any roads below 50%, repair them
         //If the room has any construction sites, build them
+        
+        this.creep.say('Determining')
 
-        if(this.targetRoom.energyAvailable < this.targetRoom.energyCapacityAvailable && this.creep.carry[RESOURCE_ENERGY] >= this.creep.carryCapacity) {
+        if(this.targetRoom.energyAvailable < this.targetRoom.energyCapacityAvailable && this.creep.carry[RESOURCE_ENERGY] > 0) {
             var closestNonFullFactory = this.creep.pos.findClosestByPath(this.targetRoom.nonFullFactories);
 
             if(closestNonFullFactory !== null) {

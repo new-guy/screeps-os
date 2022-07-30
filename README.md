@@ -11,8 +11,8 @@ The overarching goal here is to build an AI that is driven around running indivi
 - npm install screeps
 - npx screeps init
 
-- npx screeps start
-- npx screeps cli in new window
+- sh start_server.sh (you might need to use ifconfig to get your IP and update this)
+- sh start_cli.sh in new window
 - start the client in steam and connect to logged server address
 
 - place a spawn
