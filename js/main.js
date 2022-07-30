@@ -33,7 +33,7 @@ const DEFENSE_UPGRADE_SCHEDULE = {
     "5": 150000,
     "6": 500000,
     "7": 1500000,
-    "8": 25000000,
+    "8": 25000000
 };
 
 module.exports.loop = function() {

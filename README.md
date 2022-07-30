@@ -2,6 +2,22 @@
 
 The overarching goal here is to build an AI that is driven around running individual processes.  These individual processes will ideally be broken up into small chunks of logic that can reasonably be run independently of one another.  Additionally, we will decide whether or not to run each process based upon the resources available to us - both in terms of CPU and in terms of in-game resources such as Energy or Minerals.
 
+## Getting Started
+
+- brew install npm nvm
+- mkdir server && cd server
+- nvm install v12.22.10
+- nvm use v12.22.10
+- npm install screeps
+- npx screeps init
+
+- npx screeps start
+- npx screeps cli in new window
+- start the client in steam and connect to logged server address
+
+- place a spawn
+- run 
+
 ## How to play
 
 ### Respawning
@@ -107,11 +123,11 @@ If we're below the low watermark, use up to 50% of the limit
 ### MMO Readiness
 - Need invader defense - one defender per colony
 - Need Link transferring
+- Ship energy from secondary to primary pre-RCL7, and back the other way until they're both at 7
 
 ### Post RCL4 - Scouting & Remote Improvements
 - Scouts need to be able to recognize when a room is unreachable and stop sending scouts there for N ticks
 - Avoid mining rooms that are owned by other people
-
 
 ### Post RCL4 - Expansion & Housekeeping
 
@@ -120,6 +136,10 @@ If we're below the low watermark, use up to 50% of the limit
 - Creeps that have nothing else to do should recycle themselves
     - Could have them go to the !BALSTART flag next to the storage, then die and have the balancer pick up their energy
         - Balancer checks if there's energy on the ground.  If balancer is full, have it store its current energy
+
+### Post RCL4 - Stuff from old code
+
+- Terminals
 
 ### Tidy UP pt 2
 
