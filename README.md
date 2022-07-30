@@ -2,6 +2,22 @@
 
 The overarching goal here is to build an AI that is driven around running individual processes.  These individual processes will ideally be broken up into small chunks of logic that can reasonably be run independently of one another.  Additionally, we will decide whether or not to run each process based upon the resources available to us - both in terms of CPU and in terms of in-game resources such as Energy or Minerals.
 
+## Getting Started
+
+- brew install npm nvm
+- mkdir server && cd server
+- nvm install v12.22.10
+- nvm use v12.22.10
+- npm install screeps
+- npx screeps init
+
+- npx screeps start
+- npx screeps cli in new window
+- start the client in steam and connect to logged server address
+
+- place a spawn
+- run 
+
 ## How to play
 
 ### Respawning
