@@ -126,9 +126,9 @@ class Colony {
         for(var roomName in this.colonyRoomInfo) {
             var room = Game.rooms[roomName];
 
-            this.addBuildingPlanRoadsToMap(roomName);
-
             if(room === undefined) continue;
+
+            this.addBuildingPlanRoadsToMap(roomName);
 
             room.damagedRoads = room.find(FIND_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax && roadmap.isRoad(s.pos); 
@@ -163,6 +163,8 @@ class Colony {
         //     - For each x & y
         //         - If it's 'road', add it to the roadmap
 
+        console.log(roomName)
+        if (Memory.rooms[roomName] == undefined) return;
         var buildingPlan = Memory.rooms[roomName].buildingPlan;
 
         if(buildingPlan === undefined) return;

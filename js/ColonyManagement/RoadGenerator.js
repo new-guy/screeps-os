@@ -63,7 +63,10 @@ class RoadGenerator extends Process {
         this.generateHeartHighway();
         this.generateControllerRoad(this.colony.primaryRoom);
         this.generateControllerRoad(this.colony.secondaryRoom);
-        this.generateMiningRouteRoads();
+
+        if(Game.scheduler.getProcess(this.name + '|energyHarvestingManager') !== undefined) {
+            this.generateMiningRouteRoads();
+        }
     }
 
     generateHeartHighway() {
