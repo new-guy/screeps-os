@@ -5,7 +5,7 @@ Creep.prototype.putEnergyInTarget = function() {
     if((target.store === undefined && target.carryCapacity === undefined && target.energy === target.energyCapacity) ||
        (target.store !== undefined && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) ||
        (target.carryCapacity !== undefined && target.carry[RESOURCE_ENERGY] === target.carryCapacity) ||
-       this.carry[RESOURCE_ENERGY] === 0) {
+       this.hasNoEnergy) {
         this.clearTarget();
     }
 
@@ -42,7 +42,7 @@ Creep.prototype.buildTarget = function() {
         if(this.pos.getRangeTo(target) <= 3) {
             var buildResult = this.build(target);
     
-            if(buildResult === 0 && this.carry[RESOURCE_ENERGY] === 0) {
+            if(buildResult === 0 && this.hasNoEnergy) {
                 this.clearTarget();
             }
     
@@ -74,7 +74,7 @@ Creep.prototype.repairTarget = function() {
         if(this.pos.getRangeTo(target) <= 3) {
             var repairResult = this.repair(target);
     
-            if(repairResult === 0 && this.carry[RESOURCE_ENERGY] === 0) {
+            if(repairResult === 0 && this.hasNoEnergy) {
                 this.clearTarget();
             }
     
