@@ -274,7 +274,10 @@ class Colony {
         this.spawns = spawns;
         this.availableSpawns = {};
         this.timeTillAvailableSpawn = 1000;
-        //How long till we can spawn, how many can we spawn?
+        //Set time till available spawn if everything is spawning
+        //For every spawn that isn't spawning, add its energy capacity to an array
+        //We use this array to select spawns that can create the desired unit 
+        //- this is necessary for us to avoid assigning a creep to a spawn that is too small to make it
         for(var i = 0; i < spawns.length; i++) {
             var spawn = spawns[i];
 
@@ -297,7 +300,7 @@ class Colony {
             }
         }
 
-        //Also Max Energy Capacity
+        //Also set Colony Max Energy Capacity
         this.maxEnergyCapacity = 0;
 
         for(var i = 0; i < this.spawns.length; i++) {
@@ -461,8 +464,6 @@ class Colony {
             }
             return distance;
         });
-
-        console.log('Sup dood');
 
         return sortedInfo;
     }

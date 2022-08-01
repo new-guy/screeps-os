@@ -7,7 +7,7 @@
 - Move behavior config constants into constants.js
 
 ## Plan
-RCL3 Baseline Ticks remaining in Safe mode:
+RCL3 Baseline Ticks remaining in Safe mode: 8500
 
 
 ### Goals
