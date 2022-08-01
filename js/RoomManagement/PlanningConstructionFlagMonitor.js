@@ -13,7 +13,8 @@ class PlanningConstructionFlagMonitor extends Process {
         }
 
         var constructionFlags = this.room.find(FIND_FLAGS, {filter: function(flag) { return flag.name.startsWith('!CONSTRUCT') }});
-        if(this.room.constructionSites.length == 0 && constructionFlags.length == 0) //Every other tick so we avoid double building
+        if(this.room.constructionSites == undefined) return;
+        if((this.room.constructionSites == undefined || this.room.constructionSites.length == 0) && constructionFlags.length == 0) //Every other tick so we avoid double building
         {
             console.log('Trying to convert plan flag');
             this.convertPlanFlagToConstruction();

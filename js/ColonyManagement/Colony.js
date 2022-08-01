@@ -38,7 +38,9 @@ class Colony {
                 continue;
             }
 
-            if(this.roomIsOutOfRange(roomName))
+            if(this.roomIsOutOfRange(roomName)) {
+                continue;
+            }
 
             if(colonyRoomInfo[roomName] === undefined) {
                 colonyRoomInfo[roomName] = {};
