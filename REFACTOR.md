@@ -7,6 +7,9 @@
 - Move behavior config constants into constants.js
 
 ## Plan
+RCL3 Baseline Ticks remaining in Safe mode:
+
+
 ### Goals
 - Make the logic SIMPLER.  Delete code
 - Make the pre-RCL4 logic tighter and faster
@@ -25,11 +28,15 @@
         - Make changes & see how it affects things
 
 ### Speedup plans
+- Booleans should be words instead of lots of &&s and ||s
 - Bootstrapper count should be much higher - do a per-rcl schedule
+- After filling a factory, bootstrappers should look to see if they can find another factory before continuing on
 
 ### Refactors
 - Move constants to constants.js
 - Get rid of construction flags and just use a list + drawing on the screen
+- Generic "move to target" function & state?  Would be good to not have to keep rewriting it
+- Inits in main.js can be better - should instead be in object-specific files
 
 ### Fixes
 - Should plan all building placement from the beginning and store it in an array

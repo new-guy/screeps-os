@@ -123,11 +123,7 @@ class BootStrapper extends CreepProcess {
         //If target is a building, build it
         //Else, upgrade the controller
 
-        if((target instanceof StructureSpawn || target instanceof StructureExtension) && this.creep.carry[RESOURCE_ENERGY] < this.creep.carryCapacity) {
-            this.creep.clearTarget();
-        }
-
-        if((target instanceof StructureSpawn || target instanceof StructureExtension) && this.creep.carry[RESOURCE_ENERGY] >= this.creep.carryCapacity) {
+        if(target instanceof StructureSpawn || target instanceof StructureExtension) {
             this.creep.putEnergyInTarget();
         }
 
