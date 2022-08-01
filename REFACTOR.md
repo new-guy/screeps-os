@@ -8,6 +8,7 @@
 
 ## Plan
 ### Goals
+- Make the logic SIMPLER.  Delete code
 - Make the pre-RCL4 logic tighter and faster
     - Get rid of unnecessary processes
     - Tidy up the code
@@ -22,3 +23,14 @@
     - Speed up time to RCL3
         - Time baseline for getting to RCL3
         - Make changes & see how it affects things
+
+### Speedup plans
+- Bootstrapper count should be much higher - do a per-rcl schedule
+
+### Refactors
+- Move constants to constants.js
+- Get rid of construction flags and just use a list + drawing on the screen
+
+### Fixes
+- Should plan all building placement from the beginning and store it in an array
+- Road generation should use the planned storage rather than the actual storage

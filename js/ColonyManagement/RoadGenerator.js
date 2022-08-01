@@ -71,6 +71,7 @@ class RoadGenerator extends Process {
 
     generateHeartHighway() {
         if(this.colony.primaryRoom === undefined || this.colony.secondaryRoom === undefined) return;
+        if(this.colony.primaryRoom.storage === undefined || this.colony.secondaryRoom.storage === undefined) return;
         var storageOne = this.colony.primaryRoom.storage;
         var storageTwo = this.colony.secondaryRoom.storage;
 

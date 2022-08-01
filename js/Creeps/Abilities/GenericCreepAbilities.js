@@ -47,7 +47,7 @@ Creep.prototype.buildTarget = function() {
             }
     
             else {
-                this.sayInOrder(['I\'ve', 'been', 'working', 'on', 'the', 'railroad', 'all', 'the', 'live', 'long', 'day', 'I\'ve', 'been', 'working', 'on', 'the', 'railroad', 'just', 'to', 'pass', 'the', 'time', 'away']);
+                this.sayInOrder(['Let\'s', 'get', 'that', 'bread']);
             }
         }
     }

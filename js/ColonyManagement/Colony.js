@@ -159,11 +159,6 @@ class Colony {
     }
 
     addBuildingPlanRoadsToMap(roomName) {
-        // - Open up the building plan
-        //     - For each x & y
-        //         - If it's 'road', add it to the roadmap
-
-        console.log(roomName)
         if (Memory.rooms == undefined) return;
         if (Memory.rooms[roomName] == undefined) return;
         var buildingPlan = Memory.rooms[roomName].buildingPlan;
@@ -194,13 +189,6 @@ class Colony {
     }
     
     get roomsByDistance() {
-        /*
-            for(var i in roomsByDistance[distance]) {
-                var roomName = roomsByDistance[distance][i].roomName;
-                ...
-            }
-        */
-
         return _.groupBy(this.colonyRoomInfo, function(roomInfo) {
             var distance = roomInfo.distanceFromPrimary.toString();
 
