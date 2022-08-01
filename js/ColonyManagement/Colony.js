@@ -164,6 +164,7 @@ class Colony {
         //         - If it's 'road', add it to the roadmap
 
         console.log(roomName)
+        if (Memory.rooms == undefined) return;
         if (Memory.rooms[roomName] == undefined) return;
         var buildingPlan = Memory.rooms[roomName].buildingPlan;
 
