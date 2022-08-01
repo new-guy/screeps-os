@@ -28,11 +28,12 @@ RCL3 Baseline Ticks remaining in Safe mode: 8500
         - Make changes & see how it affects things
 
 ### Speedup plans
-- Booleans should be words instead of lots of &&s and ||s
-- Bootstrapper count should be much higher - do a per-rcl schedule
+- Bootstrapper count should be much higher - remove limits and see what happens
+    - If room is RCL1, there are no Game.creeps with the name colScout|W2N5
 - After filling a factory, bootstrappers should look to see if they can find another factory before continuing on
 
 ### Refactors
+- Booleans should be words instead of lots of &&s and ||s
 - Move constants to constants.js
 - Get rid of construction flags and just use a list + drawing on the screen
 - Generic "move to target" function & state?  Would be good to not have to keep rewriting it
@@ -42,3 +43,5 @@ RCL3 Baseline Ticks remaining in Safe mode: 8500
 ### Fixes
 - Should plan all building placement from the beginning and store it in an array
 - Road generation should use the planned storage rather than the actual storage
+
+- creepPriority doesn't seem to be used at all - the thing that controls spawn priority is process priority, which means that the bootstrap spawner always beats out the scout spawner.  We could just remove creepPriority and when a CreepSpawn process gets skipped over, increase its priority in addition to sleeping (up to a threshold)

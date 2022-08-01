@@ -14,12 +14,5 @@ exports.ensureCreepProcesses = function() {
 
             Game.scheduler.addProcess(pid, creepProcessClass, {'creepName': creep.name}, creepPriority);
         }
-
-                // scheduler.addProcess(pid, creepProcessClass, {'creepName': creepName}, creepPriority);
-
-                // creepMemory['spawningColonyName'] = this.name;
-                // creepMemory['pid'] = 'creep|' + creepName;
-                // creepMemory['creepProcessClass'] = creepProcessClass;
-                // creepMemory['creepPriority'] = creepPriority;
     }
 }

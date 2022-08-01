@@ -16,3 +16,15 @@ COLONY_MAX_RANGE = 2;
 COLONY_MAX_ROOMS_TO_TRAVEL = 2;
 COLONY_INFO_UPDATE_FREQUENCY = 200; //Update every N ticks
 COLONY_ROAD_HITS_CRITICAL_THRESHOLD = 0.2;
+
+// Room defense configuration
+DEFENSE_UPGRADE_SCHEDULE = {
+    "1": 5000,
+    "2": 5000,
+    "3": 20000,
+    "4": 50000,
+    "5": 150000,
+    "6": 500000,
+    "7": 1500000,
+    "8": 25000000
+};

@@ -25,17 +25,6 @@ const CreepProcessHelper = require('CreepProcessHelper');
 //Stats
 const Metrics = require('Metrics');
 
-const DEFENSE_UPGRADE_SCHEDULE = {
-    "1": 5000,
-    "2": 5000,
-    "3": 20000,
-    "4": 50000,
-    "5": 150000,
-    "6": 500000,
-    "7": 1500000,
-    "8": 25000000
-};
-
 module.exports.loop = function() {
     Metrics.initForTick();
     initCustomObjects();
