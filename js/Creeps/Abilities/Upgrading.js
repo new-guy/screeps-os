@@ -6,9 +6,14 @@ StructureController.prototype.needsSaving = function() {
 }
 
 Creep.prototype.upgradeThisController = function(controller) {
-    if(this.pos.getRangeTo(controller) <= 3 && this.carry[RESOURCE_ENERGY] > 0) {
+    if(this.pos.getRangeTo(controller) <= 3 && this.hasEnergy) {
         this.sayInOrder(['Praise', 'the', 'sun', '!!!']);
         this.upgradeController(controller);
+    }
+
+    else if(this.hasNoEnergy) {
+        this.say('Tank\'s Dry')
+        this.clearTarget();
     }
 
     if(this.pos.getRangeTo(controller) > 2) {

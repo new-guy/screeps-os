@@ -37,6 +37,7 @@ RCL3 Baseline Ticks remaining in Safe mode:
 - Get rid of construction flags and just use a list + drawing on the screen
 - Generic "move to target" function & state?  Would be good to not have to keep rewriting it
 - Inits in main.js can be better - should instead be in object-specific files
+- Should roadmaps and building maps be different?  Or should the roadmap just be the road parts of the building map?
 
 ### Fixes
 - Should plan all building placement from the beginning and store it in an array

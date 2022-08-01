@@ -1,34 +1,7 @@
-//Needs a "can spawn" function
-//Needs a "spawn creep" function
-    //Need some ability to prevent it from attempting to spawn multiple creeps from one spawner
-//Needs a "homeroom" object
-
 var BodyGenerator = require('BodyGenerator');
 var Roadmap = require('Roadmap');
 
-var COLONY_MAX_RANGE = 2;
-var COLONY_MAX_ROOMS_TO_TRAVEL = 2;
-
-var COLONY_INFO_UPDATE_FREQUENCY = 200; //Update every N ticks
-
-var COLONY_ROAD_HITS_CRITICAL_THRESHOLD = 0.2;
-
 class Colony {
-    /*
-    this.primaryRoom = Room
-    this.rooms = {roomName: Room}
-
-    this.availableSpawns = {
-        'ENERGY_CAPACITY1': [],
-        'ENERGY_CAPACITY2': []
-    };
-    this.timeTillAvailableSpawn = 0;
-    this.activeSources = [Source]
-    this.depletedSources = [Source]
-
-    this.colonyRoomInfo = {} //Info about all rooms near colony
-    */
-
     constructor(name) {
         this.name = name;
         this.memory = Memory.colonies[name];
@@ -54,49 +27,18 @@ class Colony {
         if(this.memory.colonyRoomInfo === undefined) this.memory.colonyRoomInfo = {};
         var colonyRoomInfo = this.memory.colonyRoomInfo;
 
-        var roomsToSearch = Object.values(Game.map.describeExits(this.primaryRoom.name));
+        var roomsToEvaluate = Object.values(Game.map.describeExits(this.primaryRoom.name));
+        var secondaryIsDetermined = (this.secondaryRoom !== undefined);
+        var evaluatedRooms = [];
 
-        //Shift roomsToSearch
-            //Check if it is defined in colonyRoomInfo - continue if so
-            //Check if it is far away from both the secondaryRoom and the primaryRoom
-            //If not, write down its name, and calculate its distanceFromPrimary & distanceFromSecondary
-                //Also put its exits into roomsToSearch
+        while(roomsToEvaluate.length > 0) {
+            var roomName = roomsToEvaluate.shift();
 
-        var secondaryExists = (this.secondaryRoom !== undefined);
-        var updatedRooms = [];
-
-        while(roomsToSearch.length > 0) {
-            var roomName = roomsToSearch.shift();
-
-            if(updatedRooms.includes(roomName)) {
+            if(evaluatedRooms.includes(roomName)) {
                 continue;
             }
 
-            var distToRoom = Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name);
-
-            if(secondaryExists) {
-                var distToSecondary = Game.map.getRoomLinearDistance(roomName, this.secondaryRoom.name);
-                if(distToSecondary < distToRoom) {
-                    distToRoom = distToSecondary;
-                }
-            }
-
-            if(distToRoom > COLONY_MAX_RANGE) {
-                continue;
-            }
-
-            var stepsToRoom = Game.map.findRoute(roomName, this.primaryRoom.name).length;
-
-            if(secondaryExists) {
-                var stepsToSecondary = Game.map.findRoute(roomName, this.secondaryRoom.name).length;
-                if(stepsToSecondary < stepsToRoom) {
-                    stepsToRoom = stepsToSecondary;
-                }
-            }
-
-            if(stepsToRoom > COLONY_MAX_ROOMS_TO_TRAVEL) {
-                continue;
-            }
+            if(this.roomIsOutOfRange(roomName))
 
             if(colonyRoomInfo[roomName] === undefined) {
                 colonyRoomInfo[roomName] = {};
@@ -106,18 +48,49 @@ class Colony {
             colonyRoomInfo[roomName]['distanceFromPrimary'] = Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name);
             colonyRoomInfo[roomName]['stepsToPrimary'] = Game.map.findRoute(roomName, this.primaryRoom.name).length;
 
-            if(secondaryExists) {
+            if(secondaryIsDetermined) {
                 colonyRoomInfo[roomName]['distanceFromSecondary'] = Game.map.getRoomLinearDistance(roomName, this.secondaryRoom.name);
                 colonyRoomInfo[roomName]['stepsToSecondary'] = Game.map.findRoute(roomName, this.secondaryRoom.name).length;
             }
 
             var adjacentRooms = Object.values(Game.map.describeExits(roomName));
-            roomsToSearch = roomsToSearch.concat(adjacentRooms);
+            roomsToEvaluate = roomsToEvaluate.concat(adjacentRooms);
 
-            updatedRooms.push(roomName);
+            evaluatedRooms.push(roomName);
         }
 
         this.memory.colonyRoomInfo = colonyRoomInfo;
+    }
+
+    roomIsOutOfRange(roomName) {
+        var linearDistToColony = Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name);
+        var secondaryIsDetermined = (this.secondaryRoom !== undefined);
+
+        if(secondaryIsDetermined) {
+            var distToSecondary = Game.map.getRoomLinearDistance(roomName, this.secondaryRoom.name);
+            if(distToSecondary < linearDistToColony) {
+                linearDistToColony = distToSecondary;
+            }
+        }
+
+        if(linearDistToColony > COLONY_MAX_RANGE) {
+            return true;
+        }
+
+        var stepsToColony = Game.map.findRoute(roomName, this.primaryRoom.name).length;
+
+        if(secondaryIsDetermined) {
+            var stepsToSecondary = Game.map.findRoute(roomName, this.secondaryRoom.name).length;
+            if(stepsToSecondary < stepsToColony) {
+                stepsToColony = stepsToSecondary;
+            }
+        }
+
+        if(stepsToColony > COLONY_MAX_ROOMS_TO_TRAVEL) {
+            return true;
+        }
+
+        return false;
     }
 
     updateRooms() {

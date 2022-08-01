@@ -136,7 +136,7 @@ class BootStrapper extends CreepProcess {
             this.creep.buildTarget();
         }
 
-        else {
+        else if(target instanceof StructureController) {
             this.creep.upgradeThisController(this.targetRoom.controller);
         }
     }
@@ -148,7 +148,7 @@ class BootStrapper extends CreepProcess {
         
         this.creep.say('Determining')
 
-        if(this.targetRoom.energyAvailable < this.targetRoom.energyCapacityAvailable && this.creep.carry[RESOURCE_ENERGY] > 0) {
+        if(this.targetRoom.energyAvailable < this.targetRoom.energyCapacityAvailable && this.creep.hasEnergy) {
             var closestNonFullFactory = this.creep.pos.findClosestByPath(this.targetRoom.nonFullFactories);
 
             if(closestNonFullFactory !== null) {
@@ -172,6 +172,10 @@ class BootStrapper extends CreepProcess {
 
         else if(this.targetRoom.constructionSites !== undefined && this.targetRoom.constructionSites.length > 0) {
             this.creep.setTarget(this.targetRoom.mostBuiltConstructionSite);
+        }
+
+        else if(this.targetRoom.controller.progress < this.targetRoom.controller.progressTotal) {
+            this.creep.setTarget(this.targetRoom.controller);
         }
     }
 }
