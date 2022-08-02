@@ -90,7 +90,7 @@ class ColonyManager extends Process {
             this.ensureChildProcess(this.primaryRoom.name + '|secondaryRoomFinder', 'SecondaryRoomFinder', {'colonyName': this.name}, COLONY_NONESSENTIAL_PRIORITY);
         }
 
-        else if(this.colony.primaryRoom.energyCapacityAvailable >= 650 || (this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.controller.my)) {
+        else if((Game.empire.hasSpareGCL && this.colony.primaryRoom.energyCapacityAvailable >= 650) || (this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.controller.my)) {
             this.ensureSecondaryRoom()
         }
 
@@ -98,9 +98,7 @@ class ColonyManager extends Process {
     }
 
     ensureSecondaryRoom() {
-        console.log('hi')
-        if(((this.secondaryRoomName !== undefined && this.secondaryRoom === undefined) || !this.secondaryRoom.controller.my) && Game.empire.hasSpareGCL) {
-            console.log('here')
+        if((this.secondaryRoomName !== undefined && this.secondaryRoom === undefined && !this.secondaryRoom.controller.my)) {
             this.spawnSecondaryRoomClaimer();
         }
 
