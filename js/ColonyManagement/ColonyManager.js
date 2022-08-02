@@ -76,10 +76,10 @@ class ColonyManager extends Process {
     }
 
     normalBehavior() {
-        if(this.roomIsPreStorage(this.primaryRoom)) {
-            var bootstrapPID = 'preStorSelfBoot|' + this.primaryRoom.name + '|' + this.primaryRoom.name;
-            var data = {'targetRoomName': this.primaryRoom.name, 'spawnColonyName': this.primaryRoom.name};
-            this.ensureChildProcess(bootstrapPID, 'PreStorageSelfBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
+        if(this.colony.isPreStorage) {
+            var bootstrapPID = 'preStorColonyBoot|' + this.name + '|' + this.name;
+            var data = {'targetColonyName': this.name, 'spawnColonyName': this.name};
+            this.ensureChildProcess(bootstrapPID, 'PreStorageColonyBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
         }
 
         else {
@@ -188,10 +188,6 @@ class ColonyManager extends Process {
 
     ensureRoadGeneration() {
         this.ensureChildProcess(this.primaryRoom.name + '|roadGenerator', 'RoadGenerator', {'colonyName': this.name}, COLONY_NONESSENTIAL_PRIORITY);
-    }
-
-    roomIsPreStorage(room) {
-        return (room.controller.level < 5 && room.storage === undefined);
     }
 
     processShouldDie() {

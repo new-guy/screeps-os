@@ -2,11 +2,11 @@ const Process = require('Process');
 const BodyGenerator = require('BodyGenerator');
 
 
-class PreStorageSelfBootstrap extends Process {
+class PreStorageColonyBootstrap extends Process {
     constructor (...args) {
         super(...args);
         
-        this.targetRoom = Game.rooms[this.memory.targetRoomName];
+        this.targetColony = Game.colonies[this.memory.targetColonyName];
         this.spawnColony = Game.colonies[this.memory.spawnColonyName];
     }
 
@@ -15,7 +15,7 @@ class PreStorageSelfBootstrap extends Process {
             return 'exit';
         }
 
-        var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.targetRoom.energyCapacityAvailable);
+        var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.maxEnergyCapacityAvailable);
         var ticksToSpawn = BodyGenerator.getTicksToSpawn(bootstrapperBody);
         var bootstrappersToSpawn = Math.floor(PRE_STORAGE_BOOTSTRAPPER_MAX_SPAWN_TICKS/ticksToSpawn); //Do not spawn more than a single spawner can support
 
@@ -24,11 +24,11 @@ class PreStorageSelfBootstrap extends Process {
         var data = {
             'colonyName': this.memory.spawnColonyName,
             'creepCount': bootstrappersToSpawn,
-            'creepNameBase': 'bootstrapper|' + this.targetRoom.name,
+            'creepNameBase': 'colBootstrapper|' + this.targetColony.name,
             'creepBodyType': 'BootStrapper',
             'creepProcessClass': 'BootStrapper',
             'creepMemory': {
-                'targetRoom': this.targetRoom.name
+                'targetColony': this.targetColony.name
             }
         };
         
@@ -37,8 +37,8 @@ class PreStorageSelfBootstrap extends Process {
     }
 
     processShouldDie() {
-        return (this.targetRoom.controller.level > 5 || this.targetRoom.storage !== undefined);
+        return !this.targetColony.isPreStorage;
     }
 }
 
-module.exports = PreStorageSelfBootstrap;
+module.exports = PreStorageColonyBootstrap;

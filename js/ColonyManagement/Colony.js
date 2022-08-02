@@ -162,6 +162,45 @@ class Colony {
             visual.text('Sec: ' + colonyRoomInfo['distanceFromSecondary'], 1, 3, {align: 'left'});
         }
     }
+
+    get isPreStorage() {
+        var primaryIsPreStorage = (this.primaryRoom !== undefined && this.primaryRoom.controller.level < 5 && this.primaryRoom.storage === undefined);
+        var secondaryIsPreStorage = (this.secondaryRoom !== undefined && this.secondaryRoom.controller.level < 5 && this.secondaryRoom.storage === undefined);
+        return primaryIsPreStorage || secondaryIsPreStorage;
+    }
+
+    get energyAvailable () {
+        var primaryEnergy = this.primaryRoom === undefined ? 0 : this.primaryRoom.energyAvailable;
+        var secondaryEnergy = this.secondaryRoom === undefined ? 0 : this.secondaryRoom.energyAvailable;
+        return primaryEnergy + secondaryEnergy;
+    }
+
+    get energyCapacityAvailable () {
+        var primaryEnergy = this.primaryRoom === undefined ? 0 : this.primaryRoom.energyCapacityAvailable;
+        var secondaryEnergy = this.secondaryRoom === undefined ? 0 : this.secondaryRoom.energyCapacityAvailable;
+        return primaryEnergy + secondaryEnergy;
+    }
+
+    get nonFullFactories() {
+        var primaryNonFullFactories = this.primaryRoom === undefined ? [] : this.primaryRoom.nonFullFactories;
+        var secondaryNonFullFactories = this.secondaryRoom === undefined ? [] : this.secondaryRoom.nonFullFactories;
+
+        if (primaryNonFullFactories === undefined) primaryNonFullFactories = [];
+        if (secondaryNonFullFactories === undefined) secondaryNonFullFactories = [];
+        return primaryNonFullFactories.concat(secondaryNonFullFactories);
+    }
+
+    get halfFullTowers() {
+        var primaryHalfFullTowers = this.primaryRoom === undefined ? [] : this.primaryRoom.halfFullTowers;
+        var secondaryHalfFullTowers = this.secondaryRoom === undefined ? [] : this.secondaryRoom.halfFullTowers;
+        return primaryHalfFullTowers.concat(secondaryHalfFullTowers);
+    }
+
+    get constructionSites() {
+        var primaryConstructionSites = this.primaryRoom === undefined ? [] : this.primaryRoom.constructionSites;
+        var secondaryConstructionSites = this.secondaryRoom === undefined ? [] : this.secondaryRoom.constructionSites;
+        return primaryConstructionSites.concat(secondaryConstructionSites);
+    }
     
     get roomsByDistance() {
         return _.groupBy(this.colonyRoomInfo, function(roomInfo) {
@@ -262,6 +301,26 @@ class Colony {
         return miningProcesses;
     }
 
+    get controllerToUpgrade() {
+        var primaryController = this.primaryRoom.controller;
+        var controller = primaryController;
+
+        if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my) {
+            var secondaryController = this.secondaryRoom.controller;
+            if(secondaryController.level < primaryController.level) {
+                controller = secondaryController;
+            }
+            else if(secondaryController.level === primaryController.level) {
+                controller = secondaryController.progress > primaryController.progress ? secondaryController : primaryController;
+            }
+            else {
+                controller = primaryController;
+            }
+        }
+
+        return controller;
+    }
+
     initSpawnInfo() {
         var primaryRoomSpawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
         var spawns = primaryRoomSpawns;
@@ -301,12 +360,12 @@ class Colony {
         }
 
         //Also set Colony Max Energy Capacity
-        this.maxEnergyCapacity = 0;
+        this.maxEnergyCapacityAvailable = 0;
 
         for(var i = 0; i < this.spawns.length; i++) {
             var energyCapacity = this.spawns[i].room.energyCapacityAvailable;
-            if(energyCapacity > this.maxEnergyCapacity) {
-                this.maxEnergyCapacity = energyCapacity;
+            if(energyCapacity > this.maxEnergyCapacityAvailable) {
+                this.maxEnergyCapacityAvailable = energyCapacity;
             }
         }
     }

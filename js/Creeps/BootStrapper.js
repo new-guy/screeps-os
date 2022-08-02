@@ -5,7 +5,18 @@ class BootStrapper extends CreepProcess {
         super(...args);
 
         if(this.creep !== undefined) {
-            this.targetRoom = Game.rooms[this.creep.memory.targetRoom];
+            var targetColonyName = this.creep.memory.targetColony;
+            var targetRoomName = this.creep.memory.targetRoom;
+            if(targetColonyName !== undefined) {
+                this.mode = 'colony'
+                this.targetColonyName = this.targetColonyName
+                this.targetColony = Game.colonies[targetColonyName]
+            }
+            else if(targetRoomName !== undefined) {
+                this.mode = 'room'
+                this.targetRoomName = this.targetRoomName
+                this.targetRoom = Game.rooms[targetRoomName]
+            }
         }
     }
 
@@ -94,16 +105,16 @@ class BootStrapper extends CreepProcess {
     }
 
     work() {
-        if(this.targetRoom === undefined) {
+        if(this.mode == 'room' && this.targetRoom === undefined) {
             this.creep.moveTo(new RoomPosition(24, 24, this.creep.memory.targetRoom));
             this.creep.say('NoVision');
             return;
         }
 
-        else if(this.targetRoom.controller !== undefined && this.targetRoom.controller.needsSaving())
+        else if(this.creep.room.controller !== undefined && this.creep.room.controller.needsSaving())
         {
             this.creep.say("SaveCont");
-            this.creep.upgradeThisController(this.targetRoom.controller);
+            this.creep.upgradeThisController(this.creep.room.controller);
             return;
         }
 
@@ -114,14 +125,6 @@ class BootStrapper extends CreepProcess {
             this.determineTarget();
             target = this.creep.getTarget();
         }
-
-        //Need to get target.  If we have no target, we need to determine a target
-        //Do work based upon the target's class
-
-        //If target is an extension, fill it
-        //If target is a road, repair it
-        //If target is a building, build it
-        //Else, upgrade the controller
 
         if(target instanceof StructureSpawn || target instanceof StructureExtension) {
             this.creep.putEnergyInTarget();
@@ -137,7 +140,7 @@ class BootStrapper extends CreepProcess {
         }
 
         else if(target instanceof StructureController) {
-            this.creep.upgradeThisController(this.targetRoom.controller);
+            this.creep.upgradeThisController(target);
         }
     }
 
@@ -146,17 +149,20 @@ class BootStrapper extends CreepProcess {
         //If there are any roads below 50%, repair them
         //If the room has any construction sites, build them
         
-        this.creep.say('Determining')
+        this.creep.say('Determining');
 
-        if(this.targetRoom.energyAvailable < this.targetRoom.energyCapacityAvailable && this.creep.hasEnergy) {
-            var closestNonFullFactory = this.creep.pos.findClosestByPath(this.targetRoom.nonFullFactories);
+        var workArea = this.mode === "room" ? this.targetRoom : this.targetColony;
+
+        if(workArea.energyAvailable < workArea.energyCapacityAvailable && this.creep.hasEnergy) {
+            var closestNonFullFactory = this.creep.pos.findClosestByPath(workArea.nonFullFactories);
 
             if(closestNonFullFactory !== null) {
                 this.creep.setTarget(closestNonFullFactory);
             }
             else {
-                if(this.creep.room.name !== this.targetRoom.name) {
-                    this.creep.returnToTargetRoom()
+                var firstNonFullFactory = workArea.nonFullFactories[0];
+                if(this.creep.room.name !== firstNonFullFactory.room.name) {
+                    this.creep.moveToRoom(firstNonFullFactory.room.name)
                 }
                 else {
                     console.log("Error finding nonfull factory for " + this.creep.name);
@@ -164,8 +170,8 @@ class BootStrapper extends CreepProcess {
             }
         }
 
-        else if(this.targetRoom.halfFullTowers !== undefined && this.targetRoom.halfFullTowers.length > 0) {
-            var closestTower = this.creep.pos.findClosestByPath(this.targetRoom.halfFullTowers);
+        else if(workArea.halfFullTowers !== undefined && workArea.halfFullTowers.length > 0) {
+            var closestTower = this.creep.pos.findClosestByPath(workArea.halfFullTowers);
 
             if(closestTower !== null) {
                 this.creep.setTarget(closestTower)
@@ -175,12 +181,22 @@ class BootStrapper extends CreepProcess {
             }
         }
 
-        else if(this.targetRoom.constructionSites !== undefined && this.targetRoom.constructionSites.length > 0) {
-            this.creep.setTarget(this.targetRoom.mostBuiltConstructionSite);
+        else if(workArea.constructionSites !== undefined && workArea.constructionSites.length > 0) {
+            if(this.mode === 'colony') {
+                this.creep.setTarget(workArea.roomMostNeedingBuilder.mostBuiltConstructionSite);
+            }
+            else if(this.mode === 'room') {
+                this.creep.setTarget(workArea.mostBuiltConstructionSite);
+            }
         }
 
-        else if(this.targetRoom.controller.progress < this.targetRoom.controller.progressTotal) {
-            this.creep.setTarget(this.targetRoom.controller);
+        else { //Final thing to do is upgrade controller
+            if(this.mode === 'colony') {
+                this.creep.setTarget(workArea.controllerToUpgrade);
+            }
+            else if(this.mode === 'room') {
+                this.creep.setTarget(workArea.controller);
+            }
         }
     }
 }

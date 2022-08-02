@@ -8,7 +8,7 @@ const EmpireManager = require('EmpireManager');
 const ColonyManager = require('ColonyManager');
 const ColonyScoutingManager = require('ColonyScoutingManager');
 const SecondaryRoomFinder = require('SecondaryRoomFinder');
-const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
+const PreStorageColonyBootstrap = require('PreStorageColonyBootstrap');
 const RoadGenerator = require('RoadGenerator');
 const EnergyHarvestingManager = require('EnergyHarvestingManager');
 const EnergyRouteManager = require('EnergyRouteManager');
@@ -48,7 +48,7 @@ var processTypeMap = {
     "ColonyManager": ColonyManager,
     "ColonyScoutingManager": ColonyScoutingManager,
     "SecondaryRoomFinder": SecondaryRoomFinder,
-    "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
+    "PreStorageColonyBootstrap": PreStorageColonyBootstrap,
     "RoadGenerator": RoadGenerator,
     "EnergyHarvestingManager": EnergyHarvestingManager,
     "EnergyRouteManager": EnergyRouteManager,
@@ -111,13 +111,13 @@ class Scheduler {
         while(this.shouldContinueProcessing()) {
             var activeProcessMetadata = this.sortedProcesses[this.programCounter]['metadata'];
             var processClass = activeProcessMetadata['processClass'];
-            //console.log("#PC: " + this.programCounter + " | " + activeProcessMetadata['pid']);
+            // console.log("#PC: " + this.programCounter + " | " + activeProcessMetadata['pid']);
 
             if(this.processesBeingRemoved.includes(activeProcessMetadata['pid'])) {
                 console.log('#Skipping because removal ' + activeProcessMetadata['pid']);
             }
 
-            else if(!processClass in processTypeMap) {
+            else if(!(processClass in processTypeMap)) {
                 console.log("#Error: process class " + processClass + " does not exist");
             }
 
