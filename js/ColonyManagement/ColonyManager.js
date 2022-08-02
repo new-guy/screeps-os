@@ -98,7 +98,7 @@ class ColonyManager extends Process {
     }
 
     ensureSecondaryRoom() {
-        if((this.secondaryRoomName !== undefined && this.secondaryRoom !== undefined && !this.secondaryRoom.controller.my)) {
+        if((this.secondaryRoom !== undefined && !this.secondaryRoom.controller.my)) {
             this.spawnSecondaryRoomClaimer();
         }
 
