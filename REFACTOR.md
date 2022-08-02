@@ -42,19 +42,11 @@ Ticks remaining in Safe mode
 - After filling a factory, bootstrappers should look to see if they can find another factory before continuing on
 
 ### Functionality to change
-- Are the storage support bootstrappers useful?
-- Should we use a container before storage?
+- No defenses between the two colonies :|
 - Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
     - Probably should minimize the differentiation in general to help simplify things
         - We reference the word "secondaary" 154 times :|
     - We get so much fucking complexity from having primary and secondary so thoroughly in the code.  Need to remove that logic wherever we can
-    - Bootstrappers should be colony-level rather than room-level
-    - Growth pattern should be
-        - Get first room to RCL3
-        - Expand to second room
-        - Prioritize building buildings
-        - If one of the rooms is below the other, focus on leveling up the lower room
-        - If they're equal RCL, then focus on whichever one is closer to leveling up
 
 ### Refactors
 - Consolidate room/creep/colony/game tools/prototype modifications into files to make them more sensible

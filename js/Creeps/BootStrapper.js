@@ -126,7 +126,7 @@ class BootStrapper extends CreepProcess {
             target = this.creep.getTarget();
         }
 
-        if(target instanceof StructureSpawn || target instanceof StructureExtension) {
+        if(target instanceof StructureSpawn || target instanceof StructureExtension || target instanceof StructureStorage) {
             this.creep.putEnergyInTarget();
         }
 
@@ -179,6 +179,10 @@ class BootStrapper extends CreepProcess {
             else {
                 console.log("Error finding half full tower for " + this.creep.name);
             }
+        }
+
+        else if(this.creep.room.isInComa() && this.creep.room.storage !== undefined) {
+            this.creep.setTarget(this.creep.room.storage);
         }
 
         else if(workArea.constructionSites !== undefined && workArea.constructionSites.length > 0) {
