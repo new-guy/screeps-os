@@ -155,7 +155,12 @@ class BootStrapper extends CreepProcess {
                 this.creep.setTarget(closestNonFullFactory);
             }
             else {
-                console.log("Error finding nonfull factory for " + this.creep.name);
+                if(this.creep.room.name !== this.targetRoom.name) {
+                    this.creep.returnToTargetRoom()
+                }
+                else {
+                    console.log("Error finding nonfull factory for " + this.creep.name);
+                }
             }
         }
 

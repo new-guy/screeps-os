@@ -36,6 +36,7 @@ RCL3 Baseline Ticks remaining in Safe mode: 8500
 ### Refactors
 - Booleans should be words instead of lots of &&s and ||s
 - Move constants to constants.js
+- CreepSpawners are way too verbose to define
 - Get rid of construction flags and just use a list + drawing on the screen
 - Generic "move to target" function & state?  Would be good to not have to keep rewriting it
 - Inits in main.js can be better - should instead be in object-specific files

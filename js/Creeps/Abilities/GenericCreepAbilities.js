@@ -130,3 +130,9 @@ Creep.prototype.getEnergyFromClosestColonyStorage = function(colony) {
         }
     }
 }
+
+Creep.prototype.returnToTargetRoom = function() {
+    var targetController = Game.rooms[this.memory.targetRoom].controller;
+    this.moveTo(targetController)
+    this.sayInOrder(['Returning', 'to', 'target', 'room'])
+}
