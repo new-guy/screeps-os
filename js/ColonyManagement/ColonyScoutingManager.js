@@ -51,16 +51,16 @@ class ColonyScoutingManager extends Process {
                     
                     var spawnPID = 'colScout|' + this.colony.name + '|' + roomName;
 
-                    spawnPriority = COLONY_SCOUTING_PRIORITY;
+                    var spawnPriority = COLONY_SCOUTING_PRIORITY;
 
                     if(distance === 1) spawnPriority = COLONY_ADJACENT_SCOUT_PRIORITY;
 
                     if(Memory.scouting.rooms[roomName] === undefined)  {
-                        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_SCOUTING_PRIORITY);
+                        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, spawnPriority);
                     }
 
                     else if(Game.time - Memory.scouting.rooms[roomName].lastColonyScout > scoutInterval) {
-                        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_SCOUTING_PRIORITY);
+                        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, spawnPriority);
                     }
                 }
             }
