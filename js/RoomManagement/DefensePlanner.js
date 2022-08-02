@@ -14,8 +14,10 @@ class DefensePlanner extends Process {
             return 'exit';
         }
 
-        this.placeDefenses();
-        this.sleep(SLEEP_TIMING)
+        console.log('Defense planner disabled')
+
+        // this.placeDefenses();
+        // this.sleep(SLEEP_TIMING)
     }
 
     processShouldDie() {
