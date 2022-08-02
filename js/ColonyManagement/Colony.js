@@ -193,12 +193,18 @@ class Colony {
     get halfFullTowers() {
         var primaryHalfFullTowers = this.primaryRoom === undefined ? [] : this.primaryRoom.halfFullTowers;
         var secondaryHalfFullTowers = this.secondaryRoom === undefined ? [] : this.secondaryRoom.halfFullTowers;
+
+        if (primaryHalfFullTowers === undefined) primaryHalfFullTowers = [];
+        if (secondaryHalfFullTowers === undefined) secondaryHalfFullTowers = [];
         return primaryHalfFullTowers.concat(secondaryHalfFullTowers);
     }
 
     get constructionSites() {
         var primaryConstructionSites = this.primaryRoom === undefined ? [] : this.primaryRoom.constructionSites;
         var secondaryConstructionSites = this.secondaryRoom === undefined ? [] : this.secondaryRoom.constructionSites;
+
+        if (primaryConstructionSites === undefined) primaryConstructionSites = [];
+        if (secondaryConstructionSites === undefined) secondaryConstructionSites = [];
         return primaryConstructionSites.concat(secondaryConstructionSites);
     }
     
@@ -554,16 +560,16 @@ class Colony {
             creepMemory['creepProcessClass'] = creepProcessClass;
             creepMemory['bodyType'] = creepBodyType;
 
-            var spawnResult = spawn.spawnCreep(body, creepName, {memory: creepMemory});
-
-            if(spawnResult === OK) {
-                console.log('Spawning creep ' + creepName);
+            var canSpawn = spawn.spawnCreep(body, creepName, {memory: creepMemory, dryRun: true});
+            if(canSpawn === OK) {
+                console.log(spawn.name + ' Spawning creep ' + creepName);
+                spawn.spawnCreep(body, creepName, {memory: creepMemory});
                 Game.scheduler.addProcess(creepMemory['pid'], creepProcessClass, {'creepName': creepName}, creepProcessPriority);
 
                 this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
             }
             
-            else if(spawnResult === ERR_NOT_ENOUGH_ENERGY) {
+            else if(canSpawn === ERR_NOT_ENOUGH_ENERGY) {
                 //Draw the name of the creep your'e trying to spawn
                 console.log("Waiting for energy for creep " + creepName);
                 console.log('Creep Dump: ' + creepName + ' ' + body);
@@ -573,7 +579,7 @@ class Colony {
             }
 
             else {
-                console.log('Error spawning creep ' + spawnResult);
+                console.log('Error spawning creep ' + canSpawn);
                 console.log('Creep Dump: ' + creepName + ' ' + body);
             }
         }
