@@ -155,7 +155,7 @@ class ColonyManager extends Process {
     }
 
     ensureSecondaryRoomSelfBootstrap() {
-        var bootstrappersToSpawn = 10;
+        var bootstrappersToSpawn = COLONY_SECONDARY_SELF_BOOTSTRAPPERS;
 
         var data = {
             'targetRoomName': this.secondaryRoom.name,
