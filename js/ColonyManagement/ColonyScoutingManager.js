@@ -49,8 +49,7 @@ class ColonyScoutingManager extends Process {
                         'creepProcessClass': 'Scout',
                         'creepMemory': {
                             'targetRoom': roomName
-                        },
-                        'creepPriority': COLONY_SCOUTING_PRIORITY
+                        }
                     };
                     
                     var spawnPID = 'colScout|' + this.colony.name + '|' + roomName;

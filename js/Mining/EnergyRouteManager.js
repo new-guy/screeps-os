@@ -107,8 +107,7 @@ class EnergyRouteManager extends Process {
                     'roomName': this.targetSourcePos.roomName
                 },
                 'containerPos': this.memory.containerPos
-            },
-            'creepPriority': this.metadata.defaultPriority
+            }
         };
         
         var spawnPID = 'SpawnMiner|' + this.targetSourcePos.readableString() + '|' + this.memory.spawnColonyName;
@@ -125,8 +124,7 @@ class EnergyRouteManager extends Process {
             'creepMemory': {
                 'targetStorageId': this.targetStorage.id,
                 'containerPos': this.memory.containerPos
-            },
-            'creepPriority': this.metadata.defaultPriority
+            }
         };
         
         var spawnPID = 'SpawnHauler|' + this.targetSourcePos.readableString() + '|' + this.memory.spawnColonyName;
@@ -166,8 +164,7 @@ class EnergyRouteManager extends Process {
             'creepProcessClass': 'Scout',
             'creepMemory': {
                 'targetRoom': this.targetSourcePos.roomName
-            },
-            'creepPriority': COLONY_SCOUTING_PRIORITY
+            }
         };
 
         var spawnPID ='spawnMiningScout|' + this.targetSourcePos.roomName;
@@ -183,8 +180,7 @@ class EnergyRouteManager extends Process {
             'creepProcessClass': 'Reserver',
             'creepMemory': {
                 'targetRoom': this.targetSourcePos.roomName
-            },
-            'creepPriority': this.metadata.defaultPriority
+            }
         };
 
         var spawnPID ='spawnReserver|' + this.targetSourcePos.roomName;

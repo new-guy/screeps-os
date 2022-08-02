@@ -493,7 +493,6 @@ class Colony {
             creepMemory['spawningColonyName'] = this.name;
             creepMemory['pid'] = 'creep|' + creepName;
             creepMemory['creepProcessClass'] = creepProcessClass;
-            creepMemory['creepProcessPriority'] = creepProcessPriority;
             creepMemory['bodyType'] = creepBodyType;
 
             var spawnResult = spawn.spawnCreep(body, creepName, {memory: creepMemory});

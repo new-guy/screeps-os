@@ -75,7 +75,6 @@ class HomeRoomManager extends RoomManager {
                 'startFlagName': startFlagName,
                 'endFlagName': endFlagName
             },
-            'creepPriority': COLONY_MANAGEMENT_PRIORITY,
             'maxEnergyToSpend': Math.max(300, this.room.energyAvailable)
         };
         
@@ -92,8 +91,7 @@ class HomeRoomManager extends RoomManager {
             'creepProcessClass': 'TowerFiller',
             'creepMemory': {
                 'targetRoom': this.room.name
-            },
-            'creepPriority': NECESSARY_CREEPS_PRIORITY
+            }
         };
 
         var spawnPID ='spawnTowerFiller|' + this.room.name;
@@ -135,8 +133,7 @@ class HomeRoomManager extends RoomManager {
             'creepProcessClass': 'ColonyBuilder',
             'creepMemory': {
                 'targetColony': this.colony.name
-            },
-            'creepPriority': NECESSARY_CREEPS_PRIORITY
+            }
         };
 
         var spawnPID ='spawnColonyBuilder|' + this.room.name;
@@ -155,8 +152,7 @@ class HomeRoomManager extends RoomManager {
             'creepProcessClass': 'Upgrader',
             'creepMemory': {
                 'targetRoom': this.room.name
-            },
-            'creepPriority': ROOM_UPGRADE_CREEPS_PRIORITY
+            }
         };
 
         var spawnPID ='spawnUpgraders|' + upgraderCount + '|' + this.room.name;
@@ -175,8 +171,7 @@ class HomeRoomManager extends RoomManager {
             'creepProcessClass': 'UpgradeFeeder',
             'creepMemory': {
                 'targetRoom': this.room.name
-            },
-            'creepPriority': ROOM_UPGRADE_CREEPS_PRIORITY
+            }
         };
 
         var spawnPID ='spawnUpgradeFeeders|' + upgradeFeederCount + '|' + this.room.name;

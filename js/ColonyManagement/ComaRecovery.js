@@ -29,7 +29,6 @@ class ComaRecovery extends Process {
             'creepMemory': {
                 'targetRoom': this.memory.targetRoomName
             },
-            'creepPriority': this.metadata.defaultPriority,
             'maxEnergyToSpend': 300
         };
         

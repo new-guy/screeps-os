@@ -10,7 +10,6 @@ class SpawnCreep extends Process {
         this.creepBodyType = this.memory.creepBodyType;
         this.creepProcessClass = this.memory.creepProcessClass;
         this.creepMemory = this.memory.creepMemory;
-        this.creepPriority = this.memory.creepPriority;
         this.maxEnergyToSpend = this.memory.maxEnergyToSpend;
     }
 

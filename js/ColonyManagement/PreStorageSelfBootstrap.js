@@ -40,8 +40,7 @@ class PreStorageSelfBootstrap extends Process {
             'creepProcessClass': 'BootStrapper',
             'creepMemory': {
                 'targetRoom': this.targetRoom.name
-            },
-            'creepPriority': NECESSARY_CREEPS_PRIORITY
+            }
         };
         
         var spawnPID = 'spawnPreStorSelfBoot|' + bootstrappersToSpawn + '|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;

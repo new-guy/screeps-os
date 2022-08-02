@@ -149,8 +149,7 @@ class ColonyManager extends Process {
             'creepProcessClass': 'Claimer',
             'creepMemory': {
                 'targetRoom': this.secondaryRoom.name
-            },
-            'creepPriority': COLONY_MANAGEMENT_PRIORITY
+            }
         };
         
         var spawnPID = 'spawnExpansionClaimer|' + this.colony.name + '|' + this.secondaryRoom.name;

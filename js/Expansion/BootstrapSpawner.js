@@ -57,7 +57,6 @@ class BootstrapSpawner extends Process {
             'creepMemory': {
                 'targetRoom': this.memory.targetRoomName
             },
-            'creepPriority': this.metadata.defaultPriority,
             'maxEnergyToSpend': this.memory.maxEnergyPerCreep
         };
         
