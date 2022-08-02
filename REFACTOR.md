@@ -45,6 +45,7 @@ Ticks remaining in Safe mode
 - Are the storage support bootstrappers useful?
 - Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
     - Probably should minimize the differentiation in general to help simplify things
+        - We reference the word "secondaary" 154 times :|
     - We get so much fucking complexity from having primary and secondary so thoroughly in the code.  Need to remove that logic wherever we can
     - Bootstrappers should be colony-level rather than room-level
     - Growth pattern should be
