@@ -1,9 +1,5 @@
 const Process = require('Process');
 
-var TICKS_BETWEEN_ROAD_CONSTRUCTION_SITE_UPDATES = 100;
-var TICKS_BETWEEN_FULL_ROAD_RECALCULATION = 1500;
-
-
 class RoadGenerator extends Process {
     constructor (...args) {
         super(...args);
@@ -64,7 +60,7 @@ class RoadGenerator extends Process {
         this.generateControllerRoad(this.colony.primaryRoom);
         this.generateControllerRoad(this.colony.secondaryRoom);
 
-        if(Game.scheduler.getProcess(this.name + '|energyHarvestingManager') !== undefined) {
+        if(Game.scheduler.getProcess(this.colony.name + '|energyHarvestingManager') !== undefined) {
             this.generateMiningRouteRoads();
         }
     }
