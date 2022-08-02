@@ -117,11 +117,11 @@ class ColonyManager extends Process {
 
             //Bootstrap Scheduling
             if(this.secondaryRoom.controller.level >= 2 && this.primaryRoom.controller.level <= 4 && this.primaryRoom.storage === undefined) {
-                this.supportBootstrap(this.primaryRoom);
+                this.storageBootstrap(this.primaryRoom);
             }
 
             else if(this.secondaryRoom.controller.level >= 2 && this.secondaryRoom.storage === undefined && this.primaryRoom.storage !== undefined) {
-                this.supportBootstrap(this.secondaryRoom);
+                this.storageBootstrap(this.secondaryRoom);
             }
         }
     }
@@ -170,8 +170,8 @@ class ColonyManager extends Process {
         this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
-    supportBootstrap(roomToSupport) {
-        var bootstrappersToSpawn = 15;
+    storageBootstrap(roomToSupport) {
+        var bootstrappersToSpawn = COLONY_STORAGE_SUPPORT_BOOTSTRAPPERS;
 
         var data = {
             'targetRoomName': roomToSupport.name,
@@ -182,7 +182,7 @@ class ColonyManager extends Process {
             'creepNameBase': 'support' + roomToSupport.name
         };
         
-        var spawnPID = 'supportBootstrap|' + bootstrappersToSpawn + '|' + this.name + '|' + roomToSupport.name;
+        var spawnPID = 'storageBootstrap|' + bootstrappersToSpawn + '|' + this.name + '|' + roomToSupport.name;
         this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_EXPANSION_SUPPORT);
     }
 

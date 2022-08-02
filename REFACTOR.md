@@ -41,6 +41,9 @@ Ticks remaining in Safe mode
     - Honestly might not be that big of a deal.  Might be more effort and code complexity than it's worth
 - After filling a factory, bootstrappers should look to see if they can find another factory before continuing on
 
+### Functionality to remove
+- Are the storage support bootstrappers useful?
+
 ### Refactors
 - Consolidate room/creep/colony/game tools/prototype modifications into files to make them more sensible
 - Booleans should be words instead of lots of &&s and ||s
