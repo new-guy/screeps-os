@@ -53,7 +53,7 @@ class ColonyScoutingManager extends Process {
 
                     var spawnPriority = COLONY_SCOUTING_PRIORITY;
 
-                    if(distance === 1) spawnPriority = COLONY_ADJACENT_SCOUT_PRIORITY;
+                    if(distance === "1") spawnPriority = COLONY_ADJACENT_SCOUT_PRIORITY;
 
                     if(Memory.scouting.rooms[roomName] === undefined)  {
                         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, spawnPriority);

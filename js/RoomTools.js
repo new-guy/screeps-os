@@ -23,9 +23,6 @@ Room.prototype.getPlainsPercentage = function() {
 	return numPlains/tilesInRoom;
 }
 
-var WORK_PARTS_FOR_SAFE = 3;
-var MINIMUM_ENERGY_FOR_SAFE = 50000;
-
 Room.prototype.isInComa = function() {
 	if(this.controller === undefined || !this.controller.my) {
 		return false;
@@ -42,11 +39,11 @@ Room.prototype.isInComa = function() {
 			workPartCount += workParts;
 		}
 
-		return workPartCount < WORK_PARTS_FOR_SAFE;
+		return workPartCount < COMA_WORK_PARTS_FOR_SAFE;
 	}
 
 	else  {
-		return this.storage.store[RESOURCE_ENERGY] < MINIMUM_ENERGY_FOR_SAFE;
+		return this.storage.store[RESOURCE_ENERGY] < COMA_MINIMUM_ENERGY_FOR_SAFE;
 	}
 }
 
