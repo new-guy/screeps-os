@@ -30,6 +30,7 @@ RCL3 Baseline Ticks remaining in Safe mode: 8500
 ### Speedup plans
 - Bootstrapper count should be much higher - remove limits and see what happens
     - If room is RCL1, there are no Game.creeps with the name colScout|W2N5
+    - Honestly might not be that big of a deal.  Might be more effort and code complexity than it's worth
 - After filling a factory, bootstrappers should look to see if they can find another factory before continuing on
 
 ### Refactors
