@@ -17,8 +17,6 @@ class ColonyScoutingManager extends Process {
     }
 
     update() {
-        console.log('Scouting Manager ' + this.pid + ' Colony: ' + this.memory.colonyName);
-
         if(super.update() == 'exit') {
             return 'exit';
         }
@@ -26,7 +24,6 @@ class ColonyScoutingManager extends Process {
         var roomsByDistance = this.colony.roomsByDistance;
 
         for(var distance in roomsByDistance) {
-            console.log(distance)
             var scoutInterval = DISTANCE_SCOUT_INTERVAL[distance];
 
             if(scoutInterval === undefined) scoutInterval = DEFAULT_SCOUT_INTERVAL;
