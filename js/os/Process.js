@@ -66,7 +66,7 @@ class Process {
             this.memory.children.splice(pidIndex, 1);
         }
 
-        this.scheduler.removeProcess(pid);
+        this.scheduler.garbageCollectProcess(pid);
     }
 
     saveMemory() {
@@ -98,7 +98,7 @@ class Process {
     killAllChildren() {
         while(this.memory.children.length > 0) {
             var pid = this.memory.children.shift();
-            this.scheduler.removeProcess(pid);
+            this.scheduler.garbageCollectProcess(pid);
         }
     }
 }

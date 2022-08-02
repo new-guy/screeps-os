@@ -47,7 +47,7 @@ Creep.prototype.buildTarget = function() {
             }
     
             else {
-                this.sayInOrder(['Let\'s', 'get', 'that', 'bread']);
+                this.sayInOrder(['Let\'s', 'get', 'this', 'bread']);
             }
         }
     }

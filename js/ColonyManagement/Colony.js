@@ -479,7 +479,7 @@ class Colony {
         }
     }
 
-    spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepProcessPriority, maxEnergyToSpend=undefined) {
+    spawnCreep(creepName, creepPid, creepBodyType, creepProcessClass, creepMemory, creepProcessPriority, maxEnergyToSpend=undefined) {
         var spawn = this.getCapableSpawn(creepBodyType, maxEnergyToSpend);
 
         if(spawn !== false) {
@@ -491,7 +491,7 @@ class Colony {
             //Try to spawn.  If we can, add the process to the scheduler.  If not, print why
 
             creepMemory['spawningColonyName'] = this.name;
-            creepMemory['pid'] = 'creep|' + creepName;
+            creepMemory['pid'] = creepPid;
             creepMemory['creepProcessClass'] = creepProcessClass;
             creepMemory['bodyType'] = creepBodyType;
 

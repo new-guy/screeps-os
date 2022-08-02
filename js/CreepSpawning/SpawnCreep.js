@@ -21,13 +21,18 @@ class SpawnCreep extends Process {
         if(this.colony.spawnIsAvailable(this.creepBodyType, this.maxEnergyToSpend)) {
             for(var i = 0; i < this.creepCount; i++) {
                 var creepName = this.creepNameBase + "|" + i;
-                if(Game.creeps[creepName] !== undefined) {
-                    //creep exists
+                var creepPid = 'creep|' + creepName;
+
+                if(Game.creeps[creepName] !== undefined || this.scheduler.processExists(creepPid)) {
+                    if(Game.creeps[creepName] === undefined && this.scheduler.processExists(creepPid)) {
+                        console.log('WAITING TO SPAWN CREEP ' + creepName + ' BECAUSE PROCESS EXISTS')
+                    }
+                    //creep exists or process exists
                     continue;
                 }
                 
                 console.log(this.pid + ' trying to spawn ' + creepName);
-                this.colony.spawnCreep(creepName, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.metadata.priority, this.maxEnergyToSpend);
+                this.colony.spawnCreep(creepName, creepPid, this.creepBodyType, this.creepProcessClass, this.creepMemory, this.metadata.priority, this.maxEnergyToSpend);
                 break;
             }
         }

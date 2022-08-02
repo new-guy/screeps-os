@@ -169,7 +169,7 @@ class Scheduler {
         var processResult = activeProcess.finish();
 
         if(processResult == 'exit') {
-            this.removeProcess(activeProcessMetadata['pid']);
+            this.garbageCollectProcess(activeProcessMetadata['pid']);
         }
 
         else {
@@ -244,18 +244,16 @@ class Scheduler {
         }
     }
 
-    removeProcess(pid) {
+    garbageCollectProcess(pid) {
     //Recursively remove the process from memory, along with its child processes
         if(Memory.processes[pid] !== undefined)
         {
             if(Memory.processes[pid]['data']['children'] !== undefined) {
                 for(var i = 0; i < Memory.processes[pid]['data']['children'].length; i++) {
                     var childProcessPid = Memory.processes[pid]['data']['children'][i];
-                    this.removeProcess(childProcessPid);
+                    this.garbageCollectProcess(childProcessPid);
                 }
             }
-    
-            Memory.processes[pid] = undefined;
         }
 
         this.processesBeingRemoved.push(pid);
