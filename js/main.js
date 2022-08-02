@@ -20,7 +20,6 @@ require('RoomPositionTools');
 
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
-const CreepProcessHelper = require('CreepProcessHelper');
 
 //Stats
 const Metrics = require('Metrics');
@@ -31,7 +30,6 @@ module.exports.loop = function() {
 
     const scheduler = new Scheduler();
     Game.scheduler = scheduler;
-    CreepProcessHelper.ensureCreepProcesses();
     scheduler.update();
     scheduler.garbageCollect();
     Metrics.update();

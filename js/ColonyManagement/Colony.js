@@ -479,7 +479,7 @@ class Colony {
         }
     }
 
-    spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, maxEnergyToSpend=undefined) {
+    spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepProcessPriority, maxEnergyToSpend=undefined) {
         var spawn = this.getCapableSpawn(creepBodyType, maxEnergyToSpend);
 
         if(spawn !== false) {
@@ -493,13 +493,14 @@ class Colony {
             creepMemory['spawningColonyName'] = this.name;
             creepMemory['pid'] = 'creep|' + creepName;
             creepMemory['creepProcessClass'] = creepProcessClass;
-            creepMemory['creepPriority'] = creepPriority;
+            creepMemory['creepProcessPriority'] = creepProcessPriority;
             creepMemory['bodyType'] = creepBodyType;
 
             var spawnResult = spawn.spawnCreep(body, creepName, {memory: creepMemory});
 
             if(spawnResult === OK) {
                 console.log('Spawning creep ' + creepName);
+                Game.scheduler.addProcess(creepMemory['pid'], creepProcessClass, {'creepName': creepName}, creepProcessPriority);
 
                 this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
             }
