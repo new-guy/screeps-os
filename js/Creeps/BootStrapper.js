@@ -177,7 +177,13 @@ class BootStrapper extends CreepProcess {
                 this.creep.setTarget(closestTower)
             }
             else {
-                console.log("Error finding half full tower for " + this.creep.name);
+                var firstHalfFullTower = workArea.halfFullTowers[0];
+                if(this.creep.room.name !== firstHalfFullTower.room.name) {
+                    this.creep.moveToRoom(firstHalfFullTower.room.name)
+                }
+                else {
+                    console.log("Error finding half full tower for " + this.creep.name);
+                }
             }
         }
 

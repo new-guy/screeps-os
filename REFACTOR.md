@@ -17,32 +17,10 @@ Ticks remaining in Safe mode
     - Pass 1:
 
 
-### Goals
-- Make the logic SIMPLER.  Delete code
-- Make the pre-RCL4 logic tighter and faster
-    - Get rid of unnecessary processes
-    - Tidy up the code
-    - Make it more efficient
-    - Make the logic controlling room state more reasonable
-
-### Steps
-- Iterate:
-    - Start from scratch
-    - Look at all the processes & read through the code to understand what is actually going on
-    - Fix underlying issues causing bugs & refactor
-    - Speed up time to RCL3
-        - Time baseline for getting to RCL3
-        - Make changes & see how it affects things
-- Go through this list and actually tidy it up lol
-
 ### Speedup plans
-- Bootstrapper count should be much higher - remove limits and see what happens
-    - If room is RCL1, there are no Game.creeps with the name colScout|W2N5
-    - Honestly might not be that big of a deal.  Might be more effort and code complexity than it's worth
-- After filling a factory, bootstrappers should look to see if they can find another factory before continuing on
 
 ### Functionality to change
-- No defenses between the two colonies :|
+- New Defense Code
 - Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
     - Probably should minimize the differentiation in general to help simplify things
         - We reference the word "secondaary" 154 times :|
@@ -50,6 +28,7 @@ Ticks remaining in Safe mode
 
 ### Refactors
 - Consolidate room/creep/colony/game tools/prototype modifications into files to make them more sensible
+- Get rid of targetRoom for bootstrapper
 - Booleans should be words instead of lots of &&s and ||s
 - Move constants to constants.js
 - CreepSpawners are way too verbose to define
