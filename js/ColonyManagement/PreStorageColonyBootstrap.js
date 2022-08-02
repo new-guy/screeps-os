@@ -8,6 +8,7 @@ class PreStorageColonyBootstrap extends Process {
         
         this.targetColony = Game.colonies[this.memory.targetColonyName];
         this.spawnColony = Game.colonies[this.memory.spawnColonyName];
+        this.spawnPidPrefix = this.memory.spawnPidPrefix;
     }
 
     update() {
@@ -32,7 +33,11 @@ class PreStorageColonyBootstrap extends Process {
             }
         };
         
-        var spawnPID = 'spawnPreStorSelfBoot|' + bootstrappersToSpawn + '|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
+        var spawnPID = 'spawnPreStorSelfBoot|' + bootstrappersToSpawn + '|' + this.memory.spawnColonyName + '|' + this.memory.spawnColonyName;
+        if(this.spawnPidPrefix !== undefined) {
+            spawnPID = this.spawnPidPrefix + spawnPID;
+            data['creepNameBase'] = this.spawnPidPrefix + data['creepNameBase']
+        }
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
