@@ -7,7 +7,14 @@
 - Move behavior config constants into constants.js
 
 ## Plan
-RCL3 Baseline Ticks remaining in Safe mode: 8500
+
+### Records
+Ticks remaining in Safe mode
+- RCL3 
+    - Baseline: 8500
+    - Pass 1: 10500
+- RCL4
+    - Pass 1:
 
 
 ### Goals
@@ -35,6 +42,7 @@ RCL3 Baseline Ticks remaining in Safe mode: 8500
 - After filling a factory, bootstrappers should look to see if they can find another factory before continuing on
 
 ### Refactors
+- Consolidate room/creep/colony/game tools/prototype modifications into files to make them more sensible
 - Booleans should be words instead of lots of &&s and ||s
 - Move constants to constants.js
 - CreepSpawners are way too verbose to define
@@ -46,5 +54,3 @@ RCL3 Baseline Ticks remaining in Safe mode: 8500
 ### Fixes
 - Should plan all building placement from the beginning and store it in an array
 - Road generation should use the planned storage rather than the actual storage
-
-- creepPriority doesn't seem to be used at all - the thing that controls spawn priority is process priority, which means that the bootstrap spawner always beats out the scout spawner.  We could just remove creepPriority and when a CreepSpawn process gets skipped over, increase its priority in addition to sleeping (up to a threshold)

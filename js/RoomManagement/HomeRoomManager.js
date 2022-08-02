@@ -30,7 +30,7 @@ class HomeRoomManager extends RoomManager {
             this.ensureBalancers();
         }
 
-        if(this.room.halfFullTowers.length > 0) {
+        if(this.room.halfFullTowers.length > 0 && this.room.storage !== undefined) {
             this.ensureTowerFillers();
         }
 
