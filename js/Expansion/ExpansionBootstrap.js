@@ -27,7 +27,7 @@ class ExpansionBootstrap extends Process {
         };
         
         var spawnPID = 'ExpansionBootstrapSpawner|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
-        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_NONESSENTIAL_PRIORITY);
+        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_EXPANSION_SUPPORT);
     }
 
     processShouldDie() {

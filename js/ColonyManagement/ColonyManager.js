@@ -79,7 +79,7 @@ class ColonyManager extends Process {
         if(this.roomIsPreStorage(this.primaryRoom)) {
             var bootstrapPID = 'preStorSelfBoot|' + this.primaryRoom.name + '|' + this.primaryRoom.name;
             var data = {'targetRoomName': this.primaryRoom.name, 'spawnColonyName': this.primaryRoom.name};
-            this.ensureChildProcess(bootstrapPID, 'PreStorageSelfBootstrap', data, NECESSARY_CREEPS_PRIORITY);
+            this.ensureChildProcess(bootstrapPID, 'PreStorageSelfBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
         }
 
         else {
@@ -114,7 +114,7 @@ class ColonyManager extends Process {
             if(this.secondaryRoom.controller.level < 2) {
                 var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
                 var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
-                this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, NECESSARY_CREEPS_PRIORITY);
+                this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_EXPANSION_SUPPORT);
             }
 
             //Bootstrap Scheduling
@@ -169,7 +169,7 @@ class ColonyManager extends Process {
         };
         
         var spawnPID = 'secondarySelfBootstrap|' + bootstrappersToSpawn + '|' + this.name + '|' + this.secondaryRoom.name;
-        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, NECESSARY_CREEPS_PRIORITY);
+        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
     supportBootstrap(roomToSupport) {
@@ -185,7 +185,7 @@ class ColonyManager extends Process {
         };
         
         var spawnPID = 'supportBootstrap|' + bootstrappersToSpawn + '|' + this.name + '|' + roomToSupport.name;
-        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, NECESSARY_CREEPS_PRIORITY);
+        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_EXPANSION_SUPPORT);
     }
 
     ensureRoadGeneration() {

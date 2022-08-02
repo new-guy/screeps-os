@@ -26,6 +26,7 @@ RCL3 Baseline Ticks remaining in Safe mode: 8500
     - Speed up time to RCL3
         - Time baseline for getting to RCL3
         - Make changes & see how it affects things
+- Go through this list and actually tidy it up lol
 
 ### Speedup plans
 - Bootstrapper count should be much higher - remove limits and see what happens

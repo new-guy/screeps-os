@@ -95,7 +95,7 @@ class HomeRoomManager extends RoomManager {
         };
 
         var spawnPID ='spawnTowerFiller|' + this.room.name;
-        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, NECESSARY_CREEPS_PRIORITY);
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_DEFENSE_PRIORITY);
     }
 
     ensureDowngradeSafeguard() {
@@ -137,7 +137,7 @@ class HomeRoomManager extends RoomManager {
         };
 
         var spawnPID ='spawnColonyBuilder|' + this.room.name;
-        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, NECESSARY_CREEPS_PRIORITY);
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BUILDER_PRIORITY);
     }
 
     ensureUpgraders() {
