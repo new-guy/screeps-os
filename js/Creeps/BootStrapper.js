@@ -153,8 +153,8 @@ class BootStrapper extends CreepProcess {
 
         var workArea = this.mode === "room" ? this.targetRoom : this.targetColony;
 
-        if((this.creep.room.storage !== undefined && this.creep.room.isInComa()) ||
-           (this.creep.room.storage === undefined && workArea.energyAvailable < workArea.energyCapacityAvailable && this.creep.hasEnergy)) {
+        if(((this.creep.room.storage !== undefined && this.creep.room.isInComa()) || this.creep.room.storage === undefined)
+           && workArea.energyAvailable < workArea.energyCapacityAvailable && this.creep.hasEnergy) {
             var closestNonFullFactory = this.creep.pos.findClosestByPath(workArea.nonFullFactories);
 
             if(closestNonFullFactory !== null) {

@@ -20,7 +20,10 @@ Ticks remaining in Safe mode
 ### Speedup plans
 
 ### Functionality to change
+- Small balancer is such a waste
 - New Defense Code
+    - Both creating defenses and killing enemies
+- Scouting needs to detect when destinations are dangerous and set a value in the room's memory that can then be checked by other processes
 - Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
     - Probably should minimize the differentiation in general to help simplify things
         - We reference the word "secondaary" 154 times :|

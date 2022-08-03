@@ -13,6 +13,10 @@ COLONY_NONESSENTIAL_PRIORITY = 50;
 DEFAULT_PRIORITY = 10;
 
 
+//IDK LIKE FUCKIN STUFF OR WHATEVER
+SMALL_BALANCER_CARRY_PARTS = 4; //If it's less than or equal to this, the balancer is considered small, which means it gets killed if the room is full on its balancer :)
+
+
 // Colony configuration
 COLONY_MAX_RANGE = 2;
 COLONY_MAX_ROOMS_TO_TRAVEL = 2;

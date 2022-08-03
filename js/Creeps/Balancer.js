@@ -16,7 +16,11 @@ class Balancer extends CreepProcess {
             return 'exit';
         }
 
-        
+        if(this.isTooSmall()) {
+            this.creep.kill();
+            return;
+        }
+
         if(this.creep.memory.hasInitialized !== true) {
             this.calculatePaths();
             this.setEnergySource();
@@ -24,6 +28,13 @@ class Balancer extends CreepProcess {
 
             this.creep.memory.hasInitialized = true;
         }
+    }
+
+    isTooSmall() {
+        var roomIsFull = this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable;
+        var creepIsSmall = this.creep.body.length <= SMALL_BALANCER_CARRY_PARTS*2;
+
+        return roomIsFull && creepIsSmall;
     }
 
     updateStateTransitions() {
