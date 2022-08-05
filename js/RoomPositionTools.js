@@ -64,6 +64,8 @@ RoomPosition.prototype.creepExists = function()
 
 RoomPosition.prototype.getStructure = function(structureType)
 {
+	if(this.room === undefined) return null;
+
 	var structureArray = this.lookFor(LOOK_STRUCTURES);
 
 	if(structureType === undefined)

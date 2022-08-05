@@ -129,7 +129,7 @@ class HomeRoomManager extends RoomManager {
     get shouldUpgrade() {
         var harvestDest = this.room.harvestDestination;
 
-        if(harvestDest !== undefined) {
+        if(harvestDest !== undefined && harvestDest !== null) {
             if(harvestDest.structureType === STRUCTURE_CONTAINER) {
                 return harvestDest.store[RESOURCE_ENERGY] > ROOM_UPGRADE_MINIMUM_ENERGY_CONTAINER;
             }
