@@ -67,7 +67,6 @@ RoomPosition.prototype.getStructure = function(structureType)
 	if(Game.rooms[this.roomName] === undefined) return null;
 
 	var structureArray = this.lookFor(LOOK_STRUCTURES);
-	console.log(structureArray);
 
 	if(structureType === undefined)
 	{

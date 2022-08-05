@@ -74,10 +74,7 @@ class UpgradeFeeder extends CreepProcess {
         var closestNonFullUpgrader = this.creep.pos.findClosestByRange(nonFullUpgraders);
         if(closestNonFullUpgrader === null) return;
 
-        console.log(closestNonFullUpgrader.memory.creepProcessClass);
-        console.log(closestNonFullUpgrader.carry[RESOURCE_ENERGY]);
         this.creep.setTarget(closestNonFullUpgrader);
-        console.log(this.creep.getTarget());
     }
 }
 
