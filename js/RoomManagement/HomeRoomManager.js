@@ -120,8 +120,23 @@ class HomeRoomManager extends RoomManager {
             this.ensureColonyBuilder();
         }
 
-        this.ensureUpgraders();
-        this.ensureUpgradeFeeders();
+        if(this.shouldUpgrade) {
+            this.ensureUpgraders();
+            this.ensureUpgradeFeeders();
+        }
+    }
+
+    get shouldUpgrade() {
+        var harvestDest = this.room.harvestDestination;
+
+        if(harvestDest !== undefined) {
+            if(harvestDest.structureType === STRUCTURE_CONTAINER) {
+                return harvestDest.store[RESOURCE_ENERGY] > ROOM_UPGRADE_MINIMUM_ENERGY_CONTAINER;
+            }
+            if(harvestDest.structureType === STRUCTURE_STORAGE) {
+                return harvestDest.store[RESOURCE_ENERGY] > ROOM_UPGRADE_MINIMUM_ENERGY_STORAGE;
+            }
+        }
     }
 
     ensureColonyBuilder() {
