@@ -1,10 +1,6 @@
 const Process = require('Process');
 const BodyGenerator = require('BodyGenerator');
 
-var HAULER_COUNT = 2;
-
-var REMAINING_TICKS_TO_SPAWN_RESERVER = 3000;
-
 class EnergyRouteManager extends Process {
     constructor (...args) {
         super(...args);

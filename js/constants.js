@@ -17,6 +17,14 @@ DEFAULT_PRIORITY = 10;
 SMALL_BALANCER_CARRY_PARTS = 4; //If it's less than or equal to this, the balancer is considered small, which means it gets killed if the room is full on its balancer :)
 
 
+// Mining route configuration
+MAX_TICKS_TO_USE_PER_SPAWN = 700;
+TARGET_ROUTES_PER_STORAGE = 5;
+TIME_BETWEEN_PURGES = 1500;
+HAULER_COUNT = 2;
+REMAINING_TICKS_TO_SPAWN_RESERVER = 3000;
+
+
 // Colony configuration
 COLONY_MAX_RANGE = 2;
 COLONY_MAX_ROOMS_TO_TRAVEL = 2;
