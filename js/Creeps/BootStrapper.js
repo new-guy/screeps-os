@@ -196,8 +196,8 @@ class BootStrapper extends CreepProcess {
             if(this.mode === 'room') {
                 this.creep.setTarget(workArea.mostBuiltConstructionSite);
             }
-            else if(this.room.constructionSites !== undefined && this.room.constructionSites.length > 0) {
-                this.creep.setTarget(this.room.mostBuiltConstructionSite);
+            else if(this.creep.room.constructionSites !== undefined && this.creep.room.constructionSites.length > 0) {
+                this.creep.setTarget(this.creep.room.mostBuiltConstructionSite);
             }
             else if(this.mode === 'colony') {
                 this.creep.setTarget(workArea.roomMostNeedingBuilder.mostBuiltConstructionSite);
