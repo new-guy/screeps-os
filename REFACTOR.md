@@ -30,6 +30,7 @@ Ticks remaining in Safe mode
     - We get so much fucking complexity from having primary and secondary so thoroughly in the code.  Need to remove that logic wherever we can
 
 ### Refactors
+- Change most built construction site in bootstrapper and builder to "highest priority" so that we can use both "most built" and also set a build order by building type priority
 - Make construction use memory objects instead of flags, and be able to draw it on the friggin map
     - Make road generation use the same logic that construction does
 - Either use Null or undefined - stop mixing
