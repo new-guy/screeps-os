@@ -32,7 +32,7 @@ class EnergyRouteManager extends Process {
 
         this.spawnMiner();
 
-        if(this.minerExists) {
+        if(this.minerExists && this.sourceContainerExists) {
             this.spawnHauler();
         }
 
@@ -85,6 +85,10 @@ class EnergyRouteManager extends Process {
         }
 
         return waitingForReserver;
+    }
+
+    get sourceContainerExists() {
+        return (this.sourceContainer !== undefined && this.sourceContainer !== null);
     }
 
     getUsedTicks() {
@@ -168,6 +172,14 @@ class EnergyRouteManager extends Process {
         if(reservation === undefined) return true;
 
         return reservation.ticksToEnd < REMAINING_TICKS_TO_SPAWN_RESERVER;
+    }
+
+    get sourceContainer() {
+        if(this.memory.containerPos === undefined) return undefined;
+
+        var containerPos = new RoomPosition(this.memory.containerPos.x, this.memory.containerPos.y, this.memory.containerPos.roomName);
+
+        return containerPos.getStructure(STRUCTURE_CONTAINER);
     }
 
     spawnScout() {

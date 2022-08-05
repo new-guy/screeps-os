@@ -149,7 +149,9 @@ class EnergyHarvestingManager extends Process {
 
         var totalRoutes = this.memory.children.length;
         var targetRoutes = this.colony.primaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
-        targetRoutes += this.colony.secondaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+
+        if (this.colony.secondaryRoom !== undefined)
+            targetRoutes += this.colony.secondaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
 
         var totalMaxTicks = this.colony.spawns.length * MAX_TICKS_TO_USE_PER_SPAWN;
 
