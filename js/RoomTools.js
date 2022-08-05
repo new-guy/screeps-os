@@ -28,7 +28,7 @@ Room.prototype.isInComa = function() {
 		return false;
 	}
 
-	if(this.storage === undefined) {
+	if(this.harvestDestination === undefined || this.harvestDestination.structureType === STRUCTURE_CONTAINER) {
 		var workPartCount = 0;
 
 		for(var i = 0; i < this.friendlies.length; i++) {
@@ -42,9 +42,11 @@ Room.prototype.isInComa = function() {
 		return workPartCount < COMA_WORK_PARTS_FOR_SAFE;
 	}
 
-	else  {
-		return this.storage.store[RESOURCE_ENERGY] < COMA_MINIMUM_ENERGY_FOR_SAFE;
+	else if(this.harvestDestination.structureType === STRUCTURE_STORAGE) {
+		return this.harvestDestination.store[RESOURCE_ENERGY] < COMA_MINIMUM_ENERGY_FOR_SAFE;
 	}
+
+	else return true;
 }
 
 Room.prototype.removeAllConstructionSites = function(structureType=undefined) {

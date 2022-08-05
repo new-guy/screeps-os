@@ -67,17 +67,17 @@ class RoadGenerator extends Process {
 
     generateHeartHighway() {
         if(this.colony.primaryRoom === undefined || this.colony.secondaryRoom === undefined) return;
-        if(this.colony.primaryRoom.storage === undefined || this.colony.secondaryRoom.storage === undefined) return;
-        var storageOne = this.colony.primaryRoom.storage;
-        var storageTwo = this.colony.secondaryRoom.storage;
+        if(this.colony.primaryRoom.harvestDestination === undefined || this.colony.secondaryRoom.harvestDestination === undefined) return;
+        var storageOne = this.colony.primaryRoom.harvestDestination;
+        var storageTwo = this.colony.secondaryRoom.harvestDestination;
 
         this.colony.roadmap.makeRoad(storageOne.pos, storageTwo.pos);
     }
 
     generateControllerRoad(room) {
-        if(room === undefined || room.storage === undefined) return;
+        if(room === undefined || room.harvestDestination === undefined) return;
 
-        this.colony.roadmap.makeRoad(room.storage.pos, room.controller.pos);
+        this.colony.roadmap.makeRoad(room.harvestDestination.pos, room.controller.pos);
     }
 
     generateMiningRouteRoads() {
@@ -86,15 +86,15 @@ class RoadGenerator extends Process {
 
         for(var i = 0; i < miningProcesses.length; i++) {
             var process = miningProcesses[i];
-            var storage = Game.getObjectById(process.memory.targetStorageId);
+            var harvestDestination = Game.rooms[process.memory.targetStorageRoom].harvestDestination;
             
-            if(storage === null || process.memory.containerPos === undefined) {
+            if(harvestDestination === null || process.memory.containerPos === undefined) {
                 continue;
             }
 
             var containerPos = new RoomPosition(process.memory.containerPos['x'], process.memory.containerPos['y'], process.memory.containerPos['roomName']);
 
-            this.colony.roadmap.makeRoad(storage.pos, containerPos);
+            this.colony.roadmap.makeRoad(harvestDestination.pos, containerPos);
         }
     }
 

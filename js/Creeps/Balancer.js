@@ -100,7 +100,7 @@ class Balancer extends CreepProcess {
             energySource = Game.getObjectById(this.creep.memory.energySourceId);
 
             if(energySource === null && (bufferContainer === null || (bufferContainer !== null &&  bufferContainer.store[RESOURCE_ENERGY] === 0))) {
-                this.creep.getEnergyFromStorage(this.creep.room);
+                this.creep.getEnergyFromHarvestDestination(this.creep.room);
 
                 return;
             }

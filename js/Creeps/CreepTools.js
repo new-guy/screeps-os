@@ -75,7 +75,7 @@ Creep.prototype.fillAdjacentFactories = function()
 		var workingStructure = adjacentStructureArray[i];
 
 		if ((workingStructure.structureType === STRUCTURE_EXTENSION || 
-			(this.room.storage !== undefined && workingStructure.structureType === STRUCTURE_SPAWN)) && 
+			(this.room.harvestDestination !== undefined && workingStructure.structureType === STRUCTURE_SPAWN)) && 
 			workingStructure.energy < workingStructure.energyCapacity)
 		{
 			this.cancelOrder('move');

@@ -124,6 +124,19 @@ function initRooms() {
             room.halfFullTowers = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_TOWER && s.energy < s.energyCapacity/2 
             }});
+
+            if(Game.flags['!HARVESTDEST|' + room.name] !== undefined) {
+                var harvestDestFlag = Game.flags['!HARVESTDEST|' + room.name];
+                room.memory['harvestDestination'] = {'x': harvestDestFlag.pos.x, 'y': harvestDestFlag.pos.y};
+                harvestDestFlag.remove();
+            }
+
+            if(room.memory['harvestDestination'] !== undefined) {
+                var destinationPos = new RoomPosition(room.memory['harvestDestination']['x'], room.memory['harvestDestination']['y'], room.name);
+                
+                if(destinationPos.structureExists(STRUCTURE_STORAGE)) room.harvestDestination = destinationPos.getStructure(STRUCTURE_STORAGE);
+                if(destinationPos.structureExists(STRUCTURE_CONTAINER)) room.harvestDestination = destinationPos.getStructure(STRUCTURE_CONTAINER);
+            }
         }
 
         room.enemies = room.find(FIND_CREEPS, {filter: function(c) { return c.isHostile(); }});

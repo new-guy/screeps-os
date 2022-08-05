@@ -41,7 +41,7 @@ class UpgradeFeeder extends CreepProcess {
     performStateActions() {
         var state = this.creep.memory.state;
         if(state === 'pickupEnergy') {
-            this.creep.getEnergyFromStorage(this.targetRoom);
+            this.creep.getEnergyFromHarvestDestination(this.targetRoom);
         }
 
         else if(state === 'feedUpgraders') {

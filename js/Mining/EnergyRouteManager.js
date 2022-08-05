@@ -10,7 +10,7 @@ class EnergyRouteManager extends Process {
         super(...args);
         
         this.targetSourcePos = new RoomPosition(this.memory.targetSourcePos.x, this.memory.targetSourcePos.y, this.memory.targetSourcePos.roomName);
-        this.targetStorage = Game.getObjectById(this.memory.targetStorageId);
+        this.targetStorageRoom = Game.rooms[this.memory.targetStorageRoom];
         this.spawnColony = Game.colonies[this.memory.spawnColonyName];
 
         if(this.memory.containerPos === undefined) {
@@ -23,7 +23,7 @@ class EnergyRouteManager extends Process {
             return 'exit';
         }
 
-        if(this.memory.containerPos === undefined || this.targetStorage === null) {
+        if(this.memory.containerPos === undefined || this.targetStorageRoom === null) {
             this.spawnScout();
             return 'continue';
         }
@@ -40,7 +40,7 @@ class EnergyRouteManager extends Process {
 
     drawRouteInfo() {
         var format = {align: 'left'};
-        new RoomVisual(this.memory.containerPos['roomName']).text('Dest: ' + this.targetStorage.pos.roomName, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'], format);
+        new RoomVisual(this.memory.containerPos['roomName']).text('Dest: ' + this.targetStorageRoom.name, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'], format);
     }
 
     isOperational() {
@@ -122,7 +122,7 @@ class EnergyRouteManager extends Process {
             'creepBodyType': 'Hauler',
             'creepProcessClass': 'Hauler',
             'creepMemory': {
-                'targetStorageId': this.targetStorage.id,
+                'targetStorageRoom': this.targetStorageRoom.name,
                 'containerPos': this.memory.containerPos
             }
         };

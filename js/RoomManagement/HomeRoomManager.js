@@ -26,11 +26,11 @@ class HomeRoomManager extends RoomManager {
         }
         //If we're pre-storage, bootstrap
 
-        if(this.room.storage !== undefined) {
+        if(this.room.harvestDestination !== undefined) {
             this.ensureBalancers();
         }
 
-        if(this.room.halfFullTowers.length > 0 && this.room.storage !== undefined) {
+        if(this.room.halfFullTowers.length > 0 && this.room.harvestDestination !== undefined) {
             this.ensureTowerFillers();
         }
 
@@ -38,11 +38,11 @@ class HomeRoomManager extends RoomManager {
             this.ensureDowngradeSafeguard();
         }
 
-        if(this.room.storage !== undefined && this.room.state === 'default') {
+        if(this.room.harvestDestination !== undefined && this.room.state === 'default') {
             this.ensureDefaultUnits();
         }
 
-        if(this.room.storage !== undefined || this.room.controller.level >= 5) {
+        if(this.room.harvestDestination !== undefined || this.room.controller.level >= 5) {
             this.ensureDefenses();
         }
     }
@@ -141,7 +141,7 @@ class HomeRoomManager extends RoomManager {
     }
 
     ensureUpgraders() {
-        var energyInStorage = this.room.storage.store[RESOURCE_ENERGY];
+        var energyInStorage = this.room.harvestDestination.store[RESOURCE_ENERGY];
         var upgraderCount = Math.max(1, Math.floor(energyInStorage/ENERGY_PER_EXTRA_UPGRADER));
 
         var data = {
@@ -160,7 +160,7 @@ class HomeRoomManager extends RoomManager {
     }
 
     ensureUpgradeFeeders() {
-        var energyInStorage = this.room.storage.store[RESOURCE_ENERGY];
+        var energyInStorage = this.room.harvestDestination.store[RESOURCE_ENERGY];
         var upgradeFeederCount = Math.max(1, Math.floor(energyInStorage/ENERGY_PER_EXTRA_UPGRADER));
 
         var data = {

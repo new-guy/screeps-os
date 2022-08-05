@@ -23,14 +23,14 @@ exports.update = function()
 				}
 			};
 
-			if(room.storage !== undefined) {
-				Memory.stats.rooms[roomName]['Storage'] = room.storage.store;
+			if(room.harvestDestination !== undefined) {
+				Memory.stats.rooms[roomName]['Storage'] = room.harvestDestination.store;
 
-				for(var resourceType in room.storage.store) {
-					if(resourceType === RESOURCE_ENERGY) empireEnergy += room.storage.store[resourceType];
+				for(var resourceType in room.harvestDestination.store) {
+					if(resourceType === RESOURCE_ENERGY) empireEnergy += room.harvestDestination.store[resourceType];
 					else {
-						if(empireResources[resourceType] === undefined) empireResources[resourceType] = room.storage.store[resourceType];
-						else empireResources[resourceType] += room.storage.store[resourceType];
+						if(empireResources[resourceType] === undefined) empireResources[resourceType] = room.harvestDestination.store[resourceType];
+						else empireResources[resourceType] += room.harvestDestination.store[resourceType];
 					}
 				}
 			}

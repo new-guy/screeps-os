@@ -93,40 +93,40 @@ Creep.prototype.moveRandom = function() {
     this.move(moveDirection);
 }
 
-Creep.prototype.getEnergyFromStorage = function(room) {
-    var storage = room.storage;
+Creep.prototype.getEnergyFromHarvestDestination = function(room) {
+    var harvestDestination = room.harvestDestination;
 
-    if(storage === undefined) {
+    if(harvestDestination === undefined) {
         this.say('NoStorage');
         return;
     }
 
     else {
-        if(this.pos.getRangeTo(storage) > 1) {
-            this.moveTo(storage);
+        if(this.pos.getRangeTo(harvestDestination) > 1) {
+            this.moveTo(harvestDestination);
         }
 
         else {
-            this.withdraw(storage, RESOURCE_ENERGY);
+            this.withdraw(harvestDestination, RESOURCE_ENERGY);
         }
     }
 }
 
-Creep.prototype.getEnergyFromClosestColonyStorage = function(colony) {
-    var storage = colony.getClosestStorage(this.pos, this.carryCapacity);
+Creep.prototype.getEnergyFromClosestColonyHarvestDestination = function(colony) {
+    var harvestDestination = colony.getClosestHarvestDestination(this.pos, this.carryCapacity);
 
-    if(storage === undefined) {
+    if(harvestDestination === undefined) {
         this.say('NoStorage');
         return;
     }
 
     else {
-        if(this.pos.getRangeTo(storage) > 1) {
-            this.moveTo(storage);
+        if(this.pos.getRangeTo(harvestDestination) > 1) {
+            this.moveTo(harvestDestination);
         }
 
         else {
-            this.withdraw(storage, RESOURCE_ENERGY);
+            this.withdraw(harvestDestination, RESOURCE_ENERGY);
         }
     }
 }

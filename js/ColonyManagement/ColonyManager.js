@@ -52,7 +52,7 @@ class ColonyManager extends Process {
     }
 
     ensureMiningRoutes() {
-        if(this.primaryRoom.storage !== undefined || (this.secondaryRoom !== undefined && this.secondaryRoom.storage !== undefined)) {
+        if(this.primaryRoom.harvestDestination !== undefined || (this.secondaryRoom !== undefined && this.secondaryRoom.harvestDestination !== undefined)) {
             this.ensureChildProcess(this.name + '|energyHarvestingManager', 'EnergyHarvestingManager', {'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
         }
     }

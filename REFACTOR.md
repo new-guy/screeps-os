@@ -30,6 +30,7 @@ Ticks remaining in Safe mode
     - We get so much fucking complexity from having primary and secondary so thoroughly in the code.  Need to remove that logic wherever we can
 
 ### Refactors
+- Make HomeRoomConstructionTools more DRY
 - Consolidate room/creep/colony/game tools/prototype modifications into files to make them more sensible
 - Get rid of targetRoom for bootstrapper
 - Booleans should be words instead of lots of &&s and ||s

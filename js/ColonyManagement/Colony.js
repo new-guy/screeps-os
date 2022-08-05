@@ -443,24 +443,24 @@ class Colony {
         return false;
     }
 
-    getClosestStorage(position, energyNeeded=undefined) {
-        var closestStorage = undefined;
+    getClosestHarvestDestination(position, energyNeeded=undefined) {
+        var closestHarvestDestination = undefined;
         var distance = 10000000000;
 
-        if(this.primaryRoom.storage !== undefined && (energyNeeded === undefined || this.primaryRoom.storage.store[RESOURCE_ENERGY] >= energyNeeded)) {
-            distance = PathFinder.search(position, this.primaryRoom.storage.pos).path.length;
-            closestStorage = this.primaryRoom.storage;
+        if(this.primaryRoom.harvestDestination !== undefined && (energyNeeded === undefined || this.primaryRoom.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded)) {
+            distance = PathFinder.search(position, this.primaryRoom.harvestDestination.pos).path.length;
+            closestHarvestDestination = this.primaryRoom.harvestDestination;
         }
 
-        if(this.secondaryRoom !== undefined && this.secondaryRoom.storage !== undefined && (energyNeeded === undefined || this.secondaryRoom.storage.store[RESOURCE_ENERGY] >= energyNeeded)) {
-            var secondaryDistance = PathFinder.search(position, this.secondaryRoom.storage.pos).path.length;
+        if(this.secondaryRoom !== undefined && this.secondaryRoom.harvestDestination !== undefined && (energyNeeded === undefined || this.secondaryRoom.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded)) {
+            var secondaryDistance = PathFinder.search(position, this.secondaryRoom.harvestDestination.pos).path.length;
 
             if(secondaryDistance < distance) {
-                closestStorage = this.secondaryRoom.storage;
+                closestHarvestDestination = this.secondaryRoom.harvestDestination;
             }
         }
 
-        return closestStorage;
+        return closestHarvestDestination;
     }
 
     initMiningInfo() {

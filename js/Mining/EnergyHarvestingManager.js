@@ -124,8 +124,8 @@ class EnergyHarvestingManager extends Process {
         }
 
         var totalRoutes = this.memory.children.length;
-        var targetRoutes = this.colony.primaryRoom.storage === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
-        targetRoutes += this.colony.secondaryRoom.storage === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        var targetRoutes = this.colony.primaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        targetRoutes += this.colony.secondaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
 
         var totalMaxTicks = this.colony.spawns.length * MAX_TICKS_TO_USE_PER_SPAWN;
 
@@ -146,8 +146,8 @@ class EnergyHarvestingManager extends Process {
         }
 
         var totalRoutes = this.memory.children.length;
-        var targetRoutes = this.colony.primaryRoom.storage === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
-        targetRoutes += this.colony.secondaryRoom.storage === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        var targetRoutes = this.colony.primaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        targetRoutes += this.colony.secondaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
 
         var totalMaxTicks = this.colony.spawns.length * MAX_TICKS_TO_USE_PER_SPAWN;
 
@@ -181,7 +181,7 @@ class EnergyHarvestingManager extends Process {
     }
 
     createNewRoute(sourcePos) {
-        var closestStorage = this.colony.getClosestStorage(sourcePos);
+        var closestHarvestDestination = this.colony.getClosestHarvestDestination(sourcePos);
         // - Miners should just go to their assigned source, make sure a container is built, and mine
         // - Haulers should pick up from their assigned source, then deposit in the closest storage (this value should be cached)
         var data = {
@@ -190,7 +190,7 @@ class EnergyHarvestingManager extends Process {
                 'y': sourcePos.y,
                 'roomName': sourcePos.roomName
             },
-            'targetStorageId': closestStorage.id,
+            'targetStorageRoom': closestHarvestDestination.pos.roomName,
             'spawnColonyName': this.colony.name
         };
 
@@ -199,7 +199,7 @@ class EnergyHarvestingManager extends Process {
 
         var priority = COLONY_EXTRA_ENERGY_PRIORITY;
 
-        if(sourcePos.roomName === closestStorage.pos.roomName) {
+        if(sourcePos.roomName === closestHarvestDestination.pos.roomName) {
             priority = COLONY_NECESSARY_ENERGY_PRIORITY;
         }
 
