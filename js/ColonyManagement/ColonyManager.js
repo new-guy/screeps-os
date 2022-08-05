@@ -95,8 +95,11 @@ class ColonyManager extends Process {
         else if((Game.empire.hasSpareGCL && this.colony.primaryRoom.energyCapacityAvailable >= 650) || (this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.controller.my)) {
             this.ensureSecondaryRoom()
         }
-
-        this.ensureRoadGeneration();
+        
+        //we only really wanna build roads if we can have a tower in the homeroom 'cause of repair time and cost
+        if(this.colony.primaryRoom.controller.level >= 3) {
+            this.ensureRoadGeneration();
+        }
     }
 
     ensureSecondaryRoom() {
