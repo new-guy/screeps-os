@@ -1,10 +1,5 @@
 const RoomManager = require('RoomManager');
 
-var DOWNGRADE_TICKS_SAFEGUARD = 1000;
-
-var MIN_ENERGY_TO_UPGRADE = 50000;
-var ENERGY_PER_EXTRA_UPGRADER = 100000;
-
 class HomeRoomManager extends RoomManager {
     constructor (...args) {
         super(...args);
@@ -158,6 +153,11 @@ class HomeRoomManager extends RoomManager {
     ensureUpgraders() {
         var energyInStorage = this.room.harvestDestination.store[RESOURCE_ENERGY];
         var upgraderCount = Math.max(1, Math.floor(energyInStorage/ENERGY_PER_EXTRA_UPGRADER));
+
+        var harvestDest = this.room.harvestDestination;
+        if(harvestDest.structureType === STRUCTURE_CONTAINER && harvestDest.store[RESOURCE_ENERGY] === harvestDest.store.getCapacity()) {
+            upgraderCount = 2;
+        }
 
         var data = {
             'colonyName': this.colony.name,
