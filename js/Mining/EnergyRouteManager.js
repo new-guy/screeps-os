@@ -31,9 +31,12 @@ class EnergyRouteManager extends Process {
         this.drawRouteInfo();
 
         this.spawnMiner();
-        this.spawnHauler();
 
-        if(this.shouldReserve()) {
+        if(this.minerExists) {
+            this.spawnHauler();
+        }
+
+        if(this.shouldReserve) {
             this.spawnReserver();
         }
     }
@@ -46,8 +49,22 @@ class EnergyRouteManager extends Process {
     isOperational() {
         if(this.memory.containerPos === undefined) return false;
 
-        var minerName = this.targetSourcePos.readableString() +'|Miner|0';
+        var notWaitingForReserver = !this.waitingForReserver
 
+        var isOperational = (this.minerExists && this.allHaulersExist && notWaitingForReserver)
+        if(!isOperational) {
+            console.log('Miner: ' + this.minerExists + ' Haulers: ' + this.allHaulersExist + ' Reserver: ' + notWaitingForReserver);
+        }
+
+        return isOperational;
+    }
+
+    get minerExists() {
+        var minerName = this.targetSourcePos.readableString() +'|Miner|0';
+        return Game.creeps[minerName] !== undefined;
+    }
+
+    get allHaulersExist() {
         var allHaulersExist = true;
         for(var i = 0; i < HAULER_COUNT; i++) {
             var haulerName = this.targetSourcePos.readableString() +'|Hauler|' + i;
@@ -56,20 +73,18 @@ class EnergyRouteManager extends Process {
             if(!allHaulersExist) break;
         }
 
-        var notWaitingForReserver = true;
-        if(this.shouldReserve()) {
+        return allHaulersExist;
+    }
+
+    get waitingForReserver() {        
+        var waitingForReserver = false;
+        if(this.shouldReserve) {
             var reserverName = 'reserver|' + this.targetSourcePos.roomName + '|0';
 
-            notWaitingForReserver = (Game.creeps[reserverName] !== undefined);
+            waitingForReserver = (Game.creeps[reserverName] === undefined);
         }
 
-        var isOperational = (Game.creeps[minerName] !== undefined && allHaulersExist && notWaitingForReserver)
-
-        if(!isOperational) {
-            console.log('Miner: ' + (Game.creeps[minerName] !== undefined) + ' Haulers: ' + allHaulersExist + ' Reserver: ' + notWaitingForReserver);
-        }
-
-        return isOperational;
+        return waitingForReserver;
     }
 
     getUsedTicks() {
@@ -85,7 +100,7 @@ class EnergyRouteManager extends Process {
         var minerBody = BodyGenerator.generateBody('Miner', energyCapacity);
         ticksToSpawn += BodyGenerator.getTicksToSpawn(minerBody);
 
-        if(this.shouldReserve()) {
+        if(this.shouldReserve) {
             var reserverBody = BodyGenerator.generateBody('Reserver', energyCapacity);
             ticksToSpawn += BodyGenerator.getTicksToSpawn(reserverBody);
         }
@@ -131,7 +146,7 @@ class EnergyRouteManager extends Process {
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, this.metadata.defaultPriority);
     }
 
-    shouldReserve() {
+    get shouldReserve() {
         //Should reserve if it's not 
         var room = Game.rooms[this.targetSourcePos.roomName];
 

@@ -42,5 +42,4 @@ Ticks remaining in Safe mode
 - Should roadmaps and building maps be different?  Or should the roadmap just be the road parts of the building map?
 
 ### Fixes
-- Should plan all building placement from the beginning and store it in an array
-- Road generation should use the planned storage rather than the actual storage
+- Document how the friggin OS actually works
