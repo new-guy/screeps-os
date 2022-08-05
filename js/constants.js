@@ -47,6 +47,7 @@ COMA_MINIMUM_ENERGY_FOR_SAFE = 10000;
 
 PRE_STORAGE_BOOTSTRAPPER_MAX = 10;
 PRE_STORAGE_BOOTSTRAPPER_MAX_SPAWN_TICKS = 500; //1500 ticks per life
+FULL_CONTAINER_UPGRADER_COUNT = 3; //How many upgraders to spawn when the container is full and we're pre-storage
 
 // Room defense configuration
 DEFENSE_UPGRADE_SCHEDULE = {

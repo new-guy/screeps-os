@@ -156,7 +156,7 @@ class HomeRoomManager extends RoomManager {
 
         var harvestDest = this.room.harvestDestination;
         if(harvestDest.structureType === STRUCTURE_CONTAINER && harvestDest.store[RESOURCE_ENERGY] === harvestDest.store.getCapacity()) {
-            upgraderCount = 2;
+            upgraderCount = FULL_CONTAINER_UPGRADER_COUNT;
         }
 
         var data = {
