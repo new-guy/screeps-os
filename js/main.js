@@ -136,8 +136,6 @@ function initRooms() {
                 
                 if(destinationPos.structureExists(STRUCTURE_STORAGE)) room.harvestDestination = destinationPos.getStructure(STRUCTURE_STORAGE);
                 if(destinationPos.structureExists(STRUCTURE_CONTAINER)) room.harvestDestination = destinationPos.getStructure(STRUCTURE_CONTAINER);
-
-                console.log(room.harvestDestination)
             }
         }
 
