@@ -30,7 +30,7 @@ class PlanningConstructionFlagMonitor extends Process {
     }
 
     convertConstructionFlags(constructionFlagArray)
-    {    
+    {
         for(var i = 0; i < constructionFlagArray.length; i++)
         {
             var flag = constructionFlagArray[i];
@@ -52,83 +52,94 @@ class PlanningConstructionFlagMonitor extends Process {
     }
 
     convertPlanFlagToConstruction() {
+        if(this.room.memory.buildingPlan === undefined) {
+            console.log('No build plan for ' + this.room.name);
+            return;
+        }
+
         var planFlags = this.room.find(FIND_FLAGS, {filter: function(flag) { return flag.name.startsWith('!PLAN') }});
     
-        var fullStructTypes = [];
-    
         var convertedFlag = false;
+
+        //Start by doing priority flag conversion
+        for (var i = 0; i < STRUCTURE_BUILD_PRIORITY.length; i++) {
+            var structureType = STRUCTURE_BUILD_PRIORITY[i];
+            var filteredPlanFlagArray = getPlanFlagArrayByStructureType(planFlags, structureType);
+            convertedFlag = attemptToConvertPlanFlagArray(filteredPlanFlagArray, this.room);
+
+            if(convertedFlag) break;
+        }
+
+        //Try to convert everything
+        if(!convertedFlag) {
+            convertedFlag = attemptToConvertPlanFlagArray(planFlags, this.room)
+        }
     
-        for(i = 0; i < planFlags.length; i++)
-        {
-            var planFlag = planFlags[i];
-            var structureType = planFlag.name.split("|")[1];
-    
-            if(fullStructTypes.includes(structureType)) continue;
-    
-            if(this.room.hasNoBuildingSlots(structureType) && !fullStructTypes.includes(structureType)) {
-                console.log('WARNING: Room ' + this.room.name + ' cannot build ' + structureType);
-                fullStructTypes.push(structureType);
+        if(!convertedFlag) {
+            attemptToRemoveInvalidStructure(this.room)
+        }
+
+        function getPlanFlagArrayByStructureType(planFlagArray, structureType) {
+            var filteredArray = [];
+            for(var i = 0; i < planFlagArray.length; i++) {
+                var planFlag = planFlagArray[i];
+                var planStructureType = planFlag.name.split("|")[1];
+
+                if(planStructureType === structureType) {
+                    filteredArray.push(planFlag);
+                }
             }
-            
-            else {
-                console.log('Room ' + this.room.name + ' placing flag to build ' + structureType);
+            return filteredArray;
+        }
+
+        function attemptToConvertPlanFlagArray(planFlagArray, room) {
+            var flagPlaced = false;
+            for(var i = 0; i < planFlagArray.length; i++)
+            {
+                var planFlag = planFlagArray[i];
+                var structureType = planFlag.name.split("|")[1];
+        
+                if(room.hasNoBuildingSlots(structureType)) {
+                    console.log('WARNING: Room ' + room.name + ' cannot build ' + structureType + ' - has no building slots');
+                    continue;
+                }
     
-                var placingObstacleStructure = OBSTACLE_OBJECT_TYPES.includes(OBSTACLE_OBJECT_TYPES);
-    
+                var placingObstacleStructure = OBSTACLE_OBJECT_TYPES.includes(structureType);
                 if(placingObstacleStructure) {
-                    var invalidStructureUnderneath = _.find(planFlag.pos.lookFor(LOOK_STRUCTURES), 
+                    var obstacleStructureUnderneath = _.find(planFlag.pos.lookFor(LOOK_STRUCTURES), 
                     function(struct) { 
-                        return struct.structureType != STRUCTURE_ROAD && struct.structureType != STRUCTURE_RAMPART 
+                        return OBSTACLE_OBJECT_TYPES.includes(struct.structureType)
                     });
     
-                    if(invalidStructureUnderneath !== undefined) {
-                        if(invalidStructureUnderneath.my) {
-                            console.log('DESTROYING INVALID ' + invalidStructureUnderneath.structureType + ' at ' + invalidStructureUnderneath.pos.x + 'x ' + invalidStructureUnderneath.pos.y + 'y ' + this.room.name);
-                            invalidStructureUnderneath.destroy();
-        
-                            placeNewConstructionFlag(planFlag.pos, structureType);
-        
-                            planFlag.remove();
-                            convertedFlag = true;
-                            break;
+                    if(obstacleStructureUnderneath !== undefined) {
+                        if(obstacleStructureUnderneath.my) {
+                            console.log('DESTROYING INVALID ' + obstacleStructureUnderneath.structureType + ' at ' + obstacleStructureUnderneath.pos.x + 'x ' + obstacleStructureUnderneath.pos.y + 'y ' + room.name);
+                            obstacleStructureUnderneath.destroy();
                         }
         
                         else {
-                            console.log('WARNING: Room ' + this.room.name + ' cannot build ' + planFlag.name + ' because something is in the way');
+                            console.log('WARNING: Room ' + room.name + ' cannot build ' + planFlag.name + ' because something is in the way');
                             continue;
                         }
                     }
                 }
     
-                else {
-                    placeNewConstructionFlag(planFlag.pos, structureType);
-                    planFlag.remove();
-                    convertedFlag = true;
-                    break;
-                }
+                placeNewConstructionFlag(planFlag.pos, structureType);
+                flagPlaced = true;
+                break;
             }
+
+            return flagPlaced;
         }
-    
-        if(!convertedFlag) {
-            var removePriority = [STRUCTURE_EXTENSION,
-                                  STRUCTURE_LINK,
-                                  STRUCTURE_TOWER,
-                                  STRUCTURE_LAB,
-                                  STRUCTURE_OBSERVER,
-                                  STRUCTURE_NUKER,
-                                  STRUCTURE_TERMINAL,
-                                  STRUCTURE_STORAGE,
-                                  STRUCTURE_SPAWN];
-    
-            for(var i = 0; i < removePriority.length; i++) {
-                var typeOfStructureToRemove = removePriority[i];
-                if(fullStructTypes.includes(typeOfStructureToRemove)) {
-                    var myStructures = this.room.find(FIND_MY_STRUCTURES);
+
+        function attemptToRemoveInvalidStructure(room) {
+            for(var i = 0; i < STRUCTURE_REMOVE_PRIORITY.length; i++) {
+                var typeOfStructureToRemove = STRUCTURE_REMOVE_PRIORITY[i];
+                if(room.hasNoBuildingSlots(typeOfStructureToRemove) && !room.hasZeroBuildingSlots(typeOfStructureToRemove)) {
+                    var myStructures = room.find(FIND_MY_STRUCTURES);
     
                     console.log('trying to remove ' + typeOfStructureToRemove);
                     var structureToRemove = _.find(myStructures, function(struct) {
-                        //correct structureType
-                        //also not part of room plan
                         var buildingPlan = Game.rooms[struct.pos.roomName].memory.buildingPlan;
     
                         var structureTypeAtPlanPos = buildingPlan[struct.pos.x][struct.pos.y];
@@ -139,6 +150,8 @@ class PlanningConstructionFlagMonitor extends Process {
                         var isCorrectStructureType = (struct.structureType == typeOfStructureToRemove);
                         return !isInBuildingPlan && isCorrectStructureType; 
                     });
+
+                    if(structureToRemove === undefined) break;
     
                     console.log('DESTROYING ' + structureToRemove.structureType + ' at ' + structureToRemove.pos.x + 'x ' + structureToRemove.pos.y + 'y ' + this.name);
                     structureToRemove.destroy();
@@ -151,7 +164,9 @@ class PlanningConstructionFlagMonitor extends Process {
         {
             var flagName = "!CONSTRUCT|" + structureType + "|" + pos.roomName + "|x" + pos.x + "y" + pos.y;
         
+            console.log('Placing flag ' + flagName);
             pos.createFlag(flagName, color, secondaryColor);
+            planFlag.remove();
         }
     }
 }

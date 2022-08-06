@@ -8,6 +8,13 @@ Room.prototype.hasNoBuildingSlots = function(structureType) {
 	return builtStructCount == structureCountMax;
 }
 
+Room.prototype.hasZeroBuildingSlots = function(structureType) {
+	var rcl = this.controller.level;
+	var structureCountMax = CONTROLLER_STRUCTURES[structureType][rcl];
+
+	return structureCountMax === 0;
+}
+
 Room.prototype.getPlainsPercentage = function() {
 	var tilesInRoom = 2500;
 	var numPlains = 0;
