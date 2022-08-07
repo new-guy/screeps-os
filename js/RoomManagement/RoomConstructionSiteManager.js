@@ -11,16 +11,11 @@ class RoomConstructionSiteManager extends Process {
         if(super.update() == 'exit') {
             return 'exit';
         }
-        console.log('printing stuff about this process');
 
         var structurePlanMap = this.getStructurePlanMap();
         this.drawStructurePlanMap(structurePlanMap);
 
-        if(this.room.constructionSites.length > 0) {
-            console.log(this.room.name + ' has site(s)')
-        }
-        else {
-            console.log('no sites for room')
+        if(this.room.constructionSites.length === 0) {
             this.createFirstMissingSite(structurePlanMap);
         }
     }

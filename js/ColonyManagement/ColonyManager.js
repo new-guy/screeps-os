@@ -98,6 +98,26 @@ class ColonyManager extends Process {
         if(this.colony.primaryRoom.controller.level >= 3) {
             this.ensureRoadGeneration();
         }
+
+        if(this.colony.roomsNeedingBuilder.length > 0) {
+            this.ensureColonyBuilder();
+        }
+    }
+
+    ensureColonyBuilder() {
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': 1,
+            'creepNameBase': 'colonyBuilder|' + this.colony.name,
+            'creepBodyType': 'ColonyBuilder',
+            'creepProcessClass': 'ColonyBuilder',
+            'creepMemory': {
+                'targetColony': this.colony.name
+            }
+        };
+
+        var spawnPID ='spawnColonyBuilder|' + this.colony.name;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BUILDER_PRIORITY);
     }
 
     ensureSecondaryRoom() {
