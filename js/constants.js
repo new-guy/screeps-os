@@ -20,7 +20,7 @@ SMALL_BALANCER_CARRY_PARTS = 4; //If it's less than or equal to this, the balanc
 // Mining route configuration
 MAX_TICKS_TO_USE_PER_SPAWN = 700;
 TARGET_ROUTES_PER_STORAGE = 5;
-TIME_BETWEEN_PURGES = 1500;
+TIME_BETWEEN_PURGES = 500;
 HAULER_COUNT = 2;
 REMAINING_TICKS_TO_SPAWN_RESERVER = 3000;
 
@@ -49,9 +49,9 @@ COMA_RECOVERY_CREEPS_TO_SPAWN = 5;
 COMA_WORK_PARTS_FOR_SAFE = 3;
 COMA_MINIMUM_ENERGY_FOR_SAFE = 10000;
 
-PRE_RCL3_BOOTSTRAPPER_MAX = 20; //Pre-RCL3 in the spawn colony - we do this to enable the first colony to start faster
+PRE_RCL3_BOOTSTRAPPER_MAX = 25; //Pre-RCL3 in the spawn colony - we do this to enable the first colony to start faster
 PRE_RCL3_BOOTSTRAPPER_MAX_SPAWN_TICKS = 1000; //1500 ticks per life
-PRE_STORAGE_BOOTSTRAPPER_MAX = 10;
+PRE_STORAGE_BOOTSTRAPPER_MAX = 15;
 PRE_STORAGE_BOOTSTRAPPER_MAX_SPAWN_TICKS = 800; //1500 ticks per life
 FULL_CONTAINER_UPGRADER_COUNT = 3; //How many upgraders to spawn when the container is full and we're pre-storage
 

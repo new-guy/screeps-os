@@ -66,7 +66,7 @@ class RoadGenerator extends Process {
             var process = miningProcesses[i];
             var harvestDestination = Game.rooms[process.memory.targetStorageRoom].harvestDestination;
             
-            if(harvestDestination === null || process.memory.containerPos === undefined) {
+            if(harvestDestination === null || harvestDestination === undefined || process.memory.containerPos === undefined) {
                 continue;
             }
 

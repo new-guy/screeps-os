@@ -31,11 +31,11 @@ class Balancer extends CreepProcess {
     }
 
     isTooSmall() {
-        var roomIsOverRCL2 = this.creep.room.controller.level > 2;
+        var roomIsOverRCL3 = this.creep.room.controller.level > 3;
         var roomIsFull = this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable;
         var creepIsSmall = this.creep.body.length <= SMALL_BALANCER_CARRY_PARTS*(1.5);
 
-        return roomIsOverRCL2 && roomIsFull && creepIsSmall;
+        return roomIsOverRCL3 && roomIsFull && creepIsSmall;
     }
 
     updateStateTransitions() {
