@@ -8,6 +8,12 @@
 
 ## Plan
 
+### Necessary to get on public server
+- Defense against invaders
+- Roads
+- Ramparts
+- Replace container w/ storage
+
 ### Records
 Ticks remaining in Safe mode
 - RCL3 
@@ -15,9 +21,6 @@ Ticks remaining in Safe mode
     - Pass 1: 10500
 - RCL4
     - Pass 1:
-
-
-### Speedup plans
 
 ### Functionality to change
 - Small balancer is such a waste

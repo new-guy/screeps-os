@@ -134,7 +134,7 @@ class ColonyManager extends Process {
             }
 
             //Bootstrap Scheduling
-            if(this.secondaryRoom.controller.level < 2) {
+            if(this.secondaryRoom.controller.level <= 2) {
                 var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
                 var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
                 this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_EXPANSION_SUPPORT);
