@@ -100,22 +100,26 @@ Room.prototype.drawBuildingPlan = function() {
 
 			if(structureType === 'none') continue;
 
-			new RoomVisual(this.roomName).text(structureType.substring(0, 2), x, y, {font: 0.6});
+			console.log(x, y, this.name);
+			var roomPos = new RoomPosition(x, y, this.name);
+			if(roomPos.structureExists(structureType)) continue;
+
+			new RoomVisual(this.name).text(structureType.substring(0, 2), x, y, {font: 0.6});
 
 			if(structureType == 'road')
-				new RoomVisual(this.roomName).circle(x, y, {radius: 0.5, fill: '#cccccc'});
+				new RoomVisual(this.name).circle(x, y, {radius: 0.5, fill: '#cccccc'});
 
 			if(structureType == 'extension')
-				new RoomVisual(this.roomName).circle(x, y, {radius: 0.5, fill: '#cccc00'});
+				new RoomVisual(this.name).circle(x, y, {radius: 0.5, fill: '#cccc00'});
 
 			if(structureType == 'spawn')
-				new RoomVisual(this.roomName).circle(x, y, {radius: 0.5, fill: '#cc00cc'});
+				new RoomVisual(this.name).circle(x, y, {radius: 0.5, fill: '#cc00cc'});
 
 			if(structureType == 'terminal')
-				new RoomVisual(this.roomName).circle(x, y, {radius: 0.5, fill: '#333333'});
+				new RoomVisual(this.name).circle(x, y, {radius: 0.5, fill: '#333333'});
 
 			if(structureType == 'link')
-				new RoomVisual(this.roomName).circle(x, y, {radius: 0.5, fill: '#3333ff'});
+				new RoomVisual(this.name).circle(x, y, {radius: 0.5, fill: '#3333ff'});
 		}
 	}
 }
