@@ -5,8 +5,6 @@ Room.prototype.updateBuildingPlans = function() {
 
 	if(latestRCLGenerated === undefined) latestRCLGenerated = 0;
 
-	this.drawBuildingPlan();
-
 	var roomIsMine = (this.controller !== undefined && this.controller.my);
 	if(!roomIsMine) return;
 
@@ -81,46 +79,6 @@ Room.prototype.placeChunkFlags = function(chunkFlags) {
 		}
 
 		chunkFlagDefinition['pos'].createFlag(flagName, color);
-	}
-}
-
-Room.prototype.drawBuildingPlan = function() {
-	var buildingPlan = this.memory.buildingPlan;
-
-	if(buildingPlan === undefined) {
-		if(Game.time % 180 == 0) console.log('Cannot draw building plan in ' + this.name);
-		return;
-	}
-
-	for(var x = 0; x < buildingPlan.length; x++) {
-		var column = buildingPlan[x];
-
-		for(var y = 0; y < column.length; y++) {
-			var structureType = column[y];
-
-			if(structureType === 'none') continue;
-
-			console.log(x, y, this.name);
-			var roomPos = new RoomPosition(x, y, this.name);
-			if(roomPos.structureExists(structureType)) continue;
-
-			new RoomVisual(this.name).text(structureType.substring(0, 2), x, y, {font: 0.6});
-
-			if(structureType == 'road')
-				new RoomVisual(this.name).circle(x, y, {radius: 0.5, fill: '#cccccc'});
-
-			if(structureType == 'extension')
-				new RoomVisual(this.name).circle(x, y, {radius: 0.5, fill: '#cccc00'});
-
-			if(structureType == 'spawn')
-				new RoomVisual(this.name).circle(x, y, {radius: 0.5, fill: '#cc00cc'});
-
-			if(structureType == 'terminal')
-				new RoomVisual(this.name).circle(x, y, {radius: 0.5, fill: '#333333'});
-
-			if(structureType == 'link')
-				new RoomVisual(this.name).circle(x, y, {radius: 0.5, fill: '#3333ff'});
-		}
 	}
 }
 

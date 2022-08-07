@@ -13,13 +13,14 @@ class RoomConstructionSiteManager extends Process {
         }
         console.log('printing stuff about this process');
 
+        var structurePlanMap = this.getStructurePlanMap();
+        this.drawStructurePlanMap(structurePlanMap);
+
         if(this.room.constructionSites.length > 0) {
             console.log(this.room.name + ' has site(s)')
         }
         else {
             console.log('no sites for room')
-
-            var structurePlanMap = this.getStructurePlanMap();
             this.createFirstMissingSite(structurePlanMap);
         }
     }
@@ -56,6 +57,35 @@ class RoomConstructionSiteManager extends Process {
         }
 
         return structurePlanMap;
+    }
+
+    drawStructurePlanMap(structurePlanMap) {    
+        for(const structureType in structurePlanMap) {
+            var structurePosArray = structurePlanMap[structureType];
+            for(const posXY of structurePosArray) {
+                var x = posXY.x;
+                var y = posXY.y;
+                var roomPos = new RoomPosition(x, y, this.room.name);
+                if(roomPos.structureExists(structureType)) continue;
+    
+                new RoomVisual(this.room.name).text(structureType.substring(0, 2), x, y, {font: 0.6});
+    
+                if(structureType == 'road')
+                    new RoomVisual(this.room.name).circle(x, y, {radius: 0.5, fill: '#cccccc'});
+    
+                if(structureType == 'extension')
+                    new RoomVisual(this.room.name).circle(x, y, {radius: 0.5, fill: '#cccc00'});
+    
+                if(structureType == 'spawn')
+                    new RoomVisual(this.room.name).circle(x, y, {radius: 0.5, fill: '#cc00cc'});
+    
+                if(structureType == 'terminal')
+                    new RoomVisual(this.room.name).circle(x, y, {radius: 0.5, fill: '#333333'});
+    
+                if(structureType == 'link')
+                    new RoomVisual(this.room.name).circle(x, y, {radius: 0.5, fill: '#3333ff'});
+            }
+        }
     }
 
     createFirstMissingSite(structurePlanMap) {
