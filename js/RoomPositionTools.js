@@ -70,7 +70,7 @@ RoomPosition.prototype.getStructure = function(structureType)
 
 	if(structureType === undefined)
 	{
-		return structureArray.length > 0;
+		return structureArray[0];
 	}
 
 	for(var i = 0; i < structureArray.length; i++)

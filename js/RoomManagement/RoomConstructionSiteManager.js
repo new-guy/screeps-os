@@ -25,8 +25,11 @@ class RoomConstructionSiteManager extends Process {
         var roadBuildPlan = this.room.memory.roadBuildPlan;
         var structurePlanMap = {};
 
-        for(var x = 0; x < buildingPlan.length; x++) {
-            var column = buildingPlan[x];
+        //We want to build able to build roads in mining rooms, which don't always have buildingPlans.
+        var basePlanToUse = buildingPlan === undefined ? roadBuildPlan : buildingPlan;
+
+        for(var x = 0; x < basePlanToUse.length; x++) {
+            var column = basePlanToUse[x];
 
             for(var y = 0; y < column.length; y++) {
                 var structureType = column[y];
@@ -120,9 +123,22 @@ class RoomConstructionSiteManager extends Process {
             if(posXY.x === 0 || posXY.y === 0 || posXY.x === 49 || posXY.y === 49) continue;
 
             var structPos = new RoomPosition(posXY.x, posXY.y, this.room.name);
+
             if(!structPos.structureExists(structureType) && !structPos.constructionSiteExists(structureType)) {
-                structPos.createConstructionSite(structureType);
-                console.log('Created ' + structureType + ' site in ' + this.room.name + ' at ' + posXY.x + ', ' + posXY.y);
+                if(structPos.structureExists()) {
+                    var struct = structPos.getStructure();
+                    struct.destroy();
+                    console.log('Destroyed ' + structureType + ' in ' + this.room.name + ' at ' + posXY.x + ', ' + posXY.y);
+                }
+                else if(structPos.constructionSiteExists()) {
+                    var site = structPos.getConstructionSite();
+                    site.destroy();
+                    console.log('Destroyed ' + structureType + ' site in ' + this.room.name + ' at ' + posXY.x + ', ' + posXY.y);
+                }
+                else {
+                    structPos.createConstructionSite(structureType);
+                    console.log('Created ' + structureType + ' site in ' + this.room.name + ' at ' + posXY.x + ', ' + posXY.y);
+                }
                 return false;
             }
         }

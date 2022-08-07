@@ -143,8 +143,7 @@ class Roadmap {
                         var structure = structures[i];
     
                         if( structure.structureType !== STRUCTURE_RAMPART && 
-                            structure.structureType !== STRUCTURE_ROAD && 
-                            structure.structureType !== STRUCTURE_CONTAINER) {
+                            structure.structureType !== STRUCTURE_ROAD) {
                                //structure is unwalkable
                             
                             return true;

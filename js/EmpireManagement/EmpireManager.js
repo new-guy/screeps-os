@@ -20,7 +20,7 @@ class EmpireManager extends Process {
         for(var roomName in Game.rooms) {
             var room = Game.rooms[roomName];
     
-            if(room.memory.buildingPlan !== undefined) {
+            if(room.memory.buildingPlan !== undefined || room.memory.roadBuildPlan !== undefined) {
                 this.ensureChildProcess(roomName + '|constructionSiteManager', 'RoomConstructionSiteManager', {'roomName': roomName}, COLONY_NONESSENTIAL_PRIORITY);
             }
         }

@@ -124,7 +124,7 @@ class EnergyHarvestingManager extends Process {
 
             var roomIsStorageTarget = childProcess.targetStorageRoom.name === room.name;
             if(roomIsStorageTarget)
-                visual.circle(rootPosition['x'] - 1.5, rootPosition['y'] + 1.8 + i, {fill: "#ff"});
+                visual.circle(rootPosition['x'] - 1.5, rootPosition['y'] + 1.8 + i, {fill: "#0000ff"});
         }
 
         var totalRoutes = this.memory.children.length;
