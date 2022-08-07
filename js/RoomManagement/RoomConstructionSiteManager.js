@@ -110,7 +110,6 @@ class RoomConstructionSiteManager extends Process {
                 continue;
             }
             else {
-                console.log('Created ' + structureType + ' site in ' + this.room.name);
                 break;
             }
         }
@@ -118,9 +117,12 @@ class RoomConstructionSiteManager extends Process {
 
     ensureAllSitesExist(structureType, structurePosArray) {
         for(const posXY of structurePosArray) {
+            if(posXY.x === 0 || posXY.y === 0 || posXY.x === 49 || posXY.y === 49) continue;
+
             var structPos = new RoomPosition(posXY.x, posXY.y, this.room.name);
             if(!structPos.structureExists(structureType) && !structPos.constructionSiteExists(structureType)) {
                 structPos.createConstructionSite(structureType);
+                console.log('Created ' + structureType + ' site in ' + this.room.name + ' at ' + posXY.x + ', ' + posXY.y);
                 return false;
             }
         }
