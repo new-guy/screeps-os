@@ -105,9 +105,11 @@ class ColonyManager extends Process {
     }
 
     ensureColonyBuilder() {
+        var colonyBuilderCount = this.getColonyBuilderCount();
+
         var data = {
             'colonyName': this.colony.name,
-            'creepCount': 1,
+            'creepCount': colonyBuilderCount,
             'creepNameBase': 'colonyBuilder|' + this.colony.name,
             'creepBodyType': 'ColonyBuilder',
             'creepProcessClass': 'ColonyBuilder',
@@ -116,8 +118,28 @@ class ColonyManager extends Process {
             }
         };
 
-        var spawnPID ='spawnColonyBuilder|' + this.colony.name;
+        var spawnPID ='spawnColonyBuilder|' + this.colony.name + '|' + colonyBuilderCount;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BUILDER_PRIORITY);
+    }
+
+    getColonyBuilderCount() {
+        var count = 1;
+
+        if(this.colony.primaryRoom.storage === undefined) {
+            count++;
+        }
+
+        if(this.colony.secondaryRoom.storage === undefined && this.colony.primaryRoom.harvestDestination !== undefined) {
+            count++;
+        }
+
+        if(this.colony.primaryRoom.hasNecessaryMinimumEnergy() && this.colony.secondaryRoom.hasNecessaryMinimumEnergy()) {
+            count += this.colony.roomsNeedingBuilder.length;
+        }
+        
+        count = Math.min(count, COLONY_MAX_BUILDER_COUNT);
+
+        return count;
     }
 
     ensureSecondaryRoom() {
