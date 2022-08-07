@@ -137,15 +137,12 @@ class PlanningConstructionFlagMonitor extends Process {
                 var typeOfStructureToRemove = STRUCTURE_REMOVE_PRIORITY[i];
                 if(room.hasNoBuildingSlots(typeOfStructureToRemove) && !room.hasZeroBuildingSlots(typeOfStructureToRemove)) {
                     var myStructures = room.find(FIND_MY_STRUCTURES);
-    
-                    console.log('trying to remove ' + typeOfStructureToRemove);
+
                     var structureToRemove = _.find(myStructures, function(struct) {
                         var buildingPlan = Game.rooms[struct.pos.roomName].memory.buildingPlan;
     
                         var structureTypeAtPlanPos = buildingPlan[struct.pos.x][struct.pos.y];
                         var isInBuildingPlan = (structureTypeAtPlanPos == struct.structureType);
-    
-                        console.log('Structure ' + struct.structureType + ' at ' + struct.pos.x + 'x ' + struct.pos.y + 'y ' + ' vs plan ' + structureTypeAtPlanPos + ' | ' + isInBuildingPlan);
     
                         var isCorrectStructureType = (struct.structureType == typeOfStructureToRemove);
                         return !isInBuildingPlan && isCorrectStructureType; 
