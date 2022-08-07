@@ -12,7 +12,7 @@ class HomeRoomConstructionMonitor extends Process {
             return 'exit';
         }
 
-        this.room.updateConstructionSites();
+        this.room.updateBuildingPlans();
     }
 
     processShouldDie() {

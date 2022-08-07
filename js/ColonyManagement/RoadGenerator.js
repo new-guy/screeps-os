@@ -11,47 +11,24 @@ class RoadGenerator extends Process {
         if(super.update() == 'exit') {
             return 'exit';
         }
-
-        this.generateRoomsFromRoadmap();
         
         if(this.colony.memory['roadRegenerateTick'] === undefined || Game.time - this.colony.memory['roadRegenerateTick'] > TICKS_BETWEEN_FULL_ROAD_RECALCULATION) {
             this.regenerateRoads();
             this.colony.memory['roadRegenerateTick'] = Game.time;
-        }
-        // - Need to generate roads from roadmap
-        //     - Just check every N ticks for each room to see if all of its roads are placed
-        //         - Store the last tick it was check at in roomInfo
-        //     - If not, place them
-    }
 
-    generateRoomsFromRoadmap() {
-        for(var roomName in this.colony.colonyRoomInfo) {
-            var room = Game.rooms[roomName];
-            var roomInfo = this.colony.colonyRoomInfo[roomName];
-            if(room === undefined) continue;
-
-            if(roomInfo['roadGenerationTick'] === undefined || Game.time > roomInfo['roadGenerationTick'] + TICKS_BETWEEN_ROAD_CONSTRUCTION_SITE_UPDATES) {
-                roomInfo['roadGenerationTick'] = Game.time;
-
-                room.removeAllConstructionSites(STRUCTURE_ROAD);
-    
-                this.createRoadsForRoom(room);
+            for(var roomName in this.colonyRoomInfo) {
+                var room = Game.rooms[roomName];
+                addRoadsToRoomMemory(room);
             }
         }
     }
 
-    createRoadsForRoom(room) {
+    addRoadsToRoomMemory(room) {
         var roadmap = this.colony.roadmap;
+        var roomRoadmap = roadmap.getMap(room.name);
+        if(roomRoadmap === undefined) return;
 
-        for(var x = 0; x <= 49; x++) {
-            for(var y = 0; y <= 49; y++) {
-               var pos = new RoomPosition(x, y, room.name);
-               
-               if(roadmap.getPos(pos) === 'road') {
-                   pos.createConstructionSite(STRUCTURE_ROAD);
-               }
-            }
-        }
+        room.memory.roadBuildPlan = roomRoadmap;
     }
 
     regenerateRoads() {

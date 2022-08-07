@@ -119,17 +119,6 @@ class Colony {
                     }
                 }
             }
-
-            room.constructionSites = room.find(FIND_MY_CONSTRUCTION_SITES);
-            room.mostBuiltConstructionSite = room.constructionSites[0];
-
-            for(var i = 0; i < room.constructionSites.length; i++) {
-                var constructionSite = room.constructionSites[i];
-
-                if(constructionSite.progress > room.mostBuiltConstructionSite.progress) {
-                    room.mostBuiltConstructionSite = constructionSite;
-                }
-            }
         }
     }
 
@@ -574,7 +563,7 @@ class Colony {
                 console.log("Waiting for energy for creep " + creepName);
                 console.log('Creep Dump: ' + creepName + ' ' + body);
 
-                spawn.room.visual.text(creepName, spawn.pos);
+                spawn.room.visual.text(creepName, spawn.pos.x, spawn.pos.y+1);
                 this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
             }
 

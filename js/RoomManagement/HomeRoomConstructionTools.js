@@ -1,11 +1,9 @@
 var VALID_STRUCTURES_TO_RAMPART = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_LINK, STRUCTURE_TERMINAL, STRUCTURE_TOWER, STRUCTURE_STORAGE];
 
-Room.prototype.updateConstructionSites = function() {
+Room.prototype.updateBuildingPlans = function() {
 	var latestRCLGenerated = this.memory.latestRCLGenerated;
 
 	if(latestRCLGenerated === undefined) latestRCLGenerated = 0;
-
-	if(this.memory.shouldDrawBuildingPlan == 'true') this.drawBuildingPlan();
 
 	var roomIsMine = (this.controller !== undefined && this.controller.my);
 	if(!roomIsMine) return;
@@ -16,7 +14,7 @@ Room.prototype.updateConstructionSites = function() {
 
 	if(parseInt(latestRCLGenerated) != this.controller.level && this.memory.planGenerationState == 'waiting')
 	{
-		console.log('CLEARING PLAN FLAGS FOR ' + this.name);
+		console.log('CLEARING FUNCTIONAL FLAGS FOR ' + this.name);
 		this.killGeneratedPlan();
 		this.memory.planGenerationState = 'chunks';
 	}
@@ -33,7 +31,6 @@ Room.prototype.updateConstructionSites = function() {
 		console.log('GENERATING LAYOUT FOR ' + this.name);
 
 		this.recalculateBuildingPlan();
-		this.createConstructionPlanFlags();
 		this.createFunctionalFlags();
 		this.generateControllerSinkLinkPlan();
 		this.generateMineralMiningPlan();
@@ -46,48 +43,24 @@ Room.prototype.updateConstructionSites = function() {
 	//but start subsequent steps at any time if that step is set in memory
 	/*
 	--wait
-	1. Clear planning, link, and balancer flags from room.  Keep chunk flags
+	1. Clear link, and balancer flags from room.  Keep chunk flags
 	--chunks
 	2. Find locations for chunks
 	3. Place module flags
 	--implement
 	4. Recalculate the building plan
-	5. Create construction flags
-	6. Create functional flags
-	7. Create controller sink link
-	8. Create road build flag
+	5. Create functional flags
+	6. Create controller sink link
+	7. Create road build flag
 	*/
 };
 
 //Flags look like this: !CONSTRUCT|BUILDINGTYPE|UNIQUEIFIER
 
 Room.prototype.forceBuildingRegeneration = function() {
-	console.log('CLEARING PLAN FLAGS FOR ' + this.name);
+	console.log('CLEARING FUNCTIONAL FLAGS FOR ' + this.name);
 	this.killGeneratedPlan();
 	this.memory.planGenerationState = 'chunks';
-}
-
-function createPlanningFlag(room, structureType, mapPosition)
-{
-	var roomPositionToPlan = new RoomPosition(mapPosition['x'], mapPosition['y'], room.name)
-
-	var constructionSitesAtLocation = roomPositionToPlan.lookFor(LOOK_CONSTRUCTION_SITES);
-
-	if (constructionSitesAtLocation.length > 0) return;
-
-	var buildingsAtLocation = roomPositionToPlan.lookFor(LOOK_STRUCTURES);
-
-	for(var i = 0; i < buildingsAtLocation.length; i++)
-	{
-		var building = buildingsAtLocation[i];
-
-		if(building.structureType == structureType)
-		{
-			return;
-		}
-	}
-
-	roomPositionToPlan.createFlag("!PLAN|" + structureType + "|x" + roomPositionToPlan['x'] + "y" + roomPositionToPlan['y']);
 }
 
 Room.prototype.placeChunkFlags = function(chunkFlags) {
@@ -106,42 +79,6 @@ Room.prototype.placeChunkFlags = function(chunkFlags) {
 		}
 
 		chunkFlagDefinition['pos'].createFlag(flagName, color);
-	}
-}
-
-Room.prototype.drawBuildingPlan = function() {
-	var buildingPlan = this.memory.buildingPlan;
-
-	if(buildingPlan === undefined) {
-		if(Game.time % 180 == 0) console.log('Cannot draw building plan in ' + this.name);
-		return;
-	}
-
-	for(var x = 0; x < buildingPlan.length; x++) {
-		var column = buildingPlan[x];
-
-		for(var y = 0; y < column.length; y++) {
-			var structureType = column[y];
-
-			if(structureType === 'none') continue;
-
-			new RoomVisual(this.roomName).text(structureType.substring(0, 2), x, y, {font: 0.6});
-
-			if(structureType == 'road')
-				new RoomVisual(this.roomName).circle(x, y, {radius: 0.5, fill: '#cccccc'});
-
-			if(structureType == 'extension')
-				new RoomVisual(this.roomName).circle(x, y, {radius: 0.5, fill: '#cccc00'});
-
-			if(structureType == 'spawn')
-				new RoomVisual(this.roomName).circle(x, y, {radius: 0.5, fill: '#cc00cc'});
-
-			if(structureType == 'terminal')
-				new RoomVisual(this.roomName).circle(x, y, {radius: 0.5, fill: '#333333'});
-
-			if(structureType == 'link')
-				new RoomVisual(this.roomName).circle(x, y, {radius: 0.5, fill: '#3333ff'});
-		}
 	}
 }
 
@@ -521,7 +458,7 @@ Room.prototype.generateControllerSinkLinkPlan = function() {
 
 		console.log("Generated Controller Sink Pos for room " + this.name);
 		console.log(sinkPos);
-		createPlanningFlag(this, 'link', sinkPos);
+		console.log('NEED TO ADD LINK TO BUILD PLAN')
 		sinkPos.createFlag("!LINKSINK|" + this.name + "|0");
 	}
 }
@@ -530,8 +467,9 @@ Room.prototype.generateMineralMiningPlan = function() {
 	if(this.controller.level >= 6) {
 		var mineral = this.find(FIND_MINERALS)[0];
 	
-		createPlanningFlag(this, STRUCTURE_EXTRACTOR, mineral.pos);
 		mineral.pos.createFlag('!M|' + this.name + "|" + this.name + "|mineral");
+
+		console.log('NEED TO ADD MINERAL EXTRACTOR TO BUILDING PLAN')
 	}
 }
 
@@ -552,73 +490,6 @@ Room.prototype.createFunctionalFlags = function() {
 	}
 }
 
-Room.prototype.createConstructionPlanFlags = function() {
-	var buildingPlan = this.memory.buildingPlan;
-	for(var x = 0; x < buildingPlan.length; x++) {
-		var column = buildingPlan[x];
-
-		for(var y = 0; y < column.length; y++) {
-			var structureType = column[y];
-
-			if(structureType === 'none') continue;
-			
-			var mapPosition = {"x": x, "y": y}
-
-			createPlanningFlag(this, structureType, mapPosition);
-		}
-	}
-}
-
-Room.prototype.createRampartFlags = function() {
-	if(this.controller.level < 4) return;
-
-	var rampartPlan = new Array(50);
-
-	for(var i = 0; i < rampartPlan.length; i++)  {
-		rampartPlan[i] = new Array(50).fill('none');
-	}
-
-	var buildingPlan = this.memory.buildingPlan;
-	for(var x = 0; x < buildingPlan.length; x++) {
-		var column = buildingPlan[x];
-
-		for(var y = 0; y < column.length; y++) {
-			var structureType = column[y];
-			if(VALID_STRUCTURES_TO_RAMPART.includes(structureType)) {
-				var tilesToRampart = [
-					{"x":x-1, "y":y-1},{"x":x  , "y":y-1},{"x":x+1, "y":y-1},
-					{"x":x-1, "y":y  },{"x":x  , "y":y  },{"x":x+1, "y":y  },
-					{"x":x-1, "y":y+1},{"x":x  , "y":y+1},{"x":x+1, "y":y+1}
-				];
-
-				for(var i = 0; i < tilesToRampart.length; i++) {
-					var tile = tilesToRampart[i];
-					tile_x = Math.max(2, Math.min(47, tile['x']))
-					tile_y = Math.max(2, Math.min(47, tile['y']))
-					rampartPlan[tile_x][tile_y] = 'rampart';
-				}
-			}
-		}
-	}
-
-	for(var x = 0; x < rampartPlan.length; x++) {
-		var column = rampartPlan[x];
-
-		for(var y = 0; y < column.length; y++) {
-			var structureType = column[y];
-
-			if(structureType === 'rampart') {
-				new RoomVisual(this.name).text("R", x, y);
-				var roomPositionToPlan = new RoomPosition(x, y, this.name);
-
-				if(!roomPositionToPlan.structureExists(STRUCTURE_RAMPART)) {
-					roomPositionToPlan.createFlag("!PLAN|rampart|x" + roomPositionToPlan['x'] + "y" + roomPositionToPlan['y'], COLOR_RED);
-				}
-			}
-		}
-	}
-}
-
 Room.prototype.killGeneratedPlan = function() {
 	var flags = this.find(FIND_FLAGS);
 
@@ -626,7 +497,7 @@ Room.prototype.killGeneratedPlan = function() {
 	{
 		var flag = flags[i];
 
-		if(flag.name.startsWith("!PLAN") || flag.name.startsWith("!LINK") || flag.name.startsWith("!BAL") || flag.name.startsWith("!LAB")) {
+		if(flag.name.startsWith("!LINK") || flag.name.startsWith("!BAL") || flag.name.startsWith("!LAB")) {
 			flag.remove();
 		}
 	}
@@ -715,8 +586,7 @@ var chunkDefinitions = {
 				"balancer_start": [{"x": 25, "y": 22}],
 				"balancer_end": [{"x": 26, "y": 27}]
 			},
-			"harvest_destination": {"x":24,"y":21},
-			"buildings":{"container":{"pos":[{"x":24,"y":21}]},"spawn":{"pos":[{"x":25,"y":23}]},"extension":{"pos":[{"x":27,"y":23},{"x":26,"y":24},{"x":26,"y":25},{"x":28,"y":23},{"x":28,"y":24}]},"link":{"pos":[]},"terminal":{"pos":[]},"tower":{"pos":[]}}
+			"buildings":{"spawn":{"pos":[{"x":25,"y":23}]},"extension":{"pos":[{"x":27,"y":23},{"x":26,"y":24},{"x":26,"y":25},{"x":28,"y":23},{"x":28,"y":24}]},"link":{"pos":[]},"terminal":{"pos":[]},"tower":{"pos":[]}}
 		},
 		"1": {
 			"buildings":{"spawn":{"pos":[{"x":25,"y":23}]},"extension":{"pos":[]},"link":{"pos":[]},"road":{"pos":[]},"terminal":{"pos":[]},"tower":{"pos":[]}}

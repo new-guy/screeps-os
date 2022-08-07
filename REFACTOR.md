@@ -30,9 +30,6 @@ Ticks remaining in Safe mode
     - We get so much fucking complexity from having primary and secondary so thoroughly in the code.  Need to remove that logic wherever we can
 
 ### Refactors
-- Change most built construction site in bootstrapper and builder to "highest priority" so that we can use both "most built" and also set a build order by building type priority
-- Make construction use memory objects instead of flags, and be able to draw it on the friggin map
-    - Make road generation use the same logic that construction does
 - Either use Null or undefined - stop mixing
 - Make HomeRoomConstructionTools more DRY
 - Consolidate room/creep/colony/game tools/prototype modifications into files to make them more sensible
@@ -40,10 +37,11 @@ Ticks remaining in Safe mode
 - Booleans should be words instead of lots of &&s and ||s
 - Move constants to constants.js
 - CreepSpawners are way too verbose to define
-- Get rid of construction flags and just use a list + drawing on the screen
 - Generic "move to target" function & state?  Would be good to not have to keep rewriting it
 - Inits in main.js can be better - should instead be in object-specific files
-- Should roadmaps and building maps be different?  Or should the roadmap just be the road parts of the building map?
+
+### Potential issues
+- Colony-level road planning has potential for multiple colonies defining the same room and introducing a race condition.  Search for `addRoadsToBuildPlan(room) {`
 
 ### Fixes
 - Document how the friggin OS actually works

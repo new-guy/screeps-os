@@ -36,10 +36,6 @@ class HomeRoomManager extends RoomManager {
         if(this.room.harvestDestination !== undefined && this.room.state === 'default') {
             this.ensureDefaultUnits();
         }
-
-        if(this.room.harvestDestination !== undefined || this.room.controller.level >= 5) {
-            this.ensureDefenses();
-        }
     }
 
     ensureBalancers() {
@@ -111,10 +107,6 @@ class HomeRoomManager extends RoomManager {
     }
 
     ensureDefaultUnits() {
-        if(this.room.constructionSites.length > 0 || this.room.rampartsNeedingRepair.length > 0 || this.room.wallsNeedingRepair.length > 0) {
-            this.ensureColonyBuilder();
-        }
-
         if(this.shouldUpgrade) {
             this.ensureUpgraders();
             this.ensureUpgradeFeeders();
@@ -132,22 +124,6 @@ class HomeRoomManager extends RoomManager {
                 return harvestDest.store[RESOURCE_ENERGY] > ROOM_UPGRADE_MINIMUM_ENERGY_STORAGE;
             }
         }
-    }
-
-    ensureColonyBuilder() {
-        var data = {
-            'colonyName': this.colony.name,
-            'creepCount': 1,
-            'creepNameBase': 'colonyBuilder|' + this.room.name,
-            'creepBodyType': 'ColonyBuilder',
-            'creepProcessClass': 'ColonyBuilder',
-            'creepMemory': {
-                'targetColony': this.colony.name
-            }
-        };
-
-        var spawnPID ='spawnColonyBuilder|' + this.room.name;
-        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BUILDER_PRIORITY);
     }
 
     ensureUpgraders() {
@@ -191,10 +167,6 @@ class HomeRoomManager extends RoomManager {
 
         var spawnPID ='spawnUpgradeFeeders|' + upgradeFeederCount + '|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, ROOM_UPGRADE_CREEPS_PRIORITY);
-    }
-
-    ensureDefenses() {
-        this.ensureChildProcess(this.name + '|defensePlanner', 'DefensePlanner', {'roomName': this.name}, COLONY_DEFENSE_PRIORITY);
     }
 }
 

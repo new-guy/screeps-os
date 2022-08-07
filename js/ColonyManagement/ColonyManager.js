@@ -41,12 +41,10 @@ class ColonyManager extends Process {
 
     ensureRoomManagement() {
         this.ensureChildProcess(this.primaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.primaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
-        this.ensureChildProcess(this.primaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.primaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
         this.ensureChildProcess(this.primaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.primaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
 
         if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my && this.secondaryRoom.controller.level > 0) {
             this.ensureChildProcess(this.secondaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
-            this.ensureChildProcess(this.secondaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
             this.ensureChildProcess(this.secondaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.secondaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
         }
     }
@@ -99,7 +97,27 @@ class ColonyManager extends Process {
         //we only really wanna build roads if we can have a tower in the homeroom 'cause of repair time and cost
         if(this.colony.primaryRoom.controller.level >= 3) {
             this.ensureRoadGeneration();
+
+            if(this.colony.roomsNeedingBuilder.length > 0) {
+                this.ensureColonyBuilder();
+            }
         }
+    }
+
+    ensureColonyBuilder() {
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': 1,
+            'creepNameBase': 'colonyBuilder|' + this.colony.name,
+            'creepBodyType': 'ColonyBuilder',
+            'creepProcessClass': 'ColonyBuilder',
+            'creepMemory': {
+                'targetColony': this.colony.name
+            }
+        };
+
+        var spawnPID ='spawnColonyBuilder|' + this.colony.name;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BUILDER_PRIORITY);
     }
 
     ensureSecondaryRoom() {

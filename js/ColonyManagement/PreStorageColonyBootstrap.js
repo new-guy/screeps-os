@@ -18,9 +18,13 @@ class PreStorageColonyBootstrap extends Process {
 
         var bootstrapperBody = BodyGenerator.generateBody('BootStrapper', this.maxEnergyCapacityAvailable);
         var ticksToSpawn = BodyGenerator.getTicksToSpawn(bootstrapperBody);
-        var bootstrappersToSpawn = Math.floor(PRE_STORAGE_BOOTSTRAPPER_MAX_SPAWN_TICKS/ticksToSpawn); //Do not spawn more than a single spawner can support
 
-        bootstrappersToSpawn = Math.min(bootstrappersToSpawn, PRE_STORAGE_BOOTSTRAPPER_MAX); //Do not spawn more than the PRE_STORAGE_BOOTSTRAPPER_MAX_SPAWN_TICKS
+        var spawnColonyIsPreRCL3 = this.spawnColony.primaryRoom.controller.level < 3;
+        var max_ticks = spawnColonyIsPreRCL3 ? PRE_RCL3_BOOTSTRAPPER_MAX_SPAWN_TICKS : PRE_STORAGE_BOOTSTRAPPER_MAX_SPAWN_TICKS;
+        var bootstrappersToSpawn = Math.floor(max_ticks/ticksToSpawn); //Do not use more than the target max ticks
+
+        var max_to_spawn = spawnColonyIsPreRCL3 ? PRE_RCL3_BOOTSTRAPPER_MAX : PRE_STORAGE_BOOTSTRAPPER_MAX;
+        bootstrappersToSpawn = Math.min(bootstrappersToSpawn, max_to_spawn); //Do not spawn more than the max_to_spawn
 
         var data = {
             'colonyName': this.memory.spawnColonyName,

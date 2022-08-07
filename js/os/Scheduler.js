@@ -17,8 +17,7 @@ const HomeRoomManager = require('HomeRoomManager');
 const ComaRecovery = require('ComaRecovery');
 const TowerManager = require('TowerManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
-const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
-const DefensePlanner = require('DefensePlanner');
+const RoomConstructionSiteManager = require('RoomConstructionSiteManager');
 
 const SpawnCreep = require('SpawnCreep');
 const BootstrapSpawner = require('BootstrapSpawner');
@@ -56,8 +55,7 @@ var processTypeMap = {
     "ComaRecovery": ComaRecovery,
     "TowerManager": TowerManager,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
-    "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor,
-    "DefensePlanner": DefensePlanner,
+    "RoomConstructionSiteManager": RoomConstructionSiteManager,
     "SpawnCreep": SpawnCreep,
     "BootstrapSpawner" :BootstrapSpawner,
     "BootStrapper": BootStrapper,
@@ -201,8 +199,6 @@ class Scheduler {
     }
 
     ensureProcessExists(pid, processClass, data, priority) {
-        //TODO: MAKE THIS WORK - check if the process exists.  If not, make it
-
         if(!this.processExists(pid)) {
             this.addProcessThisTick(pid, processClass, data, priority);
         }
