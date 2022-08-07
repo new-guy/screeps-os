@@ -45,5 +45,8 @@ Ticks remaining in Safe mode
 - Inits in main.js can be better - should instead be in object-specific files
 - Should roadmaps and building maps be different?  Or should the roadmap just be the road parts of the building map?
 
+### Potential issues
+- Colony-level road planning has potential for multiple colonies defining the same room and introducing a race condition.  Search for `addRoadsToBuildPlan(room) {`
+
 ### Fixes
 - Document how the friggin OS actually works

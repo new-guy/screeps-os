@@ -19,13 +19,14 @@ class RoomConstructionSiteManager extends Process {
         else {
             console.log('no sites for room')
 
-            var structurePlanMap = this.getStructurePlanMapFromBuildingPlan();
+            var structurePlanMap = this.getStructurePlanMap();
             this.createFirstMissingSite(structurePlanMap);
         }
     }
 
-    getStructurePlanMapFromBuildingPlan() {
+    getStructurePlanMap() {
         var buildingPlan = this.room.memory.buildingPlan;
+        var roadBuildPlan = this.room.memory.roadBuildPlan;
         var structurePlanMap = {};
 
         for(var x = 0; x < buildingPlan.length; x++) {
@@ -34,7 +35,14 @@ class RoomConstructionSiteManager extends Process {
             for(var y = 0; y < column.length; y++) {
                 var structureType = column[y];
 
-                if(structureType === 'none') continue;
+                if(structureType === 'none') {
+                    if(roadBuildPlan !== undefined && roadBuildPlan[x][y] === 'road') {
+                        structureType = STRUCTURE_ROAD;
+                    }
+                    else {
+                        continue;
+                    }
+                }
 
                 var structPos = {'x': x, 'y': y};
 
