@@ -36,10 +36,6 @@ class HomeRoomManager extends RoomManager {
         if(this.room.harvestDestination !== undefined && this.room.state === 'default') {
             this.ensureDefaultUnits();
         }
-
-        if(this.room.harvestDestination !== undefined || this.room.controller.level >= 5) {
-            this.ensureDefenses();
-        }
     }
 
     ensureBalancers() {
@@ -191,10 +187,6 @@ class HomeRoomManager extends RoomManager {
 
         var spawnPID ='spawnUpgradeFeeders|' + upgradeFeederCount + '|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, ROOM_UPGRADE_CREEPS_PRIORITY);
-    }
-
-    ensureDefenses() {
-        this.ensureChildProcess(this.name + '|defensePlanner', 'DefensePlanner', {'roomName': this.name}, COLONY_DEFENSE_PRIORITY);
     }
 }
 
