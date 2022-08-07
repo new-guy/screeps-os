@@ -1,6 +1,6 @@
 var VALID_STRUCTURES_TO_RAMPART = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_LINK, STRUCTURE_TERMINAL, STRUCTURE_TOWER, STRUCTURE_STORAGE];
 
-Room.prototype.updateConstructionSites = function() {
+Room.prototype.updateBuildingPlans = function() {
 	var latestRCLGenerated = this.memory.latestRCLGenerated;
 
 	if(latestRCLGenerated === undefined) latestRCLGenerated = 0;
@@ -33,7 +33,6 @@ Room.prototype.updateConstructionSites = function() {
 		console.log('GENERATING LAYOUT FOR ' + this.name);
 
 		this.recalculateBuildingPlan();
-		this.createConstructionPlanFlags();
 		this.createFunctionalFlags();
 		this.generateControllerSinkLinkPlan();
 		this.generateMineralMiningPlan();
