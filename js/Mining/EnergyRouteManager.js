@@ -48,9 +48,6 @@ class EnergyRouteManager extends Process {
         var notWaitingForReserver = !this.waitingForReserver
 
         var isOperational = (this.minerExists && this.allHaulersExist && notWaitingForReserver)
-        if(!isOperational) {
-            console.log('Miner: ' + this.minerExists + ' Haulers: ' + this.allHaulersExist + ' Reserver: ' + notWaitingForReserver);
-        }
 
         return isOperational;
     }

@@ -238,6 +238,12 @@ class Colony {
         for(var i = 0; i < rooms.length; i++) {
             var room = rooms[i];
 
+            if(room.controller !== undefined && room.controller.my && room.controller.level >= 4 && room.storage === undefined) {
+            //If we don't have a storage and should, then this is the top room to work on
+                needyRoom = room;
+                break;
+            }
+
             if(room.mostDamagedRoad !== undefined && room.mostDamagedRoad.hits/room.mostDamagedRoad.hitsMax < COLONY_ROAD_HITS_CRITICAL_THRESHOLD) {
                 needyRoom = room;
                 break;

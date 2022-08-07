@@ -81,8 +81,6 @@ class EnergyHarvestingManager extends Process {
         for(var i = 0; i < this.memory.children.length; i++) {
             var childProcess = this.scheduler.getProcess(this.memory.children[i]);
 
-            console.log(this.memory.children[i] + ' operational: ' + childProcess.isOperational());
-
             if(!childProcess.isOperational()) {
                 areOperational = false;
                 break;
@@ -147,8 +145,6 @@ class EnergyHarvestingManager extends Process {
             var childProcess = this.scheduler.getProcess(this.memory.children[i]);
             var ticksUsed = childProcess.getUsedTicks();
             totalTicksUsed += ticksUsed
-
-            console.log(childProcess.pid + ': ' + ticksUsed);
         }
 
         var totalRoutes = this.memory.children.length;
@@ -158,9 +154,6 @@ class EnergyHarvestingManager extends Process {
             targetRoutes += this.colony.secondaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
 
         var totalMaxTicks = this.colony.spawns.length * MAX_TICKS_TO_USE_PER_SPAWN;
-
-        console.log('Routes: ' + totalRoutes + ' Target: ' + targetRoutes);
-        console.log('Ticks: ' + totalTicksUsed + ' Max: ' + totalMaxTicks);
 
         return (totalRoutes < targetRoutes && totalTicksUsed < totalMaxTicks);
     }

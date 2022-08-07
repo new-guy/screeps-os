@@ -45,6 +45,7 @@ Ticks remaining in Safe mode
 
 ### Potential issues
 - Colony-level road planning has potential for multiple colonies defining the same room and introducing a race condition.  Search for `addRoadsToBuildPlan(room) {`
+- The upgrade spawner and upgrade feeder spawner didn't get cleaned up on one occasion.  Child process cleanup failed :()
 
 ### Fixes
 - Document how the friggin OS actually works
