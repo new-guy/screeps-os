@@ -63,22 +63,22 @@ class RoomConstructionSiteManager extends Process {
                 var roomPos = new RoomPosition(x, y, this.room.name);
                 if(roomPos.structureExists(structureType)) continue;
     
-                new RoomVisual(this.room.name).text(structureType.substring(0, 2), x, y, {font: 0.6});
+                new RoomVisual(this.room.name).text(structureType.substring(0, 2), x, y+0.1, {font: 0.5});
     
                 if(structureType == 'road')
-                    new RoomVisual(this.room.name).circle(x, y, {radius: 0.5, fill: '#cccccc'});
+                    new RoomVisual(this.room.name).circle(x, y, {opacity: 0.3, radius: 0.4, fill: '#cccccc'});
     
                 if(structureType == 'extension')
-                    new RoomVisual(this.room.name).circle(x, y, {radius: 0.5, fill: '#cccc00'});
+                    new RoomVisual(this.room.name).circle(x, y, {opacity: 0.3, radius: 0.4, fill: '#cccc00'});
     
                 if(structureType == 'spawn')
-                    new RoomVisual(this.room.name).circle(x, y, {radius: 0.5, fill: '#cc00cc'});
+                    new RoomVisual(this.room.name).circle(x, y, {opacity: 0.3, radius: 0.4, fill: '#cc00cc'});
     
                 if(structureType == 'terminal')
-                    new RoomVisual(this.room.name).circle(x, y, {radius: 0.5, fill: '#333333'});
+                    new RoomVisual(this.room.name).circle(x, y, {opacity: 0.3, radius: 0.4, fill: '#333333'});
     
                 if(structureType == 'link')
-                    new RoomVisual(this.room.name).circle(x, y, {radius: 0.5, fill: '#3333ff'});
+                    new RoomVisual(this.room.name).circle(x, y, {opacity: 0.3, radius: 0.4, fill: '#3333ff'});
             }
         }
     }

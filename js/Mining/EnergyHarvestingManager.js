@@ -27,7 +27,6 @@ class EnergyHarvestingManager extends Process {
             //If we are in coma, only ensure the interior ones
         if(this.memory.children !== undefined) {
             this.ensureMiningRoutes();
-            this.drawMiningRoutes();
         }
 
         if(!this.allMiningRoutesAreOperational()) {
@@ -90,44 +89,6 @@ class EnergyHarvestingManager extends Process {
         }
 
         return areOperational;
-    }
-
-    drawMiningRoutes() {
-        var rootPosition = {
-            x: 42,
-            y: 3
-        };
-
-        var visualStyle = {
-            align: 'left',
-            color: '#cccc00'
-        };
-
-        var visual = new RoomVisual(this.colony.primaryRoom.name);
-
-        var totalTicksUsed = 0;
-        for(var i = 0; i < this.memory.children.length; i++) {
-            var childProcess = this.scheduler.getProcess(this.memory.children[i]);
-            var isOperational = childProcess.isOperational();
-            var ticksUsed = childProcess.getUsedTicks();
-            totalTicksUsed += ticksUsed
-
-            visual.text(childProcess.pid.split("|")[0], rootPosition['x'], rootPosition['y'] + 2 + i, visualStyle);
-
-            var fillColor = isOperational ? "#00ff00" : "#ff0000";
-            visual.circle(rootPosition['x'] - 0.5, rootPosition['y'] + 1.8 + i, {fill: fillColor});
-        }
-
-        var totalRoutes = this.memory.children.length;
-        var targetRoutes = this.colony.primaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
-
-        if (this.colony.secondaryRoom !== undefined)
-            targetRoutes += this.colony.secondaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
-
-        var totalMaxTicks = this.colony.spawns.length * MAX_TICKS_TO_USE_PER_SPAWN;
-
-        visual.text('Routes: ' + totalRoutes + ' | Target: ' + targetRoutes, rootPosition['x'], rootPosition['y'], visualStyle);
-        visual.text('Ticks: ' + totalTicksUsed + ' | Max: ' + totalMaxTicks, rootPosition['x'], rootPosition['y'] + 1, visualStyle);
     }
 
     canCreateNewMiningRoute() {

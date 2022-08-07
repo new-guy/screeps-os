@@ -16,9 +16,10 @@ class RoadGenerator extends Process {
             this.regenerateRoads();
             this.colony.memory['roadRegenerateTick'] = Game.time;
 
-            for(var roomName in this.colonyRoomInfo) {
+            for(var roomName in this.colony.colonyRoomInfo) {
                 var room = Game.rooms[roomName];
-                addRoadsToRoomMemory(room);
+                if(room === undefined) continue;
+                this.addRoadsToRoomMemory(room);
             }
         }
     }
