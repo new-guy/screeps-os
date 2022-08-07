@@ -586,8 +586,7 @@ var chunkDefinitions = {
 				"balancer_start": [{"x": 25, "y": 22}],
 				"balancer_end": [{"x": 26, "y": 27}]
 			},
-			"harvest_destination": {"x":24,"y":21},
-			"buildings":{"container":{"pos":[{"x":24,"y":21}]},"spawn":{"pos":[{"x":25,"y":23}]},"extension":{"pos":[{"x":27,"y":23},{"x":26,"y":24},{"x":26,"y":25},{"x":28,"y":23},{"x":28,"y":24}]},"link":{"pos":[]},"terminal":{"pos":[]},"tower":{"pos":[]}}
+			"buildings":{"spawn":{"pos":[{"x":25,"y":23}]},"extension":{"pos":[{"x":27,"y":23},{"x":26,"y":24},{"x":26,"y":25},{"x":28,"y":23},{"x":28,"y":24}]},"link":{"pos":[]},"terminal":{"pos":[]},"tower":{"pos":[]}}
 		},
 		"1": {
 			"buildings":{"spawn":{"pos":[{"x":25,"y":23}]},"extension":{"pos":[]},"link":{"pos":[]},"road":{"pos":[]},"terminal":{"pos":[]},"tower":{"pos":[]}}

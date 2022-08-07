@@ -97,10 +97,10 @@ class ColonyManager extends Process {
         //we only really wanna build roads if we can have a tower in the homeroom 'cause of repair time and cost
         if(this.colony.primaryRoom.controller.level >= 3) {
             this.ensureRoadGeneration();
-        }
 
-        if(this.colony.roomsNeedingBuilder.length > 0) {
-            this.ensureColonyBuilder();
+            if(this.colony.roomsNeedingBuilder.length > 0) {
+                this.ensureColonyBuilder();
+            }
         }
     }
 
