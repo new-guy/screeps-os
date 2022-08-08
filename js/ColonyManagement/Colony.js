@@ -38,6 +38,10 @@ class Colony {
                 continue;
             }
 
+            if(Game.map.getRoomStatus(roomName).status === 'closed') {
+                continue;
+            }
+
             if(this.roomIsOutOfRange(roomName)) {
                 continue;
             }

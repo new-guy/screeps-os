@@ -46,6 +46,11 @@ class ColonyScoutingManager extends Process {
 
                     if(distance === "1") spawnPriority = COLONY_ADJACENT_SCOUT_PRIORITY;
 
+                    if(Game.recon.isRoomNameDangerous(roomName)) {
+                        //If room is dangerous, we don't want to ensure scouting for it.
+                        continue;
+                    }
+
                     if(Memory.scouting.rooms[roomName] === undefined)  {
                         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, spawnPriority);
                     }
