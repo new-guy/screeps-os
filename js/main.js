@@ -18,6 +18,7 @@ require('RoomTools');
 //RoomPosition
 require('RoomPositionTools');
 
+const ReconTools = require('ReconTools');
 const Scheduler = require('Scheduler');
 const Colony = require('Colony');
 
@@ -36,6 +37,10 @@ module.exports.loop = function() {
 }
 
 function initCustomObjects() {
+    const recon = new ReconTools();
+    Game.recon = recon;
+    recon.update();
+
     initScouting();
     initEmpire();
     initColonies();
@@ -105,6 +110,8 @@ function initCreeps() {
 function initRooms() {
     for(var roomName in Game.rooms) {
         var room = Game.rooms[roomName];
+
+        Game.recon.initRoomRecon(room);
 
         room.state = room.memory.state;
 

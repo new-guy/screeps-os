@@ -1,14 +1,5 @@
 const Process = require('Process');
 
-var DEFAULT_SCOUT_INTERVAL = 4000;
-var DISTANCE_SCOUT_INTERVAL = {
-    "1": 50,
-    "2": 2000,
-    "3": DEFAULT_SCOUT_INTERVAL
-};
-
-var ROOM_INFO_UPDATE_INTERVAL = 1000;
-
 class ColonyScoutingManager extends Process {
     constructor (...args) {
         super(...args);
@@ -24,9 +15,9 @@ class ColonyScoutingManager extends Process {
         var roomsByDistance = this.colony.roomsByDistance;
 
         for(var distance in roomsByDistance) {
-            var scoutInterval = DISTANCE_SCOUT_INTERVAL[distance];
+            var scoutInterval = COLONY_DISTANCE_SCOUT_INTERVAL[distance];
 
-            if(scoutInterval === undefined) scoutInterval = DEFAULT_SCOUT_INTERVAL;
+            if(scoutInterval === undefined) scoutInterval = COLONY_DEFAULT_SCOUT_INTERVAL;
 
             for(var i in roomsByDistance[distance]) {
                 var roomName = roomsByDistance[distance][i].roomName;
@@ -74,7 +65,7 @@ class ColonyScoutingManager extends Process {
 
         var scoutingInfo = Memory.scouting.rooms[room.name];
             
-        if(scoutingInfo.sourceInfo === undefined || scoutingInfo.lastFullColonyScout === undefined || Game.time - scoutingInfo.lastFullColonyScout > ROOM_INFO_UPDATE_INTERVAL) {
+        if(scoutingInfo.sourceInfo === undefined || scoutingInfo.lastFullColonyScout === undefined || Game.time - scoutingInfo.lastFullColonyScout > COLONY_ROOM_INFO_UPDATE_INTERVAL) {
             var fullSourceInfo = {};
             var primaryHeartPos = this.colony.primaryRoom.find(FIND_FLAGS, {filter: function(f) { return f.name.startsWith('!CHUNK|heart') }})[0].pos;
     

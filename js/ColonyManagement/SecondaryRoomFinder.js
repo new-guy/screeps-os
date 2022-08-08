@@ -49,7 +49,11 @@ class SecondaryRoomFinder extends Process {
 
             else {
                 console.log('Check Secondary: ' + roomName);
-                if(room.hasSourceKeepers) {
+                if(room.controller === undefined) {
+                    colonyRoomInfo['isValidSecondary'] = false;
+                    colonyRoomInfo['checkedForSecondary'] = true;
+                }
+                else if(room.hasSourceKeepers) {
                     colonyRoomInfo['isValidSecondary'] = false;
                     colonyRoomInfo['checkedForSecondary'] = true;
                 }

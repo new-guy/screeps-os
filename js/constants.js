@@ -13,6 +13,17 @@ COLONY_EXPANSION_SUPPORT = 55;
 COLONY_NONESSENTIAL_PRIORITY = 50;
 DEFAULT_PRIORITY = 10;
 
+//Recon
+COLONY_DEFAULT_SCOUT_INTERVAL = 4000;
+COLONY_DISTANCE_SCOUT_INTERVAL = {
+    "1": 50,
+    "2": 2000,
+    "3": COLONY_DEFAULT_SCOUT_INTERVAL
+};
+COLONY_ROOM_INFO_UPDATE_INTERVAL = 1000;
+
+ROOM_IS_DANGEROUS_TIMEOUT = 2000;
+
 
 //IDK LIKE FUCKIN STUFF OR WHATEVER
 SMALL_BALANCER_CARRY_PARTS = 4; //If it's less than or equal to this, the balancer is considered small, which means it gets killed if the room is full on its balancer :)
