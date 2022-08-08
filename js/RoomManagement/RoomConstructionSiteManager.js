@@ -12,6 +12,10 @@ class RoomConstructionSiteManager extends Process {
             return 'exit';
         }
 
+        if(this.room === undefined) {
+            return 'exit';
+        }
+
         var structurePlanMap = this.getStructurePlanMap();
         this.drawStructurePlanMap(structurePlanMap);
 

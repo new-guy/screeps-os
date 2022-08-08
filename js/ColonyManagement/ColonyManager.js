@@ -129,7 +129,7 @@ class ColonyManager extends Process {
             count++;
         }
 
-        if(this.colony.secondaryRoom.storage === undefined && this.colony.primaryRoom.harvestDestination !== undefined) {
+        if(this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.storage === undefined && this.colony.primaryRoom.harvestDestination !== undefined) {
             count++;
         }
 
