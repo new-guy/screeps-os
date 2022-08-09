@@ -109,6 +109,7 @@ class Roadmap {
             // can set the road cost lower in `roomCallback`
             plainCost: 4,
             swampCost: 6,
+            maxOps: 10000,
             
             roomCallback: function(roomName) {
                 let room = Game.rooms[roomName];
