@@ -34,6 +34,7 @@ class ReconTools {
     isRoomNameDangerous(roomName) {
         var room = Game.rooms[roomName];
         if(room === undefined) {
+            if(Memory.rooms[roomName] === undefined) return false;
             var isDangerous = Memory.rooms[roomName].recon.isDangerous;
             if(isDangerous === undefined || !isDangerous) {
                 return false;

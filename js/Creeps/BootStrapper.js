@@ -128,7 +128,7 @@ class BootStrapper extends CreepProcess {
 
         if(target instanceof StructureSpawn || target instanceof StructureExtension || target instanceof StructureStorage) {
             this.creep.putEnergyInTarget();
-            if(!this.creep.hasTarget() && this.creep.room.energyAvailable < this.creep.room.energyCapacityAvailable) {
+            if(!this.creep.hasTarget() && this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable) {
                 if(this.creep.room.constructionSites !== undefined && this.creep.room.constructionSites.length > 0) {
                     this.creep.setTarget(this.creep.room.mostBuiltConstructionSite);
                 }
