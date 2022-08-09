@@ -32,7 +32,7 @@ class Miner extends CreepProcess {
         }
 
         else {
-            if((this.container === null && this.creep.carry.energy < this.creep.CarryCapacity/2) ||
+            if((this.container === null && this.creep.carry.energy < this.creep.carryCapacity/2) ||
                (this.container !== null && this.creep.carry.energy < this.creep.carryCapacity)) {
                 this.creep.harvest(this.targetSource);
                 this.creep.say('Harvest');
