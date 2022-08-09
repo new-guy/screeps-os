@@ -15,7 +15,7 @@ class ReconTools {
 
         var isRoomDangerous = this.isRoomDangerous(room);
 
-        this.recordRoomDanger(room, isRoomDangerous);
+        this.recordRoomDanger(room.name, isRoomDangerous);
     }
 
     isRoomDangerous(room) {
@@ -23,11 +23,11 @@ class ReconTools {
         return isDangerous;
     }
 
-    recordRoomDanger(room, isDangerous) {
-        room.memory.recon.isDangerous = isDangerous;
+    recordRoomDanger(roomName, isDangerous) {
+        Memory.rooms[roomName].recon.isDangerous = isDangerous;
 
         if(isDangerous) {
-            room.memory.recon.dangerLastSeen = Game.time
+            Memory.rooms[roomName].recon.dangerLastSeen = Game.time
         }
     }
 
