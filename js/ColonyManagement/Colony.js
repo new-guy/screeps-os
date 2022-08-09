@@ -326,6 +326,14 @@ class Colony {
         return controller;
     }
 
+    get hasNecessaryMinimumEnergy() {
+        var hasMinEnergy = this.primaryRoom.hasNecessaryMinimumEnergy();
+
+        if(this.secondaryRoom !== undefined) hasMinEnergy = hasMinEnergy || this.secondaryRoom.hasNecessaryMinimumEnergy();
+
+        return hasMinEnergy;
+    }
+
     initSpawnInfo() {
         var primaryRoomSpawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
         var spawns = primaryRoomSpawns;
@@ -469,6 +477,8 @@ class Colony {
         for(var roomName in this.colonyRoomInfo) {
             var room = Game.rooms[roomName];
             if(room === undefined) continue;
+
+            if(Game.recon.isRoomNameDangerous(roomName)) continue; //Avoid dangerous rooms
 
             var sourcesInRoom = room.find(FIND_SOURCES);
 

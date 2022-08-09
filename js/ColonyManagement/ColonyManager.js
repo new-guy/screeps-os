@@ -98,7 +98,7 @@ class ColonyManager extends Process {
         if(this.colony.primaryRoom.controller.level >= 3) {
             this.ensureRoadGeneration();
 
-            if(this.colony.roomsNeedingBuilder.length > 0) {
+            if(this.colony.roomsNeedingBuilder.length > 0 && this.colony.hasNecessaryMinimumEnergy) {
                 this.ensureColonyBuilder();
             }
         }
