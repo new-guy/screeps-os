@@ -1,8 +1,7 @@
-var SAVE_LOWER_THRESHOLD = 3000;
-var SAVE_UPPER_THRESHOLD = 4000;
+
 
 StructureController.prototype.needsSaving = function() {
-    return this.my && this.ticksToDowngrade < SAVE_LOWER_THRESHOLD;
+    return this.my && this.ticksToDowngrade < BOOTSTRAPPER_SAVE_CONTROLLER_THRESHOLD;
 }
 
 Creep.prototype.upgradeThisController = function(controller) {

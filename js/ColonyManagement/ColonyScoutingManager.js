@@ -48,6 +48,7 @@ class ColonyScoutingManager extends Process {
 
                     if(Game.recon.isRoomNameDangerous(roomName)) {
                         //If room is dangerous, we don't want to ensure scouting for it.
+                        console.log('Room ' + roomName + ' is dangerous - not sending scout')
                         continue;
                     }
 
