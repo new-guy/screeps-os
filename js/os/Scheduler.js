@@ -18,6 +18,7 @@ const ComaRecovery = require('ComaRecovery');
 const TowerManager = require('TowerManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const RoomConstructionSiteManager = require('RoomConstructionSiteManager');
+const RampartPlanner = require('RampartPlanner');
 
 const SpawnCreep = require('SpawnCreep');
 const BootstrapSpawner = require('BootstrapSpawner');
@@ -69,7 +70,8 @@ var processTypeMap = {
     "Upgrader": Upgrader,
     "UpgradeFeeder": UpgradeFeeder,
     "TowerFiller": TowerFiller,
-    "ExpansionBootstrap": ExpansionBootstrap
+    "ExpansionBootstrap": ExpansionBootstrap,
+    "RampartPlanner": RampartPlanner
 };
 
 var MAX_PROCESSES_TO_DISPLAY = 10;

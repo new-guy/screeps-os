@@ -129,7 +129,7 @@ class RoomConstructionSiteManager extends Process {
             var structPos = new RoomPosition(posXY.x, posXY.y, this.room.name);
 
             if(!structPos.structureExists(structureType) && !structPos.constructionSiteExists(structureType)) {
-                if(structPos.structureExists()) {
+                if(structPos.structureExists() && structPos.getStructure().structureType !== STRUCTURE_RAMPART) {
                     var struct = structPos.getStructure();
                     struct.destroy();
                     console.log('Destroyed ' + structureType + ' in ' + this.room.name + ' at ' + posXY.x + ', ' + posXY.y);

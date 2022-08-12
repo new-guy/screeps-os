@@ -36,6 +36,10 @@ class HomeRoomManager extends RoomManager {
         if(this.room.harvestDestination !== undefined && this.room.state === 'default') {
             this.ensureDefaultUnits();
         }
+
+        if(this.room.controller.level >= 4) {
+            this.ensureRampartPlanner();
+        }
     }
 
     ensureBalancers() {
@@ -160,6 +164,15 @@ class HomeRoomManager extends RoomManager {
 
         var spawnPID ='spawnUpgradeFeeders|' + upgradeFeederCount + '|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, ROOM_UPGRADE_CREEPS_PRIORITY);
+    }
+
+    ensureRampartPlanner() {
+        var data = {
+            'roomName': this.room.name
+        };
+        
+        var spawnPID = 'rampartPlanner|' + this.room.name;
+        this.ensureChildProcess(spawnPID, 'RampartPlanner', data, COLONY_MANAGEMENT_PRIORITY);
     }
 }
 
