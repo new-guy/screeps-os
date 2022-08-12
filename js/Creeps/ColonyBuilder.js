@@ -100,10 +100,6 @@ class ColonyBuilder extends CreepProcess {
     }
 
     getTargetRoom() {
-
-        //Check if a room needs critical repairs
-        //Check if this room has construction sites
-        //Otherwise just set targetRoom to the colony's most needed
         if(this.targetColony.roomNeedingCriticalRepairs !== undefined) {
             return this.targetColony.roomNeedingCriticalRepairs;
         }

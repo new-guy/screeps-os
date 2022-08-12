@@ -238,6 +238,7 @@ class Colony {
         // - Go to room that needs critical repairs
 
         var needyRoom = undefined;
+        var needyRoadPercent = 100;
 
         for(var i = 0; i < rooms.length; i++) {
             var room = rooms[i];
@@ -248,9 +249,9 @@ class Colony {
                 break;
             }
 
-            if(room.mostDamagedRoad !== undefined && room.mostDamagedRoad.hits/room.mostDamagedRoad.hitsMax < COLONY_ROAD_HITS_CRITICAL_THRESHOLD) {
+            if(room.mostDamagedRoad !== undefined && room.mostDamagedRoad.hits/room.mostDamagedRoad.hitsMax < needyRoadPercent && room.mostDamagedRoad.hits/room.mostDamagedRoad.hitsMax < COLONY_ROAD_HITS_CRITICAL_THRESHOLD) {
                 needyRoom = room;
-                break;
+                needyRoadPercent = room.mostDamagedRoad.hits/room.mostDamagedRoad.hitsMax;
             }
         }
 
@@ -268,7 +269,13 @@ class Colony {
         for(var i = 0; i < rooms.length; i++) {
             var room = rooms[i];
 
-            if(room.constructionSites !== undefined && room.constructionSites.length > 0 && room.constructionSites.length < constructionSites) {
+            if((room.name === this.primaryRoom.name || room.name === this.secondaryRoom.name) && room.harvestDestination === undefined && room.constructionSites.length > 0) {
+                needyRoom = room;
+                console.log('Set most needed to ' + room.name + ' because harvestDest missing');
+                break;
+            }
+
+            else if(room.constructionSites !== undefined && room.constructionSites.length > 0 && room.constructionSites.length < constructionSites) {
                 needyRoom = room;
                 constructionSites = room.constructionSites.length;
                 console.log('Set most needed to ' + room.name);
