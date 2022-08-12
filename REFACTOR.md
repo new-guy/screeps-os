@@ -10,9 +10,10 @@
 
 ### Necessary to get on public server
 - Defense against invaders
-- Roads
-- Ramparts
-- Replace container w/ storage
+
+### Important New Features
+- Expansion
+- Colonies need to check if a room is already used by another colony before adding it to the colonyRoomInfo
 
 ### Records
 Ticks remaining in Safe mode
@@ -23,10 +24,8 @@ Ticks remaining in Safe mode
     - Pass 1:
 
 ### Functionality to change
-- Small balancer is such a waste
 - New Defense Code
     - Both creating defenses and killing enemies
-- Scouting needs to detect when destinations are dangerous and set a value in the room's memory that can then be checked by other processes
 - Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
     - Probably should minimize the differentiation in general to help simplify things
         - We reference the word "secondaary" 154 times :|
@@ -36,7 +35,6 @@ Ticks remaining in Safe mode
 - Either use Null or undefined - stop mixing
 - Make HomeRoomConstructionTools more DRY
 - Consolidate room/creep/colony/game tools/prototype modifications into files to make them more sensible
-- Get rid of targetRoom for bootstrapper
 - Booleans should be words instead of lots of &&s and ||s
 - Move constants to constants.js
 - CreepSpawners are way too verbose to define
