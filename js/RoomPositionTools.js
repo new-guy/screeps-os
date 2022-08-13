@@ -219,6 +219,28 @@ RoomPosition.prototype.hasAdjacentWall = function() {
 	return this.lookForAdjacent(LOOK_TERRAIN).includes('wall');
 }
 
+RoomPosition.prototype.findMyAdjacentCreeps = function() {
+	var adjacentCreeps = this.lookForAdjacent(LOOK_CREEPS);
+	var myCreeps = [];
+
+	for(var i = 0; i < adjacentCreeps.length; i++) {
+		var creep = adjacentCreeps[i];
+		if(creep === undefined) continue;
+		if(creep.my) myCreeps.push(creep);
+	}
+
+	return myCreeps;
+}
+
+RoomPosition.prototype.randomMoveAdjacentCreeps = function() {
+	var myCreeps = this.findMyAdjacentCreeps();
+
+	for(var i = 0; i < myCreeps.length; i++) {
+		var creep = myCreeps[i];
+		creep.moveRandom();
+	}
+}
+
 RoomPosition.prototype.lookForAdjacent = function(lookType) {
 	var results = [];
 

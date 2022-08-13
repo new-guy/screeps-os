@@ -123,6 +123,19 @@ class Balancer extends CreepProcess {
     }
 
     moveAlongBalancerPath(path) {
+        var currentPos = this.creep.pos;
+        var lastPos = this.creep.memory.lastPosition;
+
+        if(lastPos !== undefined && lastPos.x === currentPos.x && lastPos.y === currentPos.y) {
+            //Find adjacent creeps and make them move randomly
+            this.creep.pos.randomMoveAdjacentCreeps();
+        }
+
+        this.creep.memory.lastPosition = {
+            "x": currentPos.x,
+            "y": currentPos.y
+        };
+
         var roomPosPath = [];
 
         for(var i = 0; i < path.length; i++) {

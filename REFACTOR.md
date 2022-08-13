@@ -14,6 +14,7 @@
 ### Important New Features
 - Expansion
 - Colonies need to check if a room is already used by another colony before adding it to the colonyRoomInfo
+- Make the creeps actually walk on roads without avoiding each other
 
 ### Records
 Ticks remaining in Safe mode
@@ -24,8 +25,7 @@ Ticks remaining in Safe mode
     - Pass 1:
 
 ### Functionality to change
-- New Defense Code
-    - Both creating defenses and killing enemies
+- Balancers suck - they easily get blocked by other creeps and can't move past them.  Need to update them to be less dumb, and find some good way to go about ensuring that they aren't so teeny-tiny
 - Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
     - Probably should minimize the differentiation in general to help simplify things
         - We reference the word "secondaary" 154 times :|
