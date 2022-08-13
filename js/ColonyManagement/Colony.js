@@ -153,6 +153,11 @@ class Colony {
             visual.text('Col: ' + this.name, 1, 1, {align: 'left'});
             visual.text('Pri: ' + colonyRoomInfo['distanceFromPrimary'], 1, 2, {align: 'left'});
             visual.text('Sec: ' + colonyRoomInfo['distanceFromSecondary'], 1, 3, {align: 'left'});
+
+            var mapDescriptor = this.name;
+            if(this.primaryRoom.name === roomName) mapDescriptor += " | Pri";
+            if(this.secondaryRoom !== undefined && this.secondaryRoom.name === roomName) mapDescriptor += " | Sec";
+            Game.map.visual.text(mapDescriptor, new RoomPosition(2, 2, roomName), {color: '#CCCCCC', fontSize: 5, align: 'left', opacity: 1.0});
         }
     }
 
