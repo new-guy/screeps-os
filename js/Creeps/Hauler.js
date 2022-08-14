@@ -5,7 +5,7 @@ class Hauler extends CreepProcess {
         super(...args);
 
         if(this.creep !== undefined) {
-            this.targetStorage = Game.getObjectById(this.creep.memory['targetStorageId']);
+            this.targetHarvestDestination = Game.rooms[this.creep.memory['targetStorageRoom']].harvestDestination;
             this.containerPos = new RoomPosition(this.creep.memory['containerPos']['x'], this.creep.memory['containerPos']['y'], this.creep.memory['containerPos']['roomName'])
 
             if(Game.rooms[this.containerPos.roomName] !== undefined) {
@@ -50,7 +50,7 @@ class Hauler extends CreepProcess {
         }
 
         else if(state === 'dropoffEnergy') {
-            this.creep.setTarget(this.targetStorage);
+            this.creep.setTarget(this.targetHarvestDestination);
             this.creep.putEnergyInTarget();
         }
     }

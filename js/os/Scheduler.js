@@ -8,7 +8,7 @@ const EmpireManager = require('EmpireManager');
 const ColonyManager = require('ColonyManager');
 const ColonyScoutingManager = require('ColonyScoutingManager');
 const SecondaryRoomFinder = require('SecondaryRoomFinder');
-const PreStorageSelfBootstrap = require('PreStorageSelfBootstrap');
+const PreStorageColonyBootstrap = require('PreStorageColonyBootstrap');
 const RoadGenerator = require('RoadGenerator');
 const EnergyHarvestingManager = require('EnergyHarvestingManager');
 const EnergyRouteManager = require('EnergyRouteManager');
@@ -17,8 +17,8 @@ const HomeRoomManager = require('HomeRoomManager');
 const ComaRecovery = require('ComaRecovery');
 const TowerManager = require('TowerManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
-const PlanningConstructionFlagMonitor = require('PlanningConstructionFlagMonitor');
-const DefensePlanner = require('DefensePlanner');
+const RoomConstructionSiteManager = require('RoomConstructionSiteManager');
+const RampartPlanner = require('RampartPlanner');
 
 const SpawnCreep = require('SpawnCreep');
 const BootstrapSpawner = require('BootstrapSpawner');
@@ -48,7 +48,7 @@ var processTypeMap = {
     "ColonyManager": ColonyManager,
     "ColonyScoutingManager": ColonyScoutingManager,
     "SecondaryRoomFinder": SecondaryRoomFinder,
-    "PreStorageSelfBootstrap": PreStorageSelfBootstrap,
+    "PreStorageColonyBootstrap": PreStorageColonyBootstrap,
     "RoadGenerator": RoadGenerator,
     "EnergyHarvestingManager": EnergyHarvestingManager,
     "EnergyRouteManager": EnergyRouteManager,
@@ -56,8 +56,7 @@ var processTypeMap = {
     "ComaRecovery": ComaRecovery,
     "TowerManager": TowerManager,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
-    "PlanningConstructionFlagMonitor": PlanningConstructionFlagMonitor,
-    "DefensePlanner": DefensePlanner,
+    "RoomConstructionSiteManager": RoomConstructionSiteManager,
     "SpawnCreep": SpawnCreep,
     "BootstrapSpawner" :BootstrapSpawner,
     "BootStrapper": BootStrapper,
@@ -71,7 +70,8 @@ var processTypeMap = {
     "Upgrader": Upgrader,
     "UpgradeFeeder": UpgradeFeeder,
     "TowerFiller": TowerFiller,
-    "ExpansionBootstrap": ExpansionBootstrap
+    "ExpansionBootstrap": ExpansionBootstrap,
+    "RampartPlanner": RampartPlanner
 };
 
 var MAX_PROCESSES_TO_DISPLAY = 10;
@@ -111,13 +111,13 @@ class Scheduler {
         while(this.shouldContinueProcessing()) {
             var activeProcessMetadata = this.sortedProcesses[this.programCounter]['metadata'];
             var processClass = activeProcessMetadata['processClass'];
-            //console.log("#PC: " + this.programCounter + " | " + activeProcessMetadata['pid']);
+            // console.log("#PC: " + this.programCounter + " | " + activeProcessMetadata['pid']);
 
             if(this.processesBeingRemoved.includes(activeProcessMetadata['pid'])) {
                 console.log('#Skipping because removal ' + activeProcessMetadata['pid']);
             }
 
-            else if(!processClass in processTypeMap) {
+            else if(!(processClass in processTypeMap)) {
                 console.log("#Error: process class " + processClass + " does not exist");
             }
 
@@ -169,7 +169,7 @@ class Scheduler {
         var processResult = activeProcess.finish();
 
         if(processResult == 'exit') {
-            this.removeProcess(activeProcessMetadata['pid']);
+            this.garbageCollectProcess(activeProcessMetadata['pid']);
         }
 
         else {
@@ -201,8 +201,6 @@ class Scheduler {
     }
 
     ensureProcessExists(pid, processClass, data, priority) {
-        //TODO: MAKE THIS WORK - check if the process exists.  If not, make it
-
         if(!this.processExists(pid)) {
             this.addProcessThisTick(pid, processClass, data, priority);
         }
@@ -244,18 +242,16 @@ class Scheduler {
         }
     }
 
-    removeProcess(pid) {
+    garbageCollectProcess(pid) {
     //Recursively remove the process from memory, along with its child processes
         if(Memory.processes[pid] !== undefined)
         {
             if(Memory.processes[pid]['data']['children'] !== undefined) {
                 for(var i = 0; i < Memory.processes[pid]['data']['children'].length; i++) {
                     var childProcessPid = Memory.processes[pid]['data']['children'][i];
-                    this.removeProcess(childProcessPid);
+                    this.garbageCollectProcess(childProcessPid);
                 }
             }
-    
-            Memory.processes[pid] = undefined;
         }
 
         this.processesBeingRemoved.push(pid);

@@ -11,17 +11,21 @@ The overarching goal here is to build an AI that is driven around running indivi
 - npm install screeps
 - npx screeps init
 
-- npx screeps start
-- npx screeps cli in new window
+- npx screeps server to run locally
+- npx screeps cli to get local cli
+
+- sh start_server.sh (you might need to use ifconfig to get your IP and update this)
+- sh start_cli.sh in new window
 - start the client in steam and connect to logged server address
 
 - place a spawn
-- run 
+- run deploy_[env]
 
 ## How to play
 
 ### Respawning
 - Place the spawn
+- Increase GCL: `storage.db['users'].update({ username: 'asdf' },{ $set: { gcl: 5000000 }})`
 
 ### High Level Controls
 - Building - !CHUNK|chunktype|UID

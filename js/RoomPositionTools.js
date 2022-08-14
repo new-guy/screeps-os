@@ -64,11 +64,13 @@ RoomPosition.prototype.creepExists = function()
 
 RoomPosition.prototype.getStructure = function(structureType)
 {
+	if(Game.rooms[this.roomName] === undefined) return null;
+
 	var structureArray = this.lookFor(LOOK_STRUCTURES);
 
 	if(structureType === undefined)
 	{
-		return structureArray.length > 0;
+		return structureArray[0];
 	}
 
 	for(var i = 0; i < structureArray.length; i++)
@@ -215,6 +217,28 @@ RoomPosition.prototype.getOpenAdjacentPos = function()
 
 RoomPosition.prototype.hasAdjacentWall = function() {
 	return this.lookForAdjacent(LOOK_TERRAIN).includes('wall');
+}
+
+RoomPosition.prototype.findMyAdjacentCreeps = function() {
+	var adjacentCreeps = this.lookForAdjacent(LOOK_CREEPS);
+	var myCreeps = [];
+
+	for(var i = 0; i < adjacentCreeps.length; i++) {
+		var creep = adjacentCreeps[i];
+		if(creep === undefined) continue;
+		if(creep.my) myCreeps.push(creep);
+	}
+
+	return myCreeps;
+}
+
+RoomPosition.prototype.randomMoveAdjacentCreeps = function() {
+	var myCreeps = this.findMyAdjacentCreeps();
+
+	for(var i = 0; i < myCreeps.length; i++) {
+		var creep = myCreeps[i];
+		creep.moveRandom();
+	}
 }
 
 RoomPosition.prototype.lookForAdjacent = function(lookType) {

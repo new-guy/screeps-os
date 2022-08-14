@@ -8,6 +8,13 @@ Room.prototype.hasNoBuildingSlots = function(structureType) {
 	return builtStructCount == structureCountMax;
 }
 
+Room.prototype.hasZeroBuildingSlots = function(structureType) {
+	var rcl = this.controller.level;
+	var structureCountMax = CONTROLLER_STRUCTURES[structureType][rcl];
+
+	return structureCountMax === 0;
+}
+
 Room.prototype.getPlainsPercentage = function() {
 	var tilesInRoom = 2500;
 	var numPlains = 0;
@@ -23,15 +30,28 @@ Room.prototype.getPlainsPercentage = function() {
 	return numPlains/tilesInRoom;
 }
 
-var WORK_PARTS_FOR_SAFE = 3;
-var MINIMUM_ENERGY_FOR_SAFE = 50000;
+Room.prototype.hasNecessaryMinimumEnergy = function() {
+	var harvestDest = this.harvestDestination;
+
+	if(harvestDest !== undefined && harvestDest !== null) {
+		if(harvestDest.structureType === STRUCTURE_CONTAINER) {
+			return harvestDest.store[RESOURCE_ENERGY] > ROOM_NECESSARY_MINIMUM_ENERGY_CONTAINER;
+		}
+		if(harvestDest.structureType === STRUCTURE_STORAGE) {
+			return harvestDest.store[RESOURCE_ENERGY] > ROOM_NECESSARY_MINIMUM_ENERGY_STORAGE;
+		}
+	}
+	else {
+		return false;
+	}
+}
 
 Room.prototype.isInComa = function() {
 	if(this.controller === undefined || !this.controller.my) {
 		return false;
 	}
 
-	if(this.storage === undefined) {
+	if(this.harvestDestination === undefined || this.harvestDestination.structureType === STRUCTURE_CONTAINER) {
 		var workPartCount = 0;
 
 		for(var i = 0; i < this.friendlies.length; i++) {
@@ -42,12 +62,14 @@ Room.prototype.isInComa = function() {
 			workPartCount += workParts;
 		}
 
-		return workPartCount < WORK_PARTS_FOR_SAFE;
+		return workPartCount < COMA_WORK_PARTS_FOR_SAFE;
 	}
 
-	else  {
-		return this.storage.store[RESOURCE_ENERGY] < MINIMUM_ENERGY_FOR_SAFE;
+	else if(this.harvestDestination.structureType === STRUCTURE_STORAGE) {
+		return this.harvestDestination.store[RESOURCE_ENERGY] < COMA_MINIMUM_ENERGY_FOR_SAFE;
 	}
+
+	else return true;
 }
 
 Room.prototype.removeAllConstructionSites = function(structureType=undefined) {

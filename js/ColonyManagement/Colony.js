@@ -1,34 +1,7 @@
-//Needs a "can spawn" function
-//Needs a "spawn creep" function
-    //Need some ability to prevent it from attempting to spawn multiple creeps from one spawner
-//Needs a "homeroom" object
-
 var BodyGenerator = require('BodyGenerator');
 var Roadmap = require('Roadmap');
 
-var COLONY_MAX_RANGE = 2;
-var COLONY_MAX_ROOMS_TO_TRAVEL = 2;
-
-var COLONY_INFO_UPDATE_FREQUENCY = 200; //Update every N ticks
-
-var COLONY_ROAD_HITS_CRITICAL_THRESHOLD = 0.2;
-
 class Colony {
-    /*
-    this.primaryRoom = Room
-    this.rooms = {roomName: Room}
-
-    this.availableSpawns = {
-        'ENERGY_CAPACITY1': [],
-        'ENERGY_CAPACITY2': []
-    };
-    this.timeTillAvailableSpawn = 0;
-    this.activeSources = [Source]
-    this.depletedSources = [Source]
-
-    this.colonyRoomInfo = {} //Info about all rooms near colony
-    */
-
     constructor(name) {
         this.name = name;
         this.memory = Memory.colonies[name];
@@ -54,47 +27,22 @@ class Colony {
         if(this.memory.colonyRoomInfo === undefined) this.memory.colonyRoomInfo = {};
         var colonyRoomInfo = this.memory.colonyRoomInfo;
 
-        var roomsToSearch = Object.values(Game.map.describeExits(this.primaryRoom.name));
+        var roomsToEvaluate = Object.values(Game.map.describeExits(this.primaryRoom.name));
+        var secondaryIsDetermined = (this.secondaryRoom !== undefined);
+        var evaluatedRooms = [];
 
-        //Shift roomsToSearch
-            //Check if it is defined in colonyRoomInfo - continue if so
-            //Check if it is far away from both the secondaryRoom and the primaryRoom
-            //If not, write down its name, and calculate its distanceFromPrimary & distanceFromSecondary
-                //Also put its exits into roomsToSearch
+        while(roomsToEvaluate.length > 0) {
+            var roomName = roomsToEvaluate.shift();
 
-        var secondaryExists = (this.secondaryRoom !== undefined);
-        var updatedRooms = [];
-
-        while(roomsToSearch.length > 0) {
-            var roomName = roomsToSearch.shift();
-
-            if(updatedRooms.includes(roomName)) {
+            if(evaluatedRooms.includes(roomName)) {
                 continue;
             }
 
-            var distToRoom = Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name);
-
-            if(secondaryExists) {
-                var distToSecondary = Game.map.getRoomLinearDistance(roomName, this.secondaryRoom.name);
-                if(distToSecondary < distToRoom) {
-                    distToRoom = distToSecondary;
-                }
-            }
-
-            if(distToRoom > COLONY_MAX_RANGE) {
+            if(Game.map.getRoomStatus(roomName).status === 'closed') {
                 continue;
             }
 
-            var stepsToRoom = Game.map.findRoute(roomName, this.primaryRoom.name).length;
-
-            if(secondaryExists) {
-                var stepsToSecondary = Game.map.findRoute(roomName, this.secondaryRoom.name).length;
-                if(stepsToSecondary < stepsToRoom) {
-                    stepsToRoom = stepsToSecondary;
-                }
-            }
-
-            if(stepsToRoom > COLONY_MAX_ROOMS_TO_TRAVEL) {
+            if(this.roomIsOutOfRange(roomName)) {
                 continue;
             }
 
@@ -106,18 +54,49 @@ class Colony {
             colonyRoomInfo[roomName]['distanceFromPrimary'] = Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name);
             colonyRoomInfo[roomName]['stepsToPrimary'] = Game.map.findRoute(roomName, this.primaryRoom.name).length;
 
-            if(secondaryExists) {
+            if(secondaryIsDetermined) {
                 colonyRoomInfo[roomName]['distanceFromSecondary'] = Game.map.getRoomLinearDistance(roomName, this.secondaryRoom.name);
                 colonyRoomInfo[roomName]['stepsToSecondary'] = Game.map.findRoute(roomName, this.secondaryRoom.name).length;
             }
 
             var adjacentRooms = Object.values(Game.map.describeExits(roomName));
-            roomsToSearch = roomsToSearch.concat(adjacentRooms);
+            roomsToEvaluate = roomsToEvaluate.concat(adjacentRooms);
 
-            updatedRooms.push(roomName);
+            evaluatedRooms.push(roomName);
         }
 
         this.memory.colonyRoomInfo = colonyRoomInfo;
+    }
+
+    roomIsOutOfRange(roomName) {
+        var linearDistToColony = Game.map.getRoomLinearDistance(roomName, this.primaryRoom.name);
+        var secondaryIsDetermined = (this.secondaryRoom !== undefined);
+
+        if(secondaryIsDetermined) {
+            var distToSecondary = Game.map.getRoomLinearDistance(roomName, this.secondaryRoom.name);
+            if(distToSecondary < linearDistToColony) {
+                linearDistToColony = distToSecondary;
+            }
+        }
+
+        if(linearDistToColony > COLONY_MAX_RANGE) {
+            return true;
+        }
+
+        var stepsToColony = Game.map.findRoute(roomName, this.primaryRoom.name).length;
+
+        if(secondaryIsDetermined) {
+            var stepsToSecondary = Game.map.findRoute(roomName, this.secondaryRoom.name).length;
+            if(stepsToSecondary < stepsToColony) {
+                stepsToColony = stepsToSecondary;
+            }
+        }
+
+        if(stepsToColony > COLONY_MAX_ROOMS_TO_TRAVEL) {
+            return true;
+        }
+
+        return false;
     }
 
     updateRooms() {
@@ -126,9 +105,9 @@ class Colony {
         for(var roomName in this.colonyRoomInfo) {
             var room = Game.rooms[roomName];
 
-            this.addBuildingPlanRoadsToMap(roomName);
-
             if(room === undefined) continue;
+
+            this.addBuildingPlanRoadsToMap(roomName);
 
             room.damagedRoads = room.find(FIND_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax && roadmap.isRoad(s.pos); 
@@ -144,25 +123,12 @@ class Colony {
                     }
                 }
             }
-
-            room.constructionSites = room.find(FIND_MY_CONSTRUCTION_SITES);
-            room.mostBuiltConstructionSite = room.constructionSites[0];
-
-            for(var i = 0; i < room.constructionSites.length; i++) {
-                var constructionSite = room.constructionSites[i];
-
-                if(constructionSite.progress > room.mostBuiltConstructionSite.progress) {
-                    room.mostBuiltConstructionSite = constructionSite;
-                }
-            }
         }
     }
 
     addBuildingPlanRoadsToMap(roomName) {
-        // - Open up the building plan
-        //     - For each x & y
-        //         - If it's 'road', add it to the roadmap
-
+        if (Memory.rooms == undefined) return;
+        if (Memory.rooms[roomName] == undefined) return;
         var buildingPlan = Memory.rooms[roomName].buildingPlan;
 
         if(buildingPlan === undefined) return;
@@ -187,17 +153,60 @@ class Colony {
             visual.text('Col: ' + this.name, 1, 1, {align: 'left'});
             visual.text('Pri: ' + colonyRoomInfo['distanceFromPrimary'], 1, 2, {align: 'left'});
             visual.text('Sec: ' + colonyRoomInfo['distanceFromSecondary'], 1, 3, {align: 'left'});
+
+            var mapDescriptor = this.name;
+            if(this.primaryRoom.name === roomName) mapDescriptor += " | Pri";
+            if(this.secondaryRoom !== undefined && this.secondaryRoom.name === roomName) mapDescriptor += " | Sec";
+            Game.map.visual.text(mapDescriptor, new RoomPosition(2, 2, roomName), {color: '#CCCCCC', fontSize: 5, align: 'left', opacity: 1.0});
         }
+    }
+
+    get isPreStorage() {
+        var primaryIsPreStorage = (this.primaryRoom !== undefined && this.primaryRoom.controller.level < 5 && this.primaryRoom.storage === undefined);
+        var secondaryIsPreStorage = (this.secondaryRoom !== undefined && this.secondaryRoom.controller.level < 5 && this.secondaryRoom.storage === undefined);
+        return primaryIsPreStorage || secondaryIsPreStorage;
+    }
+
+    get energyAvailable () {
+        var primaryEnergy = this.primaryRoom === undefined ? 0 : this.primaryRoom.energyAvailable;
+        var secondaryEnergy = this.secondaryRoom === undefined ? 0 : this.secondaryRoom.energyAvailable;
+        return primaryEnergy + secondaryEnergy;
+    }
+
+    get energyCapacityAvailable () {
+        var primaryEnergy = this.primaryRoom === undefined ? 0 : this.primaryRoom.energyCapacityAvailable;
+        var secondaryEnergy = this.secondaryRoom === undefined ? 0 : this.secondaryRoom.energyCapacityAvailable;
+        return primaryEnergy + secondaryEnergy;
+    }
+
+    get nonFullFactories() {
+        var primaryNonFullFactories = this.primaryRoom === undefined ? [] : this.primaryRoom.nonFullFactories;
+        var secondaryNonFullFactories = this.secondaryRoom === undefined ? [] : this.secondaryRoom.nonFullFactories;
+
+        if (primaryNonFullFactories === undefined) primaryNonFullFactories = [];
+        if (secondaryNonFullFactories === undefined) secondaryNonFullFactories = [];
+        return primaryNonFullFactories.concat(secondaryNonFullFactories);
+    }
+
+    get halfFullTowers() {
+        var primaryHalfFullTowers = this.primaryRoom === undefined ? [] : this.primaryRoom.halfFullTowers;
+        var secondaryHalfFullTowers = this.secondaryRoom === undefined ? [] : this.secondaryRoom.halfFullTowers;
+
+        if (primaryHalfFullTowers === undefined) primaryHalfFullTowers = [];
+        if (secondaryHalfFullTowers === undefined) secondaryHalfFullTowers = [];
+        return primaryHalfFullTowers.concat(secondaryHalfFullTowers);
+    }
+
+    get constructionSites() {
+        var primaryConstructionSites = this.primaryRoom === undefined ? [] : this.primaryRoom.constructionSites;
+        var secondaryConstructionSites = this.secondaryRoom === undefined ? [] : this.secondaryRoom.constructionSites;
+
+        if (primaryConstructionSites === undefined) primaryConstructionSites = [];
+        if (secondaryConstructionSites === undefined) secondaryConstructionSites = [];
+        return primaryConstructionSites.concat(secondaryConstructionSites);
     }
     
     get roomsByDistance() {
-        /*
-            for(var i in roomsByDistance[distance]) {
-                var roomName = roomsByDistance[distance][i].roomName;
-                ...
-            }
-        */
-
         return _.groupBy(this.colonyRoomInfo, function(roomInfo) {
             var distance = roomInfo.distanceFromPrimary.toString();
 
@@ -234,13 +243,20 @@ class Colony {
         // - Go to room that needs critical repairs
 
         var needyRoom = undefined;
+        var needyRoadPercent = 100;
 
         for(var i = 0; i < rooms.length; i++) {
             var room = rooms[i];
 
-            if(room.mostDamagedRoad !== undefined && room.mostDamagedRoad.hits/room.mostDamagedRoad.hitsMax < COLONY_ROAD_HITS_CRITICAL_THRESHOLD) {
+            if(room.controller !== undefined && room.controller.my && room.controller.level >= 4 && room.storage === undefined) {
+            //If we don't have a storage and should, then this is the top room to work on
                 needyRoom = room;
                 break;
+            }
+
+            if(room.mostDamagedRoad !== undefined && room.mostDamagedRoad.hits/room.mostDamagedRoad.hitsMax < needyRoadPercent && room.mostDamagedRoad.hits/room.mostDamagedRoad.hitsMax < COLONY_ROAD_HITS_CRITICAL_THRESHOLD) {
+                needyRoom = room;
+                needyRoadPercent = room.mostDamagedRoad.hits/room.mostDamagedRoad.hitsMax;
             }
         }
 
@@ -258,7 +274,13 @@ class Colony {
         for(var i = 0; i < rooms.length; i++) {
             var room = rooms[i];
 
-            if(room.constructionSites !== undefined && room.constructionSites.length > 0 && room.constructionSites.length < constructionSites) {
+            if((room.name === this.primaryRoom.name || room.name === this.secondaryRoom.name) && room.harvestDestination === undefined && room.constructionSites.length > 0) {
+                needyRoom = room;
+                console.log('Set most needed to ' + room.name + ' because harvestDest missing');
+                break;
+            }
+
+            else if(room.constructionSites !== undefined && room.constructionSites.length > 0 && room.constructionSites.length < constructionSites) {
                 needyRoom = room;
                 constructionSites = room.constructionSites.length;
                 console.log('Set most needed to ' + room.name);
@@ -296,6 +318,34 @@ class Colony {
         return miningProcesses;
     }
 
+    get controllerToUpgrade() {
+        var primaryController = this.primaryRoom.controller;
+        var controller = primaryController;
+
+        if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my) {
+            var secondaryController = this.secondaryRoom.controller;
+            if(secondaryController.level < primaryController.level) {
+                controller = secondaryController;
+            }
+            else if(secondaryController.level === primaryController.level) {
+                controller = secondaryController.progress > primaryController.progress ? secondaryController : primaryController;
+            }
+            else {
+                controller = primaryController;
+            }
+        }
+
+        return controller;
+    }
+
+    get hasNecessaryMinimumEnergy() {
+        var hasMinEnergy = this.primaryRoom.hasNecessaryMinimumEnergy();
+
+        if(this.secondaryRoom !== undefined) hasMinEnergy = hasMinEnergy || this.secondaryRoom.hasNecessaryMinimumEnergy();
+
+        return hasMinEnergy;
+    }
+
     initSpawnInfo() {
         var primaryRoomSpawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
         var spawns = primaryRoomSpawns;
@@ -308,7 +358,10 @@ class Colony {
         this.spawns = spawns;
         this.availableSpawns = {};
         this.timeTillAvailableSpawn = 1000;
-        //How long till we can spawn, how many can we spawn?
+        //Set time till available spawn if everything is spawning
+        //For every spawn that isn't spawning, add its energy capacity to an array
+        //We use this array to select spawns that can create the desired unit 
+        //- this is necessary for us to avoid assigning a creep to a spawn that is too small to make it
         for(var i = 0; i < spawns.length; i++) {
             var spawn = spawns[i];
 
@@ -331,13 +384,13 @@ class Colony {
             }
         }
 
-        //Also Max Energy Capacity
-        this.maxEnergyCapacity = 0;
+        //Also set Colony Max Energy Capacity
+        this.maxEnergyCapacityAvailable = 0;
 
         for(var i = 0; i < this.spawns.length; i++) {
             var energyCapacity = this.spawns[i].room.energyCapacityAvailable;
-            if(energyCapacity > this.maxEnergyCapacity) {
-                this.maxEnergyCapacity = energyCapacity;
+            if(energyCapacity > this.maxEnergyCapacityAvailable) {
+                this.maxEnergyCapacityAvailable = energyCapacity;
             }
         }
     }
@@ -409,24 +462,24 @@ class Colony {
         return false;
     }
 
-    getClosestStorage(position, energyNeeded=undefined) {
-        var closestStorage = undefined;
+    getClosestHarvestDestination(position, energyNeeded=undefined) {
+        var closestHarvestDestination = undefined;
         var distance = 10000000000;
 
-        if(this.primaryRoom.storage !== undefined && (energyNeeded === undefined || this.primaryRoom.storage.store[RESOURCE_ENERGY] >= energyNeeded)) {
-            distance = PathFinder.search(position, this.primaryRoom.storage.pos).path.length;
-            closestStorage = this.primaryRoom.storage;
+        if(this.primaryRoom.harvestDestination !== undefined && (energyNeeded === undefined || this.primaryRoom.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded)) {
+            distance = PathFinder.search(position, this.primaryRoom.harvestDestination.pos).path.length;
+            closestHarvestDestination = this.primaryRoom.harvestDestination;
         }
 
-        if(this.secondaryRoom !== undefined && this.secondaryRoom.storage !== undefined && (energyNeeded === undefined || this.secondaryRoom.storage.store[RESOURCE_ENERGY] >= energyNeeded)) {
-            var secondaryDistance = PathFinder.search(position, this.secondaryRoom.storage.pos).path.length;
+        if(this.secondaryRoom !== undefined && this.secondaryRoom.harvestDestination !== undefined && (energyNeeded === undefined || this.secondaryRoom.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded)) {
+            var secondaryDistance = PathFinder.search(position, this.secondaryRoom.harvestDestination.pos).path.length;
 
             if(secondaryDistance < distance) {
-                closestStorage = this.secondaryRoom.storage;
+                closestHarvestDestination = this.secondaryRoom.harvestDestination;
             }
         }
 
-        return closestStorage;
+        return closestHarvestDestination;
     }
 
     initMiningInfo() {
@@ -436,6 +489,8 @@ class Colony {
         for(var roomName in this.colonyRoomInfo) {
             var room = Game.rooms[roomName];
             if(room === undefined) continue;
+
+            if(Game.recon.isRoomNameDangerous(roomName)) continue; //Avoid dangerous rooms
 
             var sourcesInRoom = room.find(FIND_SOURCES);
 
@@ -496,8 +551,6 @@ class Colony {
             return distance;
         });
 
-        console.log('Sup dood');
-
         return sortedInfo;
     }
 
@@ -512,7 +565,7 @@ class Colony {
         }
     }
 
-    spawnCreep(creepName, creepBodyType, creepProcessClass, creepMemory, creepPriority, maxEnergyToSpend=undefined) {
+    spawnCreep(creepName, creepPid, creepBodyType, creepProcessClass, creepMemory, creepProcessPriority, maxEnergyToSpend=undefined) {
         var spawn = this.getCapableSpawn(creepBodyType, maxEnergyToSpend);
 
         if(spawn !== false) {
@@ -524,30 +577,30 @@ class Colony {
             //Try to spawn.  If we can, add the process to the scheduler.  If not, print why
 
             creepMemory['spawningColonyName'] = this.name;
-            creepMemory['pid'] = 'creep|' + creepName;
+            creepMemory['pid'] = creepPid;
             creepMemory['creepProcessClass'] = creepProcessClass;
-            creepMemory['creepPriority'] = creepPriority;
             creepMemory['bodyType'] = creepBodyType;
 
-            var spawnResult = spawn.spawnCreep(body, creepName, {memory: creepMemory});
-
-            if(spawnResult === OK) {
-                console.log('Spawning creep ' + creepName);
+            var canSpawn = spawn.spawnCreep(body, creepName, {memory: creepMemory, dryRun: true});
+            if(canSpawn === OK) {
+                console.log(spawn.name + ' Spawning creep ' + creepName);
+                spawn.spawnCreep(body, creepName, {memory: creepMemory});
+                Game.scheduler.addProcess(creepMemory['pid'], creepProcessClass, {'creepName': creepName}, creepProcessPriority);
 
                 this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
             }
             
-            else if(spawnResult === ERR_NOT_ENOUGH_ENERGY) {
+            else if(canSpawn === ERR_NOT_ENOUGH_ENERGY) {
                 //Draw the name of the creep your'e trying to spawn
                 console.log("Waiting for energy for creep " + creepName);
                 console.log('Creep Dump: ' + creepName + ' ' + body);
 
-                spawn.room.visual.text(creepName, spawn.pos);
+                spawn.room.visual.text(creepName, spawn.pos.x, spawn.pos.y+1);
                 this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
             }
 
             else {
-                console.log('Error spawning creep ' + spawnResult);
+                console.log('Error spawning creep ' + canSpawn);
                 console.log('Creep Dump: ' + creepName + ' ' + body);
             }
         }

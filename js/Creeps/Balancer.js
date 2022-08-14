@@ -16,7 +16,11 @@ class Balancer extends CreepProcess {
             return 'exit';
         }
 
-        
+        if(this.isTooSmall()) {
+            this.creep.suicide();
+            return;
+        }
+
         if(this.creep.memory.hasInitialized !== true) {
             this.calculatePaths();
             this.setEnergySource();
@@ -24,6 +28,14 @@ class Balancer extends CreepProcess {
 
             this.creep.memory.hasInitialized = true;
         }
+    }
+
+    isTooSmall() {
+        var roomHasStorage = this.creep.room.storage !== undefined;
+        var roomIsFull = this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable;
+        var creepIsSmall = this.creep.body.length <= SMALL_BALANCER_CARRY_PARTS*(1.5);
+
+        return roomHasStorage && roomIsFull && creepIsSmall;
     }
 
     updateStateTransitions() {
@@ -44,7 +56,7 @@ class Balancer extends CreepProcess {
     
         if(this.creep.memory.state === "fill")
         {
-            if(this.creep.isEmpty())
+            if(this.creep.isEmpty() || (!this.creep.isFull() && this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable))
             {
                 this.creep.clearTarget();
                 
@@ -89,7 +101,7 @@ class Balancer extends CreepProcess {
             energySource = Game.getObjectById(this.creep.memory.energySourceId);
 
             if(energySource === null && (bufferContainer === null || (bufferContainer !== null &&  bufferContainer.store[RESOURCE_ENERGY] === 0))) {
-                this.creep.getEnergyFromStorage(this.creep.room);
+                this.creep.getEnergyFromHarvestDestination(this.creep.room);
 
                 return;
             }
@@ -111,6 +123,19 @@ class Balancer extends CreepProcess {
     }
 
     moveAlongBalancerPath(path) {
+        var currentPos = this.creep.pos;
+        var lastPos = this.creep.memory.lastPosition;
+
+        if(lastPos !== undefined && lastPos.x === currentPos.x && lastPos.y === currentPos.y) {
+            //Find adjacent creeps and make them move randomly
+            this.creep.pos.randomMoveAdjacentCreeps();
+        }
+
+        this.creep.memory.lastPosition = {
+            "x": currentPos.x,
+            "y": currentPos.y
+        };
+
         var roomPosPath = [];
 
         for(var i = 0; i < path.length; i++) {

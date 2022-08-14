@@ -66,7 +66,7 @@ class Process {
             this.memory.children.splice(pidIndex, 1);
         }
 
-        this.scheduler.removeProcess(pid);
+        this.scheduler.garbageCollectProcess(pid);
     }
 
     saveMemory() {
@@ -81,7 +81,7 @@ class Process {
             var childPID = this.memory.children[i];
 
             if(this.ensuredChildren.includes(childPID)) {
-                //console.log('Not killing child ' + childPID);
+                // console.log('Not killing child ' + childPID);
             }
 
             else {
@@ -98,7 +98,7 @@ class Process {
     killAllChildren() {
         while(this.memory.children.length > 0) {
             var pid = this.memory.children.shift();
-            this.scheduler.removeProcess(pid);
+            this.scheduler.garbageCollectProcess(pid);
         }
     }
 }

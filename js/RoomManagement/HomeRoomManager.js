@@ -1,10 +1,5 @@
 const RoomManager = require('RoomManager');
 
-var DOWNGRADE_TICKS_SAFEGUARD = 1000;
-
-var MIN_ENERGY_TO_UPGRADE = 50000;
-var ENERGY_PER_EXTRA_UPGRADER = 100000;
-
 class HomeRoomManager extends RoomManager {
     constructor (...args) {
         super(...args);
@@ -26,11 +21,11 @@ class HomeRoomManager extends RoomManager {
         }
         //If we're pre-storage, bootstrap
 
-        if(this.room.storage !== undefined) {
+        if(this.room.harvestDestination !== undefined) {
             this.ensureBalancers();
         }
 
-        if(this.room.halfFullTowers.length > 0) {
+        if(this.room.halfFullTowers.length > 0 && this.room.harvestDestination !== undefined) {
             this.ensureTowerFillers();
         }
 
@@ -38,12 +33,12 @@ class HomeRoomManager extends RoomManager {
             this.ensureDowngradeSafeguard();
         }
 
-        if(this.room.storage !== undefined && this.room.state === 'default') {
+        if(this.room.harvestDestination !== undefined && this.room.state === 'default') {
             this.ensureDefaultUnits();
         }
 
-        if(this.room.storage !== undefined || this.room.controller.level >= 5) {
-            this.ensureDefenses();
+        if(this.room.controller.level >= 4) {
+            this.ensureRampartPlanner();
         }
     }
 
@@ -74,13 +69,11 @@ class HomeRoomManager extends RoomManager {
                 'targetRoom': endFlag.room.name,
                 'startFlagName': startFlagName,
                 'endFlagName': endFlagName
-            },
-            'creepPriority': COLONY_MANAGEMENT_PRIORITY,
-            'maxEnergyToSpend': Math.max(300, this.room.energyAvailable)
+            }
         };
         
         var spawnPID = 'spawnBalancer|' + endFlagName;
-        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BALANCER_PRIORITY);
     }
 
     ensureTowerFillers() {
@@ -92,12 +85,11 @@ class HomeRoomManager extends RoomManager {
             'creepProcessClass': 'TowerFiller',
             'creepMemory': {
                 'targetRoom': this.room.name
-            },
-            'creepPriority': NECESSARY_CREEPS_PRIORITY
+            }
         };
 
         var spawnPID ='spawnTowerFiller|' + this.room.name;
-        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, NECESSARY_CREEPS_PRIORITY);
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_DEFENSE_PRIORITY);
     }
 
     ensureDowngradeSafeguard() {
@@ -118,34 +110,26 @@ class HomeRoomManager extends RoomManager {
     }
 
     ensureDefaultUnits() {
-        if(this.room.constructionSites.length > 0 || this.room.rampartsNeedingRepair.length > 0 || this.room.wallsNeedingRepair.length > 0) {
-            this.ensureColonyBuilder();
+        console.log('checking upgrade of ' + this.room.name)
+        if(this.shouldUpgrade) {
+            console.log(this.room.name + ' is trying to upgrade')
+            this.ensureUpgraders();
+            this.ensureUpgradeFeeders();
         }
-
-        this.ensureUpgraders();
-        this.ensureUpgradeFeeders();
     }
 
-    ensureColonyBuilder() {
-        var data = {
-            'colonyName': this.colony.name,
-            'creepCount': 1,
-            'creepNameBase': 'colonyBuilder|' + this.room.name,
-            'creepBodyType': 'ColonyBuilder',
-            'creepProcessClass': 'ColonyBuilder',
-            'creepMemory': {
-                'targetColony': this.colony.name
-            },
-            'creepPriority': NECESSARY_CREEPS_PRIORITY
-        };
-
-        var spawnPID ='spawnColonyBuilder|' + this.room.name;
-        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, NECESSARY_CREEPS_PRIORITY);
+    get shouldUpgrade() {
+        return this.room.hasNecessaryMinimumEnergy();
     }
 
     ensureUpgraders() {
-        var energyInStorage = this.room.storage.store[RESOURCE_ENERGY];
+        var energyInStorage = this.room.harvestDestination.store[RESOURCE_ENERGY];
         var upgraderCount = Math.max(1, Math.floor(energyInStorage/ENERGY_PER_EXTRA_UPGRADER));
+
+        var harvestDest = this.room.harvestDestination;
+        if(harvestDest.structureType === STRUCTURE_CONTAINER && harvestDest.store[RESOURCE_ENERGY] === harvestDest.store.getCapacity()) {
+            upgraderCount = FULL_CONTAINER_UPGRADER_COUNT;
+        }
 
         var data = {
             'colonyName': this.colony.name,
@@ -155,8 +139,7 @@ class HomeRoomManager extends RoomManager {
             'creepProcessClass': 'Upgrader',
             'creepMemory': {
                 'targetRoom': this.room.name
-            },
-            'creepPriority': ROOM_UPGRADE_CREEPS_PRIORITY
+            }
         };
 
         var spawnPID ='spawnUpgraders|' + upgraderCount + '|' + this.room.name;
@@ -164,7 +147,7 @@ class HomeRoomManager extends RoomManager {
     }
 
     ensureUpgradeFeeders() {
-        var energyInStorage = this.room.storage.store[RESOURCE_ENERGY];
+        var energyInStorage = this.room.harvestDestination.store[RESOURCE_ENERGY];
         var upgradeFeederCount = Math.max(1, Math.floor(energyInStorage/ENERGY_PER_EXTRA_UPGRADER));
 
         var data = {
@@ -175,16 +158,20 @@ class HomeRoomManager extends RoomManager {
             'creepProcessClass': 'UpgradeFeeder',
             'creepMemory': {
                 'targetRoom': this.room.name
-            },
-            'creepPriority': ROOM_UPGRADE_CREEPS_PRIORITY
+            }
         };
 
         var spawnPID ='spawnUpgradeFeeders|' + upgradeFeederCount + '|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, ROOM_UPGRADE_CREEPS_PRIORITY);
     }
 
-    ensureDefenses() {
-        this.ensureChildProcess(this.name + '|defensePlanner', 'DefensePlanner', {'roomName': this.name}, COLONY_DEFENSE_PRIORITY);
+    ensureRampartPlanner() {
+        var data = {
+            'roomName': this.room.name
+        };
+        
+        var spawnPID = 'rampartPlanner|' + this.room.name;
+        this.ensureChildProcess(spawnPID, 'RampartPlanner', data, COLONY_MANAGEMENT_PRIORITY);
     }
 }
 

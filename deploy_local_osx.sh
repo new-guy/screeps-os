@@ -6,5 +6,6 @@ mkdir ./dist
 
 find ./js -name '*.js' -exec cp {} ./dist \;
 
-rm -rf ~/Library/ApplicationSupport/screeps/scripts/127_0_0_1___21025/default/*
-rsync -a --delete dist/ ~/Library/ApplicationSupport/screeps/scripts/127_0_0_1___21025/default/
+rm -rf "/Users/davidkirk/Library/Application Support/Screeps/scripts/192_168_0_131___21025/default
+/*"
+rsync -a --force --delete dist/ "/Users/davidkirk/Library/Application Support/Screeps/scripts/192_168_0_131___21025/default/"

@@ -41,18 +41,18 @@ class ColonyManager extends Process {
 
     ensureRoomManagement() {
         this.ensureChildProcess(this.primaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.primaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
-        this.ensureChildProcess(this.primaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.primaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
         this.ensureChildProcess(this.primaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.primaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
 
         if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my && this.secondaryRoom.controller.level > 0) {
             this.ensureChildProcess(this.secondaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
-            this.ensureChildProcess(this.secondaryRoom.name + '|planConFlagMonitor', 'PlanningConstructionFlagMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
             this.ensureChildProcess(this.secondaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.secondaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
         }
     }
 
     ensureMiningRoutes() {
-        if(this.primaryRoom.storage !== undefined || (this.secondaryRoom !== undefined && this.secondaryRoom.storage !== undefined)) {
+        if(this.primaryRoom.controller.level < 2) return;
+
+        if(this.primaryRoom.harvestDestination !== undefined || (this.secondaryRoom !== undefined && this.secondaryRoom.harvestDestination !== undefined)) {
             this.ensureChildProcess(this.name + '|energyHarvestingManager', 'EnergyHarvestingManager', {'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
         }
     }
@@ -76,10 +76,10 @@ class ColonyManager extends Process {
     }
 
     normalBehavior() {
-        if(this.roomIsPreStorage(this.primaryRoom)) {
-            var bootstrapPID = 'preStorSelfBoot|' + this.primaryRoom.name + '|' + this.primaryRoom.name;
-            var data = {'targetRoomName': this.primaryRoom.name, 'spawnColonyName': this.primaryRoom.name};
-            this.ensureChildProcess(bootstrapPID, 'PreStorageSelfBootstrap', data, NECESSARY_CREEPS_PRIORITY);
+        if(this.colony.isPreStorage) {
+            var bootstrapPID = 'preStorColonyBoot|' + this.name + '|' + this.name;
+            var data = {'targetColonyName': this.name, 'spawnColonyName': this.name};
+            this.ensureChildProcess(bootstrapPID, 'PreStorageColonyBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
         }
 
         else {
@@ -90,40 +90,76 @@ class ColonyManager extends Process {
             this.ensureChildProcess(this.primaryRoom.name + '|secondaryRoomFinder', 'SecondaryRoomFinder', {'colonyName': this.name}, COLONY_NONESSENTIAL_PRIORITY);
         }
 
-        else if(this.colony.primaryRoom.energyCapacityAvailable >= 650 || (this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.controller.my)) {
+        else if((Game.empire.hasSpareGCL && this.colony.primaryRoom.energyCapacityAvailable >= 650) || (this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.controller.my)) {
             this.ensureSecondaryRoom()
         }
+        
+        //we only really wanna build roads if we can have a tower in the homeroom 'cause of repair time and cost
+        if(this.colony.primaryRoom.controller.level >= 3) {
+            this.ensureRoadGeneration();
 
-        this.ensureRoadGeneration();
+            if(this.colony.roomsNeedingBuilder.length > 0 && this.colony.hasNecessaryMinimumEnergy) {
+                this.ensureColonyBuilder();
+            }
+        }
+    }
+
+    ensureColonyBuilder() {
+        var colonyBuilderCount = this.getColonyBuilderCount();
+
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': colonyBuilderCount,
+            'creepNameBase': 'colonyBuilder|' + this.colony.name,
+            'creepBodyType': 'ColonyBuilder',
+            'creepProcessClass': 'ColonyBuilder',
+            'creepMemory': {
+                'targetColony': this.colony.name
+            }
+        };
+
+        var spawnPID ='spawnColonyBuilder|' + this.colony.name + '|' + colonyBuilderCount;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BUILDER_PRIORITY);
+    }
+
+    getColonyBuilderCount() {
+        var count = 1;
+
+        if(this.colony.primaryRoom.storage === undefined) {
+            count++;
+        }
+
+        if(this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.storage === undefined && this.colony.primaryRoom.harvestDestination !== undefined) {
+            count++;
+        }
+
+        if(this.colony.primaryRoom.hasNecessaryMinimumEnergy() && this.colony.secondaryRoom.hasNecessaryMinimumEnergy()) {
+            count += this.colony.roomsNeedingBuilder.length;
+        }
+        
+        count = Math.min(count, COLONY_MAX_BUILDER_COUNT);
+
+        return count;
     }
 
     ensureSecondaryRoom() {
-        console.log('hi')
-        if(((this.secondaryRoomName !== undefined && this.secondaryRoom === undefined) || !this.secondaryRoom.controller.my) && Game.empire.hasSpareGCL) {
-            console.log('here')
+        if((this.secondaryRoom !== undefined && !this.secondaryRoom.controller.my)) {
             this.spawnSecondaryRoomClaimer();
         }
 
         if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my) {
-            //Secondary Room Self-Management            
-            if(this.secondaryRoom.controller.level < 4) {
-                this.ensureSecondaryRoomSelfBootstrap();
+            //Secondary Room Self-Bootstrap            
+            if(this.secondaryRoom.controller.level <= 4) {
+                var bootstrapPID = 'preStorSecondBoot|' + this.name + '|' + this.name;
+                var data = {'targetColonyName': this.name, 'spawnColonyName': this.name, 'spawnPidPrefix': 'second'};
+                this.ensureChildProcess(bootstrapPID, 'PreStorageColonyBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
             }
 
             //Bootstrap Scheduling
-            if(this.secondaryRoom.controller.level < 2) {
+            if(this.secondaryRoom.controller.level <= 2) {
                 var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
                 var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
-                this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, NECESSARY_CREEPS_PRIORITY);
-            }
-
-            //Bootstrap Scheduling
-            if(this.secondaryRoom.controller.level >= 2 && this.primaryRoom.controller.level <= 4 && this.primaryRoom.storage === undefined) {
-                this.supportBootstrap(this.primaryRoom);
-            }
-
-            else if(this.secondaryRoom.controller.level >= 2 && this.secondaryRoom.storage === undefined && this.primaryRoom.storage !== undefined) {
-                this.supportBootstrap(this.secondaryRoom);
+                this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_EXPANSION_SUPPORT);
             }
         }
     }
@@ -149,52 +185,15 @@ class ColonyManager extends Process {
             'creepProcessClass': 'Claimer',
             'creepMemory': {
                 'targetRoom': this.secondaryRoom.name
-            },
-            'creepPriority': COLONY_MANAGEMENT_PRIORITY
+            }
         };
         
         var spawnPID = 'spawnExpansionClaimer|' + this.colony.name + '|' + this.secondaryRoom.name;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
-    ensureSecondaryRoomSelfBootstrap() {
-        var bootstrappersToSpawn = 10;
-
-        var data = {
-            'targetRoomName': this.secondaryRoom.name,
-            'spawnColonyName': this.name,
-            'maxToSpawn': bootstrappersToSpawn,
-            'maxTicksToUse': 600,
-            'maxEnergy': 3000,
-            'creepNameBase': 'secondarySelf'
-        };
-        
-        var spawnPID = 'secondarySelfBootstrap|' + bootstrappersToSpawn + '|' + this.name + '|' + this.secondaryRoom.name;
-        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, NECESSARY_CREEPS_PRIORITY);
-    }
-
-    supportBootstrap(roomToSupport) {
-        var bootstrappersToSpawn = 15;
-
-        var data = {
-            'targetRoomName': roomToSupport.name,
-            'spawnColonyName': this.name,
-            'maxToSpawn': bootstrappersToSpawn,
-            'maxTicksToUse': 1000,
-            'maxEnergy': 6000,
-            'creepNameBase': 'support' + roomToSupport.name
-        };
-        
-        var spawnPID = 'supportBootstrap|' + bootstrappersToSpawn + '|' + this.name + '|' + roomToSupport.name;
-        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, NECESSARY_CREEPS_PRIORITY);
-    }
-
     ensureRoadGeneration() {
         this.ensureChildProcess(this.primaryRoom.name + '|roadGenerator', 'RoadGenerator', {'colonyName': this.name}, COLONY_NONESSENTIAL_PRIORITY);
-    }
-
-    roomIsPreStorage(room) {
-        return (room.controller.level < 5 && room.storage === undefined);
     }
 
     processShouldDie() {

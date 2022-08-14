@@ -41,7 +41,7 @@ class UpgradeFeeder extends CreepProcess {
     performStateActions() {
         var state = this.creep.memory.state;
         if(state === 'pickupEnergy') {
-            this.creep.getEnergyFromStorage(this.targetRoom);
+            this.creep.getEnergyFromHarvestDestination(this.targetRoom);
         }
 
         else if(state === 'feedUpgraders') {
@@ -74,10 +74,7 @@ class UpgradeFeeder extends CreepProcess {
         var closestNonFullUpgrader = this.creep.pos.findClosestByRange(nonFullUpgraders);
         if(closestNonFullUpgrader === null) return;
 
-        console.log(closestNonFullUpgrader.memory.creepProcessClass);
-        console.log(closestNonFullUpgrader.carry[RESOURCE_ENERGY]);
         this.creep.setTarget(closestNonFullUpgrader);
-        console.log(this.creep.getTarget());
     }
 }
 

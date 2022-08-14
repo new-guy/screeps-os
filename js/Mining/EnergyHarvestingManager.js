@@ -1,10 +1,5 @@
 const Process = require('Process');
 
-var MAX_TICKS_TO_USE_PER_SPAWN = 700;
-var TARGET_ROUTES_PER_STORAGE = 5;
-
-var TIME_BETWEEN_PURGES = 1500;
-
 class EnergyHarvestingManager extends Process {
     constructor (...args) {
         super(...args);
@@ -86,8 +81,6 @@ class EnergyHarvestingManager extends Process {
         for(var i = 0; i < this.memory.children.length; i++) {
             var childProcess = this.scheduler.getProcess(this.memory.children[i]);
 
-            console.log(this.memory.children[i] + ' operational: ' + childProcess.isOperational());
-
             if(!childProcess.isOperational()) {
                 areOperational = false;
                 break;
@@ -98,6 +91,11 @@ class EnergyHarvestingManager extends Process {
     }
 
     drawMiningRoutes() {
+        this.drawRoutesInRoom(this.colony.primaryRoom);
+        if(this.colony.secondaryRoom !== undefined) this.drawRoutesInRoom(this.colony.secondaryRoom);
+    }
+
+    drawRoutesInRoom(room) {
         var rootPosition = {
             x: 42,
             y: 3
@@ -108,7 +106,7 @@ class EnergyHarvestingManager extends Process {
             color: '#cccc00'
         };
 
-        var visual = new RoomVisual(this.colony.primaryRoom.name);
+        var visual = new RoomVisual(room.name);
 
         var totalTicksUsed = 0;
         for(var i = 0; i < this.memory.children.length; i++) {
@@ -121,11 +119,17 @@ class EnergyHarvestingManager extends Process {
 
             var fillColor = isOperational ? "#00ff00" : "#ff0000";
             visual.circle(rootPosition['x'] - 0.5, rootPosition['y'] + 1.8 + i, {fill: fillColor});
+
+            var roomIsStorageTarget = childProcess.targetStorageRoom.name === room.name;
+            if(roomIsStorageTarget)
+                visual.circle(rootPosition['x'] - 1.5, rootPosition['y'] + 1.8 + i, {fill: "#0000ff"});
         }
 
         var totalRoutes = this.memory.children.length;
-        var targetRoutes = this.colony.primaryRoom.storage === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
-        targetRoutes += this.colony.secondaryRoom.storage === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        var targetRoutes = this.colony.primaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+
+        if (this.colony.secondaryRoom !== undefined)
+            targetRoutes += this.colony.secondaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
 
         var totalMaxTicks = this.colony.spawns.length * MAX_TICKS_TO_USE_PER_SPAWN;
 
@@ -141,18 +145,15 @@ class EnergyHarvestingManager extends Process {
             var childProcess = this.scheduler.getProcess(this.memory.children[i]);
             var ticksUsed = childProcess.getUsedTicks();
             totalTicksUsed += ticksUsed
-
-            console.log(childProcess.pid + ': ' + ticksUsed);
         }
 
         var totalRoutes = this.memory.children.length;
-        var targetRoutes = this.colony.primaryRoom.storage === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
-        targetRoutes += this.colony.secondaryRoom.storage === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        var targetRoutes = this.colony.primaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+
+        if (this.colony.secondaryRoom !== undefined)
+            targetRoutes += this.colony.secondaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
 
         var totalMaxTicks = this.colony.spawns.length * MAX_TICKS_TO_USE_PER_SPAWN;
-
-        console.log('Routes: ' + totalRoutes + ' Target: ' + targetRoutes);
-        console.log('Ticks: ' + totalTicksUsed + ' Max: ' + totalMaxTicks);
 
         return (totalRoutes < targetRoutes && totalTicksUsed < totalMaxTicks);
     }
@@ -181,7 +182,7 @@ class EnergyHarvestingManager extends Process {
     }
 
     createNewRoute(sourcePos) {
-        var closestStorage = this.colony.getClosestStorage(sourcePos);
+        var closestHarvestDestination = this.colony.getClosestHarvestDestination(sourcePos);
         // - Miners should just go to their assigned source, make sure a container is built, and mine
         // - Haulers should pick up from their assigned source, then deposit in the closest storage (this value should be cached)
         var data = {
@@ -190,7 +191,7 @@ class EnergyHarvestingManager extends Process {
                 'y': sourcePos.y,
                 'roomName': sourcePos.roomName
             },
-            'targetStorageId': closestStorage.id,
+            'targetStorageRoom': closestHarvestDestination.pos.roomName,
             'spawnColonyName': this.colony.name
         };
 
@@ -199,7 +200,7 @@ class EnergyHarvestingManager extends Process {
 
         var priority = COLONY_EXTRA_ENERGY_PRIORITY;
 
-        if(sourcePos.roomName === closestStorage.pos.roomName) {
+        if(sourcePos.roomName === closestHarvestDestination.pos.roomName) {
             priority = COLONY_NECESSARY_ENERGY_PRIORITY;
         }
 

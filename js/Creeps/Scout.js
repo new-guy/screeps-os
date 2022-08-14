@@ -16,6 +16,10 @@ class Scout extends CreepProcess {
 
         this.creep.say('Scouting');
 
+        if(this.creep.hits < this.creep.hitsMax) {
+            Game.recon.recordRoomDanger(this.creep.memory.targetRoom, true)
+        }
+
         if(Game.rooms[this.creep.memory.targetRoom] === undefined || this.creep.pos.getRangeTo(destination) > 5) {
             if(this.creep.room.enemies.length > 0) {
                 var movePath = this.creep.getSafePath(destination, 15);

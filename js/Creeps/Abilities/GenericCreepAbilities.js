@@ -2,9 +2,12 @@ Creep.prototype.putEnergyInTarget = function() {
     var target = this.getTarget();
     this.sayInOrder(['Knock', 'knock', 'delivery', 'here!']);
 
-    if((target.store === undefined && target.carryCapacity === undefined && target.energy === target.energyCapacity) ||
+
+    if(target === null ||
+       (target.store === undefined && target.carryCapacity === undefined && target.energy === target.energyCapacity) ||
+       (target.store !== undefined && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) ||
        (target.carryCapacity !== undefined && target.carry[RESOURCE_ENERGY] === target.carryCapacity) ||
-       this.carry[RESOURCE_ENERGY] === 0) {
+       this.hasNoEnergy) {
         this.clearTarget();
     }
 
@@ -41,12 +44,12 @@ Creep.prototype.buildTarget = function() {
         if(this.pos.getRangeTo(target) <= 3) {
             var buildResult = this.build(target);
     
-            if(buildResult === 0 && this.carry[RESOURCE_ENERGY] === 0) {
+            if(buildResult === 0 && this.hasNoEnergy) {
                 this.clearTarget();
             }
     
             else {
-                this.sayInOrder(['I\'ve', 'been', 'working', 'on', 'the', 'railroad', 'all', 'the', 'live', 'long', 'day', 'I\'ve', 'been', 'working', 'on', 'the', 'railroad', 'just', 'to', 'pass', 'the', 'time', 'away']);
+                this.sayInOrder(['Let\'s', 'get', 'this', 'bread']);
             }
         }
     }
@@ -73,7 +76,7 @@ Creep.prototype.repairTarget = function() {
         if(this.pos.getRangeTo(target) <= 3) {
             var repairResult = this.repair(target);
     
-            if(repairResult === 0 && this.carry[RESOURCE_ENERGY] === 0) {
+            if(repairResult === 0 && this.hasNoEnergy) {
                 this.clearTarget();
             }
     
@@ -92,40 +95,51 @@ Creep.prototype.moveRandom = function() {
     this.move(moveDirection);
 }
 
-Creep.prototype.getEnergyFromStorage = function(room) {
-    var storage = room.storage;
+Creep.prototype.getEnergyFromHarvestDestination = function(room) {
+    var harvestDestination = room.harvestDestination;
 
-    if(storage === undefined) {
+    if(harvestDestination === undefined) {
         this.say('NoStorage');
         return;
     }
 
     else {
-        if(this.pos.getRangeTo(storage) > 1) {
-            this.moveTo(storage);
+        if(this.pos.getRangeTo(harvestDestination) > 1) {
+            this.moveTo(harvestDestination);
         }
 
         else {
-            this.withdraw(storage, RESOURCE_ENERGY);
+            this.withdraw(harvestDestination, RESOURCE_ENERGY);
         }
     }
 }
 
-Creep.prototype.getEnergyFromClosestColonyStorage = function(colony) {
-    var storage = colony.getClosestStorage(this.pos, this.carryCapacity);
+Creep.prototype.getEnergyFromClosestColonyHarvestDestination = function(colony) {
+    var harvestDestination = colony.getClosestHarvestDestination(this.pos, this.carryCapacity);
 
-    if(storage === undefined) {
+    if(harvestDestination === undefined) {
         this.say('NoStorage');
         return;
     }
 
     else {
-        if(this.pos.getRangeTo(storage) > 1) {
-            this.moveTo(storage);
+        if(this.pos.getRangeTo(harvestDestination) > 1) {
+            this.moveTo(harvestDestination);
         }
 
         else {
-            this.withdraw(storage, RESOURCE_ENERGY);
+            this.withdraw(harvestDestination, RESOURCE_ENERGY);
         }
     }
+}
+
+Creep.prototype.moveToRoom = function(roomName) {
+    var targetController = Game.rooms[roomName].controller;
+    this.moveTo(targetController)
+    this.sayInOrder(['Returning', 'to', 'room', roomName])
+}
+
+Creep.prototype.returnToTargetRoom = function() {
+    this.moveToRoom(this.memory.targetRoom)
+    this.sayInOrder(['Returning', 'to', 'target', 'room'])
 }

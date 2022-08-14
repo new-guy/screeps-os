@@ -1,7 +1,5 @@
 const Process = require('Process');
 
-var CREEPS_TO_SPAWN = 10;
-
 class ComaRecovery extends Process {
     constructor (...args) {
         super(...args);
@@ -22,18 +20,17 @@ class ComaRecovery extends Process {
     spawnBootstrappers() {
         var data = {
             'colonyName': this.memory.spawnColonyName,
-            'creepCount': CREEPS_TO_SPAWN,
+            'creepCount': COMA_RECOVERY_CREEPS_TO_SPAWN,
             'creepNameBase': this.creepNameBase +'Bootstrap|' + this.memory.targetRoomName,
             'creepBodyType': 'BootStrapper',
             'creepProcessClass': 'BootStrapper',
             'creepMemory': {
                 'targetRoom': this.memory.targetRoomName
             },
-            'creepPriority': this.metadata.defaultPriority,
             'maxEnergyToSpend': 300
         };
         
-        var spawnPID = this.creepNameBase + 'SpawnBootstrap|' + CREEPS_TO_SPAWN + '|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
+        var spawnPID = this.creepNameBase + 'SpawnBootstrap|' + COMA_RECOVERY_CREEPS_TO_SPAWN + '|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, this.metadata.defaultPriority);
     }
 

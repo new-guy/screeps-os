@@ -35,7 +35,7 @@ class ColonyBuilder extends CreepProcess {
     performStateActions() {
         var state = this.creep.memory.state;
         if(state === 'getEnergy') {
-            this.creep.getEnergyFromClosestColonyStorage(this.spawningColony);
+            this.creep.getEnergyFromClosestColonyHarvestDestination(this.spawningColony, this.creep.store.getCapacity());
         }
 
         else if(state === 'work') {
@@ -100,10 +100,6 @@ class ColonyBuilder extends CreepProcess {
     }
 
     getTargetRoom() {
-
-        //Check if a room needs critical repairs
-        //Check if this room has construction sites
-        //Otherwise just set targetRoom to the colony's most needed
         if(this.targetColony.roomNeedingCriticalRepairs !== undefined) {
             return this.targetColony.roomNeedingCriticalRepairs;
         }

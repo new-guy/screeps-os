@@ -1,16 +1,12 @@
 const Process = require('Process');
 const BodyGenerator = require('BodyGenerator');
 
-var HAULER_COUNT = 2;
-
-var REMAINING_TICKS_TO_SPAWN_RESERVER = 3000;
-
 class EnergyRouteManager extends Process {
     constructor (...args) {
         super(...args);
         
         this.targetSourcePos = new RoomPosition(this.memory.targetSourcePos.x, this.memory.targetSourcePos.y, this.memory.targetSourcePos.roomName);
-        this.targetStorage = Game.getObjectById(this.memory.targetStorageId);
+        this.targetStorageRoom = Game.rooms[this.memory.targetStorageRoom];
         this.spawnColony = Game.colonies[this.memory.spawnColonyName];
 
         if(this.memory.containerPos === undefined) {
@@ -23,7 +19,7 @@ class EnergyRouteManager extends Process {
             return 'exit';
         }
 
-        if(this.memory.containerPos === undefined || this.targetStorage === null) {
+        if(this.memory.containerPos === undefined || this.targetStorageRoom === null) {
             this.spawnScout();
             return 'continue';
         }
@@ -31,23 +27,37 @@ class EnergyRouteManager extends Process {
         this.drawRouteInfo();
 
         this.spawnMiner();
-        this.spawnHauler();
 
-        if(this.shouldReserve()) {
+        if(this.minerExists && this.sourceContainerExists) {
+            this.spawnHauler();
+        }
+
+        if(this.shouldReserve) {
             this.spawnReserver();
         }
     }
 
     drawRouteInfo() {
         var format = {align: 'left'};
-        new RoomVisual(this.memory.containerPos['roomName']).text('Dest: ' + this.targetStorage.pos.roomName, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'], format);
+        new RoomVisual(this.memory.containerPos['roomName']).text('Dest: ' + this.targetStorageRoom.name, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'], format);
     }
 
     isOperational() {
         if(this.memory.containerPos === undefined) return false;
 
-        var minerName = this.targetSourcePos.readableString() +'|Miner|0';
+        var notWaitingForReserver = !this.waitingForReserver
 
+        var isOperational = (this.minerExists && this.allHaulersExist && notWaitingForReserver)
+
+        return isOperational;
+    }
+
+    get minerExists() {
+        var minerName = this.targetSourcePos.readableString() +'|Miner|0';
+        return Game.creeps[minerName] !== undefined;
+    }
+
+    get allHaulersExist() {
         var allHaulersExist = true;
         for(var i = 0; i < HAULER_COUNT; i++) {
             var haulerName = this.targetSourcePos.readableString() +'|Hauler|' + i;
@@ -56,20 +66,22 @@ class EnergyRouteManager extends Process {
             if(!allHaulersExist) break;
         }
 
-        var notWaitingForReserver = true;
-        if(this.shouldReserve()) {
+        return allHaulersExist;
+    }
+
+    get waitingForReserver() {        
+        var waitingForReserver = false;
+        if(this.shouldReserve) {
             var reserverName = 'reserver|' + this.targetSourcePos.roomName + '|0';
 
-            notWaitingForReserver = (Game.creeps[reserverName] !== undefined);
+            waitingForReserver = (Game.creeps[reserverName] === undefined);
         }
 
-        var isOperational = (Game.creeps[minerName] !== undefined && allHaulersExist && notWaitingForReserver)
+        return waitingForReserver;
+    }
 
-        if(!isOperational) {
-            console.log('Miner: ' + (Game.creeps[minerName] !== undefined) + ' Haulers: ' + allHaulersExist + ' Reserver: ' + notWaitingForReserver);
-        }
-
-        return isOperational;
+    get sourceContainerExists() {
+        return (this.sourceContainer !== undefined && this.sourceContainer !== null);
     }
 
     getUsedTicks() {
@@ -85,7 +97,7 @@ class EnergyRouteManager extends Process {
         var minerBody = BodyGenerator.generateBody('Miner', energyCapacity);
         ticksToSpawn += BodyGenerator.getTicksToSpawn(minerBody);
 
-        if(this.shouldReserve()) {
+        if(this.shouldReserve) {
             var reserverBody = BodyGenerator.generateBody('Reserver', energyCapacity);
             ticksToSpawn += BodyGenerator.getTicksToSpawn(reserverBody);
         }
@@ -107,8 +119,7 @@ class EnergyRouteManager extends Process {
                     'roomName': this.targetSourcePos.roomName
                 },
                 'containerPos': this.memory.containerPos
-            },
-            'creepPriority': this.metadata.defaultPriority
+            }
         };
         
         var spawnPID = 'SpawnMiner|' + this.targetSourcePos.readableString() + '|' + this.memory.spawnColonyName;
@@ -123,17 +134,16 @@ class EnergyRouteManager extends Process {
             'creepBodyType': 'Hauler',
             'creepProcessClass': 'Hauler',
             'creepMemory': {
-                'targetStorageId': this.targetStorage.id,
+                'targetStorageRoom': this.targetStorageRoom.name,
                 'containerPos': this.memory.containerPos
-            },
-            'creepPriority': this.metadata.defaultPriority
+            }
         };
         
         var spawnPID = 'SpawnHauler|' + this.targetSourcePos.readableString() + '|' + this.memory.spawnColonyName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, this.metadata.defaultPriority);
     }
 
-    shouldReserve() {
+    get shouldReserve() {
         //Should reserve if it's not 
         var room = Game.rooms[this.targetSourcePos.roomName];
 
@@ -157,6 +167,14 @@ class EnergyRouteManager extends Process {
         return reservation.ticksToEnd < REMAINING_TICKS_TO_SPAWN_RESERVER;
     }
 
+    get sourceContainer() {
+        if(this.memory.containerPos === undefined) return undefined;
+
+        var containerPos = new RoomPosition(this.memory.containerPos.x, this.memory.containerPos.y, this.memory.containerPos.roomName);
+
+        return containerPos.getStructure(STRUCTURE_CONTAINER);
+    }
+
     spawnScout() {
         var data = {
             'colonyName': this.spawnColony.name,
@@ -166,8 +184,7 @@ class EnergyRouteManager extends Process {
             'creepProcessClass': 'Scout',
             'creepMemory': {
                 'targetRoom': this.targetSourcePos.roomName
-            },
-            'creepPriority': COLONY_SCOUTING_PRIORITY
+            }
         };
 
         var spawnPID ='spawnMiningScout|' + this.targetSourcePos.roomName;
@@ -183,8 +200,7 @@ class EnergyRouteManager extends Process {
             'creepProcessClass': 'Reserver',
             'creepMemory': {
                 'targetRoom': this.targetSourcePos.roomName
-            },
-            'creepPriority': this.metadata.defaultPriority
+            }
         };
 
         var spawnPID ='spawnReserver|' + this.targetSourcePos.roomName;
