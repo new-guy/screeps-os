@@ -26,10 +26,6 @@ Ticks remaining in Safe mode
 
 ### Functionality to change
 - Balancer Rework
-    - Get rid of buffer containers
-        - From logic and from structure definitions
-    - Balancers need to pick up from energySource or the link
-    - If room is full and the balancer is not full, they need to fill up on energy
 - Get links working
     - Who fills the links?
 - Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
