@@ -81,10 +81,38 @@ class Balancer extends CreepProcess {
         {
             this.pickupEnergy();
         }
-    
+
         if(this.creep.memory.state === "fill")
         {
-            this.fillBalancers();
+            var roomIsFull = (this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable);
+            if(roomIsFull) {
+                var energySource = Game.getObjectById(this.creep.memory.energySourceId);
+                if(energySource !== null && energySource.structureType === STRUCTURE_STORAGE) {
+                    //Only do this for the balancer that uses storage as its energySource
+                    //Ensure link is full if it exists
+                    var linksNearStorage = energySource.pos.findInRange(FIND_MY_STRUCTURES, 1, {filter: function(structure) { 
+                        return structure.structureType == STRUCTURE_LINK}});
+
+                    if(linksNearStorage.length > 0) {
+                        var sourceLink = linksNearStorage[0];
+                        this.ensureLinkIsFull(sourceLink)
+                    }
+                }
+            }
+            else {
+                this.fillBalancers();
+            }
+        }
+    }
+
+    ensureLinkIsFull(sourceLink) {
+        if(sourceLink.store[RESOURCE_ENERGY] < sourceLink.store.getCapacity(RESOURCE_ENERGY)) {
+            if(this.creep.pos.isNearTo(sourceLink)) {
+                this.creep.transfer(sourceLink, RESOURCE_ENERGY)
+            }
+            else {
+                this.creep.moveTo(sourceLink);
+            }
         }
     }
 
@@ -148,8 +176,6 @@ class Balancer extends CreepProcess {
     }
 
     fillBalancers() {
-        var roomIsFull = (this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable);
-
         if(roomIsFull) {
             this.creep.say('full');
         }
