@@ -36,6 +36,12 @@ class PreStorageColonyBootstrap extends Process {
                 'targetColony': this.targetColony.name
             }
         };
+
+        if(this.spawnColony.secondaryRoom !== undefined && this.spawnColony.primaryRoom.storage !== undefined) {
+            data['creepMemory'] = {
+                'targetRoom': this.spawnColony.secondaryRoom.name
+            }
+        }
         
         var spawnPID = 'spawnPreStorSelfBoot|' + bootstrappersToSpawn + '|' + this.memory.spawnColonyName + '|' + this.memory.spawnColonyName;
         if(this.spawnPidPrefix !== undefined) {
