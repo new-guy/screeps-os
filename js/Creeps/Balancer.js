@@ -176,6 +176,7 @@ class Balancer extends CreepProcess {
     }
 
     fillBalancers() {
+        var roomIsFull = this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable;
         if(roomIsFull) {
             this.creep.say('full');
         }
