@@ -69,8 +69,7 @@ class HomeRoomManager extends RoomManager {
                 'targetRoom': endFlag.room.name,
                 'startFlagName': startFlagName,
                 'endFlagName': endFlagName
-            },
-            'maxEnergyToSpend': Math.max(300, this.room.energyAvailable)
+            }
         };
         
         var spawnPID = 'spawnBalancer|' + endFlagName;

@@ -25,7 +25,13 @@ Ticks remaining in Safe mode
     - Pass 1:
 
 ### Functionality to change
-- Balancers suck - they easily get blocked by other creeps and can't move past them.  Need to update them to be less dumb, and find some good way to go about ensuring that they aren't so teeny-tiny
+- Balancer Rework
+    - Get rid of buffer containers
+        - From logic and from structure definitions
+    - Balancers need to pick up from energySource or the link
+    - If room is full and the balancer is not full, they need to fill up on energy
+- Get links working
+    - Who fills the links?
 - Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
     - Probably should minimize the differentiation in general to help simplify things
         - We reference the word "secondaary" 154 times :|

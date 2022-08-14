@@ -56,7 +56,7 @@ class Balancer extends CreepProcess {
     
         if(this.creep.memory.state === "fill")
         {
-            if(this.creep.isEmpty())
+            if(this.creep.isEmpty() || (!this.creep.isFull() && this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable))
             {
                 this.creep.clearTarget();
                 
