@@ -1,15 +1,12 @@
-- The way we define process names is really gross.  It's constants duplicated all over the place - that should instead be defined in the actual process definition itself
-- Define an expected baseline of how long it takes to get both rooms to level 4 as a basic metric for evaluating if changes are good, and ideally some automated test
-
-
-## Tidy Up
-- Just do a pass of boolean logic and clean up the undefined BS
-- Move behavior config constants into constants.js
-
 ## Plan
-
-### Necessary to get on public server
-- Defense against invaders
+1. Links for RCL5
+2. Spend an hour just fucking cleaning this shitty logic up
+    - Booleans, poorly named variables, etc.  Just fucking delete some code, because there's so much BS in here
+    - Consolidate where/how we define prototypes and set room/creep attributes.  Stop doing it all over the fucking place
+    - Finish moving constants to constants.js
+3. Invader Defense
+4. Expansion
+5. Make CreepSpawner less verbose & cleaner to define
 
 ### Important New Features
 - Expansion
@@ -24,28 +21,14 @@ Ticks remaining in Safe mode
 - RCL4
     - Pass 1:
 
-### Functionality to change
-- Balancer Rework
-- Get links working
-    - Who fills the links?
-- Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
-    - Probably should minimize the differentiation in general to help simplify things
-        - We reference the word "secondaary" 154 times :|
-    - We get so much fucking complexity from having primary and secondary so thoroughly in the code.  Need to remove that logic wherever we can
-
 ### Refactors
 - Either use Null or undefined - stop mixing
 - Make HomeRoomConstructionTools more DRY
-- Consolidate room/creep/colony/game tools/prototype modifications into files to make them more sensible
-- Booleans should be words instead of lots of &&s and ||s
-- Move constants to constants.js
-- CreepSpawners are way too verbose to define
 - Generic "move to target" function & state?  Would be good to not have to keep rewriting it
-- Inits in main.js can be better - should instead be in object-specific files
-
-### Potential issues
-- Colony-level road planning has potential for multiple colonies defining the same room and introducing a race condition.  Search for `addRoadsToBuildPlan(room) {`
-- The upgrade spawner and upgrade feeder spawner didn't get cleaned up on one occasion.  Child process cleanup failed :()
+- Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
+    - Probably should minimize the differentiation in general to help simplify things
+        - We reference the word "secondary" 178 times :|
+    - We get so much fucking complexity from having primary and secondary so thoroughly in the code.  Need to remove that logic wherever we can
 
 ### Fixes
 - Document how the friggin OS actually works
