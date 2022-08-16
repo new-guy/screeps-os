@@ -14,6 +14,7 @@ class ReconTools {
         }
 
         var isRoomDangerous = this.isRoomDangerous(room);
+
         this.recordRoomDanger(room.name, isRoomDangerous);
     }
 
@@ -28,11 +29,6 @@ class ReconTools {
         if(isDangerous) {
             Memory.rooms[roomName].recon.dangerLastSeen = Game.time
         }
-    }
-
-    updateInvaderStatus(roomName) {
-        var hasInvader = _.filter(Game.room[roomName].enemies, function(r) { 
-            return r.owner.username === 'Invader' }).length > 0;
     }
 
     isRoomNameDangerous(roomName) {
