@@ -115,6 +115,7 @@ class BootStrapper extends CreepProcess {
         {
             this.creep.say("SaveCont");
             this.creep.upgradeThisController(this.creep.room.controller);
+            this.creep.setTarget(this.creep.room.controller);
             return;
         }
 
@@ -151,6 +152,7 @@ class BootStrapper extends CreepProcess {
 
     determineTarget() {
         //If the room is below energy capacity, find the closest spawn or extension
+            //Note: in room mode, we do not have bootstrappers fill factories because we want them to build
         //If there are any roads below 50%, repair them
         //If the room has any construction sites, build them
         
@@ -159,7 +161,7 @@ class BootStrapper extends CreepProcess {
         var workArea = this.mode === "room" ? this.targetRoom : this.targetColony;
 
         if(((this.creep.room.storage !== undefined && this.creep.room.isInComa()) || this.creep.room.storage === undefined)
-           && workArea.energyAvailable < workArea.energyCapacityAvailable && this.creep.hasEnergy) {
+           && this.mode === 'colony' && workArea.energyAvailable < workArea.energyCapacityAvailable && this.creep.hasEnergy) {
             var closestNonFullFactory = this.creep.pos.findClosestByPath(workArea.nonFullFactories);
 
             if(closestNonFullFactory !== null) {
