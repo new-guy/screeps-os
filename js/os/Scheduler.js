@@ -12,6 +12,7 @@ const PreStorageColonyBootstrap = require('PreStorageColonyBootstrap');
 const RoadGenerator = require('RoadGenerator');
 const EnergyHarvestingManager = require('EnergyHarvestingManager');
 const EnergyRouteManager = require('EnergyRouteManager');
+const InvaderMonitor = require('InvaderMonitor');
 
 const HomeRoomManager = require('HomeRoomManager');
 const ComaRecovery = require('ComaRecovery');
@@ -71,7 +72,8 @@ var processTypeMap = {
     "UpgradeFeeder": UpgradeFeeder,
     "TowerFiller": TowerFiller,
     "ExpansionBootstrap": ExpansionBootstrap,
-    "RampartPlanner": RampartPlanner
+    "RampartPlanner": RampartPlanner,
+    "InvaderMonitor": InvaderMonitor
 };
 
 var MAX_PROCESSES_TO_DISPLAY = 10;

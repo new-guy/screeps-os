@@ -136,3 +136,17 @@ exports.Balancer = {
 		"move": 4
 	}
 }
+
+exports.InvaderDefender = {
+	"segment": ["tough", "ranged_attack", "move", "move"],
+	"min": {
+		"tough": 1,
+		"ranged_attack": 1,
+		"move": 2
+	},
+	"max": {
+		"tough": 10,
+		"ranged_attack": 10,
+		"move": 20
+	}
+}
