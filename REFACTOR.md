@@ -13,6 +13,10 @@
 4. Expansion
 5. Make CreepSpawner less verbose & cleaner to define
 
+### ColonyManager Refactor Plan
+- Separate colony-leve logic and room-level logic into different functions
+- Instead of having the weirdness around secondary vs primary room, just have a "update room" function that takes care of creating the pre-stor-bootstrap stuff.  Stop making secondary so unique.  We eventually want this to be way more generic so we could theoretically have more than just the secondary room in there
+
 ### Important New Features
 - Expansion
 - Colonies need to check if a room is already used by another colony before adding it to the colonyRoomInfo
