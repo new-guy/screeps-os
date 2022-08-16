@@ -58,19 +58,11 @@ class ColonyManager extends Process {
     }
 
     comaRecovery() {
-        if(this.primaryRoom.isInComa()) {
-            this.ensureChildProcess(this.primaryRoom.name + '|comaRecovery', 'ComaRecovery', {
-                'targetRoomName': this.primaryRoom.name,
+        if(this.primaryRoom.isInComa() || (this.secondaryRoom !== undefined && this.secondaryRoom.isInComa())) {
+            this.ensureChildProcess(this.name + '|comaRecovery', 'ComaRecovery', {
+                'targetColonyName': this.name,
                 'spawnColonyName': this.name,
-                'creepNameBase': this.primaryRoom.name + '|comaRecovery'
-            }, HIGHEST_PROMOTABLE_PRIORITY);
-        }
-
-        if(this.secondaryRoom !== undefined && this.secondaryRoom.isInComa()) {
-            this.ensureChildProcess(this.secondaryRoom.name + '|comaRecovery', 'ComaRecovery', {
-                'targetRoomName': this.secondaryRoom.name,
-                'spawnColonyName': this.name,
-                'creepNameBase': this.secondaryRoom.name + '|comaRecovery'
+                'creepNameBase': this.name + '|comaRecovery'
             }, HIGHEST_PROMOTABLE_PRIORITY);
         }
     }
@@ -100,6 +92,21 @@ class ColonyManager extends Process {
 
             if(this.colony.roomsNeedingBuilder.length > 0 && this.colony.hasNecessaryMinimumEnergy) {
                 this.ensureColonyBuilder();
+            }
+        }
+    }
+
+    ensureSecondaryRoom() {
+        if((this.secondaryRoom !== undefined && !this.secondaryRoom.controller.my)) {
+            this.spawnSecondaryRoomClaimer();
+        }
+
+        if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my) {
+            //Bootstrap Scheduling
+            if(this.secondaryRoom.controller.level <= 4 && this.secondaryRoom.storage === undefined) {
+                var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
+                var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
+                this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_EXPANSION_SUPPORT);
             }
         }
     }
@@ -140,28 +147,6 @@ class ColonyManager extends Process {
         count = Math.min(count, COLONY_MAX_BUILDER_COUNT);
 
         return count;
-    }
-
-    ensureSecondaryRoom() {
-        if((this.secondaryRoom !== undefined && !this.secondaryRoom.controller.my)) {
-            this.spawnSecondaryRoomClaimer();
-        }
-
-        if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my) {
-            //Secondary Room Self-Bootstrap            
-            if(this.secondaryRoom.controller.level <= 4) {
-                var bootstrapPID = 'preStorSecondBoot|' + this.name + '|' + this.name;
-                var data = {'targetColonyName': this.name, 'spawnColonyName': this.name, 'spawnPidPrefix': 'second'};
-                this.ensureChildProcess(bootstrapPID, 'PreStorageColonyBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
-            }
-
-            //Bootstrap Scheduling
-            if(this.secondaryRoom.controller.level <= 2) {
-                var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
-                var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
-                this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_EXPANSION_SUPPORT);
-            }
-        }
     }
 
     updateRoomStates(room) {
