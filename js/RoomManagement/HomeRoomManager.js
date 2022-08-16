@@ -59,6 +59,9 @@ class HomeRoomManager extends RoomManager {
         var startFlagName = startFlagName;
         var endFlagName = endFlag.name;
 
+        var roundedEnergyAvailable = this.room.energyAvailable - (this.room.energyAvailable % 100);
+        var energyToSpend = Math.max(300, roundedEnergyAvailable);
+
         var data = {
             'colonyName': this.colony.name,
             'creepCount': 1,
@@ -69,10 +72,11 @@ class HomeRoomManager extends RoomManager {
                 'targetRoom': endFlag.room.name,
                 'startFlagName': startFlagName,
                 'endFlagName': endFlagName
-            }
+            },
+            'maxEnergyToSpend': energyToSpend
         };
         
-        var spawnPID = 'spawnBalancer|' + endFlagName;
+        var spawnPID = 'spawnBalancer|' + energyToSpend + '|' + endFlagName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BALANCER_PRIORITY);
     }
 

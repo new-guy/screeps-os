@@ -115,6 +115,7 @@ class BootStrapper extends CreepProcess {
         {
             this.creep.say("SaveCont");
             this.creep.upgradeThisController(this.creep.room.controller);
+            this.creep.setTarget(this.creep.room.controller);
             return;
         }
 
