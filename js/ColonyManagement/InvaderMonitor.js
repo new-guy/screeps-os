@@ -11,14 +11,35 @@ class InvaderMonitor extends Process {
         if(super.update() == 'exit') {
             return 'exit';
         }
-        for(var i = 0; i < this.colony.colonyRoomInfo.length; i++) {
-            
+
+        for(var roomName in this.colony.colonyRoomInfo) {
+            var room = Game.rooms[roomName];
+            if(room === undefined) continue;
+            if(room.enemies === undefined) continue;
+            var invaders = _.filter(Game.room[roomName].enemies, function(r) { 
+                return r.owner.username === 'Invader' });
+
+            if(invaders.length === 0) continue;
+            else {
+                this.ensureDefender();
+            }
         }
-        console.log('printing stuff about this process');
     }
 
-    someOtherFunction() {
-        return (this.stuff.controller.level < 5 && this.stuff.storage === undefined);
+    ensureDefender() {
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': 1,
+            'creepNameBase': 'invaderDefender|' + this.colony.name,
+            'creepBodyType': 'InvaderDefender',
+            'creepProcessClass': 'InvaderDefender',
+            'creepMemory': {
+                'targetColony': this.colony.name
+            }
+        };
+
+        var spawnPID ='spawnInvaderDefender|' + this.colony.name;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BUILDER_PRIORITY);
     }
 
     processShouldDie() {

@@ -35,6 +35,7 @@ const ColonyBuilder = require('ColonyBuilder');
 const Upgrader = require('Upgrader');
 const UpgradeFeeder = require('UpgradeFeeder');
 const TowerFiller = require('TowerFiller');
+const InvaderDefender = require('InvaderDefender');
 
 const ExpansionBootstrap = require('ExpansionBootstrap');
 
@@ -73,7 +74,8 @@ var processTypeMap = {
     "TowerFiller": TowerFiller,
     "ExpansionBootstrap": ExpansionBootstrap,
     "RampartPlanner": RampartPlanner,
-    "InvaderMonitor": InvaderMonitor
+    "InvaderMonitor": InvaderMonitor,
+    "InvaderDefender": InvaderDefender
 };
 
 var MAX_PROCESSES_TO_DISPLAY = 10;
