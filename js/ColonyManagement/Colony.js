@@ -346,6 +346,21 @@ class Colony {
         return hasMinEnergy;
     }
 
+    get invadedRoomToDefend() {
+        for(var roomName in this.colonyRoomInfo) {
+            var room = Game.rooms[roomName];
+            if(room === undefined) continue;
+            if(room.enemies === undefined) continue;
+            var invaders = _.filter(Game.room[roomName].enemies, function(r) { 
+                return r.owner.username === 'Invader' });
+
+            if(invaders.length === 0) continue;
+            else {
+                return room;
+            }
+        }
+    }
+
     initSpawnInfo() {
         var primaryRoomSpawns = this.primaryRoom.find(FIND_MY_STRUCTURES, {filter: function(structure) { return structure.structureType === STRUCTURE_SPAWN }});
         var spawns = primaryRoomSpawns;

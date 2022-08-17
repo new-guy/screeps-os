@@ -22,6 +22,7 @@ class InvaderMonitor extends Process {
             if(invaders.length === 0) continue;
             else {
                 this.ensureDefender();
+                console.log("Detected invader in " + roomName + " - ensuring defense")
             }
         }
     }
