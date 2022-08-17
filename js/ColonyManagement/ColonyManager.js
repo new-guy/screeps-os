@@ -23,7 +23,8 @@ class ColonyManager extends Process {
         this.ensureRoomManagement();
         this.ensureMiningRoutes();
         
-        this.ensureChildProcess(this.primaryRoom.name + '|scoutingManager', 'ColonyScoutingManager', {'colonyName': this.name}, COLONY_SCOUTING_PRIORITY);
+        this.ensureChildProcess(this.colony.name + '|scoutingManager', 'ColonyScoutingManager', {'colonyName': this.name}, COLONY_SCOUTING_PRIORITY);
+        this.ensureChildProcess(this.colony.name + '|invaderMonitor', 'InvaderMonitor', {'colonyName': this.name}, COLONY_DEFENSE_PRIORITY);
 
         if(this.primaryRoom.isInComa() || (this.secondaryRoom !== undefined && this.secondaryRoom.isInComa())) {
             console.log('Coma Recovery');
