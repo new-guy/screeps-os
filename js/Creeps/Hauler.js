@@ -4,11 +4,11 @@ class Hauler extends CreepProcess {
     constructor (...args) {
         super(...args);
 
-        if(this.creep !== undefined) {
+        if(this.creep != null) {
             this.targetHarvestDestination = Game.rooms[this.creep.memory['targetStorageRoom']].harvestDestination;
             this.containerPos = new RoomPosition(this.creep.memory['containerPos']['x'], this.creep.memory['containerPos']['y'], this.creep.memory['containerPos']['roomName'])
 
-            if(Game.rooms[this.containerPos.roomName] !== undefined) {
+            if(Game.rooms[this.containerPos.roomName] != null) {
                 this.container = this.containerPos.getStructure(STRUCTURE_CONTAINER);
             }
         }
@@ -56,11 +56,11 @@ class Hauler extends CreepProcess {
     }
 
     pickupFromContainer() {
-        if(this.container === undefined) {
+        if(this.container == null) {
             this.creep.moveTo(this.containerPos);
         }
 
-        else if(this.container === null && this.creep.pos.getRangeTo(this.containerPos) > 4) {
+        else if(this.container == null && this.creep.pos.getRangeTo(this.containerPos) > 4) {
             this.creep.moveTo(this.containerPos);
         }
 

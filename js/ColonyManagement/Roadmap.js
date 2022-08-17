@@ -4,13 +4,13 @@ class Roadmap {
     constructor(colony) {
         this.colony = colony;
 
-        if(this.colony.memory.roadmap === undefined) {
+        if(this.colony.memory.roadmap == null) {
             this.colony.memory.roadmap = {};
         }
 
         this.memory = this.colony.memory.roadmap;
 
-        if(this.memory.shouldDraw === undefined) {
+        if(this.memory.shouldDraw == null) {
             this.memory.shouldDraw = false;
         }
 
@@ -32,7 +32,7 @@ class Roadmap {
             var roadmap = this.getMap(roomName);
 
 
-            if(roadmap === undefined) continue;
+            if(roadmap == null) continue;
 
             var visual = new RoomVisual(roomName);
 
@@ -70,7 +70,7 @@ class Roadmap {
 
     setRoad(roomPosition) {
         var roadmap = this.getMap(roomPosition.roomName);
-        if(roadmap === undefined) {
+        if(roadmap == null) {
             this.initMap(roomPosition.roomName);
             roadmap = this.getMap(roomPosition.roomName);
         }
@@ -80,7 +80,7 @@ class Roadmap {
 
     getPos(roomPosition) {
         var roadmap = this.getMap(roomPosition.roomName);
-        if(roadmap === undefined) {
+        if(roadmap == null) {
             this.initMap(roomPosition.roomName);
             roadmap = this.getMap(roomPosition.roomName);
         }

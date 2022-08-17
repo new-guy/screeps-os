@@ -40,13 +40,13 @@ class SecondaryRoomFinder extends Process {
 
             console.log(roomName);
 
-            if(room === undefined) {
+            if(room == null) {
                 continue;
             }
 
             else {
                 console.log('Check Secondary: ' + roomName);
-                if(room.controller === undefined) {
+                if(room.controller == null) {
                     colonyRoomInfo['isValidSecondary'] = false;
                     colonyRoomInfo['checkedForSecondary'] = true;
                 }
@@ -83,11 +83,11 @@ class SecondaryRoomFinder extends Process {
                 }
             }
 
-            if(currentCandidate !== null) {
+            if(currentCandidate != null) {
                 console.log('Would set candidate ' + currentCandidate + ' ' + currentPlainsPercent);
                 var candidateRoom = Game.rooms[currentCandidate];
 
-                if(candidateRoom !== undefined) {
+                if(candidateRoom != null) {
                     if(this.placeHeart(candidateRoom)) {
                         this.colony.memory['secondaryRoomName'] = currentCandidate;
                     }

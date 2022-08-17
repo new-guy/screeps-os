@@ -12,11 +12,11 @@ class RampartPlanner extends Process {
             return 'exit';
         }
     
-        if(this.room === undefined || this.room.memory.buildingPlan == undefined) {
+        if(this.room == null || this.room.memory.buildingPlan == undefined) {
             return 'continue';
         }
 
-        if(this.room.storage !== undefined && this.room.constructionSites.length === 0) {
+        if(this.room.storage != null && this.room.constructionSites.length === 0) {
             this.ensureRamparts();
         }
 

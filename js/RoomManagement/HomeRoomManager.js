@@ -12,7 +12,7 @@ class HomeRoomManager extends RoomManager {
             return 'exit';
         }
     
-        if(this.room === undefined) {
+        if(this.room == null) {
             return 'continue';
         }
 
@@ -21,11 +21,11 @@ class HomeRoomManager extends RoomManager {
         }
         //If we're pre-storage, bootstrap
 
-        if(this.room.harvestDestination !== undefined) {
+        if(this.room.harvestDestination != null) {
             this.ensureBalancers();
         }
 
-        if(this.room.halfFullTowers.length > 0 && this.room.harvestDestination !== undefined) {
+        if(this.room.halfFullTowers.length > 0 && this.room.harvestDestination != null) {
             this.ensureTowerFillers();
         }
 
@@ -33,7 +33,7 @@ class HomeRoomManager extends RoomManager {
             this.ensureDowngradeSafeguard();
         }
 
-        if(this.room.harvestDestination !== undefined && this.room.state === 'default') {
+        if(this.room.harvestDestination != null && this.room.state === 'default') {
             this.ensureDefaultUnits();
         }
 

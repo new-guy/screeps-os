@@ -3,10 +3,10 @@ Creep.prototype.putEnergyInTarget = function() {
     this.sayInOrder(['Knock', 'knock', 'delivery', 'here!']);
 
 
-    if(target === null ||
-       (target.store === undefined && target.carryCapacity === undefined && target.energy === target.energyCapacity) ||
-       (target.store !== undefined && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) ||
-       (target.carryCapacity !== undefined && target.carry[RESOURCE_ENERGY] === target.carryCapacity) ||
+    if(target == null ||
+       (target.store == null && target.carryCapacity == null && target.energy === target.energyCapacity) ||
+       (target.store != null && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) ||
+       (target.carryCapacity != null && target.carry[RESOURCE_ENERGY] === target.carryCapacity) ||
        this.hasNoEnergy) {
         this.clearTarget();
     }
@@ -64,7 +64,7 @@ Creep.prototype.repairTarget = function() {
     }
 
     else {
-        if(target === null || target.hits == target.hitsMax) {
+        if(target == null || target.hits == target.hitsMax) {
             this.clearTarget();
             return;
         }
@@ -98,7 +98,7 @@ Creep.prototype.moveRandom = function() {
 Creep.prototype.getEnergyFromHarvestDestination = function(room) {
     var harvestDestination = room.harvestDestination;
 
-    if(harvestDestination === undefined) {
+    if(harvestDestination == null) {
         this.say('NoStorage');
         return;
     }
@@ -118,7 +118,7 @@ Creep.prototype.getEnergyFromClosestColonyHarvestDestination = function(colony, 
     //hasMinimum checks your ROOM_NECESSARY_MINIMUM_ENERGY_CONTAINER
     var harvestDestination = colony.getClosestHarvestDestination(this.pos, this.carryCapacity, hasMinimum);
 
-    if(harvestDestination === undefined) {
+    if(harvestDestination == null) {
         this.say('NoStorage');
         return;
     }

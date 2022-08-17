@@ -22,7 +22,7 @@ exports.endProcess = function(processMetadata) {
     var processRunTime = processEndTime - processStartTime;
     var processClass = processMetadata['processClass'];
 
-    if(processStats[processClass] === undefined) {
+    if(processStats[processClass] == null) {
         processStats[processClass] = [processRunTime];
     }
 

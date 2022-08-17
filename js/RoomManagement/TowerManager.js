@@ -12,7 +12,7 @@ class TowerManager extends Process {
             return 'exit';
         }
     
-        if(this.room === undefined) {
+        if(this.room == null) {
             return 'continue';
         }
 

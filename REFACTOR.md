@@ -1,8 +1,6 @@
 ## Plan
 1. Spend an hour just fucking cleaning this shitty logic up
     - Booleans, poorly named variables, etc.  Just fucking delete some code, because there's so much BS in here
-    - Consolidate where/how we define prototypes and set room/creep attributes.  Stop doing it all over the fucking place
-    - Finish moving constants to constants.js
 2. Consolidate PreStorBootstrap logic and BootstrapSpawner
 2. Work on room/colony state refactor
     - This codebase fucking sucks to work on because this early game logic is so tightly coupled

@@ -8,7 +8,7 @@ class ColonyManager extends Process {
         this.primaryRoom = Game.rooms[this.memory.primaryRoom];
         this.name = this.primaryRoom.name;
 
-        if(this.colony.memory.secondaryRoomName !== undefined) {
+        if(this.colony.memory.secondaryRoomName != null) {
             this.secondaryRoom = Game.rooms[this.colony.memory.secondaryRoomName];
         }
     }
@@ -26,7 +26,7 @@ class ColonyManager extends Process {
         this.ensureChildProcess(this.colony.name + '|scoutingManager', 'ColonyScoutingManager', {'colonyName': this.name}, COLONY_SCOUTING_PRIORITY);
         this.ensureChildProcess(this.colony.name + '|invaderMonitor', 'InvaderMonitor', {'colonyName': this.name}, COLONY_DEFENSE_PRIORITY);
 
-        if(this.primaryRoom.isInComa() || (this.secondaryRoom !== undefined && this.secondaryRoom.isInComa())) {
+        if(this.primaryRoom.isInComa() || (this.secondaryRoom != null && this.secondaryRoom.isInComa())) {
             console.log('Coma Recovery');
             this.comaRecovery();
         }
@@ -35,7 +35,7 @@ class ColonyManager extends Process {
 
         this.updateRoomStates(this.primaryRoom);
 
-        if(this.secondaryRoom !== undefined) {
+        if(this.secondaryRoom != null) {
             this.updateRoomStates(this.secondaryRoom);
         }
     }
@@ -44,7 +44,7 @@ class ColonyManager extends Process {
         this.ensureChildProcess(this.primaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.primaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
         this.ensureChildProcess(this.primaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.primaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
 
-        if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my && this.secondaryRoom.controller.level > 0) {
+        if(this.secondaryRoom != null && this.secondaryRoom.controller.my && this.secondaryRoom.controller.level > 0) {
             this.ensureChildProcess(this.secondaryRoom.name + '|constructionMonitor', 'HomeRoomConstructionMonitor', {'roomName': this.secondaryRoom.name}, COLONY_NONESSENTIAL_PRIORITY);
             this.ensureChildProcess(this.secondaryRoom.name + '|homeroomManager', 'HomeRoomManager', {'roomName': this.secondaryRoom.name, 'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
         }
@@ -53,13 +53,13 @@ class ColonyManager extends Process {
     ensureMiningRoutes() {
         if(this.primaryRoom.controller.level < 2) return;
 
-        if(this.primaryRoom.harvestDestination !== undefined || (this.secondaryRoom !== undefined && this.secondaryRoom.harvestDestination !== undefined)) {
+        if(this.primaryRoom.harvestDestination != null || (this.secondaryRoom != null && this.secondaryRoom.harvestDestination != null)) {
             this.ensureChildProcess(this.name + '|energyHarvestingManager', 'EnergyHarvestingManager', {'colonyName': this.name}, COLONY_MANAGEMENT_PRIORITY);
         }
     }
 
     comaRecovery() {
-        if(this.primaryRoom.isInComa() || (this.secondaryRoom !== undefined && this.secondaryRoom.isInComa())) {
+        if(this.primaryRoom.isInComa() || (this.secondaryRoom != null && this.secondaryRoom.isInComa())) {
             this.ensureChildProcess(this.name + '|comaRecovery', 'ComaRecovery', {
                 'targetColonyName': this.name,
                 'spawnColonyName': this.name,
@@ -79,11 +79,11 @@ class ColonyManager extends Process {
             console.log('Need to implement post-storage functionality');
         }
 
-        if(this.colony.memory.secondaryRoomName === undefined) { //If we have not figured out the secondaryRoom name, ensure a process to find the room
+        if(this.colony.memory.secondaryRoomName == null) { //If we have not figured out the secondaryRoom name, ensure a process to find the room
             this.ensureChildProcess(this.primaryRoom.name + '|secondaryRoomFinder', 'SecondaryRoomFinder', {'colonyName': this.name}, COLONY_NONESSENTIAL_PRIORITY);
         }
 
-        else if((Game.empire.hasSpareGCL && this.colony.primaryRoom.energyCapacityAvailable >= 650) || (this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.controller.my)) {
+        else if((Game.empire.hasSpareGCL && this.colony.primaryRoom.energyCapacityAvailable >= 650) || (this.colony.secondaryRoom != null && this.colony.secondaryRoom.controller.my)) {
             this.ensureSecondaryRoom()
         }
         
@@ -98,13 +98,13 @@ class ColonyManager extends Process {
     }
 
     ensureSecondaryRoom() {
-        if((this.secondaryRoom !== undefined && !this.secondaryRoom.controller.my)) {
+        if((this.secondaryRoom != null && !this.secondaryRoom.controller.my)) {
             this.spawnSecondaryRoomClaimer();
         }
 
-        if(this.secondaryRoom !== undefined && this.secondaryRoom.controller.my) {
+        if(this.secondaryRoom != null && this.secondaryRoom.controller.my) {
             //Bootstrap Scheduling
-            if(this.secondaryRoom.controller.level <= 4 && this.secondaryRoom.storage === undefined) {
+            if(this.secondaryRoom.controller.level <= 4 && this.secondaryRoom.storage == null) {
                 var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
                 var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
                 this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_EXPANSION_SUPPORT);
@@ -133,11 +133,11 @@ class ColonyManager extends Process {
     getColonyBuilderCount() {
         var count = 1;
 
-        if(this.colony.primaryRoom.storage === undefined) {
+        if(this.colony.primaryRoom.storage == null) {
             count++;
         }
 
-        if(this.colony.secondaryRoom !== undefined && this.colony.secondaryRoom.storage === undefined && this.colony.primaryRoom.harvestDestination !== undefined) {
+        if(this.colony.secondaryRoom != null && this.colony.secondaryRoom.storage == null && this.colony.primaryRoom.harvestDestination != null) {
             count++;
         }
 
@@ -183,7 +183,7 @@ class ColonyManager extends Process {
     }
 
     processShouldDie() {
-        return this.primaryRoom === undefined;
+        return this.primaryRoom == null;
     }
 }
 

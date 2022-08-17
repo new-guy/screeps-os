@@ -14,8 +14,8 @@ class InvaderMonitor extends Process {
 
         for(var roomName in this.colony.colonyRoomInfo) {
             var room = Game.rooms[roomName];
-            if(room === undefined) continue;
-            if(room.enemies === undefined) continue;
+            if(room == null) continue;
+            if(room.enemies == null) continue;
             var invaders = _.filter(Game.rooms[roomName].enemies, function(r) { 
                 return r.owner.username === 'Invader' });
 

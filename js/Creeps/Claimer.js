@@ -15,7 +15,7 @@ class Claimer extends CreepProcess {
         var targetRoom = Game.rooms[this.creep.memory.targetRoom];
         this.creep.say('🚩');
 
-        if(targetRoom === undefined) {
+        if(targetRoom == null) {
             var destination = new RoomPosition(25,25,this.creep.memory.targetRoom);
 
             this.creep.moveTo(destination);

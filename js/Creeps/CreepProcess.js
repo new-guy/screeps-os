@@ -6,7 +6,7 @@ class CreepProcess extends Process {
 
         this.creep = Game.creeps[this.memory.creepName];
 
-        if(this.creep !== undefined) {
+        if(this.creep != null) {
             this.spawningColony = Game.colonies[this.creep.memory.spawningColonyName];
         }
     }
@@ -16,11 +16,11 @@ class CreepProcess extends Process {
             return 'exit';
         }
 
-        if(this.creep === undefined) {
+        if(this.creep == null) {
             console.log(this.memory.creepName + ' is not defined');
         }
 
-        else if(this.creep !== undefined && this.creep.spawning) {
+        else if(this.creep != null && this.creep.spawning) {
             console.log(this.creep.name + ' is spawning');
         }
 
@@ -31,7 +31,7 @@ class CreepProcess extends Process {
     }
 
     updateStateTransitions() {
-        if(this.creep !== undefined) {
+        if(this.creep != null) {
             this.creep.say('nostates');
         }
     }
@@ -41,7 +41,7 @@ class CreepProcess extends Process {
     }
 
     processShouldDie() {
-        var myCreepExists = (this.creep !== undefined);
+        var myCreepExists = (this.creep != null);
 
         var shouldDie = !myCreepExists;
         if(shouldDie) {

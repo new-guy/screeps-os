@@ -1,6 +1,6 @@
 class ReconTools {
     constructor () {
-        if(Memory.recon === undefined) {
+        if(Memory.recon == null) {
             Memory.recon = {};
         }
     }
@@ -9,7 +9,7 @@ class ReconTools {
     }
 
     initRoomRecon(room) {
-        if(room.memory.recon === undefined) {
+        if(room.memory.recon == null) {
             room.memory.recon = {};
         }
 
@@ -19,7 +19,7 @@ class ReconTools {
     }
 
     isRoomDangerous(room) {
-        var isDangerous = room.enemies !== undefined;
+        var isDangerous = room.enemies != null;
         return isDangerous;
     }
 
@@ -33,10 +33,10 @@ class ReconTools {
 
     isRoomNameDangerous(roomName) {
         var room = Game.rooms[roomName];
-        if(room === undefined) {
-            if(Memory.rooms[roomName] === undefined) return false;
+        if(room == null) {
+            if(Memory.rooms[roomName] == null) return false;
             var isDangerous = Memory.rooms[roomName].recon.isDangerous;
-            if(isDangerous === undefined || !isDangerous) {
+            if(isDangerous == null || !isDangerous) {
                 return false;
             }
 

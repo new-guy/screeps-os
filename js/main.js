@@ -61,7 +61,7 @@ function initScouting() {
 function initEmpire() {
     Game.empire = {};
 
-    var ownedRooms = _.filter(Game.rooms, function(r) { return r.controller !== undefined && r.controller.my && r.controller.level > 0 }).length;
+    var ownedRooms = _.filter(Game.rooms, function(r) { return r.controller != null && r.controller.my && r.controller.level > 0 }).length;
 
     Game.empire.hasSpareGCL = ownedRooms < Game.gcl.level;
 }
@@ -117,7 +117,7 @@ function initRooms() {
 
         room.constructionSites = room.find(FIND_MY_CONSTRUCTION_SITES);
 
-        if(room.controller !== undefined && room.controller.my) {
+        if(room.controller != null && room.controller.my) {
             if(room.energyAvailable < room.energyCapacityAvailable) {
                 room.nonFullFactories = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                     return (s.structureType === STRUCTURE_EXTENSION || s. structureType === STRUCTURE_SPAWN) && s.energy < s.energyCapacity;
@@ -129,13 +129,13 @@ function initRooms() {
                 return s.structureType === STRUCTURE_TOWER && s.energy < s.energyCapacity/2 
             }});
 
-            if(Game.flags['!HARVESTDEST|' + room.name] !== undefined) {
+            if(Game.flags['!HARVESTDEST|' + room.name] != null) {
                 var harvestDestFlag = Game.flags['!HARVESTDEST|' + room.name];
                 room.memory['harvestDestination'] = {'x': harvestDestFlag.pos.x, 'y': harvestDestFlag.pos.y};
                 harvestDestFlag.remove();
             }
 
-            if(room.memory['harvestDestination'] !== undefined) {
+            if(room.memory['harvestDestination'] != null) {
                 var destinationPos = new RoomPosition(room.memory['harvestDestination']['x'], room.memory['harvestDestination']['y'], room.name);
                 
                 if(destinationPos.structureExists(STRUCTURE_STORAGE)) room.harvestDestination = destinationPos.getStructure(STRUCTURE_STORAGE);
@@ -147,7 +147,7 @@ function initRooms() {
         room.friendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly(); }});
         room.damagedFriendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly() && c.hits < c.hitsMax; }});
 
-        if(room.controller !== undefined && room.controller.my) {
+        if(room.controller != null && room.controller.my) {
             room.rampartsNeedingRepair = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_RAMPART && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
             }});

@@ -1,12 +1,12 @@
 Room.prototype.updateBuildingPlans = function() {
 	var latestRCLGenerated = this.memory.latestRCLGenerated;
 
-	if(latestRCLGenerated === undefined) latestRCLGenerated = 0;
+	if(latestRCLGenerated == null) latestRCLGenerated = 0;
 
-	var roomIsMine = (this.controller !== undefined && this.controller.my);
+	var roomIsMine = (this.controller != null && this.controller.my);
 	if(!roomIsMine) return;
 
-	if(this.memory.planGenerationState === undefined) {
+	if(this.memory.planGenerationState == null) {
 		this.memory.planGenerationState = 'waiting';
 	}
 
@@ -87,7 +87,7 @@ Room.prototype.calculateChunkPositions = function(rclString) {
 	var heartPosition = undefined;
 
 	var heartChunkFlag = Game.flags['!CHUNK|heart|' + this.name];
-	if(heartChunkFlag === undefined) {
+	if(heartChunkFlag == null) {
 		console.log('CANNOT FIND HEART FLAG FOR ' + this.name);
 		return false;
 	}
@@ -105,15 +105,15 @@ Room.prototype.calculateChunkPositions = function(rclString) {
 
 		var chunkRoot = this.findRootForChunk(chunkType, heartPosition, searchDistance=20);
 
-		if(chunkRoot === null) {
+		if(chunkRoot == null) {
 			continue;
 		}
 
-		var typeCount = (typeCountDict[chunkType] === undefined ? 0 : typeCountDict[chunkType]);
+		var typeCount = (typeCountDict[chunkType] == null ? 0 : typeCountDict[chunkType]);
 
 		var flagName = "!CHUNK|" + chunkType + "|" + this.name + "|" + typeCount;
 
-		if(Game.flags[flagName] === undefined)  {
+		if(Game.flags[flagName] == null)  {
 			chunkFlagsToPlace.push({
 				"flagName": "!CHUNK|" + chunkType + "|" + this.name + "|" + typeCount,
 				"pos": chunkRoot
@@ -258,10 +258,10 @@ function getAbsolutePositionsFromChunkFlag(chunkFlag, rclString) {
 function getAbolutePositionsFromPos(chunkType, rootPos, rclString) {
 	var buildingsToPlan = [];
 	var chunkDefinition = {};
-	if(chunkDefinitions[chunkType][rclString] !== undefined) {
+	if(chunkDefinitions[chunkType][rclString] != null) {
 		chunkDefinition = chunkDefinitions[chunkType][rclString];
 	}
-	else if(chunkDefinitions[chunkType]['default'] !== undefined) {
+	else if(chunkDefinitions[chunkType]['default'] != null) {
 		chunkDefinition = chunkDefinitions[chunkType]['default'];
 	}
 	else {
@@ -289,7 +289,7 @@ function getAbolutePositionsFromPos(chunkType, rootPos, rclString) {
 		}
 	}
 
-	if(chunkDefinition['balancer_flags'] !== undefined) {
+	if(chunkDefinition['balancer_flags'] != null) {
 		var balancerFlags = chunkDefinition['balancer_flags'];
 
 		var startFlags = balancerFlags['balancer_start'];
@@ -321,7 +321,7 @@ function getAbolutePositionsFromPos(chunkType, rootPos, rclString) {
 		}
 	}
 
-	if(chunkDefinition['harvest_destination'] !== undefined) {
+	if(chunkDefinition['harvest_destination'] != null) {
 		var harvestDestPosition = chunkDefinition['harvest_destination'];
 		var harvestDestAbsolutePosition = getAbolutePosition(harvestDestPosition, designRootPos, rootPos);
 
@@ -333,7 +333,7 @@ function getAbolutePositionsFromPos(chunkType, rootPos, rclString) {
 		absolutePositions.push(harvestDestAbsolutePosition);
 	}
 
-	if(chunkDefinition['link_flags'] !== undefined) {
+	if(chunkDefinition['link_flags'] != null) {
 		var linkFlags = chunkDefinition['link_flags'];
 
 		var sourceFlags = linkFlags['sources'];
@@ -365,11 +365,11 @@ function getAbolutePositionsFromPos(chunkType, rootPos, rclString) {
 		}
 	}
 
-	if(chunkDefinition['lab_flags'] !== undefined) {
+	if(chunkDefinition['lab_flags'] != null) {
 		var labFlags = chunkDefinition['lab_flags'];
 
 		var boostFlagPosition = labFlags['boost'];
-		if(boostFlagPosition !== undefined) {
+		if(boostFlagPosition != null) {
 			var boostFlagAbsolutePosition = getAbolutePosition(boostFlagPosition, designRootPos, rootPos);
 	
 			var boostFlagName = '!LABBOOST|' + rootPos.roomName;
@@ -412,7 +412,7 @@ function getAbolutePosition(designPosition, designRootPosition, rootPosition) {
 Room.prototype.ensureRoadBuildFlag = function() {
 	if(this.controller.level >= 2) {
 		var roadFlagName = "!ROADS|" + this.name + "|homeroom"
-		if(Game.flags[roadFlagName] === undefined) {
+		if(Game.flags[roadFlagName] == null) {
 			new RoomPosition(0, 0, this.name).createFlag(roadFlagName)
 		}
 	}
@@ -423,7 +423,7 @@ Room.prototype.generateControllerSinkLinkPlan = function() {
 
 	if(this.controller.level >= 6) {
 		//Find storage and place one link below it, along with source flag
-		if(this.storage === undefined) {
+		if(this.storage == null) {
 			console.log("ERROR: Unable to generate controller link plans - room " + this.name + " has no storage");
 
 			return false;

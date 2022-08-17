@@ -4,15 +4,15 @@ class BootStrapper extends CreepProcess {
     constructor (...args) {
         super(...args);
 
-        if(this.creep !== undefined) {
+        if(this.creep != null) {
             var targetColonyName = this.creep.memory.targetColony;
             var targetRoomName = this.creep.memory.targetRoom;
-            if(targetColonyName !== undefined) {
+            if(targetColonyName != null) {
                 this.mode = 'colony'
                 this.targetColonyName = this.targetColonyName
                 this.targetColony = Game.colonies[targetColonyName]
             }
-            else if(targetRoomName !== undefined) {
+            else if(targetRoomName != null) {
                 this.mode = 'room'
                 this.targetRoomName = this.targetRoomName
                 this.targetRoom = Game.rooms[targetRoomName]
@@ -55,9 +55,9 @@ class BootStrapper extends CreepProcess {
     }
 
     mineEnergy() {
-        if(this.creep.memory.roomToExplore !== undefined) {
+        if(this.creep.memory.roomToExplore != null) {
             var roomName = this.creep.memory.roomToExplore;
-            if(Game.rooms[roomName] !== undefined && this.creep.room.name === roomName && !this.creep.pos.isEdge()) {
+            if(Game.rooms[roomName] != null && this.creep.room.name === roomName && !this.creep.pos.isEdge()) {
                 this.creep.memory.roomToExplore = undefined;
             }
 
@@ -93,7 +93,7 @@ class BootStrapper extends CreepProcess {
 
             var nearestSource = this.creep.pos.multiRoomFindClosestByPath(activeSources);
 
-            if(nearestSource !== null) {
+            if(nearestSource != null) {
                 this.creep.setTarget(nearestSource);
                 this.spawningColony.removeFromActiveSources(nearestSource);
             }
@@ -109,13 +109,13 @@ class BootStrapper extends CreepProcess {
     }
 
     work() {
-        if(this.mode == 'room' && this.targetRoom === undefined) {
+        if(this.mode == 'room' && this.targetRoom == null) {
             this.creep.moveTo(new RoomPosition(24, 24, this.creep.memory.targetRoom));
             this.creep.say('🙈');
             return;
         }
 
-        else if(this.creep.room.controller !== undefined && this.creep.room.controller.needsSaving())
+        else if(this.creep.room.controller != null && this.creep.room.controller.needsSaving())
         {
             this.creep.say("SaveCont");
             this.creep.upgradeThisController(this.creep.room.controller);
@@ -126,7 +126,7 @@ class BootStrapper extends CreepProcess {
 
         var target = this.creep.getTarget();
 
-        if(target === null) {
+        if(target == null) {
             this.determineTarget();
             target = this.creep.getTarget();
         }
@@ -134,7 +134,7 @@ class BootStrapper extends CreepProcess {
         if(target instanceof StructureSpawn || target instanceof StructureExtension || target instanceof StructureStorage) {
             this.creep.putEnergyInTarget();
             if(!this.creep.hasTarget() && this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable) {
-                if(this.creep.room.constructionSites !== undefined && this.creep.room.constructionSites.length > 0) {
+                if(this.creep.room.constructionSites != null && this.creep.room.constructionSites.length > 0) {
                     this.creep.setTarget(this.creep.room.getMostBuiltConstructionSite());
                 }
             }
@@ -164,11 +164,11 @@ class BootStrapper extends CreepProcess {
 
         var workArea = this.mode === "room" ? this.targetRoom : this.targetColony;
 
-        if(((this.creep.room.storage !== undefined && this.creep.room.isInComa()) || this.creep.room.storage === undefined)
+        if(((this.creep.room.storage != null && this.creep.room.isInComa()) || this.creep.room.storage == null)
            && this.mode === 'colony' && workArea.energyAvailable < workArea.energyCapacityAvailable && this.creep.hasEnergy) {
             var closestNonFullFactory = this.creep.pos.findClosestByPath(workArea.nonFullFactories);
 
-            if(closestNonFullFactory !== null) {
+            if(closestNonFullFactory != null) {
                 this.creep.setTarget(closestNonFullFactory);
             }
             else {
@@ -182,10 +182,10 @@ class BootStrapper extends CreepProcess {
             }
         }
 
-        else if(workArea.halfFullTowers !== undefined && workArea.halfFullTowers.length > 0) {
+        else if(workArea.halfFullTowers != null && workArea.halfFullTowers.length > 0) {
             var closestTower = this.creep.pos.findClosestByPath(workArea.halfFullTowers);
 
-            if(closestTower !== null) {
+            if(closestTower != null) {
                 this.creep.setTarget(closestTower)
             }
             else {
@@ -199,15 +199,15 @@ class BootStrapper extends CreepProcess {
             }
         }
 
-        else if(this.creep.room.isInComa() && this.creep.room.storage !== undefined) {
+        else if(this.creep.room.isInComa() && this.creep.room.storage != null) {
             this.creep.setTarget(this.creep.room.storage);
         }
 
-        else if(workArea.constructionSites !== undefined && workArea.constructionSites.length > 0) {
+        else if(workArea.constructionSites != null && workArea.constructionSites.length > 0) {
             if(this.mode === 'room') {
                 this.creep.setTarget(workArea.getMostBuiltConstructionSite());
             }
-            else if(this.creep.room.constructionSites !== undefined && this.creep.room.constructionSites.length > 0) {
+            else if(this.creep.room.constructionSites != null && this.creep.room.constructionSites.length > 0) {
                 this.creep.setTarget(this.creep.room.getMostBuiltConstructionSite());
             }
             else if(this.mode === 'colony') {

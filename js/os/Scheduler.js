@@ -84,8 +84,8 @@ var DEBUGGING = true;
 
 class Scheduler {
     constructor () {
-        if( Memory.processes === undefined || 
-            Memory.ipc === undefined) {
+        if( Memory.processes == null || 
+            Memory.ipc == null) {
 
             Memory.processes = {};
             Memory.ipc = {};
@@ -163,7 +163,7 @@ class Scheduler {
         CPUMetrics.printProcessStats(this);
 
         function shouldSleep(processMetadata) {
-            return processMetadata['wakeTick'] !== undefined && processMetadata['wakeTick'] > Game.time; //Are we before the wake tick?
+            return processMetadata['wakeTick'] != null && processMetadata['wakeTick'] > Game.time; //Are we before the wake tick?
         }
     }
 
@@ -184,7 +184,7 @@ class Scheduler {
     getProcess(pid) {
         var processMemory = Memory.processes[pid];
 
-        if(processMemory === undefined) {
+        if(processMemory == null) {
             return undefined;
         }
 
@@ -211,7 +211,7 @@ class Scheduler {
     }
 
     processExists(pid) {
-        return Memory.processes[pid] !== undefined;
+        return Memory.processes[pid] != null;
     }
 
     addProcess(pid, processClass, data, priority) {
@@ -248,9 +248,9 @@ class Scheduler {
 
     garbageCollectProcess(pid) {
     //Recursively remove the process from memory, along with its child processes
-        if(Memory.processes[pid] !== undefined)
+        if(Memory.processes[pid] != null)
         {
-            if(Memory.processes[pid]['data']['children'] !== undefined) {
+            if(Memory.processes[pid]['data']['children'] != null) {
                 for(var i = 0; i < Memory.processes[pid]['data']['children'].length; i++) {
                     var childProcessPid = Memory.processes[pid]['data']['children'][i];
                     this.garbageCollectProcess(childProcessPid);

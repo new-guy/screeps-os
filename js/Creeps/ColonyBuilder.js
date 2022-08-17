@@ -4,7 +4,7 @@ class ColonyBuilder extends CreepProcess {
     constructor (...args) {
         super(...args);
 
-        if(this.creep !== undefined) {
+        if(this.creep != null) {
             this.targetColony = Game.colonies[this.creep.memory.targetColony];
         }
     }
@@ -46,7 +46,7 @@ class ColonyBuilder extends CreepProcess {
     work() {
         var target = this.creep.getTarget();
 
-        if(target === null) {
+        if(target == null) {
             this.determineTarget();
             target = this.creep.getTarget();
         }
@@ -71,36 +71,36 @@ class ColonyBuilder extends CreepProcess {
 
         var targetRoom = this.getTargetRoom();
 
-        if(targetRoom === undefined) {
+        if(targetRoom == null) {
             this.creep.say('NoRoom');
         }
 
         else {
             this.creep.say(targetRoom.name);
-            if(targetRoom.constructionSites !== undefined && targetRoom.constructionSites.length > 0) {
+            if(targetRoom.constructionSites != null && targetRoom.constructionSites.length > 0) {
                 this.creep.setTarget(targetRoom.getMostBuiltConstructionSite());
             }
     
-            else if(targetRoom.rampartsNeedingRepair !== undefined && targetRoom.rampartsNeedingRepair.length > 0 ||
-                    targetRoom.wallsNeedingRepair !== undefined && targetRoom.wallsNeedingRepair.length > 0) {
+            else if(targetRoom.rampartsNeedingRepair != null && targetRoom.rampartsNeedingRepair.length > 0 ||
+                    targetRoom.wallsNeedingRepair != null && targetRoom.wallsNeedingRepair.length > 0) {
                 
                 var thingToRepair = targetRoom.leastBuiltRampart;
     
-                if(targetRoom.leastBuiltRampart === undefined || (targetRoom.leastBuiltWall !== undefined && targetRoom.leastBuiltWall.hits < targetRoom.leastBuiltRampart.hits)) {
+                if(targetRoom.leastBuiltRampart == null || (targetRoom.leastBuiltWall != null && targetRoom.leastBuiltWall.hits < targetRoom.leastBuiltRampart.hits)) {
                     thingToRepair = targetRoom.leastBuiltWall;
                 }
     
                 this.creep.setTarget(thingToRepair);
             }
 
-            else if(targetRoom.mostDamagedRoad !== undefined) {
+            else if(targetRoom.mostDamagedRoad != null) {
                 this.creep.setTarget(targetRoom.mostDamagedRoad);
             }
         }
     }
 
     getTargetRoom() {
-        if(this.targetColony.roomNeedingCriticalRepairs !== undefined) {
+        if(this.targetColony.roomNeedingCriticalRepairs != null) {
             return this.targetColony.roomNeedingCriticalRepairs;
         }
 

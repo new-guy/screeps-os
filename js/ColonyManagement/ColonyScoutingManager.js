@@ -17,14 +17,14 @@ class ColonyScoutingManager extends Process {
         for(var distance in roomsByDistance) {
             var scoutInterval = COLONY_DISTANCE_SCOUT_INTERVAL[distance];
 
-            if(scoutInterval === undefined) scoutInterval = COLONY_DEFAULT_SCOUT_INTERVAL;
+            if(scoutInterval == null) scoutInterval = COLONY_DEFAULT_SCOUT_INTERVAL;
 
             for(var i in roomsByDistance[distance]) {
                 var roomName = roomsByDistance[distance][i].roomName;
 
                 var room = Game.rooms[roomName];
 
-                if(room !== undefined) {
+                if(room != null) {
                     this.updateScoutingInfo(room);
                 }
 
@@ -52,7 +52,7 @@ class ColonyScoutingManager extends Process {
                         continue;
                     }
 
-                    if(Memory.scouting.rooms[roomName] === undefined)  {
+                    if(Memory.scouting.rooms[roomName] == null)  {
                         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, spawnPriority);
                     }
 
@@ -65,17 +65,17 @@ class ColonyScoutingManager extends Process {
     }
 
     updateScoutingInfo(room) {
-        if(Memory.scouting.rooms[room.name] === undefined) {
+        if(Memory.scouting.rooms[room.name] == null) {
             Memory.scouting.rooms[room.name] = {};
         }
 
         var scoutingInfo = Memory.scouting.rooms[room.name];
             
-        if(scoutingInfo.sourceInfo === undefined || scoutingInfo.lastFullColonyScout === undefined || Game.time - scoutingInfo.lastFullColonyScout > COLONY_ROOM_INFO_UPDATE_INTERVAL) {
+        if(scoutingInfo.sourceInfo == null || scoutingInfo.lastFullColonyScout == null || Game.time - scoutingInfo.lastFullColonyScout > COLONY_ROOM_INFO_UPDATE_INTERVAL) {
             var fullSourceInfo = {};
             var primaryHeartPos = this.colony.primaryRoom.find(FIND_FLAGS, {filter: function(f) { return f.name.startsWith('!CHUNK|heart') }})[0].pos;
     
-            if(primaryHeartPos !== undefined) {
+            if(primaryHeartPos != null) {
                 var sourcesInRoom = room.find(FIND_SOURCES);
                 for(var i = 0; i < sourcesInRoom.length; i++) {
                     var source = sourcesInRoom[i];
@@ -89,7 +89,7 @@ class ColonyScoutingManager extends Process {
                         } 
                     }
 
-                    if(this.colony.secondaryRoom !== undefined) {
+                    if(this.colony.secondaryRoom != null) {
                         var secondaryHeartPos = this.colony.secondaryRoom.find(FIND_FLAGS, {filter: function(f) { return f.name.startsWith('!CHUNK|heart') }})[0].pos;
                         var distToSecondary = PathFinder.search(source.pos, secondaryHeartPos).path.length;
                         fullSourceInfo[source.id]['distanceToSecondaryHeart'] = distToSecondary;
@@ -100,7 +100,7 @@ class ColonyScoutingManager extends Process {
             scoutingInfo.sourceInfo = fullSourceInfo;
         }
 
-        if(scoutingInfo.skLairs === undefined) {    
+        if(scoutingInfo.skLairs == null) {    
             scoutingInfo.isSkRoom = room.hasSourceKeepers;
         }
 
@@ -108,7 +108,7 @@ class ColonyScoutingManager extends Process {
     }
 
     processShouldDie() {
-        return this.colony === undefined;
+        return this.colony == null;
     }
 }
 

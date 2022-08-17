@@ -3,7 +3,7 @@ Room.prototype.hasNoBuildingSlots = function(structureType) {
 	var structureCountMax = CONTROLLER_STRUCTURES[structureType][rcl];
 	var builtStructCount = _.countBy(this.find(FIND_MY_STRUCTURES), function(structure){return structure.structureType === structureType})["true"];
 
-	if (builtStructCount === undefined) builtStructCount = 0;
+	if (builtStructCount == null) builtStructCount = 0;
 
 	return builtStructCount == structureCountMax;
 }
@@ -33,7 +33,7 @@ Room.prototype.getPlainsPercentage = function() {
 Room.prototype.hasNecessaryMinimumEnergy = function() {
 	var harvestDest = this.harvestDestination;
 
-	if(harvestDest !== undefined && harvestDest !== null) {
+	if(harvestDest != null) {
 		if(harvestDest.structureType === STRUCTURE_CONTAINER) {
 			return harvestDest.store[RESOURCE_ENERGY] > ROOM_NECESSARY_MINIMUM_ENERGY_CONTAINER;
 		}
@@ -47,11 +47,11 @@ Room.prototype.hasNecessaryMinimumEnergy = function() {
 }
 
 Room.prototype.isInComa = function() {
-	if(this.controller === undefined || !this.controller.my) {
+	if(this.controller == null || !this.controller.my) {
 		return false;
 	}
 
-	if(this.harvestDestination === undefined || this.harvestDestination.structureType === STRUCTURE_CONTAINER) {
+	if(this.harvestDestination == null || this.harvestDestination.structureType === STRUCTURE_CONTAINER) {
 		var workPartCount = 0;
 
 		for(var i = 0; i < this.friendlies.length; i++) {
@@ -73,14 +73,14 @@ Room.prototype.isInComa = function() {
 }
 
 Room.prototype.removeAllConstructionSites = function(structureType=undefined) {
-	if(this.constructionSites === undefined) return;
+	if(this.constructionSites == null) return;
 
 	for(var i = 0; i < this.constructionSites.length; i++) {
 		var constructionSite = this.constructionSites[i];
 
 		if(constructionSite.progress > 0) continue;
 
-		if(structureType === undefined) {
+		if(structureType == null) {
 			constructionSite.remove();
 		}
 
@@ -91,8 +91,8 @@ Room.prototype.removeAllConstructionSites = function(structureType=undefined) {
 }
 
 Room.prototype.hasEnergyInHarvestDestination = function(energyNeeded, hasMinimum=false) {
-	var hasEnergy = (this.harvestDestination !== undefined &&
-	(energyNeeded === undefined || this.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded));
+	var hasEnergy = (this.harvestDestination != null &&
+	(energyNeeded == null || this.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded));
 	if(hasMinimum) {
 		hasEnergy = hasEnergy && this.hasNecessaryMinimumEnergy();
 	}

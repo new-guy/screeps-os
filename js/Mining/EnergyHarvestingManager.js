@@ -6,7 +6,7 @@ class EnergyHarvestingManager extends Process {
 
         this.colony = Game.colonies[this.memory.colonyName];
 
-        if(this.memory.timeSinceLastPurged === undefined) {
+        if(this.memory.timeSinceLastPurged == null) {
             this.memory.timeSinceLastPurged = Game.time;
         }
     }
@@ -25,7 +25,7 @@ class EnergyHarvestingManager extends Process {
         //CHECK IF MINING ROUTE SHOULD BE ENSURED
             //If we are not in coma, ensure all existing routes
             //If we are in coma, only ensure the interior ones
-        if(this.memory.children !== undefined) {
+        if(this.memory.children != null) {
             this.ensureMiningRoutes();
             this.drawMiningRoutes();
         }
@@ -41,7 +41,7 @@ class EnergyHarvestingManager extends Process {
 
         if(this.canCreateNewMiningRoute()) {
             var sourcePos = this.findSourcePosToHarvest();
-            if(sourcePos === null) {
+            if(sourcePos == null) {
                 console.log('Could not find new source to mine');
             }
             
@@ -74,7 +74,7 @@ class EnergyHarvestingManager extends Process {
     allMiningRoutesAreOperational() {
         var areOperational = true;
 
-        if(this.memory.children === undefined) {
+        if(this.memory.children == null) {
             return areOperational;
         }
 
@@ -92,7 +92,7 @@ class EnergyHarvestingManager extends Process {
 
     drawMiningRoutes() {
         this.drawRoutesInRoom(this.colony.primaryRoom);
-        if(this.colony.secondaryRoom !== undefined) this.drawRoutesInRoom(this.colony.secondaryRoom);
+        if(this.colony.secondaryRoom != null) this.drawRoutesInRoom(this.colony.secondaryRoom);
     }
 
     drawRoutesInRoom(room) {
@@ -126,10 +126,10 @@ class EnergyHarvestingManager extends Process {
         }
 
         var totalRoutes = this.memory.children.length;
-        var targetRoutes = this.colony.primaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        var targetRoutes = this.colony.primaryRoom.harvestDestination == null ? 0 : TARGET_ROUTES_PER_STORAGE;
 
-        if (this.colony.secondaryRoom !== undefined)
-            targetRoutes += this.colony.secondaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        if (this.colony.secondaryRoom != null)
+            targetRoutes += this.colony.secondaryRoom.harvestDestination == null ? 0 : TARGET_ROUTES_PER_STORAGE;
 
         var totalMaxTicks = this.colony.spawns.length * MAX_TICKS_TO_USE_PER_SPAWN;
 
@@ -138,7 +138,7 @@ class EnergyHarvestingManager extends Process {
     }
 
     canCreateNewMiningRoute() {
-        if(this.memory.children === undefined) return true;
+        if(this.memory.children == null) return true;
 
         var totalTicksUsed = 0;
         for(var i = 0; i < this.memory.children.length; i++) {
@@ -148,10 +148,10 @@ class EnergyHarvestingManager extends Process {
         }
 
         var totalRoutes = this.memory.children.length;
-        var targetRoutes = this.colony.primaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        var targetRoutes = this.colony.primaryRoom.harvestDestination == null ? 0 : TARGET_ROUTES_PER_STORAGE;
 
-        if (this.colony.secondaryRoom !== undefined)
-            targetRoutes += this.colony.secondaryRoom.harvestDestination === undefined ? 0 : TARGET_ROUTES_PER_STORAGE;
+        if (this.colony.secondaryRoom != null)
+            targetRoutes += this.colony.secondaryRoom.harvestDestination == null ? 0 : TARGET_ROUTES_PER_STORAGE;
 
         var totalMaxTicks = this.colony.spawns.length * MAX_TICKS_TO_USE_PER_SPAWN;
 
@@ -209,7 +209,7 @@ class EnergyHarvestingManager extends Process {
 
     routeExistsForSourcePos(sourcePos) {
         var sourcePid = this.getPidForSourcePos(sourcePos);
-        return Memory.processes[sourcePid] !== undefined;
+        return Memory.processes[sourcePid] != null;
     }
 
     getPidForSourcePos(sourcePos) {
