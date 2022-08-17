@@ -153,6 +153,9 @@ class HomeRoomManager extends RoomManager {
     ensureUpgradeFeeders() {
         var energyInStorage = this.room.harvestDestination.store[RESOURCE_ENERGY];
         var upgradeFeederCount = Math.max(1, Math.floor(energyInStorage/ENERGY_PER_EXTRA_UPGRADER));
+        if(harvestDest.structureType === STRUCTURE_CONTAINER && harvestDest.store[RESOURCE_ENERGY] === harvestDest.store.getCapacity()) {
+            upgradeFeederCount = FULL_CONTAINER_UPGRADER_COUNT;
+        }
 
         var data = {
             'colonyName': this.colony.name,
