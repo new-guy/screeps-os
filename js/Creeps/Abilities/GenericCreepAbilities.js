@@ -114,8 +114,9 @@ Creep.prototype.getEnergyFromHarvestDestination = function(room) {
     }
 }
 
-Creep.prototype.getEnergyFromClosestColonyHarvestDestination = function(colony) {
-    var harvestDestination = colony.getClosestHarvestDestination(this.pos, this.carryCapacity);
+Creep.prototype.getEnergyFromClosestColonyHarvestDestination = function(colony, hasMinimum=false) {
+    //hasMinimum checks your ROOM_NECESSARY_MINIMUM_ENERGY_CONTAINER
+    var harvestDestination = colony.getClosestHarvestDestination(this.pos, this.carryCapacity, hasMinimum);
 
     if(harvestDestination === undefined) {
         this.say('NoStorage');

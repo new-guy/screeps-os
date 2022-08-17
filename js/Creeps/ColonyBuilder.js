@@ -35,7 +35,7 @@ class ColonyBuilder extends CreepProcess {
     performStateActions() {
         var state = this.creep.memory.state;
         if(state === 'getEnergy') {
-            this.creep.getEnergyFromClosestColonyHarvestDestination(this.spawningColony, this.creep.store.getCapacity());
+            this.creep.getEnergyFromClosestColonyHarvestDestination(this.spawningColony, true);
         }
 
         else if(state === 'work') {

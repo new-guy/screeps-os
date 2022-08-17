@@ -477,16 +477,16 @@ class Colony {
         return false;
     }
 
-    getClosestHarvestDestination(position, energyNeeded=undefined) {
+    getClosestHarvestDestination(position, energyNeeded=undefined, hasMinimum=false) {
         var closestHarvestDestination = undefined;
         var distance = 10000000000;
 
-        if(this.primaryRoom.harvestDestination !== undefined && (energyNeeded === undefined || this.primaryRoom.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded)) {
+        if(this.primaryRoom.hasEnergyInHarvestDestination(energyNeeded, hasMinimum)) {
             distance = PathFinder.search(position, this.primaryRoom.harvestDestination.pos).path.length;
             closestHarvestDestination = this.primaryRoom.harvestDestination;
         }
 
-        if(this.secondaryRoom !== undefined && this.secondaryRoom.harvestDestination !== undefined && (energyNeeded === undefined || this.secondaryRoom.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded)) {
+        if(this.secondaryRoom.hasEnergyInHarvestDestination(energyNeeded, hasMinimum)) {
             var secondaryDistance = PathFinder.search(position, this.secondaryRoom.harvestDestination.pos).path.length;
 
             if(secondaryDistance < distance) {

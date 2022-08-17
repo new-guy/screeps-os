@@ -141,7 +141,7 @@ class ColonyManager extends Process {
             count++;
         }
 
-        if(this.colony.primaryRoom.hasNecessaryMinimumEnergy() && this.colony.secondaryRoom.hasNecessaryMinimumEnergy()) {
+        if(this.colony.primaryRoom.hasNecessaryMinimumEnergy() || this.colony.secondaryRoom.hasNecessaryMinimumEnergy()) {
             count += this.colony.roomsNeedingBuilder.length;
         }
         
