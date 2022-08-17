@@ -92,7 +92,7 @@ Room.prototype.removeAllConstructionSites = function(structureType=undefined) {
 
 Room.prototype.hasEnergyInHarvestDestination = function(energyNeeded, hasMinimum=false) {
 	var hasEnergy = (this.harvestDestination !== undefined &&
-	(energyNeeded === undefined || this.primaryRoom.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded));
+	(energyNeeded === undefined || this.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded));
 	if(hasMinimum) {
 		hasEnergy = hasEnergy && this.hasNecessaryMinimumEnergy();
 	}
