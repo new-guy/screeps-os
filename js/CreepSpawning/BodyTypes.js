@@ -21,8 +21,8 @@ exports.ColonyBuilder = {
 	},
 	"max": {
 		"work": 10,
-		"carry": 10,
-		"move": 10
+		"carry": 20,
+		"move": 15
 	}
 };
 
