@@ -29,7 +29,7 @@ class InvaderDefender extends CreepProcess {
         }
 
         else if(state === 'fighting') {
-            if(this.creep.hasNoEnergy) {
+            if(this.creep.room.enemies === undefined) {
                 state = 'relocating'
                 this.creep.clearTarget();
             }
@@ -51,6 +51,10 @@ class InvaderDefender extends CreepProcess {
 
     relocate() {
         var roomToDefend = this.targetColony.invadedRoomToDefend;
+        if(roomToDefend === undefined) {
+            this.creep.say('Guarding');
+            return;
+        }
         var middleRoomPosition = new RoomPosition(25, 25, roomToDefend.name);
 
         this.creep.moveTo(middleRoomPosition);
@@ -64,7 +68,8 @@ class InvaderDefender extends CreepProcess {
 
         if(rangeToTarget > 3) this.creep.moveTo(target);
         else if(rangeToTarget < 3) {
-            var fleePath = PathFinder.search(this.creep.pos, target, {flee: true})
+            var fleePath = PathFinder.search(this.creep.pos, target, {flee: true});
+            this.creep.moveByPath(fleePath);
         }
 
         if(rangeToTarget <= 3) {

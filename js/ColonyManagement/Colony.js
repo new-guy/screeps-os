@@ -351,7 +351,7 @@ class Colony {
             var room = Game.rooms[roomName];
             if(room === undefined) continue;
             if(room.enemies === undefined) continue;
-            var invaders = _.filter(Game.room[roomName].enemies, function(r) { 
+            var invaders = _.filter(Game.rooms[roomName].enemies, function(r) { 
                 return r.owner.username === 'Invader' });
 
             if(invaders.length === 0) continue;
