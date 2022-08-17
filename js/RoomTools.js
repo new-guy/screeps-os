@@ -99,14 +99,14 @@ Room.prototype.hasEnergyInHarvestDestination = function(energyNeeded, hasMinimum
 	return hasEnergy;
 }
 
-Room.prototype.getMostBuildConstructionSite = function() {
-	room.mostBuiltConstructionSite = room.constructionSites[0];
+Room.prototype.getMostBuiltConstructionSite = function() {
+	this.mostBuiltConstructionSite = this.constructionSites[0];
 
-	for(var i = 0; i < room.constructionSites.length; i++) {
-		var constructionSite = room.constructionSites[i];
+	for(var i = 0; i < this.constructionSites.length; i++) {
+		var constructionSite = this.constructionSites[i];
 
-		if(constructionSite.progress > room.mostBuiltConstructionSite.progress) {
-			room.mostBuiltConstructionSite = constructionSite;
+		if(constructionSite.progress > this.mostBuiltConstructionSite.progress) {
+			this.mostBuiltConstructionSite = constructionSite;
 		}
 	}
 }

@@ -1,5 +1,3 @@
-var MIN_DIST_FROM_SK = 5;
-
 Creep.prototype.getSafePath = function(targetPosition, range=0) {
     let goals = {pos: targetPosition, range: range};
 

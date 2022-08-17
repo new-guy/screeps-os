@@ -1,5 +1,3 @@
-var VALID_STRUCTURES_TO_RAMPART = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_LINK, STRUCTURE_TERMINAL, STRUCTURE_TOWER, STRUCTURE_STORAGE];
-
 Room.prototype.updateBuildingPlans = function() {
 	var latestRCLGenerated = this.memory.latestRCLGenerated;
 
