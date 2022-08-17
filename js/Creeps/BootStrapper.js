@@ -99,7 +99,7 @@ class BootStrapper extends CreepProcess {
             }
 
             else {
-                this.creep.say('NoSrc');
+                this.creep.say('❎');
 
                 if(this.creep.hasEnergy) {
                     this.creep.memory.state = 'work'
@@ -111,7 +111,7 @@ class BootStrapper extends CreepProcess {
     work() {
         if(this.mode == 'room' && this.targetRoom === undefined) {
             this.creep.moveTo(new RoomPosition(24, 24, this.creep.memory.targetRoom));
-            this.creep.say('NoVision');
+            this.creep.say('🙈');
             return;
         }
 
@@ -141,7 +141,7 @@ class BootStrapper extends CreepProcess {
         }
 
         else if(target instanceof StructureTower) {
-            this.creep.say('Tower');
+            this.creep.say('♜');
             this.creep.putEnergyInTarget();
         }
 
@@ -160,7 +160,7 @@ class BootStrapper extends CreepProcess {
         //If there are any roads below 50%, repair them
         //If the room has any construction sites, build them
         
-        this.creep.say('Determining');
+        this.creep.say('🤔');
 
         var workArea = this.mode === "room" ? this.targetRoom : this.targetColony;
 

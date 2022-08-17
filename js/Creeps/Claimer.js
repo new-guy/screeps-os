@@ -13,7 +13,7 @@ class Claimer extends CreepProcess {
 
     performStateActions() {
         var targetRoom = Game.rooms[this.creep.memory.targetRoom];
-        this.creep.say('Claim');
+        this.creep.say('🚩');
 
         if(targetRoom === undefined) {
             var destination = new RoomPosition(25,25,this.creep.memory.targetRoom);

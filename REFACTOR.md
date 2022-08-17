@@ -13,6 +13,7 @@
 3. Invader Defense
 4. Expansion
 5. Make CreepSpawner less verbose & cleaner to define
+6. Create common library for creeps to talk with
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

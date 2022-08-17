@@ -33,7 +33,7 @@ Creep.prototype.buildTarget = function() {
 
     if(this.pos.getRangeTo(target) === 0) {
         this.moveRandom();
-        this.say('Move');
+        this.say('🚶');
     }
 
     else {
@@ -60,7 +60,7 @@ Creep.prototype.repairTarget = function() {
 
     if(this.pos.getRangeTo(target) === 0) {
         this.moveRandom();
-        this.say('Move');
+        this.say('🚶');
     }
 
     else {
@@ -81,7 +81,7 @@ Creep.prototype.repairTarget = function() {
             }
     
             else {
-                this.say('Rep');
+                this.say('🔧');
             }
         }
     }

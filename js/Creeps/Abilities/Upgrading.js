@@ -11,7 +11,7 @@ Creep.prototype.upgradeThisController = function(controller) {
     }
 
     else if(this.hasNoEnergy) {
-        this.say('Tank\'s Dry')
+        this.say('⌚')
         this.clearTarget();
     }
 

@@ -65,9 +65,8 @@ class Balancer extends CreepProcess {
     }
 
     performStateActions() {
-        this.creep.say(this.creep.memory.state);
         if(this.creep.room.name !== this.targetRoom.name) {
-            this.creep.say('homebound');
+            this.creep.say('🚌');
             this.creep.moveTo(new RoomPosition(25, 25, this.targetRoom.name));
             return;
         }
@@ -79,11 +78,13 @@ class Balancer extends CreepProcess {
     
         if(this.creep.memory.state === "pickup")
         {
+            this.creep.say('🚶');
             this.pickupEnergy();
         }
 
         if(this.creep.memory.state === "fill")
         {
+            this.creep.say('⚡');
             var roomIsFull = (this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable);
             if(roomIsFull) {
                 var energySource = Game.getObjectById(this.creep.memory.energySourceId);
@@ -170,7 +171,7 @@ class Balancer extends CreepProcess {
         var finalPosInPath = path[path.length-1];
 
         if(moveResult == ERR_NOT_FOUND) {
-            this.creep.say('return');
+            this.creep.say('🚶');
             this.creep.moveTo(finalPosInPath['x'], finalPosInPath['y']);
         }
     }
@@ -178,7 +179,7 @@ class Balancer extends CreepProcess {
     fillBalancers() {
         var roomIsFull = this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable;
         if(roomIsFull) {
-            this.creep.say('full');
+            this.creep.say('🌝');
         }
 
         else {
