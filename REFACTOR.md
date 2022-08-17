@@ -1,5 +1,4 @@
 ## Plan
-0. Maybe we need a bootstrapper RCL schedule or something.  Too many right now
 1. Spend an hour just fucking cleaning this shitty logic up
     - Booleans, poorly named variables, etc.  Just fucking delete some code, because there's so much BS in here
     - Consolidate where/how we define prototypes and set room/creep attributes.  Stop doing it all over the fucking place
@@ -14,6 +13,8 @@
 4. Expansion
 5. Make CreepSpawner less verbose & cleaner to define
 6. Create common library for creeps to talk with
+7. Need ability to flush processes & creeps
+8. Dynamically calculate number of haulers
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

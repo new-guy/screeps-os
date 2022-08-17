@@ -209,7 +209,6 @@ class EnergyHarvestingManager extends Process {
 
     routeExistsForSourcePos(sourcePos) {
         var sourcePid = this.getPidForSourcePos(sourcePos);
-        console.log('Pid: ' + sourcePid);
         return Memory.processes[sourcePid] !== undefined;
     }
 
