@@ -115,21 +115,7 @@ function initRooms() {
 
         room.state = room.memory.state;
 
-        room.mapPos = {
-            'x': roomName.split(/[EWNS]+/)[1],
-            'y': roomName.split(/[EWNS]+/)[2]
-        };
-
         room.constructionSites = room.find(FIND_MY_CONSTRUCTION_SITES);
-        room.mostBuiltConstructionSite = room.constructionSites[0];
-
-        for(var i = 0; i < room.constructionSites.length; i++) {
-            var constructionSite = room.constructionSites[i];
-
-            if(constructionSite.progress > room.mostBuiltConstructionSite.progress) {
-                room.mostBuiltConstructionSite = constructionSite;
-            }
-        }
 
         if(room.controller !== undefined && room.controller.my) {
             if(room.energyAvailable < room.energyCapacityAvailable) {

@@ -135,7 +135,7 @@ class BootStrapper extends CreepProcess {
             this.creep.putEnergyInTarget();
             if(!this.creep.hasTarget() && this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable) {
                 if(this.creep.room.constructionSites !== undefined && this.creep.room.constructionSites.length > 0) {
-                    this.creep.setTarget(this.creep.room.mostBuiltConstructionSite);
+                    this.creep.setTarget(this.creep.room.getMostBuiltConstructionSite());
                 }
             }
         }
@@ -205,13 +205,13 @@ class BootStrapper extends CreepProcess {
 
         else if(workArea.constructionSites !== undefined && workArea.constructionSites.length > 0) {
             if(this.mode === 'room') {
-                this.creep.setTarget(workArea.mostBuiltConstructionSite);
+                this.creep.setTarget(workArea.getMostBuiltConstructionSite());
             }
             else if(this.creep.room.constructionSites !== undefined && this.creep.room.constructionSites.length > 0) {
-                this.creep.setTarget(this.creep.room.mostBuiltConstructionSite);
+                this.creep.setTarget(this.creep.room.getMostBuiltConstructionSite());
             }
             else if(this.mode === 'colony') {
-                this.creep.setTarget(workArea.roomMostNeedingBuilder.mostBuiltConstructionSite);
+                this.creep.setTarget(workArea.roomMostNeedingBuilder.getMostBuiltConstructionSite());
             }
         }
 
