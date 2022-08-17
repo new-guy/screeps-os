@@ -1,15 +1,22 @@
-- The way we define process names is really gross.  It's constants duplicated all over the place - that should instead be defined in the actual process definition itself
-- Define an expected baseline of how long it takes to get both rooms to level 4 as a basic metric for evaluating if changes are good, and ideally some automated test
-
-
-## Tidy Up
-- Just do a pass of boolean logic and clean up the undefined BS
-- Move behavior config constants into constants.js
-
 ## Plan
+0. Maybe we need a bootstrapper RCL schedule or something.  Too many right now
+1. Spend an hour just fucking cleaning this shitty logic up
+    - Booleans, poorly named variables, etc.  Just fucking delete some code, because there's so much BS in here
+    - Consolidate where/how we define prototypes and set room/creep attributes.  Stop doing it all over the fucking place
+    - Finish moving constants to constants.js
+2. Work on room/colony state refactor
+    - This codebase fucking sucks to work on because this early game logic is so tightly coupled
+    - It's all just so needlessly complex.  It's a combo of good ideas and shitty hacks.
+    - These booleans are INSANE.  ColonyManager is INSANE
+    - Figure out some sane way to progress a room/colony through different states
+    - Right now it's just such a fucking mess.  Need to use actual states and transition functions in colonies and rooms and whatnot, because this conditional bullshit is just atrocious
+3. Invader Defense
+4. Expansion
+5. Make CreepSpawner less verbose & cleaner to define
 
-### Necessary to get on public server
-- Defense against invaders
+### ColonyManager Refactor Plan
+- Separate colony-leve logic and room-level logic into different functions
+- Instead of having the weirdness around secondary vs primary room, just have a "update room" function that takes care of creating the pre-stor-bootstrap stuff.  Stop making secondary so unique.  We eventually want this to be way more generic so we could theoretically have more than just the secondary room in there
 
 ### Important New Features
 - Expansion
@@ -24,32 +31,14 @@ Ticks remaining in Safe mode
 - RCL4
     - Pass 1:
 
-### Functionality to change
-- Balancer Rework
-    - Get rid of buffer containers
-        - From logic and from structure definitions
-    - Balancers need to pick up from energySource or the link
-    - If room is full and the balancer is not full, they need to fill up on energy
-- Get links working
-    - Who fills the links?
-- Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
-    - Probably should minimize the differentiation in general to help simplify things
-        - We reference the word "secondaary" 154 times :|
-    - We get so much fucking complexity from having primary and secondary so thoroughly in the code.  Need to remove that logic wherever we can
-
 ### Refactors
 - Either use Null or undefined - stop mixing
 - Make HomeRoomConstructionTools more DRY
-- Consolidate room/creep/colony/game tools/prototype modifications into files to make them more sensible
-- Booleans should be words instead of lots of &&s and ||s
-- Move constants to constants.js
-- CreepSpawners are way too verbose to define
 - Generic "move to target" function & state?  Would be good to not have to keep rewriting it
-- Inits in main.js can be better - should instead be in object-specific files
-
-### Potential issues
-- Colony-level road planning has potential for multiple colonies defining the same room and introducing a race condition.  Search for `addRoadsToBuildPlan(room) {`
-- The upgrade spawner and upgrade feeder spawner didn't get cleaned up on one occasion.  Child process cleanup failed :()
+- Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
+    - Probably should minimize the differentiation in general to help simplify things
+        - We reference the word "secondary" 178 times :|
+    - We get so much fucking complexity from having primary and secondary so thoroughly in the code.  Need to remove that logic wherever we can
 
 ### Fixes
 - Document how the friggin OS actually works

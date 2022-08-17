@@ -59,6 +59,9 @@ class HomeRoomManager extends RoomManager {
         var startFlagName = startFlagName;
         var endFlagName = endFlag.name;
 
+        var roundedEnergyAvailable = this.room.energyAvailable - (this.room.energyAvailable % 100);
+        var energyToSpend = Math.max(300, roundedEnergyAvailable);
+
         var data = {
             'colonyName': this.colony.name,
             'creepCount': 1,
@@ -69,10 +72,11 @@ class HomeRoomManager extends RoomManager {
                 'targetRoom': endFlag.room.name,
                 'startFlagName': startFlagName,
                 'endFlagName': endFlagName
-            }
+            },
+            'maxEnergyToSpend': energyToSpend
         };
         
-        var spawnPID = 'spawnBalancer|' + endFlagName;
+        var spawnPID = 'spawnBalancer|' + energyToSpend + '|' + endFlagName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BALANCER_PRIORITY);
     }
 
@@ -149,6 +153,11 @@ class HomeRoomManager extends RoomManager {
     ensureUpgradeFeeders() {
         var energyInStorage = this.room.harvestDestination.store[RESOURCE_ENERGY];
         var upgradeFeederCount = Math.max(1, Math.floor(energyInStorage/ENERGY_PER_EXTRA_UPGRADER));
+
+        var harvestDest = this.room.harvestDestination;
+        if(harvestDest.structureType === STRUCTURE_CONTAINER && harvestDest.store[RESOURCE_ENERGY] === harvestDest.store.getCapacity()) {
+            upgradeFeederCount = FULL_CONTAINER_UPGRADE_FEEDER_COUNT;
+        }
 
         var data = {
             'colonyName': this.colony.name,

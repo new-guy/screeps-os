@@ -100,6 +100,10 @@ class BootStrapper extends CreepProcess {
 
             else {
                 this.creep.say('NoSrc');
+
+                if(this.creep.hasEnergy) {
+                    this.creep.memory.state = 'work'
+                }
             }
         }
     }

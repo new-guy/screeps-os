@@ -24,7 +24,6 @@ class Balancer extends CreepProcess {
         if(this.creep.memory.hasInitialized !== true) {
             this.calculatePaths();
             this.setEnergySource();
-            this.setBufferContainer();
 
             this.creep.memory.hasInitialized = true;
         }
@@ -82,16 +81,43 @@ class Balancer extends CreepProcess {
         {
             this.pickupEnergy();
         }
-    
+
         if(this.creep.memory.state === "fill")
         {
-            this.fillBalancers();
+            var roomIsFull = (this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable);
+            if(roomIsFull) {
+                var energySource = Game.getObjectById(this.creep.memory.energySourceId);
+                if(energySource !== null && energySource.structureType === STRUCTURE_STORAGE) {
+                    //Only do this for the balancer that uses storage as its energySource
+                    //Ensure link is full if it exists
+                    var linksNearStorage = energySource.pos.findInRange(FIND_MY_STRUCTURES, 1, {filter: function(structure) { 
+                        return structure.structureType == STRUCTURE_LINK}});
+
+                    if(linksNearStorage.length > 0) {
+                        var sourceLink = linksNearStorage[0];
+                        this.ensureLinkIsFull(sourceLink)
+                    }
+                }
+            }
+            else {
+                this.fillBalancers();
+            }
+        }
+    }
+
+    ensureLinkIsFull(sourceLink) {
+        if(sourceLink.store[RESOURCE_ENERGY] < sourceLink.store.getCapacity(RESOURCE_ENERGY)) {
+            if(this.creep.pos.isNearTo(sourceLink)) {
+                this.creep.transfer(sourceLink, RESOURCE_ENERGY)
+            }
+            else {
+                this.creep.moveTo(sourceLink);
+            }
         }
     }
 
     pickupEnergy() {
         var energySource = Game.getObjectById(this.creep.memory.energySourceId);
-        var bufferContainer = Game.getObjectById(this.creep.memory.bufferContainerId);
         var inboundPath = this.creep.memory.inboundPath;
 
         var finalPosInPath = inboundPath[inboundPath.length-1]
@@ -100,7 +126,7 @@ class Balancer extends CreepProcess {
             this.setEnergySource();
             energySource = Game.getObjectById(this.creep.memory.energySourceId);
 
-            if(energySource === null && (bufferContainer === null || (bufferContainer !== null &&  bufferContainer.store[RESOURCE_ENERGY] === 0))) {
+            if(energySource === null) {
                 this.creep.getEnergyFromHarvestDestination(this.creep.room);
 
                 return;
@@ -109,10 +135,6 @@ class Balancer extends CreepProcess {
 
         if(this.creep.pos.x === finalPosInPath.x && this.creep.pos.y === finalPosInPath.y) {
             var sourceToWithdrawFrom = energySource;
-
-            if(bufferContainer != null && bufferContainer.store[RESOURCE_ENERGY] > 0 && ((energySource !== null && energySource.energy == 0) || energySource === null)) {
-                sourceToWithdrawFrom = bufferContainer;
-            }
 
             this.creep.withdraw(sourceToWithdrawFrom, RESOURCE_ENERGY);
         }
@@ -154,24 +176,9 @@ class Balancer extends CreepProcess {
     }
 
     fillBalancers() {
-        var roomIsFull = (this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable);
-
+        var roomIsFull = this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable;
         if(roomIsFull) {
             this.creep.say('full');
-            var bufferContainer = Game.getObjectById(this.creep.memory.bufferContainerId);
-
-            if(bufferContainer != null && bufferContainer.store[RESOURCE_ENERGY] < bufferContainer.storeCapacity) {
-                var inboundPath = this.creep.memory.inboundPath;
-
-                var finalPosInPath = inboundPath[inboundPath.length-1]
-                if(this.creep.pos.x === finalPosInPath.x && this.creep.pos.y === finalPosInPath.y) {
-                    this.creep.transfer(bufferContainer, RESOURCE_ENERGY);
-                }
-
-                else {
-                    this.moveAlongBalancerPath(inboundPath);
-                }
-            }
         }
 
         else {
@@ -239,24 +246,6 @@ class Balancer extends CreepProcess {
     
         this.creep.memory.energySourceId = energySource.id;
     }
-    
-    setBufferContainer() {
-        var structuresAtFlag = this.startFlag.pos.lookFor(LOOK_STRUCTURES);
-    
-        if(structuresAtFlag.length == 0) {
-            return;
-        }
-    
-        var container = _.find(structuresAtFlag, function(structure) { return structure.structureType == STRUCTURE_CONTAINER; });
-    
-        if(container === undefined) {
-            console.log('Unable to find buffer container for ' + this.creep.name);
-            return;
-        }
-    
-        this.creep.memory.bufferContainerId = container.id;
-    }
-    
     
     getBalancerPath(startPos, endPos, printCosts=false)
     {

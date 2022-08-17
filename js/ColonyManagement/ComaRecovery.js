@@ -3,8 +3,7 @@ const Process = require('Process');
 class ComaRecovery extends Process {
     constructor (...args) {
         super(...args);
-        
-        this.targetRoom = Game.rooms[this.memory.targetRoomName];
+
         this.spawnColony = Game.colonies[this.memory.spawnColonyName];
         this.creepNameBase = this.memory.creepNameBase ? this.memory.creepNameBase + "|" : "";
     }
@@ -21,11 +20,11 @@ class ComaRecovery extends Process {
         var data = {
             'colonyName': this.memory.spawnColonyName,
             'creepCount': COMA_RECOVERY_CREEPS_TO_SPAWN,
-            'creepNameBase': this.creepNameBase +'Bootstrap|' + this.memory.targetRoomName,
+            'creepNameBase': this.creepNameBase +'Bootstrap|' + this.memory.targetColonyName,
             'creepBodyType': 'BootStrapper',
             'creepProcessClass': 'BootStrapper',
             'creepMemory': {
-                'targetRoom': this.memory.targetRoomName
+                'targetColony': this.memory.targetColonyName
             },
             'maxEnergyToSpend': 300
         };
