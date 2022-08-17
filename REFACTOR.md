@@ -1,4 +1,5 @@
 ## Plan
+0. Maybe we need a bootstrapper RCL schedule or something.  Too many right now
 1. Spend an hour just fucking cleaning this shitty logic up
     - Booleans, poorly named variables, etc.  Just fucking delete some code, because there's so much BS in here
     - Consolidate where/how we define prototypes and set room/creep attributes.  Stop doing it all over the fucking place
