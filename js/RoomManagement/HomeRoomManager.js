@@ -40,6 +40,10 @@ class HomeRoomManager extends RoomManager {
         if(this.room.controller.level >= 4) {
             this.ensureRampartPlanner();
         }
+
+        if(this.room.storage == null) {
+            this.preStorageBootstrap();
+        }
     }
 
     ensureBalancers() {
@@ -181,6 +185,20 @@ class HomeRoomManager extends RoomManager {
         
         var spawnPID = 'rampartPlanner|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'RampartPlanner', data, COLONY_MANAGEMENT_PRIORITY);
+    }
+
+    preStorageBootstrap() {
+        var data = {
+            'targetRoomName': this.room.name,
+            'spawnColonyName': this.colony.name,
+            'maxToSpawn': PRE_STORAGE_BOOTSTRAPPER_MAX,
+            'maxTicksToUse': PRE_STORAGE_BOOTSTRAPPER_MAX_TICKS,
+            'maxEnergy': PRE_STORAGE_BOOTSTRAPPER_MAX_ENERGY,
+            'creepNameBase': this.room.name + '|PreStorBoot'
+        };
+        
+        var spawnPID = 'PreStorBootSpawner|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
+        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_EXPANSION_SUPPORT);
     }
 }
 

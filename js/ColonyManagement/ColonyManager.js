@@ -69,16 +69,6 @@ class ColonyManager extends Process {
     }
 
     normalBehavior() {
-        if(this.colony.isPreStorage) {
-            var bootstrapPID = 'preStorColonyBoot|' + this.name + '|' + this.name;
-            var data = {'targetColonyName': this.name, 'spawnColonyName': this.name};
-            this.ensureChildProcess(bootstrapPID, 'PreStorageColonyBootstrap', data, COLONY_MANAGEMENT_PRIORITY);
-        }
-
-        else {
-            console.log('Need to implement post-storage functionality');
-        }
-
         if(this.colony.memory.secondaryRoomName == null) { //If we have not figured out the secondaryRoom name, ensure a process to find the room
             this.ensureChildProcess(this.primaryRoom.name + '|secondaryRoomFinder', 'SecondaryRoomFinder', {'colonyName': this.name}, COLONY_NONESSENTIAL_PRIORITY);
         }
@@ -100,15 +90,6 @@ class ColonyManager extends Process {
     ensureSecondaryRoom() {
         if((this.secondaryRoom != null && !this.secondaryRoom.controller.my)) {
             this.spawnSecondaryRoomClaimer();
-        }
-
-        if(this.secondaryRoom != null && this.secondaryRoom.controller.my) {
-            //Bootstrap Scheduling
-            if(this.secondaryRoom.controller.level <= 4 && this.secondaryRoom.storage == null) {
-                var bootstrapPID = 'secondaryExpandBootstrap|' + this.primaryRoom.name;
-                var data = {'targetRoomName': this.colony.memory.secondaryRoomName, 'spawnColonyName': this.primaryRoom.name};
-                this.ensureChildProcess(bootstrapPID, 'ExpansionBootstrap', data, COLONY_EXPANSION_SUPPORT);
-            }
         }
     }
 

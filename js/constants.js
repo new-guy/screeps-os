@@ -76,10 +76,10 @@ COMA_RECOVERY_CREEPS_TO_SPAWN = 5;
 COMA_WORK_PARTS_FOR_SAFE = 3;
 COMA_MINIMUM_ENERGY_FOR_SAFE = 10000;
 
-PRE_RCL3_BOOTSTRAPPER_MAX = 15; //Pre-RCL3 in the spawn colony - we do this to enable the first colony to start faster
-PRE_RCL3_BOOTSTRAPPER_MAX_SPAWN_TICKS = 800; //1500 ticks per life
 PRE_STORAGE_BOOTSTRAPPER_MAX = 10;
-PRE_STORAGE_BOOTSTRAPPER_MAX_SPAWN_TICKS = 700; //1500 ticks per life
+PRE_STORAGE_BOOTSTRAPPER_MAX_TICKS = 700; //1500 ticks per life
+PRE_STORAGE_BOOTSTRAPPER_MAX_ENERGY = 4000; //800 * 5 (arbitrary)
+
 FULL_CONTAINER_UPGRADER_COUNT = 3; //How many upgraders to spawn when the container is full and we're pre-storage
 FULL_CONTAINER_UPGRADE_FEEDER_COUNT = 3;
 
