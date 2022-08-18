@@ -4,7 +4,7 @@ class InvaderDefender extends CreepProcess {
     constructor (...args) {
         super(...args);
 
-        if(this.creep !== undefined) {
+        if(this.creep != null) {
             this.targetColony = Game.colonies[this.creep.memory.targetColony];
         }
     }
@@ -22,14 +22,14 @@ class InvaderDefender extends CreepProcess {
         }
 
         if(state === 'relocating') {
-            if(this.creep.room.enemies !== undefined) {
+            if(this.creep.room.enemies != null) {
                 state = 'fighting'
                 this.creep.clearTarget();
             }
         }
 
         else if(state === 'fighting') {
-            if(this.creep.room.enemies === undefined) {
+            if(this.creep.room.enemies == null || this.creep.room.enemies.length === 0) {
                 state = 'relocating'
                 this.creep.clearTarget();
             }
@@ -51,7 +51,7 @@ class InvaderDefender extends CreepProcess {
 
     relocate() {
         var roomToDefend = this.targetColony.invadedRoomToDefend;
-        if(roomToDefend === undefined) {
+        if(roomToDefend == null) {
             this.creep.say('Guarding');
             return;
         }
