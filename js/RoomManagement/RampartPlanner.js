@@ -16,14 +16,12 @@ class RampartPlanner extends Process {
             return 'continue';
         }
 
-        if(this.room.storage != null && this.room.constructionSites.length === 0) {
-            this.ensureRamparts();
-        }
-
-        this.drawRamparts();
+        this.ensureRamparts();
     }
 
     ensureRamparts() {
+        var rampartShouldBeCreated = (this.room.constructionSites.length === 0 && this.room.storage != null);
+
         for(var x = 0; x < this.room.memory.buildingPlan.length; x++) {
             var column = this.room.memory.buildingPlan[x];
 
@@ -32,36 +30,39 @@ class RampartPlanner extends Process {
                 if(structureType === 'none') continue;
                 else {
                     var pos = new RoomPosition(x, y, this.room.name);
-                    if (pos.structureExists(STRUCTURE_RAMPART)) {
-                        continue;
-                    }
-                    else {
-                        pos.createConstructionSite(STRUCTURE_RAMPART);
-                        break;
-                    }
+                    rampartShouldBeCreated = this.ensureRampartForPos(pos, rampartShouldBeCreated);
                 }
             }
+        }
+
+        rampartShouldBeCreated = this.ensureControllerRamparts(rampartShouldBeCreated);
+    }
+
+    ensureRampartForPos(pos, rampartShouldBeCreated) {
+        if (pos.structureExists(STRUCTURE_RAMPART)) {
+            return true;
+        }
+        else {
+            if(rampartShouldBeCreated) {
+                pos.createConstructionSite(STRUCTURE_RAMPART);
+            }
+            else {
+                new RoomVisual(this.room.name).circle(pos, {opacity: 0.3, radius: 0.3, fill: '#ffaaaa'});
+            }
+            return false;
         }
     }
 
-    drawRamparts() {
-        for(var x = 0; x < this.room.memory.buildingPlan.length; x++) {
-            var column = this.room.memory.buildingPlan[x];
+    ensureControllerRamparts(rampartShouldBeCreated) {
+        var controller = this.room.controller;
+        var walkableControllerTiles = controller.pos.getAdjacentWalkablePositions();
 
-            for(var y = 0; y < column.length; y++) {
-                var structureType = column[y];
-                if(structureType === 'none') continue;
-                else {
-                    var pos = new RoomPosition(x, y, this.room.name);
-                    if (pos.structureExists(STRUCTURE_RAMPART)) {
-                        continue;
-                    }
-                    else {
-                        new RoomVisual(this.room.name).circle(x, y, {opacity: 0.3, radius: 0.3, fill: '#ffaaaa'});
-                    }
-                }
-            }
+        for(var i = 0; i < walkableControllerTiles.length; i++) {
+            var walkablePos = walkableControllerTiles[i];
+            rampartShouldBeCreated = this.ensureRampartForPos(walkablePos, rampartShouldBeCreated);
         }
+
+        return rampartShouldBeCreated;
     }
 }
 

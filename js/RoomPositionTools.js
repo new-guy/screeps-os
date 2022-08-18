@@ -116,6 +116,31 @@ RoomPosition.prototype.isWalkableTerrain = function()
 	return (hasPlains || hasSwamp);
 }
 
+RoomPosition.prototype.getAdjacentWalkablePositions = function()
+{
+	var walkablePositions = [];
+
+	for(var x_mod = -1; x_mod <= 1; x_mod++)
+	{
+		var x_to_look_at = Math.max(Math.min(this.x + x_mod, 49), 0);
+
+		for(var y_mod = -1; y_mod <= 1; y_mod++)
+		{
+			var y_to_look_at = Math.max(Math.min(this.y + y_mod, 49), 0);
+
+			var posBeingLookedAt = new RoomPosition(x_to_look_at, y_to_look_at, this.roomName);
+			var IS_WALKABLE = posBeingLookedAt.isWalkableTerrain();
+
+			if(IS_WALKABLE)
+			{
+				walkablePositions.push(posBeingLookedAt);
+			}
+		}
+	}
+
+	return walkablePositions;
+}
+
 RoomPosition.prototype.simpleCanBuildStructure = function(structureType)
 {
 	var correctTerrain = this.isWalkableTerrain();
