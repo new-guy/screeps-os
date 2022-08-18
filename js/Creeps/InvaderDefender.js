@@ -53,6 +53,11 @@ class InvaderDefender extends CreepProcess {
         var roomToDefend = this.targetColony.invadedRoomToDefend;
         if(roomToDefend == null) {
             this.creep.say('Guarding');
+            if(this.creep.room.name !== this.targetColony.primaryRoom.name) {
+                var primaryRoom = new RoomPosition(25, 25, this.targetColony.primaryRoom.name);
+        
+                this.creep.moveTo(primaryRoom);
+            }
             return;
         }
         var middleRoomPosition = new RoomPosition(25, 25, roomToDefend.name);
@@ -68,8 +73,9 @@ class InvaderDefender extends CreepProcess {
 
         if(rangeToTarget > 3) this.creep.moveTo(target);
         else if(rangeToTarget < 3) {
-            var fleePath = PathFinder.search(this.creep.pos, target, {flee: true});
+            var fleePath = PathFinder.search(this.creep.pos, target, {flee: true}).path;
             this.creep.moveByPath(fleePath);
+            this.creep.say('Flee');
         }
 
         if(rangeToTarget <= 3) {
