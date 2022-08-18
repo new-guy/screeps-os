@@ -29,7 +29,7 @@ class InvaderDefender extends CreepProcess {
         }
 
         else if(state === 'fighting') {
-            if(this.creep.room.enemies == null) {
+            if(this.creep.room.enemies == null || this.creep.room.enemies.length === 0) {
                 state = 'relocating'
                 this.creep.clearTarget();
             }
