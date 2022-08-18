@@ -21,6 +21,9 @@ The overarching goal here is to build an AI that is driven around running indivi
 - place a spawn
 - run deploy_[env]
 
+## Codebase best practices
+- Use `== null` and `!= null` instead of `=== undefined` and `!== undefined`
+
 ## How to play
 
 ### Respawning
