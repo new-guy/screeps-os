@@ -266,13 +266,13 @@ class Colony {
     get roomMostNeedingBuilder() {
         var rooms = this.roomsNeedingBuilder;
         // - Build in room that has the least construction sites, then most repair sites
-
         var needyRoom = undefined;
         var constructionSites = 10000000000000000000;
         var repairSites = 0;
 
         for(var i = 0; i < rooms.length; i++) {
             var room = rooms[i];
+            console.log(room.name + room.rampartsNeedingRepair)
 
             if((room.name === this.primaryRoom.name || room.name === this.secondaryRoom.name) && room.harvestDestination === undefined && room.constructionSites.length > 0) {
                 needyRoom = room;
@@ -283,14 +283,12 @@ class Colony {
             else if(room.constructionSites !== undefined && room.constructionSites.length > 0 && room.constructionSites.length < constructionSites) {
                 needyRoom = room;
                 constructionSites = room.constructionSites.length;
-                console.log('Set most needed to ' + room.name);
             }
 
-            else if( needyRoom !== undefined && (needyRoom.constructionSites === undefined || room.constructionSites.length === 0) && (
+            else if( needyRoom == null && (
                      room.rampartsNeedingRepair !== undefined && room.rampartsNeedingRepair.length > 0 || 
                      room.wallsNeedingRepair !== undefined && room.wallsNeedingRepair.length > 0 || 
                      room.damagedRoads !== undefined && room.damagedRoads.length > 0)) {
-                
                 var roomRepairSites = 0;
                 if(room.rampartsNeedingRepair !== undefined) roomRepairSites += room.rampartsNeedingRepair.length;
                 if(room.wallsNeedingRepair !== undefined) roomRepairSites += room.wallsNeedingRepair.length;
@@ -300,6 +298,8 @@ class Colony {
                     repairSites = roomRepairSites;
                     needyRoom = room;
                 }
+
+                console.log(room.rampartsNeedingRepair);
             }
         }
 
