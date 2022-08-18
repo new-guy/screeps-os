@@ -28,7 +28,7 @@ The overarching goal here is to build an AI that is driven around running indivi
 
 ### Respawning
 - Place the spawn
-- Increase GCL: `storage.db['users'].update({ username: 'asdf' },{ $set: { gcl: 5000000 }})`
+- Increase GCL: `storage.db['users'].update({ username: 'asdf' },{ $set: { gcl: 50000000 }})`
 
 ### High Level Controls
 - Building - !CHUNK|chunktype|UID
