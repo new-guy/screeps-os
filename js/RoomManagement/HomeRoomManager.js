@@ -197,7 +197,7 @@ class HomeRoomManager extends RoomManager {
             'creepNameBase': this.room.name + '|PreStorBoot'
         };
         
-        var spawnPID = 'PreStorBootSpawner|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
+        var spawnPID = 'PreStorBootSpawner|' + this.colony.name + '|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_EXPANSION_SUPPORT);
     }
 }

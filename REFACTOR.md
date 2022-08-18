@@ -1,12 +1,9 @@
 ## Plan
-1. Spend an hour just fucking cleaning this shitty logic up
-    - Booleans, poorly named variables, etc.  Just fucking delete some code, because there's so much BS in here
-2. Work on room/colony state refactor
+1. Work on room/colony state refactor
     - This codebase fucking sucks to work on because this early game logic is so tightly coupled
     - It's all just so needlessly complex.  It's a combo of good ideas and shitty hacks.
     - These booleans are INSANE.  ColonyManager is INSANE
-    - Figure out some sane way to progress a room/colony through different states
-    - Right now it's just such a fucking mess.  Need to use actual states and transition functions in colonies and rooms and whatnot, because this conditional bullshit is just atrocious
+2. Invasion defense needs to ignore rooms with invader bases
 3. Expansion
     - Manual route planning & drawing on map
         - Either commands or flags - document these
