@@ -92,8 +92,8 @@ class Roadmap {
         return this.getPos(roomPosition) === 'road';
     }
 
-    makeRoad(startPos, endPos) {
-        var path = this.findRoadPath(startPos, endPos);
+    makeRoad(startPos, endPos, type=undefined) {
+        var path = this.findRoadPath(startPos, endPos, type);
 
         for(var i = 0; i < path.length; i++) {
             this.setRoad(path[i])
@@ -103,6 +103,7 @@ class Roadmap {
     findRoadPath(startPos, endPos, type=undefined)
     {
         var roadmap = this;
+        console.log(type)
 
         return PathFinder.search(startPos, {pos: endPos, range: 1}, {
             // We need to set the defaults costs higher so that we
@@ -126,10 +127,8 @@ class Roadmap {
                 for(var x = 0; x < 50; x++) {
                     for(var y = 0; y < 50; y++) {
                         var posToEvaluate = new RoomPosition(x, y, roomName);
-    
-    
-                        var structuresAtPos = posToEvaluate.lookFor(LOOK_STRUCTURES);
-                        if(unwalkableStructuresExist(structuresAtPos)) {
+
+                        if(posToEvaluate.unwalkableStructureExists()) {
                             costs.set(x, y, 0xff);
                         }
 
@@ -138,27 +137,14 @@ class Roadmap {
                         }
 
                         if(type === 'mining') {
-                            var hasAdjacentController = posToEvaluate.getAdjacentStructures(STRUCTURE_CONTROLLER);
-                            var hasAdjacentExtension = posToEvaluate.getAdjacentStructures(STRUCTURE_EXTENSION);
+                            var hasAdjacentController = posToEvaluate.getAdjacentStructures(STRUCTURE_CONTROLLER).length > 0;
+                            var hasAdjacentExtension = posToEvaluate.getAdjacentStructures(STRUCTURE_EXTENSION).length > 0;
 
                             if(hasAdjacentController || hasAdjacentExtension) {
                                 costs.set(x, y, 10);
                             }
                         }
                     }
-                }
-    
-                function unwalkableStructuresExist(structures) {
-                    for(var i = 0; i < structures.length; i++) {
-                        var structure = structures[i];
-    
-                        if( structure.structureType !== STRUCTURE_RAMPART && 
-                            structure.structureType !== STRUCTURE_ROAD) {
-                            return true;
-                        }
-                    }
-    
-                    return false;
                 }
     
                 return costs;

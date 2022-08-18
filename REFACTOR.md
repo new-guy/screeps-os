@@ -7,12 +7,16 @@
     - These booleans are INSANE.  ColonyManager is INSANE
     - Figure out some sane way to progress a room/colony through different states
     - Right now it's just such a fucking mess.  Need to use actual states and transition functions in colonies and rooms and whatnot, because this conditional bullshit is just atrocious
-3. Invader Defense
-4. Expansion
-5. Make CreepSpawner less verbose & cleaner to define
-6. Create common library for creeps to talk with
-7. Need ability to flush processes & creeps
-8. Dynamically calculate number of haulers
+3. Expansion
+    - Manual route planning & drawing on map
+        - Either commands or flags - document these
+    - Send claimer, expansion bootstrappers, and create new colony once claimed
+    - See what breaks :sunglasses:
+4. Make CreepSpawner less verbose & cleaner to define
+5. Create common library for creeps to talk with
+6. Need ability to flush processes & creeps
+7. Dynamically calculate number of haulers
+8. Break road repair and rampart repair into their own creeps
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

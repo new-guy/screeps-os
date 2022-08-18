@@ -284,3 +284,18 @@ RoomPosition.prototype.isEdge = function() {
 RoomPosition.prototype.readableString = function() {
 	return this.roomName + this.x + 'x' + this.y + 'y';
 }
+
+RoomPosition.prototype.unwalkableStructureExists = function() {
+	var structures = this.lookFor(LOOK_STRUCTURES);
+
+	for(var i = 0; i < structures.length; i++) {
+		var structure = structures[i];
+
+		if( structure.structureType !== STRUCTURE_RAMPART && 
+			structure.structureType !== STRUCTURE_ROAD) {
+			return true;
+		}
+	}
+
+	return false;
+}
