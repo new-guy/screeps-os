@@ -100,7 +100,7 @@ class Roadmap {
         }
     }
 
-    findRoadPath(startPos, endPos)
+    findRoadPath(startPos, endPos, type=undefined)
     {
         var roadmap = this;
 
@@ -136,6 +136,15 @@ class Roadmap {
                         else if(roadmap.getPos(posToEvaluate) === 'road' || posToEvaluate.structureExists(STRUCTURE_ROAD)) {
                             costs.set(x, y, 2);
                         }
+
+                        if(type === 'mining') {
+                            var hasAdjacentController = posToEvaluate.getAdjacentStructures(STRUCTURE_CONTROLLER);
+                            var hasAdjacentExtension = posToEvaluate.getAdjacentStructures(STRUCTURE_EXTENSION);
+
+                            if(hasAdjacentController || hasAdjacentExtension) {
+                                costs.set(x, y, 10);
+                            }
+                        }
                     }
                 }
     
@@ -145,8 +154,6 @@ class Roadmap {
     
                         if( structure.structureType !== STRUCTURE_RAMPART && 
                             structure.structureType !== STRUCTURE_ROAD) {
-                               //structure is unwalkable
-                            
                             return true;
                         }
                     }

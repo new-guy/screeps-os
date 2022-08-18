@@ -72,7 +72,7 @@ class RoadGenerator extends Process {
 
             var containerPos = new RoomPosition(process.memory.containerPos['x'], process.memory.containerPos['y'], process.memory.containerPos['roomName']);
 
-            this.colony.roadmap.makeRoad(harvestDestination.pos, containerPos);
+            this.colony.roadmap.makeRoad(harvestDestination.pos, containerPos, 'mining');
         }
     }
 
