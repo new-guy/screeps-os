@@ -205,6 +205,7 @@ class BootStrapper extends CreepProcess {
 
         else if(workArea.constructionSites != null && workArea.constructionSites.length > 0) {
             if(this.mode === 'room') {
+                this.creep.say('a');
                 this.creep.setTarget(workArea.getMostBuiltConstructionSite());
             }
             else if(this.creep.room.constructionSites != null && this.creep.room.constructionSites.length > 0) {

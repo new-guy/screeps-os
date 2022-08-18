@@ -109,4 +109,6 @@ Room.prototype.getMostBuiltConstructionSite = function() {
 			this.mostBuiltConstructionSite = constructionSite;
 		}
 	}
+
+	return this.mostBuiltConstructionSite;
 }
