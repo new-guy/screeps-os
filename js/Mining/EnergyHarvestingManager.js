@@ -41,12 +41,7 @@ class EnergyHarvestingManager extends Process {
 
         if(this.canCreateNewMiningRoute()) {
             var sourcePos = this.findSourcePosToHarvest();
-            if(sourcePos == null) {
-                console.log('Could not find new source to mine');
-            }
-            
-            else {
-                console.log(sourcePos.readableString());
+            if(sourcePos != null) {
                 this.createNewRoute(sourcePos);
             }
         }
@@ -168,7 +163,6 @@ class EnergyHarvestingManager extends Process {
             var sourcePos = new RoomPosition(sourceInfo['pos']['x'], sourceInfo['pos']['y'], sourceInfo['pos']['roomName']);
 
             if(this.routeExistsForSourcePos(sourcePos)) {
-                console.log('Skipping ' + sourcePos.readableString());
                 continue;
             }
             

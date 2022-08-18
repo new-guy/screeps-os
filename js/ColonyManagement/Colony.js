@@ -266,13 +266,13 @@ class Colony {
     get roomMostNeedingBuilder() {
         var rooms = this.roomsNeedingBuilder;
         // - Build in room that has the least construction sites, then most repair sites
-
         var needyRoom = undefined;
         var constructionSites = 10000000000000000000;
         var repairSites = 0;
 
         for(var i = 0; i < rooms.length; i++) {
             var room = rooms[i];
+            console.log(room.name + room.rampartsNeedingRepair)
 
             if((room.name === this.primaryRoom.name || room.name === this.secondaryRoom.name) && room.harvestDestination == null && room.constructionSites.length > 0) {
                 needyRoom = room;
@@ -283,14 +283,12 @@ class Colony {
             else if(room.constructionSites != null && room.constructionSites.length > 0 && room.constructionSites.length < constructionSites) {
                 needyRoom = room;
                 constructionSites = room.constructionSites.length;
-                console.log('Set most needed to ' + room.name);
             }
 
-            else if( needyRoom != null && (needyRoom.constructionSites == null || room.constructionSites.length === 0) && (
+            else if( needyRoom == null && (
                      room.rampartsNeedingRepair != null && room.rampartsNeedingRepair.length > 0 || 
                      room.wallsNeedingRepair != null && room.wallsNeedingRepair.length > 0 || 
                      room.damagedRoads != null && room.damagedRoads.length > 0)) {
-                
                 var roomRepairSites = 0;
                 if(room.rampartsNeedingRepair != null) roomRepairSites += room.rampartsNeedingRepair.length;
                 if(room.wallsNeedingRepair != null) roomRepairSites += room.wallsNeedingRepair.length;
@@ -300,6 +298,8 @@ class Colony {
                     repairSites = roomRepairSites;
                     needyRoom = room;
                 }
+
+                console.log(room.rampartsNeedingRepair);
             }
         }
 
