@@ -145,6 +145,10 @@ function initRooms() {
             room.links = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_LINK; 
             }});
+
+            room.spawns = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
+                return s.structureType === STRUCTURE_SPAWN; 
+            }});
         }
 
         room.enemies = room.find(FIND_CREEPS, {filter: function(c) { return c.isHostile(); }});
