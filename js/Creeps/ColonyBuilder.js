@@ -96,7 +96,7 @@ class ColonyBuilder extends CreepProcess {
     }
 
     getTargetRoom() {
-        if(this.creep.room.constructionSites.length > 0) {
+        if(this.creep.room.constructionSites.length > 0 || this.creep.room.rampartsNeedingRepair != null && this.creep.room.rampartsNeedingRepair.length > 0) {
             return this.creep.room;
         }
 
