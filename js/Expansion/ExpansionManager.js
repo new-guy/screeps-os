@@ -34,8 +34,6 @@ class ExpansionManager extends Process {
                 expansionFlag.remove();
             }
         }
-
-        //Delete the flag once storage exists in this room
     }
 
     ensureClaimer() {
