@@ -310,8 +310,6 @@ class Colony {
 
         for(var i = 0; i < rooms.length; i++) {
             var room = rooms[i];
-            console.log(room.name + room.rampartsNeedingRepair)
-
             if((room.name === this.primaryRoom.name || room.name === this.secondaryRoom.name) && room.harvestDestination == null && room.constructionSites.length > 0) {
                 needyRoom = room;
                 console.log('Set most needed to ' + room.name + ' because harvestDest missing');

@@ -23,7 +23,7 @@ class Claimer extends CreepProcess {
 
         else {
             if(this.creep.pos.getRangeTo(targetRoom.controller) > 1) {
-                this.creep.moveTo(targetRoom.controller, {visualizePathStyle: {stroke: "#d0d", opacity: .5}});
+                this.creep.moveTo(targetRoom.controller, {maxRooms: 1, visualizePathStyle: {stroke: "#d0d", opacity: .5}});
             }
             
             else {

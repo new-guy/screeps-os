@@ -89,6 +89,10 @@ class ColonyManager extends Process {
                 this.ensureRoadRepairer();
             }
         }
+
+        if(this.colony.primaryRoom.controller.level >= 4) {
+            this.checkForExpansionFlags();
+        }
     }
 
     ensureSecondaryRoom() {
@@ -182,7 +186,18 @@ class ColonyManager extends Process {
     }
 
     ensureRoadGeneration() {
-        this.ensureChildProcess(this.primaryRoom.name + '|roadGenerator', 'RoadGenerator', {'colonyName': this.name}, COLONY_NONESSENTIAL_PRIORITY);
+        this.ensureChildProcess(this.name + '|roadGenerator', 'RoadGenerator', {'colonyName': this.name}, COLONY_NONESSENTIAL_PRIORITY);
+    }
+
+    checkForExpansionFlags() {
+        var expansionRequestFlagName = '!EXPAND|'+this.name;
+        var colonyExpansionRequestFlag = Game.flags[expansionRequestFlagName];
+        if(colonyExpansionRequestFlag != null) {
+            colonyExpansionRequestFlag.setColor(COLOR_PURPLE);
+            var targetRoom = colonyExpansionRequestFlag.pos.roomName;
+            var expansionPID = 'ExpansionManager|' + this.name + targetRoom;
+            this.ensureChildProcess(expansionPID, 'ExpansionManager', {'spawnColony': this.colony.name, 'targetRoom': targetRoom}, COLONY_EXPANSION_SUPPORT)
+        }
     }
 
     processShouldDie() {

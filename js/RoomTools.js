@@ -181,3 +181,29 @@ Room.prototype.getSinkLinks = function() {
 
 	return sinkLinks;
 }
+
+Room.prototype.canPlaceHeart = function() {
+	var middleOfRoom = new RoomPosition(24, 24, this.name);
+	var flagPosition = this.findRootForChunk('heart', middleOfRoom, HEART_MAX_DISTANCE);
+
+	if(flagPosition == null) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+Room.prototype.placeHeart = function() {
+	var middleOfRoom = new RoomPosition(24, 24, this.name);
+	var flagPosition = this.findRootForChunk('heart', middleOfRoom, HEART_MAX_DISTANCE);
+
+	if(flagPosition == null) {
+		console.log('CANNOT FIND PLACE FOR INTIAL HEART IN ' + this.name);
+		return false;
+	}
+	else {
+		flagPosition.createFlag('!CHUNK|heart|' + flagPosition.roomName, COLOR_RED);
+		return true;
+	}
+}

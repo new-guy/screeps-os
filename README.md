@@ -34,9 +34,9 @@ The overarching goal here is to build an AI that is driven around running indivi
 
 ### High Level Controls
 - Building - !CHUNK|chunktype|UID
-	- Chunktypes are defined in constructionSiteManager.  Also there are some pictures of them
 	- Chunks are placed automatically, but we can only place one new chunk per RCL because we don't include future building locations in our chunk calculations
 	- Force recalculation with Room.prototype.forceBuildingRegeneration()
+- Expansion - !EXPAND|[colony to expand from]
 
 ## Tick Loop - sorta out of date
 
