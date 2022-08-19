@@ -85,7 +85,7 @@ class ColonyManager extends Process {
                 this.ensureColonyBuilder();
             }
 
-            if(this.colony.roomNeedingRoadRepairs.length > 0 && this.colony.hasNecessaryMinimumEnergy) {
+            if(this.colony.roomNeedingRoadRepairs != null && this.colony.roomNeedingRoadRepairs.length > 0 && this.colony.hasNecessaryMinimumEnergy) {
                 this.ensureRoadRepairer();
             }
         }
