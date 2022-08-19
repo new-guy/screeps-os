@@ -1,21 +1,15 @@
 ## Plan
-0. Change undefined to null
-1. Work on room/colony state refactor
-    - This codebase fucking sucks to work on because this early game logic is so tightly coupled
-    - It's all just so needlessly complex.  It's a combo of good ideas and shitty hacks.
-    - These booleans are INSANE.  ColonyManager is INSANE
-2. Invasion defense needs to ignore rooms with invader bases
-    - Invasion defense needs to be able to kill Invader Cores
-3. Expansion
+1. Change undefined to null
+2. Expansion
     - Manual route planning & drawing on map
         - Either commands or flags - document these
     - Send claimer, expansion bootstrappers, and create new colony once claimed
     - See what breaks :sunglasses:
-4. Make CreepSpawner less verbose & cleaner to define
-5. Create common library for creeps to talk with
-6. Need ability to flush processes & creeps
-7. Dynamically calculate number of haulers
-9. Allow more base designs
+3. Make CreepSpawner less verbose & cleaner to define
+4. Need ability to flush processes & creeps
+5. Dynamically calculate number of haulers
+6. Allow more base designs
+7. Create common library for creeps to talk with
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions
