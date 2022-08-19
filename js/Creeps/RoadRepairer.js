@@ -74,6 +74,10 @@ class RoadRepairer extends CreepProcess {
     }
 
     getTargetRoom() {
+        if(this.creep.room.mostDamagedRoad != null) {
+            return this.creep.room;
+        }
+
         if(this.targetColony.roomNeedingRoadRepairs != null) {
             return this.targetColony.roomNeedingRoadRepairs;
         }

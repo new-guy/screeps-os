@@ -70,7 +70,8 @@ Creep.prototype.repairTarget = function() {
         }
 
         if(this.pos.getRangeTo(target) > 1) {
-            this.moveTo(target, {visualizePathStyle: {stroke: "#333", opacity: .2}});
+            this.moveTo(target, {visualizePathStyle: {stroke: "#333", opacity: .3}});
+            this.say('🛻')
         }
 
         if(this.pos.getRangeTo(target) <= 3) {
