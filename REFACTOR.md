@@ -13,7 +13,6 @@
 7. Make creeps move along road and ignore each other
 7. Create common library for creeps to talk with
 9. Get rid of link flags
-10. Turn road generation into one-off processes
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

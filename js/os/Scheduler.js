@@ -9,6 +9,7 @@ const ColonyManager = require('ColonyManager');
 const ColonyScoutingManager = require('ColonyScoutingManager');
 const SecondaryRoomFinder = require('SecondaryRoomFinder');
 const RoadGenerator = require('RoadGenerator');
+const RoadmapMakeRoad = require('RoadmapMakeRoad');
 const EnergyHarvestingManager = require('EnergyHarvestingManager');
 const EnergyRouteManager = require('EnergyRouteManager');
 const InvaderMonitor = require('InvaderMonitor');
@@ -52,6 +53,7 @@ var processTypeMap = {
     "ColonyScoutingManager": ColonyScoutingManager,
     "SecondaryRoomFinder": SecondaryRoomFinder,
     "RoadGenerator": RoadGenerator,
+    "RoadmapMakeRoad": RoadmapMakeRoad,
     "EnergyHarvestingManager": EnergyHarvestingManager,
     "EnergyRouteManager": EnergyRouteManager,
     "HomeRoomManager": HomeRoomManager,
