@@ -12,6 +12,8 @@ class ColonyScoutingManager extends Process {
             return 'exit';
         }
 
+        if(!this.colony.primaryRoom.hasHeart()) return 'continue';
+
         var roomsByDistance = this.colony.roomsByDistance;
 
         for(var distance in roomsByDistance) {
@@ -73,7 +75,7 @@ class ColonyScoutingManager extends Process {
             
         if(scoutingInfo.sourceInfo == null || scoutingInfo.lastFullColonyScout == null || Game.time - scoutingInfo.lastFullColonyScout > COLONY_ROOM_INFO_UPDATE_INTERVAL) {
             var fullSourceInfo = {};
-            var primaryHeartPos = this.colony.primaryRoom.find(FIND_FLAGS, {filter: function(f) { return f.name.startsWith('!CHUNK|heart') }})[0].pos;
+            var primaryHeartPos = this.colony.primaryRoom.getHeartPos();
     
             if(primaryHeartPos != null) {
                 var sourcesInRoom = room.find(FIND_SOURCES);

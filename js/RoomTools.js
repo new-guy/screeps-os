@@ -182,6 +182,15 @@ Room.prototype.getSinkLinks = function() {
 	return sinkLinks;
 }
 
+Room.prototype.hasHeart = function() {
+	return Game.flags['!CHUNK|heart|' + this.name] != null;
+}
+
+Room.prototype.getHeartPos = function() {
+	if(Game.flags['!CHUNK|heart|' + this.name] == null) return null;
+	return Game.flags['!CHUNK|heart|' + this.name].pos;
+}
+
 Room.prototype.canPlaceHeart = function() {
 	var middleOfRoom = new RoomPosition(24, 24, this.name);
 	var flagPosition = this.findRootForChunk('heart', middleOfRoom, HEART_MAX_DISTANCE);
@@ -203,7 +212,7 @@ Room.prototype.placeHeart = function() {
 		return false;
 	}
 	else {
-		flagPosition.createFlag('!CHUNK|heart|' + flagPosition.roomName, COLOR_RED);
+		flagPosition.createFlag('!CHUNK|heart|' + this.name, COLOR_RED);
 		return true;
 	}
 }
