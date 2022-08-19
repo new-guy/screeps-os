@@ -30,6 +30,7 @@ The overarching goal here is to build an AI that is driven around running indivi
 - Place the spawn
 - Increase GCL: `storage.db['users'].update({ username: 'asdf' },{ $set: { gcl: 50000000 }})`
 - Increase RCL: `storage.db['rooms.objects'].update({ _id: 'idOfController' },{ $set: { level: 3 }})`
+- Increase CPU Limit: `storage.db['users'].update({ username: 'asdf' },{ $set: { cpu: 500 }})`
 
 ### High Level Controls
 - Building - !CHUNK|chunktype|UID
