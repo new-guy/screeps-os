@@ -1,6 +1,5 @@
 ## Plan
 1. Change undefined to null
-2. Link filler creep
 2. Expansion
     - Manual route planning & drawing on map
         - Either commands or flags - document these

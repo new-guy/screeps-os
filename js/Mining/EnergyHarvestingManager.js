@@ -165,7 +165,7 @@ class EnergyHarvestingManager extends Process {
             var routeExists = this.routeExistsForSourcePos(sourcePos);
 
             var room = Game.rooms[sourcePos.roomName];
-            var hasInvaders = room != null && room.hasInvaders() || room.hasInvaderStructures();
+            var hasInvaders = room != null && (room.hasInvaders() || room.hasInvaderStructures());
 
             if(routeExists || hasInvaders) {
                 continue;
