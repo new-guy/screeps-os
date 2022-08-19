@@ -109,7 +109,7 @@ class Roadmap {
             // can set the road cost lower in `roomCallback`
             plainCost: 4,
             swampCost: 6,
-            maxOps: 10000,
+            maxOps: 5000,
             
             roomCallback: function(roomName) {
                 let room = Game.rooms[roomName];
@@ -126,6 +126,7 @@ class Roadmap {
                 for(var x = 0; x < 50; x++) {
                     for(var y = 0; y < 50; y++) {
                         var posToEvaluate = new RoomPosition(x, y, roomName);
+                        // console.log(x + ', ' + y + ' | ' + roomName);
 
                         if(posToEvaluate.unwalkableStructureExists()) {
                             costs.set(x, y, 0xff);
