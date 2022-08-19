@@ -204,7 +204,7 @@ RoomPosition.prototype.getOpenAdjacentPos = function()
 		}
 	}
 
-	return undefined;
+	return null;
 }
 
 RoomPosition.prototype.hasAdjacentWall = function() {

@@ -23,7 +23,7 @@ Room.prototype.hasInvaderStructures = function() {
 Room.prototype.getInvaderStructures = function() {
 	var invaderBase = this.find(FIND_STRUCTURES, {
 		filter: function(object) {
-			if(object.owner === undefined) return false;
+			if(object.owner == null) return false;
 			return object.owner.username === 'Invader';
 	 	}
 	});
@@ -103,7 +103,7 @@ Room.prototype.isInComa = function() {
 	else return true;
 }
 
-Room.prototype.removeAllConstructionSites = function(structureType=undefined) {
+Room.prototype.removeAllConstructionSites = function(structureType=null) {
 	if(this.constructionSites == null) return;
 
 	for(var i = 0; i < this.constructionSites.length; i++) {

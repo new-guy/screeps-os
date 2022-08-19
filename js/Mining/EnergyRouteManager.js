@@ -168,7 +168,7 @@ class EnergyRouteManager extends Process {
     }
 
     get sourceContainer() {
-        if(this.memory.containerPos == null) return undefined;
+        if(this.memory.containerPos == null) return null;
 
         var containerPos = new RoomPosition(this.memory.containerPos.x, this.memory.containerPos.y, this.memory.containerPos.roomName);
 

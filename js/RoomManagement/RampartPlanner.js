@@ -12,7 +12,7 @@ class RampartPlanner extends Process {
             return 'exit';
         }
     
-        if(this.room == null || this.room.memory.buildingPlan == undefined) {
+        if(this.room == null || this.room.memory.buildingPlan == null) {
             return 'continue';
         }
 

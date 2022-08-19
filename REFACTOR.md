@@ -1,11 +1,14 @@
 ## Plan
 1. Change undefined to null
 2. Expansion
-    - Manual route planning & drawing on map
-        - Either commands or flags - document these
     - Send claimer, expansion bootstrappers, and create new colony once claimed
+    - Ensure that colonies only add rooms that aren't already owned to their colonyRoomInfo
     - See what breaks :sunglasses:
+3. Manual route planning & drawing on map
+    - Either commands or flags - document these
 3. Attacking poorly defended bases
+3. Minimum energy in storage needs to be scheduled
+4. Need to be able to send energy to other base once we hit a threshold
 3. Make CreepSpawner less verbose & cleaner to define
 4. Need ability to flush processes & creeps
 5. Dynamically calculate number of haulers
@@ -13,6 +16,7 @@
 7. Make creeps move along road and ignore each other
 7. Create common library for creeps to talk with
 9. Get rid of link flags
+10. Error handling - catch error and throw it at the end of processing
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

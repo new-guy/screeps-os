@@ -92,7 +92,7 @@ class Roadmap {
         return this.getPos(roomPosition) === 'road';
     }
 
-    makeRoad(startPos, endPos, type=undefined) {
+    makeRoad(startPos, endPos, type=null) {
         var data = {
             'startPos': {'x': startPos.x, 'y': startPos.y, 'roomName': startPos.roomName},
             'endPos': {'x': endPos.x, 'y': endPos.y, 'roomName': endPos.roomName},

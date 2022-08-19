@@ -127,8 +127,8 @@ class Colony {
     }
 
     addBuildingPlanRoadsToMap(roomName) {
-        if (Memory.rooms == undefined) return;
-        if (Memory.rooms[roomName] == undefined) return;
+        if (Memory.rooms == null) return;
+        if (Memory.rooms[roomName] == null) return;
         var buildingPlan = Memory.rooms[roomName].buildingPlan;
 
         if(buildingPlan == null) return;
@@ -258,7 +258,7 @@ class Colony {
         var rooms = this.roomsNeedingRoadRepairs;
         // - Go to room that needs critical repairs
 
-        var needyRoom = undefined;
+        var needyRoom = null;
         var needyRoadPercent = 100;
 
         for(var i = 0; i < rooms.length; i++) {
@@ -282,7 +282,7 @@ class Colony {
     get roomMostNeedingBuilder() {
         var rooms = this.roomsNeedingBuilder;
         // - Build in room that has the least construction sites, then most repair sites
-        var needyRoom = undefined;
+        var needyRoom = null;
         var constructionSites = 10000000000000000000;
         var repairSites = 0;
 
@@ -422,7 +422,7 @@ class Colony {
         }
     }
 
-    spawnIsAvailable(creepBodyType, energyRequired=undefined) {
+    spawnIsAvailable(creepBodyType, energyRequired=null) {
         if(energyRequired == null) {
             energyRequired = 0;
         }
@@ -443,7 +443,7 @@ class Colony {
         return false;
     }
 
-    getCapableSpawn(creepBodyType, energyRequired=undefined) {
+    getCapableSpawn(creepBodyType, energyRequired=null) {
         if(energyRequired == null) {
             energyRequired = 0;
         }
@@ -471,7 +471,7 @@ class Colony {
         return spawnToUse;
     }
 
-    removeCapableSpawn(creepBodyType, energyRequired=undefined) {
+    removeCapableSpawn(creepBodyType, energyRequired=null) {
         if(energyRequired == null) {
             energyRequired = 0;
         }
@@ -489,8 +489,8 @@ class Colony {
         return false;
     }
 
-    getClosestHarvestDestination(position, energyNeeded=undefined, hasMinimum=false) {
-        var closestHarvestDestination = undefined;
+    getClosestHarvestDestination(position, energyNeeded=null, hasMinimum=false) {
+        var closestHarvestDestination = null;
         var distance = 10000000000;
 
         if(this.primaryRoom.hasEnergyInHarvestDestination(energyNeeded, hasMinimum)) {
@@ -592,7 +592,7 @@ class Colony {
         }
     }
 
-    spawnCreep(creepName, creepPid, creepBodyType, creepProcessClass, creepMemory, creepProcessPriority, maxEnergyToSpend=undefined) {
+    spawnCreep(creepName, creepPid, creepBodyType, creepProcessClass, creepMemory, creepProcessPriority, maxEnergyToSpend=null) {
         var spawn = this.getCapableSpawn(creepBodyType, maxEnergyToSpend);
 
         if(spawn !== false) {

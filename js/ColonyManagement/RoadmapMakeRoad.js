@@ -18,7 +18,7 @@ class RoadmapMakeRoad extends SingleTickProcess {
         this.makeRoad(this.startPos, this.endPos, this.type);
     }
 
-    makeRoad(startPos, endPos, type=undefined) {
+    makeRoad(startPos, endPos, type=null) {
         var path = this.findRoadPath(startPos, endPos, type);
 
         for(var i = 0; i < path.length; i++) {
@@ -26,7 +26,7 @@ class RoadmapMakeRoad extends SingleTickProcess {
         }
     }
 
-    findRoadPath(startPos, endPos, type=undefined)
+    findRoadPath(startPos, endPos, type=null)
     {
         var roadmap = this.roadmap;
 

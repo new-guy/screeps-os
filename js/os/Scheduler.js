@@ -189,7 +189,7 @@ class Scheduler {
         var processMemory = Memory.processes[pid];
 
         if(processMemory == null) {
-            return undefined;
+            return null;
         }
 
         return new processTypeMap[processMemory['metadata']['processClass']](pid, this);
@@ -199,7 +199,7 @@ class Scheduler {
         console.log('GC Start');
         for(var i = 0; i < this.processesBeingRemoved.length; i++) {
             var pid = this.processesBeingRemoved[i];
-            Memory.processes[pid] = undefined;
+            Memory.processes[pid] = undefined; //Needs to be undefined in order to wipe the memory
             console.log('GC: ' + pid);
         }
     }

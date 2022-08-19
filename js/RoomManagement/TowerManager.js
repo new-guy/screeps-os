@@ -50,7 +50,7 @@ class TowerManager extends Process {
         }
 
         else if(this.room.rampartsNeedingRepair.length > 0) {
-            var dangerousRampart = undefined;
+            var dangerousRampart = null;
 
             for(var i = 0; i < this.room.rampartsNeedingRepair.length; i++) {
                 var rampart = this.room.rampartsNeedingRepair[i];

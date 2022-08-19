@@ -49,11 +49,11 @@ function initCustomObjects() {
 }
 
 function initScouting() {
-    if(Memory.scouting === undefined) {
+    if(Memory.scouting == null) {
         Memory.scouting = {};
     } 
     
-    if(Memory.scouting.rooms === undefined) {
+    if(Memory.scouting.rooms == null) {
         Memory.scouting.rooms = {};
     } 
 }
@@ -72,7 +72,7 @@ function initColonies() {
 }
 
 function initColonyMemory() {
-    if(Memory.colonies === undefined) {
+    if(Memory.colonies == null) {
         Memory.colonies = {};
 
         var spawn1 = Game.spawns['Spawn1'];

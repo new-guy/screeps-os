@@ -11,7 +11,7 @@ class RoadRepairer extends CreepProcess {
 
     updateStateTransitions() {
         var state = this.creep.memory.state;
-        if(state == undefined) {
+        if(state == null) {
             state = 'getEnergy';
         }
 

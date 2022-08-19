@@ -84,7 +84,7 @@ Room.prototype.calculateChunkPositions = function(rclString) {
 	var chunks = chunkSetsByRCL[rclString];
 
 	var chunkFlagsToPlace = []; //Array of {flagName, roomPosition}
-	var heartPosition = undefined;
+	var heartPosition = null;
 
 	var heartChunkFlag = Game.flags['!CHUNK|heart|' + this.name];
 	if(heartChunkFlag == null) {
@@ -429,7 +429,7 @@ Room.prototype.generateControllerSinkLinkPlan = function() {
 			return false;
 		}
 		//Look through tiles near control and place sink flag near it
-		var sinkPos = undefined;
+		var sinkPos = null;
 
 		for(var x_mod = -2; x_mod <= 2; x_mod++) {
 			for(var y_mod = -2; y_mod <= 2; y_mod++) {
@@ -443,10 +443,10 @@ Room.prototype.generateControllerSinkLinkPlan = function() {
 				}
 			}
 
-			if(sinkPos != undefined) break;
+			if(sinkPos != null) break;
 		}
 
-		if(sinkPos == undefined) {
+		if(sinkPos == null) {
 			console.log("ERROR: Unable to generate controller link plans - room " + this.name + " has no valid controller link positions");
 
 			return false;

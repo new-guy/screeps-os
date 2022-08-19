@@ -22,7 +22,7 @@ class BootStrapper extends CreepProcess {
 
     updateStateTransitions() {
         var state = this.creep.memory.state;
-        if(state == undefined) {
+        if(state == null) {
             state = 'mineEnergy';
         }
 
@@ -58,7 +58,7 @@ class BootStrapper extends CreepProcess {
         if(this.creep.memory.roomToExplore != null) {
             var roomName = this.creep.memory.roomToExplore;
             if(Game.rooms[roomName] != null && this.creep.room.name === roomName && !this.creep.pos.isEdge()) {
-                this.creep.memory.roomToExplore = undefined;
+                this.creep.memory.roomToExplore = null;
             }
 
             else {
