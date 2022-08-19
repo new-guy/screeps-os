@@ -89,13 +89,14 @@ class BootStrapper extends CreepProcess {
                 this.creep.clearTarget();
             }
 
-            var activeSources = this.spawningColony.activeSources;
+            var colonyToHarvestFrom = this.mode === 'colony' ? this.targetColony : Game.colonies[this.targetRoom.memory.colonyName];
+            var activeSources = colonyToHarvestFrom.activeSources;
 
             var nearestSource = this.creep.pos.multiRoomFindClosestByPath(activeSources);
 
             if(nearestSource != null) {
                 this.creep.setTarget(nearestSource);
-                this.spawningColony.removeFromActiveSources(nearestSource);
+                colonyToHarvestFrom.removeFromActiveSources(nearestSource);
             }
 
             else {

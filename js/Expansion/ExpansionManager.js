@@ -26,6 +26,12 @@ class ExpansionManager extends Process {
             else {
                 this.ensureHeart();
                 this.ensureSpawn();
+                this.ensureExpansionBootstrap();
+            }
+
+            if(this.targetRoom.storage != null) {
+                var expansionFlag = Game.flags['!EXPAND|'+this.spawnColony.name];
+                expansionFlag.remove();
             }
         }
 
@@ -62,9 +68,13 @@ class ExpansionManager extends Process {
 
     ensureSpawn() {
         if(this.targetRoom.constructionSites.length === 0 && this.targetRoom.spawns.length === 0 && Game.time % 10 === 0) {
-            console.log("Ensure spawn")
             this.targetRoom.forceBuildingRegeneration();
         }
+    }
+
+    ensureExpansionBootstrap() {
+        var expansionBootstrapPID = 'expBoot|' + this.spawnColony.name + '|' + this.targetRoom.name
+        this.ensureChildProcess(expansionBootstrapPID, 'ExpansionBootstrap', {'spawnColonyName': this.spawnColony.name, 'targetRoomName': this.targetRoom.name}, COLONY_EXPANSION_SUPPORT);
     }
 }
 
