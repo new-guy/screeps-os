@@ -108,7 +108,7 @@ class Roadmap {
             // We need to set the defaults costs higher so that we
             // can set the road cost lower in `roomCallback`
             plainCost: 4,
-            swampCost: 6,
+            swampCost: 8,
             maxOps: 5000,
             
             roomCallback: function(roomName) {
@@ -128,11 +128,13 @@ class Roadmap {
                         var posToEvaluate = new RoomPosition(x, y, roomName);
                         // console.log(x + ', ' + y + ' | ' + roomName);
 
+                        var roadAtPos = roadmap.getPos(posToEvaluate) === 'road';
+
                         if(posToEvaluate.unwalkableStructureExists()) {
                             costs.set(x, y, 0xff);
                         }
 
-                        else if(roadmap.getPos(posToEvaluate) === 'road' || posToEvaluate.structureExists(STRUCTURE_ROAD)) {
+                        else if(roadAtPos || posToEvaluate.structureExists(STRUCTURE_ROAD)) {
                             costs.set(x, y, 2);
                         }
 
@@ -140,7 +142,7 @@ class Roadmap {
                             var hasAdjacentController = posToEvaluate.getAdjacentStructures(STRUCTURE_CONTROLLER).length > 0;
                             var hasAdjacentExtension = posToEvaluate.getAdjacentStructures(STRUCTURE_EXTENSION).length > 0;
 
-                            if(hasAdjacentController || hasAdjacentExtension) {
+                            if((hasAdjacentController || hasAdjacentExtension) && !roadAtPos) {
                                 costs.set(x, y, 10);
                             }
                         }

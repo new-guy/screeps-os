@@ -38,7 +38,6 @@ class SpawnCreep extends Process {
         }
 
         else {
-            console.log('Sleeping spawn of ' + this.creepNameBase);
             this.sleep(this.colony.timeTillAvailableSpawn);
         }
     }

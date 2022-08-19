@@ -9,6 +9,7 @@
 4. Need ability to flush processes & creeps
 5. Dynamically calculate number of haulers
 6. Allow more base designs
+7. Make creeps move along road and ignore each other
 7. Create common library for creeps to talk with
 
 ### ColonyManager Refactor Plan

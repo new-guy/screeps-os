@@ -27,7 +27,7 @@ class ColonyManager extends Process {
         this.ensureChildProcess(this.colony.name + '|invaderMonitor', 'InvaderMonitor', {'colonyName': this.name}, COLONY_DEFENSE_PRIORITY);
 
         if(this.primaryRoom.isInComa() || (this.secondaryRoom != null && this.secondaryRoom.isInComa())) {
-            console.log('Coma Recovery');
+            console.log('Coma Recovery ' + this.colony.name);
             this.comaRecovery();
         }
 
