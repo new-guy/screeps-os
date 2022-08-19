@@ -122,9 +122,7 @@ class HomeRoomManager extends RoomManager {
     }
 
     ensureDefaultUnits() {
-        console.log('checking upgrade of ' + this.room.name)
         if(this.shouldUpgrade) {
-            console.log(this.room.name + ' is trying to upgrade')
             this.ensureUpgraders();
             this.ensureUpgradeFeeders();
         }
