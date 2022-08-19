@@ -4,7 +4,7 @@ class TowerFiller extends CreepProcess {
     constructor (...args) {
         super(...args);
 
-        if(this.creep !== undefined) {
+        if(this.creep != null) {
             this.targetRoom = Game.rooms[this.creep.memory.targetRoom];
         }
     }
@@ -17,7 +17,7 @@ class TowerFiller extends CreepProcess {
 
     updateStateTransitions() {
         var state = this.creep.memory.state;
-        if(state == undefined) {
+        if(state == null) {
             state = 'pickupEnergy';
         }
 
@@ -45,11 +45,11 @@ class TowerFiller extends CreepProcess {
         }
 
         else if(state === 'fillTowers') {
-            if(this.creep.getTarget() === null) {
+            if(this.creep.getTarget() == null) {
                 this.findTowerToFill();
             }
 
-            if(this.creep.getTarget() !== null) {
+            if(this.creep.getTarget() != null) {
                 this.creep.putEnergyInTarget();
             }
 
@@ -62,10 +62,10 @@ class TowerFiller extends CreepProcess {
     }
 
     findTowerToFill() {
-        if(this.targetRoom.halfFullTowers !== undefined && this.targetRoom.halfFullTowers.length > 0) {
+        if(this.targetRoom.halfFullTowers != null && this.targetRoom.halfFullTowers.length > 0) {
             var closestTower = this.creep.pos.findClosestByPath(this.targetRoom.halfFullTowers);
 
-            if(closestTower !== null) {
+            if(closestTower != null) {
                 this.creep.setTarget(closestTower)
             }
             else {

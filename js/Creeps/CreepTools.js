@@ -1,5 +1,3 @@
-var MIN_DIST_FROM_SK = 5;
-
 Creep.prototype.getSafePath = function(targetPosition, range=0) {
     let goals = {pos: targetPosition, range: range};
 
@@ -47,7 +45,7 @@ Creep.prototype.curse = function() {
 }
 
 Creep.prototype.sayInOrder = function(words) {
-    if(this.memory.talkStart === undefined) {
+    if(this.memory.talkStart == null) {
         this.memory.talkStart = Game.time;
     }
 
@@ -75,7 +73,7 @@ Creep.prototype.fillAdjacentFactories = function()
 		var workingStructure = adjacentStructureArray[i];
 
 		if ((workingStructure.structureType === STRUCTURE_EXTENSION || 
-			(this.room.harvestDestination !== undefined && workingStructure.structureType === STRUCTURE_SPAWN)) && 
+			(this.room.harvestDestination != null && workingStructure.structureType === STRUCTURE_SPAWN)) && 
 			workingStructure.energy < workingStructure.energyCapacity)
 		{
 			this.cancelOrder('move');
@@ -103,7 +101,7 @@ Creep.prototype.getAdjacentStructureArray = function()
 		{
 			var cell = row[column];
 
-			if(cell === undefined) continue;
+			if(cell == null) continue;
 
 			for(var i = 0; i < cell.length; i++)
 			{

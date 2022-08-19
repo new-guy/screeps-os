@@ -12,7 +12,7 @@ class RoomConstructionSiteManager extends Process {
             return 'exit';
         }
 
-        if(this.room === undefined) {
+        if(this.room == null) {
             return 'exit';
         }
 
@@ -30,7 +30,7 @@ class RoomConstructionSiteManager extends Process {
         var structurePlanMap = {};
 
         //We want to build able to build roads in mining rooms, which don't always have buildingPlans.
-        var basePlanToUse = buildingPlan === undefined ? roadBuildPlan : buildingPlan;
+        var basePlanToUse = buildingPlan == null ? roadBuildPlan : buildingPlan;
 
         for(var x = 0; x < basePlanToUse.length; x++) {
             var column = basePlanToUse[x];
@@ -39,7 +39,7 @@ class RoomConstructionSiteManager extends Process {
                 var structureType = column[y];
 
                 if(structureType === 'none') {
-                    if(roadBuildPlan !== undefined && roadBuildPlan[x][y] === 'road') {
+                    if(roadBuildPlan != null && roadBuildPlan[x][y] === 'road') {
                         structureType = STRUCTURE_ROAD;
                     }
                     else {
@@ -49,7 +49,7 @@ class RoomConstructionSiteManager extends Process {
 
                 var structPos = {'x': x, 'y': y};
 
-                if(structurePlanMap[structureType] === undefined) {
+                if(structurePlanMap[structureType] == null) {
                     structurePlanMap[structureType] = [structPos];
                 }
                 else {
@@ -94,7 +94,7 @@ class RoomConstructionSiteManager extends Process {
         for(const structureType of STRUCTURE_BUILD_PRIORITY) {
             var structurePosArray = structurePlanMap[structureType];
 
-            if(structurePosArray === undefined) continue;
+            if(structurePosArray == null) continue;
 
             var allSitesExist = this.ensureAllSitesExist(structureType, structurePosArray);
             if(allSitesExist) {
@@ -110,7 +110,7 @@ class RoomConstructionSiteManager extends Process {
             if(STRUCTURE_BUILD_PRIORITY.includes(structureType)) continue;
             var structurePosArray = structurePlanMap[structureType];
 
-            if(structurePosArray === undefined) continue;
+            if(structurePosArray == null) continue;
 
             var allSitesExist = this.ensureAllSitesExist(structureType, structurePosArray);
             if(allSitesExist) {

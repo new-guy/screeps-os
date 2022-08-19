@@ -3,9 +3,40 @@ Room.prototype.hasNoBuildingSlots = function(structureType) {
 	var structureCountMax = CONTROLLER_STRUCTURES[structureType][rcl];
 	var builtStructCount = _.countBy(this.find(FIND_MY_STRUCTURES), function(structure){return structure.structureType === structureType})["true"];
 
-	if (builtStructCount === undefined) builtStructCount = 0;
+	if (builtStructCount == null) builtStructCount = 0;
 
 	return builtStructCount == structureCountMax;
+}
+
+Room.prototype.hasLoneInvaderCore = function() {
+	return this.getInvaderStructures().length === 1;
+}
+
+Room.prototype.hasInvaderBase = function() {
+	return this.getInvaderStructures().length > 1;
+}
+
+Room.prototype.hasInvaderStructures = function() {
+	return this.getInvaderStructures().length > 0;
+}
+
+Room.prototype.getInvaderStructures = function() {
+	var invaderBase = this.find(FIND_STRUCTURES, {
+		filter: function(object) {
+			if(object.owner == null) return false;
+			return object.owner.username === 'Invader';
+	 	}
+	});
+
+	return invaderBase;
+}
+
+Room.prototype.hasInvaders = function() {
+	if(this.enemies == null) return false;
+	var invaders = _.filter(this.enemies, function(r) { 
+		return r.owner.username === 'Invader' });
+
+	return invaders.length > 0;
 }
 
 Room.prototype.hasZeroBuildingSlots = function(structureType) {
@@ -33,7 +64,7 @@ Room.prototype.getPlainsPercentage = function() {
 Room.prototype.hasNecessaryMinimumEnergy = function() {
 	var harvestDest = this.harvestDestination;
 
-	if(harvestDest !== undefined && harvestDest !== null) {
+	if(harvestDest != null) {
 		if(harvestDest.structureType === STRUCTURE_CONTAINER) {
 			return harvestDest.store[RESOURCE_ENERGY] > ROOM_NECESSARY_MINIMUM_ENERGY_CONTAINER;
 		}
@@ -47,11 +78,11 @@ Room.prototype.hasNecessaryMinimumEnergy = function() {
 }
 
 Room.prototype.isInComa = function() {
-	if(this.controller === undefined || !this.controller.my) {
+	if(this.controller == null || !this.controller.my) {
 		return false;
 	}
 
-	if(this.harvestDestination === undefined || this.harvestDestination.structureType === STRUCTURE_CONTAINER) {
+	if(this.harvestDestination == null || this.harvestDestination.structureType === STRUCTURE_CONTAINER) {
 		var workPartCount = 0;
 
 		for(var i = 0; i < this.friendlies.length; i++) {
@@ -72,15 +103,15 @@ Room.prototype.isInComa = function() {
 	else return true;
 }
 
-Room.prototype.removeAllConstructionSites = function(structureType=undefined) {
-	if(this.constructionSites === undefined) return;
+Room.prototype.removeAllConstructionSites = function(structureType=null) {
+	if(this.constructionSites == null) return;
 
 	for(var i = 0; i < this.constructionSites.length; i++) {
 		var constructionSite = this.constructionSites[i];
 
 		if(constructionSite.progress > 0) continue;
 
-		if(structureType === undefined) {
+		if(structureType == null) {
 			constructionSite.remove();
 		}
 
@@ -91,10 +122,62 @@ Room.prototype.removeAllConstructionSites = function(structureType=undefined) {
 }
 
 Room.prototype.hasEnergyInHarvestDestination = function(energyNeeded, hasMinimum=false) {
-	var hasEnergy = (this.harvestDestination !== undefined &&
-	(energyNeeded === undefined || this.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded));
+	var hasEnergy = (this.harvestDestination != null &&
+	(energyNeeded == null || this.harvestDestination.store[RESOURCE_ENERGY] >= energyNeeded));
 	if(hasMinimum) {
 		hasEnergy = hasEnergy && this.hasNecessaryMinimumEnergy();
 	}
 	return hasEnergy;
+}
+
+Room.prototype.getMostBuiltConstructionSite = function() {
+	this.mostBuiltConstructionSite = this.constructionSites[0];
+
+	for(var i = 0; i < this.constructionSites.length; i++) {
+		var constructionSite = this.constructionSites[i];
+
+		if(constructionSite.progress > this.mostBuiltConstructionSite.progress) {
+			this.mostBuiltConstructionSite = constructionSite;
+		}
+	}
+
+	return this.mostBuiltConstructionSite;
+}
+
+Room.prototype.getSourceLinks = function() {
+	var sourceLinkFlags = this.find(FIND_FLAGS, {
+		filter: function(object) {
+			return object.name.startsWith('!LINKSOURCE');
+		}	
+	});
+
+	var sourceLinks = [];
+
+	for(var i = 0; i < sourceLinkFlags.length; i++) {
+		var flag = sourceLinkFlags[i];
+		var link = flag.pos.getStructure(STRUCTURE_LINK);
+		
+		if(link != null) sourceLinks.push(link);
+	}
+
+	return sourceLinks;
+}
+
+Room.prototype.getSinkLinks = function() {
+	var sinkLinkFlags = this.find(FIND_FLAGS, {
+		filter: function(object) {
+			return object.name.startsWith('!LINKSINK');
+		}	
+	});
+
+	var sinkLinks = [];
+
+	for(var i = 0; i < sinkLinkFlags.length; i++) {
+		var flag = sinkLinkFlags[i];
+		var link = flag.pos.getStructure(STRUCTURE_LINK);
+		
+		if(link != null) sinkLinks.push(link);
+	}
+
+	return sinkLinks;
 }

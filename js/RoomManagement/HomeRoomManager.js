@@ -12,7 +12,7 @@ class HomeRoomManager extends RoomManager {
             return 'exit';
         }
     
-        if(this.room === undefined) {
+        if(this.room == null) {
             return 'continue';
         }
 
@@ -21,11 +21,11 @@ class HomeRoomManager extends RoomManager {
         }
         //If we're pre-storage, bootstrap
 
-        if(this.room.harvestDestination !== undefined) {
+        if(this.room.harvestDestination != null) {
             this.ensureBalancers();
         }
 
-        if(this.room.halfFullTowers.length > 0 && this.room.harvestDestination !== undefined) {
+        if(this.room.halfFullTowers.length > 0 && this.room.harvestDestination != null) {
             this.ensureTowerFillers();
         }
 
@@ -33,12 +33,20 @@ class HomeRoomManager extends RoomManager {
             this.ensureDowngradeSafeguard();
         }
 
-        if(this.room.harvestDestination !== undefined && this.room.state === 'default') {
+        if(this.room.harvestDestination != null && this.room.state === 'default') {
             this.ensureDefaultUnits();
         }
 
         if(this.room.controller.level >= 4) {
             this.ensureRampartPlanner();
+        }
+
+        if(this.room.controller.level >= 5) {
+            this.ensureLinkManager();
+        }
+
+        if(this.room.storage == null) {
+            this.preStorageBootstrap();
         }
     }
 
@@ -114,9 +122,7 @@ class HomeRoomManager extends RoomManager {
     }
 
     ensureDefaultUnits() {
-        console.log('checking upgrade of ' + this.room.name)
         if(this.shouldUpgrade) {
-            console.log(this.room.name + ' is trying to upgrade')
             this.ensureUpgraders();
             this.ensureUpgradeFeeders();
         }
@@ -181,6 +187,29 @@ class HomeRoomManager extends RoomManager {
         
         var spawnPID = 'rampartPlanner|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'RampartPlanner', data, COLONY_MANAGEMENT_PRIORITY);
+    }
+
+    ensureLinkManager() {
+        var data = {
+            'roomName': this.room.name
+        };
+        
+        var spawnPID = 'linkManager|' + this.room.name;
+        this.ensureChildProcess(spawnPID, 'LinkManager', data, COLONY_MANAGEMENT_PRIORITY);
+    }
+
+    preStorageBootstrap() {
+        var data = {
+            'targetRoomName': this.room.name,
+            'spawnColonyName': this.colony.name,
+            'maxToSpawn': PRE_STORAGE_BOOTSTRAPPER_MAX,
+            'maxTicksToUse': PRE_STORAGE_BOOTSTRAPPER_MAX_TICKS,
+            'maxEnergy': PRE_STORAGE_BOOTSTRAPPER_MAX_ENERGY,
+            'creepNameBase': this.room.name + '|PreStorBoot'
+        };
+        
+        var spawnPID = 'PreStorBootSpawner|' + this.colony.name + '|' + this.room.name;
+        this.ensureChildProcess(spawnPID, 'BootstrapSpawner', data, COLONY_EXPANSION_SUPPORT);
     }
 }
 

@@ -1,10 +1,3 @@
-var BUCKET_LOW_WATERMARK = 2000;
-var BUCKET_HIGH_WATERMARK = 8000;
-
-var ABOVE_HIGH_PERCENT = 0.8;
-var DEFAULT_PERCENT = 0.9;
-var BELOW_LOW_PERCENT = 0.5;
-
 var processStartTime = 0;
 var processesFinished = 0;
 var processesSlept = 0;
@@ -29,7 +22,7 @@ exports.endProcess = function(processMetadata) {
     var processRunTime = processEndTime - processStartTime;
     var processClass = processMetadata['processClass'];
 
-    if(processStats[processClass] === undefined) {
+    if(processStats[processClass] == null) {
         processStats[processClass] = [processRunTime];
     }
 
@@ -50,11 +43,11 @@ exports.getBucketState = getBucketState;
 function getBucketState() {
     var bucketLevel = Game.cpu.bucket;
 
-    if(bucketLevel > BUCKET_HIGH_WATERMARK) {
+    if(bucketLevel > CPU_BUCKET_HIGH_WATERMARK) {
         return "high";
     }
 
-    else if(bucketLevel > BUCKET_LOW_WATERMARK) {
+    else if(bucketLevel > CPU_BUCKET_LOW_WATERMARK) {
         return "normal";
     }
 
@@ -68,15 +61,15 @@ exports.isPastSafeCPUUsage = function() {
     var cpuUsed = Game.cpu.getUsed();
 
     if(bucketState === "high") {
-        return (cpuUsed/Game.cpu.tickLimit > ABOVE_HIGH_PERCENT);
+        return (cpuUsed/Game.cpu.tickLimit > CPU_ABOVE_HIGH_PERCENT);
     }
 
     else if(bucketState === "normal") {
-        return (cpuUsed/Game.cpu.limit > DEFAULT_PERCENT);
+        return (cpuUsed/Game.cpu.limit > CPU_DEFAULT_PERCENT);
     }
 
     else if(bucketState === "low") {
-        return (cpuUsed/Game.cpu.limit > BELOW_LOW_PERCENT);
+        return (cpuUsed/Game.cpu.limit > CPU_BELOW_LOW_PERCENT);
     }
 
     else {

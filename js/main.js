@@ -49,11 +49,11 @@ function initCustomObjects() {
 }
 
 function initScouting() {
-    if(Memory.scouting === undefined) {
+    if(Memory.scouting == null) {
         Memory.scouting = {};
     } 
     
-    if(Memory.scouting.rooms === undefined) {
+    if(Memory.scouting.rooms == null) {
         Memory.scouting.rooms = {};
     } 
 }
@@ -61,7 +61,7 @@ function initScouting() {
 function initEmpire() {
     Game.empire = {};
 
-    var ownedRooms = _.filter(Game.rooms, function(r) { return r.controller !== undefined && r.controller.my && r.controller.level > 0 }).length;
+    var ownedRooms = _.filter(Game.rooms, function(r) { return r.controller != null && r.controller.my && r.controller.level > 0 }).length;
 
     Game.empire.hasSpareGCL = ownedRooms < Game.gcl.level;
 }
@@ -72,7 +72,7 @@ function initColonies() {
 }
 
 function initColonyMemory() {
-    if(Memory.colonies === undefined) {
+    if(Memory.colonies == null) {
         Memory.colonies = {};
 
         var spawn1 = Game.spawns['Spawn1'];
@@ -115,23 +115,9 @@ function initRooms() {
 
         room.state = room.memory.state;
 
-        room.mapPos = {
-            'x': roomName.split(/[EWNS]+/)[1],
-            'y': roomName.split(/[EWNS]+/)[2]
-        };
-
         room.constructionSites = room.find(FIND_MY_CONSTRUCTION_SITES);
-        room.mostBuiltConstructionSite = room.constructionSites[0];
 
-        for(var i = 0; i < room.constructionSites.length; i++) {
-            var constructionSite = room.constructionSites[i];
-
-            if(constructionSite.progress > room.mostBuiltConstructionSite.progress) {
-                room.mostBuiltConstructionSite = constructionSite;
-            }
-        }
-
-        if(room.controller !== undefined && room.controller.my) {
+        if(room.controller != null && room.controller.my) {
             if(room.energyAvailable < room.energyCapacityAvailable) {
                 room.nonFullFactories = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                     return (s.structureType === STRUCTURE_EXTENSION || s. structureType === STRUCTURE_SPAWN) && s.energy < s.energyCapacity;
@@ -143,25 +129,29 @@ function initRooms() {
                 return s.structureType === STRUCTURE_TOWER && s.energy < s.energyCapacity/2 
             }});
 
-            if(Game.flags['!HARVESTDEST|' + room.name] !== undefined) {
+            if(Game.flags['!HARVESTDEST|' + room.name] != null) {
                 var harvestDestFlag = Game.flags['!HARVESTDEST|' + room.name];
                 room.memory['harvestDestination'] = {'x': harvestDestFlag.pos.x, 'y': harvestDestFlag.pos.y};
                 harvestDestFlag.remove();
             }
 
-            if(room.memory['harvestDestination'] !== undefined) {
+            if(room.memory['harvestDestination'] != null) {
                 var destinationPos = new RoomPosition(room.memory['harvestDestination']['x'], room.memory['harvestDestination']['y'], room.name);
                 
                 if(destinationPos.structureExists(STRUCTURE_STORAGE)) room.harvestDestination = destinationPos.getStructure(STRUCTURE_STORAGE);
                 if(destinationPos.structureExists(STRUCTURE_CONTAINER)) room.harvestDestination = destinationPos.getStructure(STRUCTURE_CONTAINER);
             }
+
+            room.links = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
+                return s.structureType === STRUCTURE_LINK; 
+            }});
         }
 
         room.enemies = room.find(FIND_CREEPS, {filter: function(c) { return c.isHostile(); }});
         room.friendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly(); }});
         room.damagedFriendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly() && c.hits < c.hitsMax; }});
 
-        if(room.controller !== undefined && room.controller.my) {
+        if(room.controller != null && room.controller.my) {
             room.rampartsNeedingRepair = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_RAMPART && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
             }});

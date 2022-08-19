@@ -1,43 +1,10 @@
-RoomPosition.prototype.findFurthestByRange = function(type, opts = {})
-{
-	var room = Game.rooms[this.roomName];
-
-	if(room === undefined) return null;
-
-	var foundArray = room.find(type, opts);
-
-	var ret = null;
-	var rangeToRet = 0;
-
-	for(var i = 0; i < foundArray.length; i++)
-	{
-		var foundItem = foundArray[i];
-		var rangeToFoundItem = this.getRangeTo(foundItem);
-
-		if(ret === null)
-		{
-			ret = foundItem;
-			rangeToRet = rangeToFoundItem;
-			continue;
-		}
-
-		else if(rangeToFoundItem > rangeToRet)
-		{
-			ret = foundItem;
-			rangeToRet = rangeToFoundItem;
-		}
-	}
-
-	return ret;
-}
-
 RoomPosition.prototype.multiRoomFindClosestByPath = function(objects) {
 	var closest = null;
 	var closestDistance = 10000000;
 
 	for(var i = 0; i < objects.length; i++) {
 		var testing = objects[i];
-		var testingPos = (testing.pos === undefined) ? testing : testing.pos;
+		var testingPos = (testing.pos == null) ? testing : testing.pos;
 
 		try {
 			var pathToTesting = PathFinder.search(this, testingPos).path;
@@ -64,11 +31,11 @@ RoomPosition.prototype.creepExists = function()
 
 RoomPosition.prototype.getStructure = function(structureType)
 {
-	if(Game.rooms[this.roomName] === undefined) return null;
+	if(Game.rooms[this.roomName] == null) return null;
 
 	var structureArray = this.lookFor(LOOK_STRUCTURES);
 
-	if(structureType === undefined)
+	if(structureType == null)
 	{
 		return structureArray[0];
 	}
@@ -88,7 +55,7 @@ RoomPosition.prototype.structureExists = function(structureType)
 {
 	var structureArray = this.lookFor(LOOK_STRUCTURES);
 
-	if(structureType === undefined)
+	if(structureType == null)
 	{
 		return structureArray.length > 0;
 	}
@@ -110,7 +77,7 @@ RoomPosition.prototype.getConstructionSite = function(structureType)
 {
 	var constructionSite = this.lookFor(LOOK_CONSTRUCTION_SITES)[0];
 
-	if(constructionSite === undefined || constructionSite.structureType !== structureType) {
+	if(constructionSite == null || constructionSite.structureType !== structureType) {
 		return null;
 	}
 
@@ -123,7 +90,7 @@ RoomPosition.prototype.constructionSiteExists = function(structureType)
 {
 	var constructionSiteArray = this.lookFor(LOOK_CONSTRUCTION_SITES);
 
-	if(structureType === undefined)
+	if(structureType == null)
 	{
 		return constructionSiteArray.length > 0;
 	}
@@ -147,6 +114,31 @@ RoomPosition.prototype.isWalkableTerrain = function()
 	var hasSwamp = (_.includes(this.lookFor(LOOK_TERRAIN), "swamp"));
 
 	return (hasPlains || hasSwamp);
+}
+
+RoomPosition.prototype.getAdjacentWalkablePositions = function()
+{
+	var walkablePositions = [];
+
+	for(var x_mod = -1; x_mod <= 1; x_mod++)
+	{
+		var x_to_look_at = Math.max(Math.min(this.x + x_mod, 49), 0);
+
+		for(var y_mod = -1; y_mod <= 1; y_mod++)
+		{
+			var y_to_look_at = Math.max(Math.min(this.y + y_mod, 49), 0);
+
+			var posBeingLookedAt = new RoomPosition(x_to_look_at, y_to_look_at, this.roomName);
+			var IS_WALKABLE = posBeingLookedAt.isWalkableTerrain();
+
+			if(IS_WALKABLE)
+			{
+				walkablePositions.push(posBeingLookedAt);
+			}
+		}
+	}
+
+	return walkablePositions;
 }
 
 RoomPosition.prototype.simpleCanBuildStructure = function(structureType)
@@ -212,7 +204,7 @@ RoomPosition.prototype.getOpenAdjacentPos = function()
 		}
 	}
 
-	return undefined;
+	return null;
 }
 
 RoomPosition.prototype.hasAdjacentWall = function() {
@@ -225,7 +217,7 @@ RoomPosition.prototype.findMyAdjacentCreeps = function() {
 
 	for(var i = 0; i < adjacentCreeps.length; i++) {
 		var creep = adjacentCreeps[i];
-		if(creep === undefined) continue;
+		if(creep == null) continue;
 		if(creep.my) myCreeps.push(creep);
 	}
 
@@ -266,7 +258,7 @@ RoomPosition.prototype.getAdjacentStructures = function(structureType) {
 	var structuresToReturn = [];
 
 	for(var i = 0; i < adjacentStructures.length; i++) {
-		if(adjacentStructures[i] === undefined) continue;
+		if(adjacentStructures[i] == null) continue;
 		if(adjacentStructures[i].structureType === structureType) structuresToReturn.push(adjacentStructures[i]);
 	}
 
@@ -278,7 +270,7 @@ RoomPosition.prototype.getAdjacentConstructionSites = function(structureType) {
 	var sitesToReturn = [];
 
 	for(var i = 0; i < adjacentSites.length; i++) {
-		if(adjacentSites[i] === undefined) continue;
+		if(adjacentSites[i] == null) continue;
 		if(adjacentSites[i].structureType === structureType) sitesToReturn.push(adjacentSites[i]);
 	}
 
@@ -291,4 +283,19 @@ RoomPosition.prototype.isEdge = function() {
 
 RoomPosition.prototype.readableString = function() {
 	return this.roomName + this.x + 'x' + this.y + 'y';
+}
+
+RoomPosition.prototype.unwalkableStructureExists = function() {
+	var structures = this.lookFor(LOOK_STRUCTURES);
+
+	for(var i = 0; i < structures.length; i++) {
+		var structure = structures[i];
+
+		if( structure.structureType !== STRUCTURE_RAMPART && 
+			structure.structureType !== STRUCTURE_ROAD) {
+			return true;
+		}
+	}
+
+	return false;
 }

@@ -13,7 +13,7 @@ exports.update = function()
 	{
 		var room = Game.rooms[roomName];
 
-		if(room.controller !== undefined && room.controller.my && room.controller.level > 0)
+		if(room.controller != null && room.controller.my && room.controller.level > 0)
 		{
 			Memory.stats.rooms[roomName] = {
 				RCL: {
@@ -23,26 +23,26 @@ exports.update = function()
 				}
 			};
 
-			if(room.harvestDestination !== undefined) {
+			if(room.harvestDestination != null) {
 				Memory.stats.rooms[roomName]['Storage'] = room.harvestDestination.store;
 
 				for(var resourceType in room.harvestDestination.store) {
 					if(resourceType === RESOURCE_ENERGY) empireEnergy += room.harvestDestination.store[resourceType];
 					else {
-						if(empireResources[resourceType] === undefined) empireResources[resourceType] = room.harvestDestination.store[resourceType];
+						if(empireResources[resourceType] == null) empireResources[resourceType] = room.harvestDestination.store[resourceType];
 						else empireResources[resourceType] += room.harvestDestination.store[resourceType];
 					}
 				}
 			}
 
-			if(room.terminal !== undefined) {
+			if(room.terminal != null) {
 				Memory.stats.rooms[roomName]['Terminal'] = room.terminal.store;
 
 				for(var resourceType in room.terminal.store) {
 					if(resourceType === RESOURCE_ENERGY) empireEnergy += room.terminal.store[resourceType];
 					else
 					{
-						if(empireResources[resourceType] === undefined) empireResources[resourceType] = room.terminal.store[resourceType];
+						if(empireResources[resourceType] == null) empireResources[resourceType] = room.terminal.store[resourceType];
 						else empireResources[resourceType] += room.terminal.store[resourceType];
 					}
 				}
@@ -86,7 +86,7 @@ function getCreepTypeCount()
 		if(creep.spawning) continue;
 
 		var role = creep.memory.creepProcessClass;
-		if(creepTypes[role] === undefined)
+		if(creepTypes[role] == null)
 		{
 			creepTypes[role] = 1;
 		}

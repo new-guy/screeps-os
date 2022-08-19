@@ -15,7 +15,7 @@ class ExampleProcess extends Process {
     }
 
     someOtherFunction() {
-        return (this.stuff.controller.level < 5 && this.stuff.storage === undefined);
+        return (this.stuff.controller.level < 5 && this.stuff.storage == null);
     }
 
     processShouldDie() {

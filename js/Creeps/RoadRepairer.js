@@ -1,6 +1,6 @@
 const CreepProcess = require('CreepProcess');
 
-class ColonyBuilder extends CreepProcess {
+class RoadRepairer extends CreepProcess {
     constructor (...args) {
         super(...args);
 
@@ -51,17 +51,7 @@ class ColonyBuilder extends CreepProcess {
             target = this.creep.getTarget();
         }
 
-        //Need to get target.  If we have no target, we need to determine a target
-        //Do work based upon the target's class
-
-        if(target instanceof ConstructionSite) {
-            this.creep.buildTarget();
-        }
-
-        else {
-            this.creep.repairTarget();
-            //Repair target
-        }
+        this.creep.repairTarget();
     }
 
     determineTarget() {
@@ -77,33 +67,21 @@ class ColonyBuilder extends CreepProcess {
 
         else {
             this.creep.say(targetRoom.name);
-            if(targetRoom.constructionSites != null && targetRoom.constructionSites.length > 0) {
-                this.creep.setTarget(targetRoom.getMostBuiltConstructionSite());
-            }
-    
-            else if(targetRoom.rampartsNeedingRepair != null && targetRoom.rampartsNeedingRepair.length > 0 ||
-                    targetRoom.wallsNeedingRepair != null && targetRoom.wallsNeedingRepair.length > 0) {
-                
-                var thingToRepair = _.sample(targetRoom.rampartsNeedingRepair);
-    
-                if(targetRoom.leastBuiltRampart == null || (targetRoom.leastBuiltWall != null && targetRoom.leastBuiltWall.hits < targetRoom.leastBuiltRampart.hits)) {
-                    thingToRepair = _.sample(targetRoom.wallsNeedingRepair);
-                }
-    
-                this.creep.setTarget(thingToRepair);
+            if(targetRoom.mostDamagedRoad != null) {
+                this.creep.setTarget(targetRoom.mostDamagedRoad);
             }
         }
     }
 
     getTargetRoom() {
-        if(this.creep.room.constructionSites.length > 0 || this.creep.room.rampartsNeedingRepair != null && this.creep.room.rampartsNeedingRepair.length > 0) {
+        if(this.creep.room.mostDamagedRoad != null) {
             return this.creep.room;
         }
 
-        else {
-            return this.targetColony.roomMostNeedingBuilder;
+        if(this.targetColony.roomNeedingRoadRepairs != null) {
+            return this.targetColony.roomNeedingRoadRepairs;
         }
     }
 }
 
-module.exports = ColonyBuilder;
+module.exports = RoadRepairer;

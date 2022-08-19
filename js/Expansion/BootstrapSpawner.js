@@ -8,25 +8,12 @@ var DEFAULT_MAX_ENERGY = 3000;
 class BootstrapSpawner extends Process {
     constructor (...args) {
         super(...args);
-
-        /*
-        Set:
-        targetRoom
-        spawnColony
-        maxToSpawn
-        maxTicksToUse
-        maxEnergy
-        creepNameBase
-        maxEnergyPerCreep <- optional
-        */
         
-        this.targetRoom = Game.rooms[this.memory.targetRoomName];
-        this.spawnColony = Game.colonies[this.memory.spawnColonyName];
         this.maxToSpawn = this.memory.maxToSpawn ? this.memory.maxToSpawn : DEFAULT_MAX_COUNT;
         this.maxTicksToUse = this.memory.maxTicksToUse ? this.memory.maxTicksToUse : DEFAULT_TICKS;
         this.maxEnergy = this.memory.maxEnergy ? this.memory.maxEnergy : DEFAULT_MAX_ENERGY;
         this.creepNameBase = this.memory.creepNameBase ? this.memory.creepNameBase + "|" : "";
-        this.maxEnergyPerCreep = this.memory.maxEnergyPerCreep ? this.memory.maxEnergyPerCreep : this.targetRoom.energyCapacityAvailable;
+        this.maxEnergyPerCreep = this.memory.maxEnergyPerCreep ? this.memory.maxEnergyPerCreep : 300;
     }
 
     update() {
@@ -54,11 +41,16 @@ class BootstrapSpawner extends Process {
             'creepNameBase': this.creepNameBase +'Bootstrap|' + this.memory.targetRoomName,
             'creepBodyType': 'BootStrapper',
             'creepProcessClass': 'BootStrapper',
-            'creepMemory': {
-                'targetRoom': this.memory.targetRoomName
-            },
             'maxEnergyToSpend': this.memory.maxEnergyPerCreep
         };
+
+        if(this.memory.targetRoomName != null) {
+            data['creepMemory'] = {'targetRoom': this.memory.targetRoomName}
+        }
+
+        if(this.memory.targetColonyName != null) {
+            data['creepMemory'] = {'targetColony': this.memory.targetColonyName}
+        }
         
         var spawnPID = this.creepNameBase + 'SpawnBootstrap|' + bootstrappersToSpawn + '|' + this.memory.spawnColonyName + '|' + this.memory.targetRoomName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, this.metadata.defaultPriority);

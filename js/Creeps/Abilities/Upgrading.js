@@ -1,5 +1,3 @@
-
-
 StructureController.prototype.needsSaving = function() {
     return this.my && this.ticksToDowngrade < BOOTSTRAPPER_SAVE_CONTROLLER_THRESHOLD;
 }

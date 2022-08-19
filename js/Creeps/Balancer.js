@@ -4,7 +4,7 @@ class Balancer extends CreepProcess {
     constructor (...args) {
         super(...args);
 
-        if(this.creep !== undefined) {
+        if(this.creep != null) {
             this.targetRoom = Game.rooms[this.creep.memory['targetRoom']];
             this.startFlag = Game.flags[this.creep.memory['startFlagName']];
             this.endFlag = Game.flags[this.creep.memory['endFlagName']];
@@ -30,7 +30,7 @@ class Balancer extends CreepProcess {
     }
 
     isTooSmall() {
-        var roomHasStorage = this.creep.room.storage !== undefined;
+        var roomHasStorage = this.creep.room.storage != null;
         var roomIsFull = this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable;
         var creepIsSmall = this.creep.body.length <= SMALL_BALANCER_CARRY_PARTS*(1.5);
 
@@ -38,7 +38,7 @@ class Balancer extends CreepProcess {
     }
 
     updateStateTransitions() {
-        if(this.creep.memory.state === undefined)
+        if(this.creep.memory.state == null)
         {
             this.creep.memory.state = "pickup";
         }
@@ -71,7 +71,7 @@ class Balancer extends CreepProcess {
             return;
         }
 
-        if(this.creep.memory.state === undefined)
+        if(this.creep.memory.state == null)
         {
             this.creep.memory.state = "pickup";
         }
@@ -88,10 +88,10 @@ class Balancer extends CreepProcess {
             var roomIsFull = (this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable);
             if(roomIsFull) {
                 var energySource = Game.getObjectById(this.creep.memory.energySourceId);
-                if(energySource !== null && energySource.structureType === STRUCTURE_STORAGE) {
+                if(energySource != null && energySource.structureType === STRUCTURE_STORAGE) {
                     //Only do this for the balancer that uses storage as its energySource
                     //Ensure link is full if it exists
-                    var linksNearStorage = energySource.pos.findInRange(FIND_MY_STRUCTURES, 1, {filter: function(structure) { 
+                    var linksNearStorage = energySource.pos.findInRange(FIND_MY_STRUCTURES, 2, {filter: function(structure) { 
                         return structure.structureType == STRUCTURE_LINK}});
 
                     if(linksNearStorage.length > 0) {
@@ -123,11 +123,11 @@ class Balancer extends CreepProcess {
 
         var finalPosInPath = inboundPath[inboundPath.length-1]
 
-        if(energySource == null) {
+        if(energySource == null || energySource.store[RESOURCE_ENERGY] === 0) {
             this.setEnergySource();
             energySource = Game.getObjectById(this.creep.memory.energySourceId);
 
-            if(energySource === null) {
+            if(energySource == null || energySource.store[RESOURCE_ENERGY] === 0) {
                 this.creep.getEnergyFromHarvestDestination(this.creep.room);
 
                 return;
@@ -149,7 +149,7 @@ class Balancer extends CreepProcess {
         var currentPos = this.creep.pos;
         var lastPos = this.creep.memory.lastPosition;
 
-        if(lastPos !== undefined && lastPos.x === currentPos.x && lastPos.y === currentPos.y) {
+        if(lastPos != null && lastPos.x === currentPos.x && lastPos.y === currentPos.y) {
             //Find adjacent creeps and make them move randomly
             this.creep.pos.randomMoveAdjacentCreeps();
         }
@@ -192,7 +192,7 @@ class Balancer extends CreepProcess {
     }
 
     traverseBalancePath() {
-        if(this.creep.memory.currentPath === undefined) {
+        if(this.creep.memory.currentPath == null) {
             this.creep.memory.currentPath = 'outboundPath';
         }
 
@@ -232,7 +232,7 @@ class Balancer extends CreepProcess {
     }
     
     setEnergySource() {    
-        if(this.startFlag === undefined) return;
+        if(this.startFlag == null) return;
     
         var energySources = this.startFlag.pos.findInRange(FIND_MY_STRUCTURES, 1, {filter: function(structure) { 
             return (structure.structureType == STRUCTURE_LINK && structure.energy > 0) || (structure.structureType == STRUCTURE_STORAGE && structure.store.energy > 0) }});

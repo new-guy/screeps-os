@@ -4,11 +4,11 @@ class Miner extends CreepProcess {
     constructor (...args) {
         super(...args);
 
-        if(this.creep !== undefined) {
+        if(this.creep != null) {
             this.targetSourcePos = new RoomPosition(this.creep.memory.targetSourcePos.x, this.creep.memory.targetSourcePos.y, this.creep.memory.targetSourcePos.roomName);
             this.containerPos = new RoomPosition(this.creep.memory['containerPos']['x'], this.creep.memory['containerPos']['y'], this.creep.memory['containerPos']['roomName'])
 
-            if(Game.rooms[this.containerPos.roomName] !== undefined) {
+            if(Game.rooms[this.containerPos.roomName] != null) {
                 this.container = this.containerPos.getStructure(STRUCTURE_CONTAINER);
                 this.targetSource = this.targetSourcePos.lookFor(LOOK_SOURCES)[0];
             }
@@ -22,7 +22,7 @@ class Miner extends CreepProcess {
     }
 
     performStateActions() {
-        if(this.targetSource === undefined) {
+        if(this.targetSource == null) {
             this.creep.moveTo(this.targetSourcePos);
         }
 
@@ -32,16 +32,16 @@ class Miner extends CreepProcess {
         }
 
         else {
-            if((this.container === null && this.creep.carry.energy < this.creep.carryCapacity/2) ||
-               (this.container !== null && this.creep.carry.energy < this.creep.carryCapacity)) {
+            if((this.container == null && this.creep.carry.energy < this.creep.carryCapacity/2) ||
+               (this.container != null && this.creep.carry.energy < this.creep.carryCapacity)) {
                 this.creep.harvest(this.targetSource);
                 this.creep.say('⚡');
             }
 
             else {
-                if(this.container === null) {
+                if(this.container == null) {
                     var containerConstructionSite = this.containerPos.getConstructionSite(STRUCTURE_CONTAINER);
-                    if(containerConstructionSite === null) {
+                    if(containerConstructionSite == null) {
                         this.containerPos.createConstructionSite(STRUCTURE_CONTAINER);
                         this.creep.say('Create');
                     }

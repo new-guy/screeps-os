@@ -1,8 +1,5 @@
 const Process = require('Process');
 
-var HEART_MAX_DISTANCE = 15;
-var MAX_STEPS_TO_PRIMARY = 1;
-
 class SecondaryRoomFinder extends Process {
     constructor (...args) {
         super(...args);
@@ -26,7 +23,7 @@ class SecondaryRoomFinder extends Process {
                 continue;
             }
 
-            if(colonyRoomInfo['stepsToPrimary'] > MAX_STEPS_TO_PRIMARY) {
+            if(colonyRoomInfo['stepsToPrimary'] > SECONDARY_MAX_STEPS_TO_PRIMARY) {
                 continue;
             }
 
@@ -43,13 +40,13 @@ class SecondaryRoomFinder extends Process {
 
             console.log(roomName);
 
-            if(room === undefined) {
+            if(room == null) {
                 continue;
             }
 
             else {
                 console.log('Check Secondary: ' + roomName);
-                if(room.controller === undefined) {
+                if(room.controller == null) {
                     colonyRoomInfo['isValidSecondary'] = false;
                     colonyRoomInfo['checkedForSecondary'] = true;
                 }
@@ -86,11 +83,11 @@ class SecondaryRoomFinder extends Process {
                 }
             }
 
-            if(currentCandidate !== null) {
+            if(currentCandidate != null) {
                 console.log('Would set candidate ' + currentCandidate + ' ' + currentPlainsPercent);
                 var candidateRoom = Game.rooms[currentCandidate];
 
-                if(candidateRoom !== undefined) {
+                if(candidateRoom != null) {
                     if(this.placeHeart(candidateRoom)) {
                         this.colony.memory['secondaryRoomName'] = currentCandidate;
                     }
@@ -101,7 +98,7 @@ class SecondaryRoomFinder extends Process {
 
     tryToPlaceHeart(room) {
         var middleOfRoom = new RoomPosition(24, 24, room.name);
-        var flagPosition = room.findRootForChunk('heart', middleOfRoom, HEART_MAX_DISTANCE);
+        var flagPosition = room.findRootForChunk('heart', middleOfRoom, SECONDARY_HEART_MAX_DISTANCE);
 
         if(flagPosition == null) {
             return false;
@@ -113,7 +110,7 @@ class SecondaryRoomFinder extends Process {
 
     placeHeart(room) {
         var middleOfRoom = new RoomPosition(24, 24, room.name);
-        var flagPosition = Game.rooms[room.name].findRootForChunk('heart', middleOfRoom, HEART_MAX_DISTANCE);
+        var flagPosition = Game.rooms[room.name].findRootForChunk('heart', middleOfRoom, SECONDARY_HEART_MAX_DISTANCE);
         
         console.log(flagPosition.x + 'x ' + flagPosition.y + 'y ' + flagPosition.roomName);
 

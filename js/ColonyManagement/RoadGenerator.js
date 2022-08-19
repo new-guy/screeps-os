@@ -12,13 +12,16 @@ class RoadGenerator extends Process {
             return 'exit';
         }
         
-        if(this.colony.memory['roadRegenerateTick'] === undefined || Game.time - this.colony.memory['roadRegenerateTick'] > TICKS_BETWEEN_FULL_ROAD_RECALCULATION) {
+        if(this.colony.memory['roadRegenerateTick'] == null || Game.time - this.colony.memory['roadRegenerateTick'] > TICKS_BETWEEN_FULL_ROAD_RECALCULATION) {
             this.regenerateRoads();
             this.colony.memory['roadRegenerateTick'] = Game.time;
 
+        }
+
+        if(Game.time % TICKS_BETWEEN_ROOM_ROADMAP_UPDATE === 0) {
             for(var roomName in this.colony.colonyRoomInfo) {
                 var room = Game.rooms[roomName];
-                if(room === undefined) continue;
+                if(room == null) continue;
                 this.addRoadsToRoomMemory(room);
             }
         }
@@ -27,7 +30,7 @@ class RoadGenerator extends Process {
     addRoadsToRoomMemory(room) {
         var roadmap = this.colony.roadmap;
         var roomRoadmap = roadmap.getMap(room.name);
-        if(roomRoadmap === undefined) return;
+        if(roomRoadmap == null) return;
 
         room.memory.roadBuildPlan = roomRoadmap;
     }
@@ -38,14 +41,14 @@ class RoadGenerator extends Process {
         this.generateControllerRoad(this.colony.primaryRoom);
         this.generateControllerRoad(this.colony.secondaryRoom);
 
-        if(Game.scheduler.getProcess(this.colony.name + '|energyHarvestingManager') !== undefined) {
+        if(Game.scheduler.getProcess(this.colony.name + '|energyHarvestingManager') != null) {
             this.generateMiningRouteRoads();
         }
     }
 
     generateHeartHighway() {
-        if(this.colony.primaryRoom === undefined || this.colony.secondaryRoom === undefined) return;
-        if(this.colony.primaryRoom.harvestDestination === undefined || this.colony.secondaryRoom.harvestDestination === undefined) return;
+        if(this.colony.primaryRoom == null || this.colony.secondaryRoom == null) return;
+        if(this.colony.primaryRoom.harvestDestination == null || this.colony.secondaryRoom.harvestDestination == null) return;
         var storageOne = this.colony.primaryRoom.harvestDestination;
         var storageTwo = this.colony.secondaryRoom.harvestDestination;
 
@@ -53,7 +56,7 @@ class RoadGenerator extends Process {
     }
 
     generateControllerRoad(room) {
-        if(room === undefined || room.harvestDestination === undefined) return;
+        if(room == null || room.harvestDestination == null) return;
 
         this.colony.roadmap.makeRoad(room.harvestDestination.pos, room.controller.pos);
     }
@@ -64,15 +67,16 @@ class RoadGenerator extends Process {
 
         for(var i = 0; i < miningProcesses.length; i++) {
             var process = miningProcesses[i];
+            // console.log(process.pid)
             var harvestDestination = Game.rooms[process.memory.targetStorageRoom].harvestDestination;
             
-            if(harvestDestination === null || harvestDestination === undefined || process.memory.containerPos === undefined) {
+            if(harvestDestination == null || harvestDestination == null || process.memory.containerPos == null) {
                 continue;
             }
 
             var containerPos = new RoomPosition(process.memory.containerPos['x'], process.memory.containerPos['y'], process.memory.containerPos['roomName']);
 
-            this.colony.roadmap.makeRoad(harvestDestination.pos, containerPos);
+            this.colony.roadmap.makeRoad(harvestDestination.pos, containerPos, 'mining');
         }
     }
 

@@ -23,8 +23,8 @@ class SpawnCreep extends Process {
                 var creepName = this.creepNameBase + "|" + i;
                 var creepPid = 'creep|' + creepName;
 
-                if(Game.creeps[creepName] !== undefined || this.scheduler.processExists(creepPid)) {
-                    if(Game.creeps[creepName] === undefined && this.scheduler.processExists(creepPid)) {
+                if(Game.creeps[creepName] != null || this.scheduler.processExists(creepPid)) {
+                    if(Game.creeps[creepName] == null && this.scheduler.processExists(creepPid)) {
                         console.log('WAITING TO SPAWN CREEP ' + creepName + ' BECAUSE PROCESS EXISTS')
                     }
                     //creep exists or process exists
@@ -38,7 +38,6 @@ class SpawnCreep extends Process {
         }
 
         else {
-            console.log('Sleeping spawn of ' + this.creepNameBase);
             this.sleep(this.colony.timeTillAvailableSpawn);
         }
     }

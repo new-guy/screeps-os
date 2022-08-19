@@ -4,13 +4,13 @@ class Roadmap {
     constructor(colony) {
         this.colony = colony;
 
-        if(this.colony.memory.roadmap === undefined) {
+        if(this.colony.memory.roadmap == null) {
             this.colony.memory.roadmap = {};
         }
 
         this.memory = this.colony.memory.roadmap;
 
-        if(this.memory.shouldDraw === undefined) {
+        if(this.memory.shouldDraw == null) {
             this.memory.shouldDraw = false;
         }
 
@@ -32,7 +32,7 @@ class Roadmap {
             var roadmap = this.getMap(roomName);
 
 
-            if(roadmap === undefined) continue;
+            if(roadmap == null) continue;
 
             var visual = new RoomVisual(roomName);
 
@@ -70,7 +70,7 @@ class Roadmap {
 
     setRoad(roomPosition) {
         var roadmap = this.getMap(roomPosition.roomName);
-        if(roadmap === undefined) {
+        if(roadmap == null) {
             this.initMap(roomPosition.roomName);
             roadmap = this.getMap(roomPosition.roomName);
         }
@@ -80,7 +80,7 @@ class Roadmap {
 
     getPos(roomPosition) {
         var roadmap = this.getMap(roomPosition.roomName);
-        if(roadmap === undefined) {
+        if(roadmap == null) {
             this.initMap(roomPosition.roomName);
             roadmap = this.getMap(roomPosition.roomName);
         }
@@ -92,73 +92,17 @@ class Roadmap {
         return this.getPos(roomPosition) === 'road';
     }
 
-    makeRoad(startPos, endPos) {
-        var path = this.findRoadPath(startPos, endPos);
+    makeRoad(startPos, endPos, type=null) {
+        var data = {
+            'startPos': {'x': startPos.x, 'y': startPos.y, 'roomName': startPos.roomName},
+            'endPos': {'x': endPos.x, 'y': endPos.y, 'roomName': endPos.roomName},
+            'type': type,
+            'colonyName': this.colony.name
+        };
 
-        for(var i = 0; i < path.length; i++) {
-            this.setRoad(path[i])
-        }
+        var makeRoadPid ='makeRoad|' + startPos.x + startPos.y + startPos.roomName + endPos.x + endPos.y + endPos.roomName;
+        Game.scheduler.addProcessThisTick(makeRoadPid, 'RoadmapMakeRoad', data, COLONY_NONESSENTIAL_PRIORITY);
     }
-
-    findRoadPath(startPos, endPos)
-    {
-        var roadmap = this;
-
-        return PathFinder.search(startPos, {pos: endPos, range: 1}, {
-            // We need to set the defaults costs higher so that we
-            // can set the road cost lower in `roomCallback`
-            plainCost: 4,
-            swampCost: 6,
-            maxOps: 10000,
-            
-            roomCallback: function(roomName) {
-                let room = Game.rooms[roomName];
-                // In this example `room` will always exist, but since PathFinder 
-                // supports searches which span multiple rooms you should be careful!
-                if (!room)
-                {
-                    console.log("Can't find room " + roomName + " to generate road path");
-                    return;
-                }
-    
-                let costs = new PathFinder.CostMatrix;
-    
-                for(var x = 0; x < 50; x++) {
-                    for(var y = 0; y < 50; y++) {
-                        var posToEvaluate = new RoomPosition(x, y, roomName);
-    
-    
-                        var structuresAtPos = posToEvaluate.lookFor(LOOK_STRUCTURES);
-                        if(unwalkableStructuresExist(structuresAtPos)) {
-                            costs.set(x, y, 0xff);
-                        }
-
-                        else if(roadmap.getPos(posToEvaluate) === 'road' || posToEvaluate.structureExists(STRUCTURE_ROAD)) {
-                            costs.set(x, y, 2);
-                        }
-                    }
-                }
-    
-                function unwalkableStructuresExist(structures) {
-                    for(var i = 0; i < structures.length; i++) {
-                        var structure = structures[i];
-    
-                        if( structure.structureType !== STRUCTURE_RAMPART && 
-                            structure.structureType !== STRUCTURE_ROAD) {
-                               //structure is unwalkable
-                            
-                            return true;
-                        }
-                    }
-    
-                    return false;
-                }
-    
-                return costs;
-            }
-        }).path;
-    }
-    //For computation, we could have the colony call a function in here that just ensures a childprocess that has sleeps
 }
 
 module.exports = Roadmap;

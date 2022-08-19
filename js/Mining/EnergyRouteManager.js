@@ -9,7 +9,7 @@ class EnergyRouteManager extends Process {
         this.targetStorageRoom = Game.rooms[this.memory.targetStorageRoom];
         this.spawnColony = Game.colonies[this.memory.spawnColonyName];
 
-        if(this.memory.containerPos === undefined) {
+        if(this.memory.containerPos == null) {
             this.determineContainerPos();
         }
     }
@@ -19,7 +19,7 @@ class EnergyRouteManager extends Process {
             return 'exit';
         }
 
-        if(this.memory.containerPos === undefined || this.targetStorageRoom === null) {
+        if(this.memory.containerPos == null || this.targetStorageRoom == null) {
             this.spawnScout();
             return 'continue';
         }
@@ -43,7 +43,7 @@ class EnergyRouteManager extends Process {
     }
 
     isOperational() {
-        if(this.memory.containerPos === undefined) return false;
+        if(this.memory.containerPos == null) return false;
 
         var notWaitingForReserver = !this.waitingForReserver
 
@@ -54,14 +54,14 @@ class EnergyRouteManager extends Process {
 
     get minerExists() {
         var minerName = this.targetSourcePos.readableString() +'|Miner|0';
-        return Game.creeps[minerName] !== undefined;
+        return Game.creeps[minerName] != null;
     }
 
     get allHaulersExist() {
         var allHaulersExist = true;
         for(var i = 0; i < HAULER_COUNT; i++) {
             var haulerName = this.targetSourcePos.readableString() +'|Hauler|' + i;
-            allHaulersExist = (Game.creeps[haulerName] !== undefined);
+            allHaulersExist = (Game.creeps[haulerName] != null);
 
             if(!allHaulersExist) break;
         }
@@ -74,20 +74,20 @@ class EnergyRouteManager extends Process {
         if(this.shouldReserve) {
             var reserverName = 'reserver|' + this.targetSourcePos.roomName + '|0';
 
-            waitingForReserver = (Game.creeps[reserverName] === undefined);
+            waitingForReserver = (Game.creeps[reserverName] == null);
         }
 
         return waitingForReserver;
     }
 
     get sourceContainerExists() {
-        return (this.sourceContainer !== undefined && this.sourceContainer !== null);
+        return (this.sourceContainer != null);
     }
 
     getUsedTicks() {
         var energyCapacity = this.spawnColony.primaryRoom.energyCapacityAvailable;
 
-        if(this.spawnColony.secondaryRoom !== undefined && this.spawnColony.secondaryRoom.energyCapacityAvailable > energyCapacity) {
+        if(this.spawnColony.secondaryRoom != null && this.spawnColony.secondaryRoom.energyCapacityAvailable > energyCapacity) {
             energyCapacity = this.spawnColony.secondaryRoom.energyCapacityAvailable;;
         }
 
@@ -147,28 +147,28 @@ class EnergyRouteManager extends Process {
         //Should reserve if it's not 
         var room = Game.rooms[this.targetSourcePos.roomName];
 
-        if(room === undefined || room.controller === undefined) return false;
+        if(room == null || room.controller == null) return false;
 
-        var isOneOfMyRooms = (room.controller !== undefined && room.controller.my && room.controller.level > 0);
+        var isOneOfMyRooms = (room.controller != null && room.controller.my && room.controller.level > 0);
 
         if(isOneOfMyRooms) return false;
 
         var reserverBody = BodyGenerator.generateBody('Reserver', 0);
         var costOfBody = BodyGenerator.getCostOfBody(reserverBody);
 
-        if(this.spawnColony.primaryRoom.energyCapacityAvailable < costOfBody && this.spawnColony.secondaryRoom !== undefined && this.spawnColony.secondaryRoom.energyCapacityAvailable < costOfBody) {
+        if(this.spawnColony.primaryRoom.energyCapacityAvailable < costOfBody && this.spawnColony.secondaryRoom != null && this.spawnColony.secondaryRoom.energyCapacityAvailable < costOfBody) {
             //We don't have enough energy capacity
             return false;
         }
 
         var reservation = room.controller.reservation;
-        if(reservation === undefined) return true;
+        if(reservation == null) return true;
 
         return reservation.ticksToEnd < REMAINING_TICKS_TO_SPAWN_RESERVER;
     }
 
     get sourceContainer() {
-        if(this.memory.containerPos === undefined) return undefined;
+        if(this.memory.containerPos == null) return null;
 
         var containerPos = new RoomPosition(this.memory.containerPos.x, this.memory.containerPos.y, this.memory.containerPos.roomName);
 
@@ -208,7 +208,7 @@ class EnergyRouteManager extends Process {
     }
 
     determineContainerPos() {
-        if(Game.rooms[this.targetSourcePos.roomName] === undefined) {
+        if(Game.rooms[this.targetSourcePos.roomName] == null) {
             console.log('Cannot reach room for target source');
             return;
         }
@@ -217,13 +217,13 @@ class EnergyRouteManager extends Process {
 
         var container = this.targetSourcePos.getAdjacentStructures(STRUCTURE_CONTAINER)[0];
 
-        if(container !== undefined) {
+        if(container != null) {
             containerPos = container.pos;
         }
 
         var containerConstructionSpot = this.targetSourcePos.getAdjacentConstructionSites(STRUCTURE_CONTAINER)[0];
 
-        if(containerConstructionSpot !== undefined) {
+        if(containerConstructionSpot != null) {
             containerPos = containerConstructionSpot.pos;
         }
 

@@ -8,8 +8,8 @@ const EmpireManager = require('EmpireManager');
 const ColonyManager = require('ColonyManager');
 const ColonyScoutingManager = require('ColonyScoutingManager');
 const SecondaryRoomFinder = require('SecondaryRoomFinder');
-const PreStorageColonyBootstrap = require('PreStorageColonyBootstrap');
 const RoadGenerator = require('RoadGenerator');
+const RoadmapMakeRoad = require('RoadmapMakeRoad');
 const EnergyHarvestingManager = require('EnergyHarvestingManager');
 const EnergyRouteManager = require('EnergyRouteManager');
 const InvaderMonitor = require('InvaderMonitor');
@@ -17,6 +17,7 @@ const InvaderMonitor = require('InvaderMonitor');
 const HomeRoomManager = require('HomeRoomManager');
 const ComaRecovery = require('ComaRecovery');
 const TowerManager = require('TowerManager');
+const LinkManager = require('LinkManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const RoomConstructionSiteManager = require('RoomConstructionSiteManager');
 const RampartPlanner = require('RampartPlanner');
@@ -32,6 +33,7 @@ const Miner = require('Miner');
 const Hauler = require('Hauler');
 const Balancer = require('Balancer');
 const ColonyBuilder = require('ColonyBuilder');
+const RoadRepairer = require('RoadRepairer');
 const Upgrader = require('Upgrader');
 const UpgradeFeeder = require('UpgradeFeeder');
 const TowerFiller = require('TowerFiller');
@@ -50,13 +52,14 @@ var processTypeMap = {
     "ColonyManager": ColonyManager,
     "ColonyScoutingManager": ColonyScoutingManager,
     "SecondaryRoomFinder": SecondaryRoomFinder,
-    "PreStorageColonyBootstrap": PreStorageColonyBootstrap,
     "RoadGenerator": RoadGenerator,
+    "RoadmapMakeRoad": RoadmapMakeRoad,
     "EnergyHarvestingManager": EnergyHarvestingManager,
     "EnergyRouteManager": EnergyRouteManager,
     "HomeRoomManager": HomeRoomManager,
     "ComaRecovery": ComaRecovery,
     "TowerManager": TowerManager,
+    "LinkManager": LinkManager,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
     "RoomConstructionSiteManager": RoomConstructionSiteManager,
     "SpawnCreep": SpawnCreep,
@@ -69,6 +72,7 @@ var processTypeMap = {
     "Hauler": Hauler,
     "Balancer": Balancer,
     "ColonyBuilder": ColonyBuilder,
+    "RoadRepairer": RoadRepairer,
     "Upgrader": Upgrader,
     "UpgradeFeeder": UpgradeFeeder,
     "TowerFiller": TowerFiller,
@@ -84,8 +88,8 @@ var DEBUGGING = true;
 
 class Scheduler {
     constructor () {
-        if( Memory.processes === undefined || 
-            Memory.ipc === undefined) {
+        if( Memory.processes == null || 
+            Memory.ipc == null) {
 
             Memory.processes = {};
             Memory.ipc = {};
@@ -163,7 +167,7 @@ class Scheduler {
         CPUMetrics.printProcessStats(this);
 
         function shouldSleep(processMetadata) {
-            return processMetadata['wakeTick'] !== undefined && processMetadata['wakeTick'] > Game.time; //Are we before the wake tick?
+            return processMetadata['wakeTick'] != null && processMetadata['wakeTick'] > Game.time; //Are we before the wake tick?
         }
     }
 
@@ -184,8 +188,8 @@ class Scheduler {
     getProcess(pid) {
         var processMemory = Memory.processes[pid];
 
-        if(processMemory === undefined) {
-            return undefined;
+        if(processMemory == null) {
+            return null;
         }
 
         return new processTypeMap[processMemory['metadata']['processClass']](pid, this);
@@ -195,7 +199,7 @@ class Scheduler {
         console.log('GC Start');
         for(var i = 0; i < this.processesBeingRemoved.length; i++) {
             var pid = this.processesBeingRemoved[i];
-            Memory.processes[pid] = undefined;
+            Memory.processes[pid] = undefined; //Needs to be undefined in order to wipe the memory
             console.log('GC: ' + pid);
         }
     }
@@ -211,7 +215,7 @@ class Scheduler {
     }
 
     processExists(pid) {
-        return Memory.processes[pid] !== undefined;
+        return Memory.processes[pid] != null;
     }
 
     addProcess(pid, processClass, data, priority) {
@@ -248,9 +252,9 @@ class Scheduler {
 
     garbageCollectProcess(pid) {
     //Recursively remove the process from memory, along with its child processes
-        if(Memory.processes[pid] !== undefined)
+        if(Memory.processes[pid] != null)
         {
-            if(Memory.processes[pid]['data']['children'] !== undefined) {
+            if(Memory.processes[pid]['data']['children'] != null) {
                 for(var i = 0; i < Memory.processes[pid]['data']['children'].length; i++) {
                     var childProcessPid = Memory.processes[pid]['data']['children'][i];
                     this.garbageCollectProcess(childProcessPid);

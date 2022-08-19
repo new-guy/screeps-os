@@ -17,7 +17,7 @@ class RecursiveChildTest extends Process {
     //Need an update function
 
     processShouldDie() {
-        if(this.memory.ticksAlive === undefined) this.memory.ticksAlive = 1;
+        if(this.memory.ticksAlive == null) this.memory.ticksAlive = 1;
 
         if(this.memory.ticksAlive > 5) return true;
         else {

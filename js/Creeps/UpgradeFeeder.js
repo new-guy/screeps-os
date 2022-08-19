@@ -4,7 +4,7 @@ class UpgradeFeeder extends CreepProcess {
     constructor (...args) {
         super(...args);
 
-        if(this.creep !== undefined) {
+        if(this.creep != null) {
             this.targetRoom = Game.rooms[this.creep.memory.targetRoom];
         }
     }
@@ -17,7 +17,7 @@ class UpgradeFeeder extends CreepProcess {
 
     updateStateTransitions() {
         var state = this.creep.memory.state;
-        if(state == undefined) {
+        if(state == null) {
             state = 'pickupEnergy';
         }
 
@@ -45,11 +45,11 @@ class UpgradeFeeder extends CreepProcess {
         }
 
         else if(state === 'feedUpgraders') {
-            if(this.creep.getTarget() === null) {
+            if(this.creep.getTarget() == null) {
                 this.findUpgraderToFeed();
             }
 
-            if(this.creep.getTarget() !== null) {
+            if(this.creep.getTarget() != null) {
                 this.creep.putEnergyInTarget();
             }
 
@@ -64,7 +64,7 @@ class UpgradeFeeder extends CreepProcess {
 
         for(var i = 0; i < this.targetRoom.friendlies.length; i++) {
             var friendly = this.targetRoom.friendlies[i];
-            var friendlyNeedsEnergy = (friendly.carry[RESOURCE_ENERGY] === undefined || friendly.carry[RESOURCE_ENERGY] < friendly.carryCapacity/2);
+            var friendlyNeedsEnergy = (friendly.carry[RESOURCE_ENERGY] == null || friendly.carry[RESOURCE_ENERGY] < friendly.carryCapacity/2);
 
             if(friendly.memory.creepProcessClass === 'Upgrader' && friendlyNeedsEnergy) {
                 nonFullUpgraders.push(friendly);
@@ -72,7 +72,7 @@ class UpgradeFeeder extends CreepProcess {
         }
 
         var closestNonFullUpgrader = this.creep.pos.findClosestByRange(nonFullUpgraders);
-        if(closestNonFullUpgrader === null) return;
+        if(closestNonFullUpgrader == null) return;
 
         this.creep.setTarget(closestNonFullUpgrader);
     }

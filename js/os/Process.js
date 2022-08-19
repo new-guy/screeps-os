@@ -28,7 +28,7 @@ class Process {
     finish() {
         this.saveMemory();
 
-        if(this.memory.children !== undefined) {
+        if(this.memory.children != null) {
             this.killNonEnsuredChildren();
         }
 
@@ -46,7 +46,7 @@ class Process {
         this.scheduler.ensureProcessExists(pid, processClass, data, priority);
         this.ensuredChildren.push(pid);
 
-        if(this.memory.children === undefined) {
+        if(this.memory.children == null) {
             this.memory.children = [];
         }
 
