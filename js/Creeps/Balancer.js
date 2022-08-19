@@ -123,11 +123,11 @@ class Balancer extends CreepProcess {
 
         var finalPosInPath = inboundPath[inboundPath.length-1]
 
-        if(energySource == null) {
+        if(energySource == null || energySource.store[RESOURCE_ENERGY] === 0) {
             this.setEnergySource();
             energySource = Game.getObjectById(this.creep.memory.energySourceId);
 
-            if(energySource == null) {
+            if(energySource == null || energySource.store[RESOURCE_ENERGY] === 0) {
                 this.creep.getEnergyFromHarvestDestination(this.creep.room);
 
                 return;
