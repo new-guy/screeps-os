@@ -1,6 +1,6 @@
 Creep.prototype.putEnergyInTarget = function() {
     var target = this.getTarget();
-    this.sayInOrder(['Knock', 'knock', 'delivery', 'here!']);
+    this.say('🚛')
 
 
     if(target == null ||
