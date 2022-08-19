@@ -46,6 +46,11 @@ class Colony {
                 continue;
             }
 
+            var roomColonyName = this.getColonyNameOfRoom(roomName);
+            if(roomColonyName != null && roomColonyName !== this.name) {
+                continue;
+            }
+
             if(colonyRoomInfo[roomName] == null) {
                 colonyRoomInfo[roomName] = {};
             }
@@ -59,6 +64,16 @@ class Colony {
                 colonyRoomInfo[roomName]['stepsToSecondary'] = Game.map.findRoute(roomName, this.secondaryRoom.name).length;
             }
 
+            if(Memory.rooms[roomName] == null) {
+                Memory.rooms[roomName] = {
+                    'colonyName': this.name
+                }
+            }
+
+            else {
+                Memory.rooms[roomName]['colonyName'] = this.name;
+            }
+
             var adjacentRooms = Object.values(Game.map.describeExits(roomName));
             roomsToEvaluate = roomsToEvaluate.concat(adjacentRooms);
 
@@ -66,6 +81,13 @@ class Colony {
         }
 
         this.memory.colonyRoomInfo = colonyRoomInfo;
+    }
+
+    getColonyNameOfRoom(roomName) {
+        if(Memory.rooms[roomName] == null) return null;
+        else {
+            return Memory.rooms[roomName]['colonyName'];
+        }
     }
 
     roomIsOutOfRange(roomName) {
