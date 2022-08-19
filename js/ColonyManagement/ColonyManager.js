@@ -90,7 +90,7 @@ class ColonyManager extends Process {
             }
         }
 
-        if(this.colony.primaryRoom.controller.level >= 4) {
+        if(this.colony.primaryRoom.controller.level >= 3) {
             this.checkForExpansionFlags();
         }
     }
