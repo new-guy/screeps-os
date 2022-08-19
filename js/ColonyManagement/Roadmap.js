@@ -103,7 +103,6 @@ class Roadmap {
     findRoadPath(startPos, endPos, type=undefined)
     {
         var roadmap = this;
-        console.log(type)
 
         return PathFinder.search(startPos, {pos: endPos, range: 1}, {
             // We need to set the defaults costs higher so that we

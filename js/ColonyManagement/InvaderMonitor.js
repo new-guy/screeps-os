@@ -11,7 +11,11 @@ class InvaderMonitor extends Process {
         if(super.update() == 'exit') {
             return 'exit';
         }
+        this.checkForInvaders();
+        this.checkForLoneInvaderCores();
+    }
 
+    checkForInvaders() {
         for(var roomName in this.colony.colonyRoomInfo) {
             var room = Game.rooms[roomName];
             if(room == null) continue;
@@ -19,10 +23,21 @@ class InvaderMonitor extends Process {
             var invaders = _.filter(Game.rooms[roomName].enemies, function(r) { 
                 return r.owner.username === 'Invader' });
 
-            if(invaders.length === 0) continue;
-            else {
+            if(invaders.length > 0 && !room.hasInvaderBase()) {
                 this.ensureDefender();
                 console.log("Detected invader in " + roomName + " - ensuring defense")
+            }
+        }
+    }
+
+    checkForLoneInvaderCores() {
+        for(var roomName in this.colony.colonyRoomInfo) {
+            var room = Game.rooms[roomName];
+            if(room == null) continue;
+
+            if(room.hasLoneInvaderCore()) {
+                this.ensureDefender();
+                console.log("Detected invader core in " + roomName + " - ensuring defense")
             }
         }
     }

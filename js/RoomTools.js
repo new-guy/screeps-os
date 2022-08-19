@@ -8,6 +8,25 @@ Room.prototype.hasNoBuildingSlots = function(structureType) {
 	return builtStructCount == structureCountMax;
 }
 
+Room.prototype.hasLoneInvaderCore = function() {
+	return this.getInvaderBase().length === 1;
+}
+
+Room.prototype.hasInvaderBase = function() {
+	return this.getInvaderBase().length > 1;
+}
+
+Room.prototype.getInvaderBase = function() {
+	var invaderBase = this.find(FIND_STRUCTURES, {
+		filter: function(object) {
+			if(object.owner === undefined) return false;
+			return object.owner.username === 'Invader';
+	 	}
+	});
+
+	return invaderBase;
+}
+
 Room.prototype.hasZeroBuildingSlots = function(structureType) {
 	var rcl = this.controller.level;
 	var structureCountMax = CONTROLLER_STRUCTURES[structureType][rcl];

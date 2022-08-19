@@ -4,6 +4,7 @@
     - It's all just so needlessly complex.  It's a combo of good ideas and shitty hacks.
     - These booleans are INSANE.  ColonyManager is INSANE
 2. Invasion defense needs to ignore rooms with invader bases
+    - Invasion defense needs to be able to kill Invader Cores
 3. Expansion
     - Manual route planning & drawing on map
         - Either commands or flags - document these
