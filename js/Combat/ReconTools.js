@@ -35,6 +35,10 @@ class ReconTools {
         var room = Game.rooms[roomName];
         if(room == null) {
             if(Memory.rooms[roomName] == null) return false;
+            if(Memory.rooms[roomName].recon == null) {
+                Memory.rooms[roomName].recon = {};
+            }
+
             var isDangerous = Memory.rooms[roomName].recon.isDangerous;
             if(isDangerous == null || !isDangerous) {
                 return false;
