@@ -538,6 +538,7 @@ class Colony {
             if(room == null) continue;
 
             if(Game.recon.isRoomNameDangerous(roomName)) continue; //Avoid dangerous rooms
+            if(room.hasInvaders() || room.hasInvaderStructures()) continue; //Ignore invader rooms
 
             var sourcesInRoom = room.find(FIND_SOURCES);
 
