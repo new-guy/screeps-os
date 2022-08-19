@@ -20,9 +20,6 @@ class LinkManager extends Process {
         var sinkLinks = this.room.getSinkLinks();
         //If we're pre-storage, bootstrap
 
-        console.log(sourceLinks);
-        console.log(sinkLinks);
-
         for(var i = 0; i < sourceLinks.length; i++) {
             var sourceLink = sourceLinks[i];
             if(sourceLink.store[RESOURCE_ENERGY] === 0) continue;
