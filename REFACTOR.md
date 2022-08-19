@@ -1,16 +1,19 @@
 ## Plan
 1. Change undefined to null
+2. Link filler creep
 2. Expansion
     - Manual route planning & drawing on map
         - Either commands or flags - document these
     - Send claimer, expansion bootstrappers, and create new colony once claimed
     - See what breaks :sunglasses:
+3. Attacking poorly defended bases
 3. Make CreepSpawner less verbose & cleaner to define
 4. Need ability to flush processes & creeps
 5. Dynamically calculate number of haulers
 6. Allow more base designs
 7. Make creeps move along road and ignore each other
 7. Create common library for creeps to talk with
+9. Get rid of link flags
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

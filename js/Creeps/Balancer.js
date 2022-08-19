@@ -91,7 +91,7 @@ class Balancer extends CreepProcess {
                 if(energySource != null && energySource.structureType === STRUCTURE_STORAGE) {
                     //Only do this for the balancer that uses storage as its energySource
                     //Ensure link is full if it exists
-                    var linksNearStorage = energySource.pos.findInRange(FIND_MY_STRUCTURES, 1, {filter: function(structure) { 
+                    var linksNearStorage = energySource.pos.findInRange(FIND_MY_STRUCTURES, 2, {filter: function(structure) { 
                         return structure.structureType == STRUCTURE_LINK}});
 
                     if(linksNearStorage.length > 0) {

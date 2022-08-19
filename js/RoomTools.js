@@ -143,3 +143,41 @@ Room.prototype.getMostBuiltConstructionSite = function() {
 
 	return this.mostBuiltConstructionSite;
 }
+
+Room.prototype.getSourceLinks = function() {
+	var sourceLinkFlags = this.find(FIND_FLAGS, {
+		filter: function(object) {
+			return object.name.startsWith('!LINKSOURCE');
+		}	
+	});
+
+	var sourceLinks = [];
+
+	for(var i = 0; i < sourceLinkFlags.length; i++) {
+		var flag = sourceLinkFlags[i];
+		var link = flag.pos.getStructure(STRUCTURE_LINK);
+		
+		if(link != null) sourceLinks.push(link);
+	}
+
+	return sourceLinks;
+}
+
+Room.prototype.getSinkLinks = function() {
+	var sinkLinkFlags = this.find(FIND_FLAGS, {
+		filter: function(object) {
+			return object.name.startsWith('!LINKSINK');
+		}	
+	});
+
+	var sinkLinks = [];
+
+	for(var i = 0; i < sinkLinkFlags.length; i++) {
+		var flag = sinkLinkFlags[i];
+		var link = flag.pos.getStructure(STRUCTURE_LINK);
+		
+		if(link != null) sinkLinks.push(link);
+	}
+
+	return sinkLinks;
+}

@@ -41,6 +41,10 @@ class HomeRoomManager extends RoomManager {
             this.ensureRampartPlanner();
         }
 
+        if(this.room.controller.level >= 5) {
+            this.ensureLinkManager();
+        }
+
         if(this.room.storage == null) {
             this.preStorageBootstrap();
         }
@@ -185,6 +189,15 @@ class HomeRoomManager extends RoomManager {
         
         var spawnPID = 'rampartPlanner|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'RampartPlanner', data, COLONY_MANAGEMENT_PRIORITY);
+    }
+
+    ensureLinkManager() {
+        var data = {
+            'roomName': this.room.name
+        };
+        
+        var spawnPID = 'linkManager|' + this.room.name;
+        this.ensureChildProcess(spawnPID, 'LinkManager', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
     preStorageBootstrap() {

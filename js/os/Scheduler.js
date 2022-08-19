@@ -16,6 +16,7 @@ const InvaderMonitor = require('InvaderMonitor');
 const HomeRoomManager = require('HomeRoomManager');
 const ComaRecovery = require('ComaRecovery');
 const TowerManager = require('TowerManager');
+const LinkManager = require('LinkManager');
 const HomeRoomConstructionMonitor = require('HomeRoomConstructionMonitor');
 const RoomConstructionSiteManager = require('RoomConstructionSiteManager');
 const RampartPlanner = require('RampartPlanner');
@@ -56,6 +57,7 @@ var processTypeMap = {
     "HomeRoomManager": HomeRoomManager,
     "ComaRecovery": ComaRecovery,
     "TowerManager": TowerManager,
+    "LinkManager": LinkManager,
     "HomeRoomConstructionMonitor": HomeRoomConstructionMonitor,
     "RoomConstructionSiteManager": RoomConstructionSiteManager,
     "SpawnCreep": SpawnCreep,
