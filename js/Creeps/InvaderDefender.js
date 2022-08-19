@@ -43,21 +43,19 @@ class InvaderDefender extends CreepProcess {
     performStateActions() {
         var state = this.creep.memory.state;
         if(state === 'relocating') {
-            this.creep.say('🤠');
+            this.creep.say('🚶');
             this.relocate();
         }
 
         else if(state === 'fighting') {
             this.fight();
         }
-
-        this.creep.say(state);
     }
 
     relocate() {
         var roomToDefend = this.targetColony.invadedRoomToDefend;
         if(roomToDefend == null) {
-            this.creep.say('Guarding');
+            this.creep.say('🛡️');
             if(this.creep.room.name !== this.targetColony.primaryRoom.name) {
                 var primaryRoom = new RoomPosition(25, 25, this.targetColony.primaryRoom.name);
         
@@ -74,18 +72,19 @@ class InvaderDefender extends CreepProcess {
         var target = this.determineTarget();
         var rangeToTarget = this.creep.pos.getRangeTo(target);
 
-        if(rangeToTarget > 4) {
+        if(rangeToTarget > 3) {
             this.creep.say('🤠');
             this.creep.moveTo(target);
         }
-        else if(rangeToTarget < 4) {
-            var fleePath = PathFinder.search(this.creep.pos, target, {flee: true}).path;
-            this.creep.moveByPath(fleePath);
-            this.creep.say('Flee');
+        else if(rangeToTarget < 3) {
+            var fleePath = PathFinder.search(this.creep.pos, {pos: target.pos, range: 4}, {flee: true});
+            this.creep.moveByPath(fleePath.path);
+            this.creep.say('😱');
         }
 
-        if(rangeToTarget <= 4) {
+        if(rangeToTarget <= 3) {
             this.creep.rangedAttack(target);
+            this.creep.say('🔫');
         }
     }
 
