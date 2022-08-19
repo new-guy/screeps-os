@@ -1,4 +1,5 @@
 ## Plan
+0. Change undefined to null
 1. Work on room/colony state refactor
     - This codebase fucking sucks to work on because this early game logic is so tightly coupled
     - It's all just so needlessly complex.  It's a combo of good ideas and shitty hacks.
@@ -14,7 +15,7 @@
 5. Create common library for creeps to talk with
 6. Need ability to flush processes & creeps
 7. Dynamically calculate number of haulers
-8. Break road repair and rampart repair into their own creeps
+9. Allow more base designs
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

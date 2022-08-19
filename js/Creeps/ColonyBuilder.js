@@ -92,19 +92,11 @@ class ColonyBuilder extends CreepProcess {
     
                 this.creep.setTarget(thingToRepair);
             }
-
-            else if(targetRoom.mostDamagedRoad != null) {
-                this.creep.setTarget(targetRoom.mostDamagedRoad);
-            }
         }
     }
 
     getTargetRoom() {
-        if(this.targetColony.roomNeedingCriticalRepairs != null) {
-            return this.targetColony.roomNeedingCriticalRepairs;
-        }
-
-        else if(this.creep.room.constructionSites.length > 0) {
+        if(this.creep.room.constructionSites.length > 0) {
             return this.creep.room;
         }
 

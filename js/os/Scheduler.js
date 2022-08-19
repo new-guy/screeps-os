@@ -31,6 +31,7 @@ const Miner = require('Miner');
 const Hauler = require('Hauler');
 const Balancer = require('Balancer');
 const ColonyBuilder = require('ColonyBuilder');
+const RoadRepairer = require('RoadRepairer');
 const Upgrader = require('Upgrader');
 const UpgradeFeeder = require('UpgradeFeeder');
 const TowerFiller = require('TowerFiller');
@@ -67,6 +68,7 @@ var processTypeMap = {
     "Hauler": Hauler,
     "Balancer": Balancer,
     "ColonyBuilder": ColonyBuilder,
+    "RoadRepairer": RoadRepairer,
     "Upgrader": Upgrader,
     "UpgradeFeeder": UpgradeFeeder,
     "TowerFiller": TowerFiller,

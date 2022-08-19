@@ -84,6 +84,10 @@ class ColonyManager extends Process {
             if(this.colony.roomsNeedingBuilder.length > 0 && this.colony.hasNecessaryMinimumEnergy) {
                 this.ensureColonyBuilder();
             }
+
+            if(this.colony.roomNeedingRoadRepairs.length > 0 && this.colony.hasNecessaryMinimumEnergy) {
+                this.ensureRoadRepairer();
+            }
         }
     }
 
@@ -108,6 +112,24 @@ class ColonyManager extends Process {
         };
 
         var spawnPID ='spawnColonyBuilder|' + this.colony.name + '|' + colonyBuilderCount;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BUILDER_PRIORITY);
+    }
+
+    ensureRoadRepairer() {
+        var roadRepairerCount = this.colony.roomNeedingRoadRepairs.length;
+
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': roadRepairerCount,
+            'creepNameBase': 'roadRepairer|' + this.colony.name,
+            'creepBodyType': 'RoadRepairer',
+            'creepProcessClass': 'RoadRepairer',
+            'creepMemory': {
+                'targetColony': this.colony.name
+            }
+        };
+
+        var spawnPID ='spawnRoadRepairer|' + this.colony.name + '|' + roadRepairerCount;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BUILDER_PRIORITY);
     }
 

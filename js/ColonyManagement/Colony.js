@@ -238,8 +238,25 @@ class Colony {
         return rooms;
     }
 
-    get roomNeedingCriticalRepairs() {
-        var rooms = this.roomsNeedingBuilder;
+    get roomsNeedingRoadRepairs() {
+        var rooms = [];
+        for(var roomName in this.colonyRoomInfo) {
+            var room = Game.rooms[roomName];
+
+            if(room == null) continue;
+
+            else {
+                if(room.damagedRoads != null && room.damagedRoads.length > 0) {
+                    rooms.push(room);
+                }
+            }
+        }
+
+        return rooms;
+    }
+
+    get roomNeedingRoadRepairs() {
+        var rooms = this.roomsNeedingRoadRepairs;
         // - Go to room that needs critical repairs
 
         var needyRoom = undefined;
@@ -287,19 +304,15 @@ class Colony {
 
             else if( needyRoom == null && (
                      room.rampartsNeedingRepair != null && room.rampartsNeedingRepair.length > 0 || 
-                     room.wallsNeedingRepair != null && room.wallsNeedingRepair.length > 0 || 
-                     room.damagedRoads != null && room.damagedRoads.length > 0)) {
+                     room.wallsNeedingRepair != null && room.wallsNeedingRepair.length > 0)) {
                 var roomRepairSites = 0;
                 if(room.rampartsNeedingRepair != null) roomRepairSites += room.rampartsNeedingRepair.length;
                 if(room.wallsNeedingRepair != null) roomRepairSites += room.wallsNeedingRepair.length;
-                if(room.damagedRoads != null) roomRepairSites += room.damagedRoads.length;
 
                 if(roomRepairSites > repairSites) {
                     repairSites = roomRepairSites;
                     needyRoom = room;
                 }
-
-                console.log(room.rampartsNeedingRepair);
             }
         }
 
