@@ -182,15 +182,18 @@ class EnergyHarvestingManager extends Process {
 
     createNewRoute(sourcePos) {
         var closestHarvestDestination = this.colony.getClosestHarvestDestination(sourcePos);
-        // - Miners should just go to their assigned source, make sure a container is built, and mine
-        // - Haulers should pick up from their assigned source, then deposit in the closest storage (this value should be cached)
+        var storageRoomName = closestHarvestDestination.pos.roomName
+        if(sourcePos.roomName === this.colony.memory.primaryRoomName || sourcePos.roomName === this.colony.memory.secondaryRoomName) {
+            storageRoomName = sourcePos.roomName;
+        }
+
         var data = {
             'targetSourcePos': {
                 'x': sourcePos.x,
                 'y': sourcePos.y,
                 'roomName': sourcePos.roomName
             },
-            'targetStorageRoom': closestHarvestDestination.pos.roomName,
+            'targetStorageRoom': storageRoomName,
             'spawnColonyName': this.colony.name
         };
 

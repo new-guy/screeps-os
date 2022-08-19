@@ -84,10 +84,10 @@ class ColonyBuilder extends CreepProcess {
             else if(targetRoom.rampartsNeedingRepair != null && targetRoom.rampartsNeedingRepair.length > 0 ||
                     targetRoom.wallsNeedingRepair != null && targetRoom.wallsNeedingRepair.length > 0) {
                 
-                var thingToRepair = targetRoom.leastBuiltRampart;
+                var thingToRepair = _.sample(targetRoom.rampartsNeedingRepair);
     
                 if(targetRoom.leastBuiltRampart == null || (targetRoom.leastBuiltWall != null && targetRoom.leastBuiltWall.hits < targetRoom.leastBuiltRampart.hits)) {
-                    thingToRepair = targetRoom.leastBuiltWall;
+                    thingToRepair = _.sample(targetRoom.wallsNeedingRepair);
                 }
     
                 this.creep.setTarget(thingToRepair);

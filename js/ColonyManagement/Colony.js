@@ -228,8 +228,7 @@ class Colony {
             else {
                 if( room.constructionSites != null && room.constructionSites.length > 0 || 
                     room.rampartsNeedingRepair != null && room.rampartsNeedingRepair.length > 0 || 
-                    room.wallsNeedingRepair != null && room.wallsNeedingRepair.length > 0 || 
-                    room.damagedRoads != null && room.damagedRoads.length > 0) {
+                    room.wallsNeedingRepair != null && room.wallsNeedingRepair.length > 0) {
                     rooms.push(room);
                 }
             }
