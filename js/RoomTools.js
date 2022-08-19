@@ -9,14 +9,18 @@ Room.prototype.hasNoBuildingSlots = function(structureType) {
 }
 
 Room.prototype.hasLoneInvaderCore = function() {
-	return this.getInvaderBase().length === 1;
+	return this.getInvaderStructures().length === 1;
 }
 
 Room.prototype.hasInvaderBase = function() {
-	return this.getInvaderBase().length > 1;
+	return this.getInvaderStructures().length > 1;
 }
 
-Room.prototype.getInvaderBase = function() {
+Room.prototype.hasInvaderStructures = function() {
+	return this.getInvaderStructures().length > 0;
+}
+
+Room.prototype.getInvaderStructures = function() {
 	var invaderBase = this.find(FIND_STRUCTURES, {
 		filter: function(object) {
 			if(object.owner === undefined) return false;
@@ -25,6 +29,14 @@ Room.prototype.getInvaderBase = function() {
 	});
 
 	return invaderBase;
+}
+
+Room.prototype.hasInvaders = function() {
+	if(this.enemies == null) return false;
+	var invaders = _.filter(this.enemies, function(r) { 
+		return r.owner.username === 'Invader' });
+
+	return invaders.length > 0;
 }
 
 Room.prototype.hasZeroBuildingSlots = function(structureType) {

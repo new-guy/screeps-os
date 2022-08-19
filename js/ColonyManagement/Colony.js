@@ -350,12 +350,12 @@ class Colony {
         for(var roomName in this.colonyRoomInfo) {
             var room = Game.rooms[roomName];
             if(room == null) continue;
-            if(room.enemies == null) continue;
-            var invaders = _.filter(Game.rooms[roomName].enemies, function(r) { 
-                return r.owner.username === 'Invader' });
 
-            if(invaders.length === 0) continue;
-            else {
+            var hasLoneInvaderCore = room.hasLoneInvaderCore();
+            var hasInvaders = room.hasInvaders();
+
+            if(hasLoneInvaderCore || hasInvaders) {
+                console.log('Selected ' + room.name + ' for invader defense')
                 return room;
             }
         }
