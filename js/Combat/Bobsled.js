@@ -114,10 +114,14 @@ class Bobsled extends Process {
     mainBehavior() {
         var creeps = this.getDesiredCreeps();
         this.moveCreeps(creeps);
+
+        var targetFlag = Game.flags[this.targetFlagName];
+        this.fight(creeps, targetFlag);
     }
 
     moveCreeps(creeps) {
         if(this.creepsAreSeparated(creeps)) {
+            console.log('SEPARATED');
             this.uniteCreeps(creeps);
         }
 
@@ -131,8 +135,6 @@ class Bobsled extends Process {
             else {
                 this.combatMove(creeps, targetFlag);
             }
-
-            this.fight(creeps, targetFlag);
         }
     }
 

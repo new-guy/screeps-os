@@ -28,11 +28,11 @@ class OffenseMonitor extends Process {
 
         var data = {
             'colonyName': this.colony.name,
-            'creepNameBase': 'bobsled|' + this.colony.name + '|' + flag.pos.roomName,
+            'creepNameBase': 'bobsled|' + this.colony.name,
             'targetFlagName': flag.name
         };
         
-        var spawnPID = 'bobsled|' + this.colony.name + '|' + flag.pos.roomName;
+        var spawnPID = 'bobsled|' + this.colony.name;
         this.ensureChildProcess(spawnPID, 'Bobsled', data, COLONY_OFFENSE_PRIORITY);
     }
 }
