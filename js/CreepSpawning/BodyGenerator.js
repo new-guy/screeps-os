@@ -42,9 +42,9 @@ exports.generateBody = function(creepBodyType, availableEnergy)
 				return 5;
 			case CARRY:
 				return 6;
-			case HEAL:
-				return 9;
 			case MOVE:
+				return 9;
+			case HEAL:
 				return 10;
 			default:
 				return 1;

@@ -9,7 +9,7 @@ class Bobsled extends Process {
         this.targetFlagName = this.memory.targetFlagName;
         this.rallyFlagName = '!RALLY|' + this.memory.colonyName;
 
-        this.desiredCreeps = ['Melee', 'Healer'];
+        this.desiredCreeps = ['Melee', 'Healer', 'Healer'];
     }
 
     update() {
@@ -17,8 +17,10 @@ class Bobsled extends Process {
             return 'exit';
         }
 
+        this.ensureDesiredCreeps();
+
         if(!this.hasDesiredCreeps()) {
-            this.ensureDesiredCreeps();
+            console.log('MISSING')
             this.waitingBehavior();
         }
 
@@ -36,10 +38,20 @@ class Bobsled extends Process {
 
     getDesiredCreeps() {
         var creeps = [];
+        var creepTypeCount = {};
 
         for(var i = 0; i < this.desiredCreeps.length; i++) {
-            var creepName = this.getRealCreepName(this.desiredCreeps[i]);
+            var creepType = this.desiredCreeps[i];
+            var typeIndex = creepTypeCount[creepType] == null ? 0 : creepTypeCount[creepType];
+            var creepName = this.getRealCreepName(this.desiredCreeps[i], typeIndex);
             var creep = Game.creeps[creepName];
+
+            if(creepTypeCount[creepType] == null) {
+                creepTypeCount[creepType] = 1;
+            }
+            else {
+                creepTypeCount[creepType] = creepTypeCount[creepType] + 1;
+            }
 
             if(creep != null) {
                 creeps.push(creep);
@@ -49,39 +61,36 @@ class Bobsled extends Process {
         return creeps;
     }
 
-    getMissingCreepTypes() {
-        var creepNames = [];
-
+    getDesiredCreepTypeCount(creepType) {
+        var count = 0;
         for(var i = 0; i < this.desiredCreeps.length; i++) {
-            var creepName = this.getCreepNameBase(this.desiredCreeps[i]);
-            var creep = Game.creeps[creepName];
-
-            if(creep == null) {
-                creepNames.push(this.desiredCreeps[i]);
+            if(this.desiredCreeps[i] === creepType) {
+                count++;
             }
         }
-
-        return creepNames;
+        return count;
     }
 
     getCreepNameBase(suffix) {
         return this.creepNameBase + '|' + suffix;
     }
 
-    getRealCreepName(suffix) {
-        return this.creepNameBase + '|' + suffix + '|0';
+    getRealCreepName(suffix, index=0) {
+        return this.creepNameBase + '|' + suffix + '|' + index;
     }
 
     ensureDesiredCreeps() {
-        var missingCreepTypes = this.getMissingCreepTypes();
+        var creepTypesEnsured = [];
+        
+        for(var i = 0; i < this.desiredCreeps.length; i++) {
+            var creepType = this.desiredCreeps[i];
 
-        for(var i = 0; i < missingCreepTypes.length; i++) {
-            var creepType = missingCreepTypes[i];
+            if(creepTypesEnsured.includes(creepType)) continue;
             var creepName = this.getCreepNameBase(creepType);
 
             var data = {
                 'colonyName': this.colony.name,
-                'creepCount': 1,
+                'creepCount': this.getDesiredCreepTypeCount(creepType),
                 'creepNameBase': creepName,
                 'creepBodyType': creepType,
                 'creepProcessClass': 'CreepProcess',
@@ -89,8 +98,10 @@ class Bobsled extends Process {
                 'maxEnergyToSpend': this.colony.primaryRoom.energyCapacityAvailable
             };
             
-            var spawnPID = 'spawnM|' + creepName;
+            var spawnPID = 'spawn|' + creepName;
             this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_OFFENSE_PRIORITY);
+
+            creepTypesEnsured.push(creepType);
         }
     }
 
@@ -159,11 +170,18 @@ class Bobsled extends Process {
     fight(creeps, targetFlag) {
         //If targetFlag in range, prioritize targets there, otherwise just look for close targets
         //Healer just checks everyone and heals the most damaged creep
-        var melee = this.getCreepByType(creeps, 'Melee');
-        var healer = this.getCreepByType(creeps, 'Healer');
+        var melees = this.getCreepsByType(creeps, 'Melee');
+        var healers = this.getCreepsByType(creeps, 'Healer');
 
-        this.meleeNearbyTargets(melee, targetFlag);
-        this.healWoundedCreeps(healer, creeps);
+        for(var i = 0 ; i < melees.length; i++) {
+            var melee = melees[i];
+            this.meleeNearbyTargets(melee, targetFlag);
+        }
+
+        for(var i = 0 ; i < healers.length; i++) {
+            var healer = healers[i];
+            this.healWoundedCreeps(healer, creeps);
+        }
     }
 
     meleeNearbyTargets(melee, targetFlag) {
@@ -192,28 +210,35 @@ class Bobsled extends Process {
     }
 
     healWoundedCreeps(healer, creeps) {
-        var mostDamagedCreep = creeps[0];
-        for(var i = 1; i < creeps.length; i++) {
-            var creep = creeps[i];
-            var mostDamageDelta = mostDamagedCreep.hitsMax - mostDamagedCreep.hits;
-            var newDamageDelta = creep.hitsMax - creep.hits;
-            if(newDamageDelta > mostDamageDelta) {
-                mostDamagedCreep = creep;
+        if(healer.hits < healer.hitsMax) healer.heal(healer);
+        else {
+            var mostDamagedCreep = creeps[0];
+            for(var i = 1; i < creeps.length; i++) {
+                var creep = creeps[i];
+                var mostDamageDelta = mostDamagedCreep.hitsMax - mostDamagedCreep.hits;
+                var newDamageDelta = creep.hitsMax - creep.hits;
+                if(newDamageDelta > mostDamageDelta) {
+                    mostDamagedCreep = creep;
+                }
             }
-        }
-
-        if(mostDamagedCreep.hits < mostDamagedCreep.hitsMax) {
-            healer.heal(mostDamagedCreep);
+    
+            if(mostDamagedCreep.hits < mostDamagedCreep.hitsMax) {
+                healer.heal(mostDamagedCreep);
+            }
         }
     }
 
-    getCreepByType(creeps, creepType) {
+    getCreepsByType(creeps, creepType) {
+        var creepsByType = [];
+
         for(var i = 0; i < creeps.length; i++) {
             var creep = creeps[i];
             if(creep.name.includes(creepType)) {
-                return creep;
+                creepsByType.push(creep);
             }
         }
+
+        return creepsByType;
     }
 
     moveCreepsTo(creeps, pos, forward=true) {

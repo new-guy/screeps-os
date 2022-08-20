@@ -154,8 +154,8 @@ exports.InvaderDefender = {
 exports.Melee = {
 	"segment": ["attack", "move"],
 	"min": {
-		"attack": 5,
-		"move": 5
+		"attack": 10,
+		"move": 10
 	},
 	"max": {
 		"attack": 25,
@@ -166,8 +166,8 @@ exports.Melee = {
 exports.Healer = {
 	"segment": ["heal", "move"],
 	"min": {
-		"heal": 3,
-		"move": 3
+		"heal": 6,
+		"move": 6
 	},
 	"max": {
 		"heal": 25,
