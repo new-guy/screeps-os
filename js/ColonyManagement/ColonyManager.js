@@ -96,7 +96,7 @@ class ColonyManager extends Process {
     }
 
     ensureSecondaryRoom() {
-        if((this.secondaryRoom != null && !this.secondaryRoom.controller.my)) {
+        if((this.secondaryRoom != null && !this.secondaryRoom.controller.my && !this.secondaryRoom.hasInvaderStructures())) {
             this.spawnSecondaryRoomClaimer();
         }
     }

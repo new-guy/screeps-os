@@ -13,7 +13,7 @@ Creep.prototype.upgradeThisController = function(controller) {
         this.clearTarget();
     }
 
-    if(this.pos.getRangeTo(controller) > 2) {
+    if(this.pos.getRangeTo(controller) > 1) {
         this.moveTo(controller, {visualizePathStyle: {stroke: "#2dd", opacity: .3}});
     }
 }
