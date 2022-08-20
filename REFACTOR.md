@@ -1,22 +1,23 @@
 ## Plan
-2. Break bobsled into MultiCreep
-3. Minimum energy in storage needs to be scheduled
-3. Manual route planning & drawing on map
+1. Break bobsled into MultiCreep
+2. Minimum energy in storage needs to be scheduled
+3. Wall Mining
+4. Manual route planning & drawing on map
     - Either commands or flags - document these
-4. Need to be able to send energy to other base once we hit a threshold
-5. Ability to force spawns to use a minimum amount of energy
+5. Need to be able to send energy to other base once we hit a threshold
+6. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
     - Use this for bobsled to force it to use enough creeps
-3. Make CreepSpawner less verbose & cleaner to define
-4. Need ability to flush processes & creeps
-5. Dynamically calculate number of haulers
-6. Allow more base designs
-7. Make creeps move along road and ignore each other
-7. Create common library for creeps to talk with
-9. Get rid of link flags
-10. Error handling - catch error and throw it at the end of processing
-11. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
-12. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
+7. Make CreepSpawner less verbose & cleaner to define
+8. Need ability to flush processes & creeps
+9. Dynamically calculate number of haulers
+10. Allow more base designs
+11. Make creeps move along road and ignore each other
+12. Create common library for creeps to talk with
+13. Get rid of link flags
+14. Error handling - catch error and throw it at the end of processing
+15. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
+16. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions
