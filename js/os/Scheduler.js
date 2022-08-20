@@ -14,6 +14,7 @@ const EnergyHarvestingManager = require('EnergyHarvestingManager');
 const EnergyRouteManager = require('EnergyRouteManager');
 const InvaderMonitor = require('InvaderMonitor');
 const ExpansionManager = require('ExpansionManager');
+const OffenseMonitor = require('OffenseMonitor');
 
 const HomeRoomManager = require('HomeRoomManager');
 const ComaRecovery = require('ComaRecovery');
@@ -26,6 +27,9 @@ const RampartPlanner = require('RampartPlanner');
 const SpawnCreep = require('SpawnCreep');
 const BootstrapSpawner = require('BootstrapSpawner');
 
+const Bobsled = require('Bobsled');
+
+const CreepProcess = require('CreepProcess');
 const BootStrapper = require('BootStrapper');
 const Scout = require('Scout');
 const Claimer = require('Claimer');
@@ -58,6 +62,7 @@ var processTypeMap = {
     "EnergyHarvestingManager": EnergyHarvestingManager,
     "EnergyRouteManager": EnergyRouteManager,
     "ExpansionManager": ExpansionManager,
+    "OffenseMonitor": OffenseMonitor,
     "HomeRoomManager": HomeRoomManager,
     "ComaRecovery": ComaRecovery,
     "TowerManager": TowerManager,
@@ -81,7 +86,9 @@ var processTypeMap = {
     "ExpansionBootstrap": ExpansionBootstrap,
     "RampartPlanner": RampartPlanner,
     "InvaderMonitor": InvaderMonitor,
-    "InvaderDefender": InvaderDefender
+    "InvaderDefender": InvaderDefender,
+    "Bobsled": Bobsled,
+    "CreepProcess": CreepProcess
 };
 
 var MAX_PROCESSES_TO_DISPLAY = 10;

@@ -9,7 +9,6 @@ exports.generateBody = function(creepBodyType, availableEnergy)
 	var shouldRun = true;
 	while(shouldRun)
 	{
-
 		var segmentToAdd = getSegmentToAdd(segment, bodyDefinition.max, bodyArray);
 
 		if(segmentToAdd.length === 0)

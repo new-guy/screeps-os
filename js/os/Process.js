@@ -85,7 +85,7 @@ class Process {
             }
 
             else {
-                console.log('Would kill child ' + childPID);
+                // console.log('Would kill child ' + childPID);
                 childrenToKill.push(childPID);
             }
         }
