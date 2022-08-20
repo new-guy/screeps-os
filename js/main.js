@@ -152,6 +152,7 @@ function initRooms() {
         }
 
         room.enemies = room.find(FIND_CREEPS, {filter: function(c) { return c.isHostile(); }});
+        room.enemyStructures = room.find(FIND_HOSTILE_STRUCTURES, {filter: function(c) { return c.hits != null; }});
         room.friendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly(); }});
         room.damagedFriendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly() && c.hits < c.hitsMax; }});
 

@@ -128,10 +128,84 @@ class Bobsled extends Process {
             if(lastCreep.pos.roomName != targetFlag.pos.roomName) {
                 this.moveCreepsTo(creeps, targetFlag.pos, true)
             }
+            else {
+                this.combatMove(creeps, targetFlag);
+            }
+
+            this.fight(creeps, targetFlag);
         }
     }
 
-    moveCreepsTo(creeps, pos, forward) {
+    combatMove(creeps, targetFlag) {
+        var enemyStructuresAtFlag = targetFlag.pos.getDestroyableStructures();
+
+        if(enemyStructuresAtFlag.length > 0) {
+            new RoomVisual(targetFlag.pos.roomName).circle(targetFlag.pos.x, targetFlag.pos.y, {opacity: 0.9, radius: 0.2, fill: '#ffcc00'});
+            this.moveCreepsTo(creeps, targetFlag.pos, true);
+        }
+
+        else {
+            var closestStructure = creeps[0].pos.getClosestDestroyableStructure();
+            if(closestStructure === null) {
+                creeps[0].say('NoTar');
+                return;
+            }
+            this.moveCreepsTo(creeps, closestStructure.pos, true);
+        }
+    }
+
+    fight(creeps, targetFlag) {
+        //If targetFlag in range, prioritize targets there, otherwise just look for close targets
+        //Healer just checks everyone and heals the most damaged creep
+        var melee = this.getCreepByType(creeps, 'Melee');
+        var healer = this.getCreepByType(creeps, 'Healer');
+
+        this.meleeNearbyTargets(melee, targetFlag);
+        this.healWoundedCreeps(healer, creeps);
+    }
+
+    meleeNearbyTargets(melee, targetFlag) {
+        var enemyStructuresAtFlag = targetFlag.pos.getDestroyableStructures();
+        if(melee.pos.isNearTo(targetFlag.pos) && enemyStructuresAtFlag.length > 0) {
+            melee.attack(enemyStructuresAtFlag[0]);
+            melee.say('⚔️')
+        }
+
+        else {
+            var nearbyEnemyClosestToDeath = melee.pos.getEnemyClosestToDeath();
+            if(nearbyEnemyClosestToDeath != null) {
+                melee.attack(nearbyEnemyClosestToDeath);
+                melee.say('⚔️')
+            }
+        }
+    }
+
+    healWoundedCreeps(healer, creeps) {
+        var mostDamagedCreep = creeps[0];
+        for(var i = 1; i < creeps.length; i++) {
+            var creep = creeps[i];
+            var mostDamageDelta = mostDamagedCreep.hitsMax - mostDamagedCreep.hits;
+            var newDamageDelta = creep.hitsMax - creep.hits;
+            if(newDamageDelta > mostDamageDelta) {
+                mostDamagedCreep = creep;
+            }
+        }
+
+        if(mostDamagedCreep.hits < mostDamagedCreep.hitsMax) {
+            healer.heal(mostDamagedCreep);
+        }
+    }
+
+    getCreepByType(creeps, creepType) {
+        for(var i = 0; i < creeps.length; i++) {
+            var creep = creeps[i];
+            if(creep.name.includes(creepType)) {
+                return creep;
+            }
+        }
+    }
+
+    moveCreepsTo(creeps, pos, forward=true) {
         var leadCreep = forward ? creeps[0] : creeps[creeps.length - 1];
 
         leadCreep.moveTo(pos);

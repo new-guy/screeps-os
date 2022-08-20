@@ -224,6 +224,46 @@ RoomPosition.prototype.findMyAdjacentCreeps = function() {
 	return myCreeps;
 }
 
+RoomPosition.prototype.getEnemyClosestToDeath = function() {
+	var enemies = this.findAdjacentDestroyableStructures().concat(this.findAdjacentEnemyCreeps);
+	if(enemies.length === 0) return null;
+
+	var lowestHealthEnemy = enemies[0];
+	for(var i = 1; i < enemies.length; i++) {
+		var enemy = enemies[i];
+		if(enemy.hits < lowestHealthEnemy.hits) {
+			lowestHealthEnemy = enemy;
+		}
+	}
+
+	return lowestHealthEnemy;
+}
+
+RoomPosition.prototype.findAdjacentEnemyCreeps = function() {
+	var adjacentCreeps = this.lookForAdjacent(LOOK_CREEPS);
+	var enemyCreeps = [];
+
+	for(var i = 0; i < adjacentCreeps.length; i++) {
+		var creep = adjacentCreeps[i];
+		if(creep == null) continue;
+		if(!creep.my) enemyCreeps.push(creep);
+	}
+
+	return enemyCreeps;
+}
+
+RoomPosition.prototype.findAdjacentDestroyableStructures = function() {
+	var adjacentStructures = this.lookForAdjacent(LOOK_STRUCTURES);
+	var structuresToReturn = [];
+
+	for(var i = 0; i < adjacentStructures.length; i++) {
+		if(adjacentStructures[i] == null) continue;
+		if(!adjacentStructures[i].my && adjacentStructures[i].hits != null) structuresToReturn.push(adjacentStructures[i]);
+	}
+
+	return structuresToReturn;
+}
+
 RoomPosition.prototype.randomMoveAdjacentCreeps = function() {
 	var myCreeps = this.findMyAdjacentCreeps();
 
@@ -298,4 +338,12 @@ RoomPosition.prototype.unwalkableStructureExists = function() {
 	}
 
 	return false;
+}
+
+RoomPosition.prototype.getDestroyableStructures = function(){
+	return this.lookFor(LOOK_STRUCTURES, {filter: function(c) { return c.hits != null && !c.my; }});
+}
+
+RoomPosition.prototype.getClosestDestroyableStructure = function(){
+	return this.findClosestByPath(FIND_HOSTILE_STRUCTURES, {filter: function(c) { return c.hits != null; }});
 }
