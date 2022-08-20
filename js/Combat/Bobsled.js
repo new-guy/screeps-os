@@ -165,10 +165,19 @@ class Bobsled extends Process {
     }
 
     meleeNearbyTargets(melee, targetFlag) {
-        var enemyStructuresAtFlag = targetFlag.pos.getDestroyableStructures();
-        if(melee.pos.isNearTo(targetFlag.pos) && enemyStructuresAtFlag.length > 0) {
-            melee.attack(enemyStructuresAtFlag[0]);
-            melee.say('⚔️')
+        if(targetFlag.room != null && melee.pos.isNearTo(targetFlag.pos)) {
+            var enemyStructuresAtFlag = targetFlag.pos.getDestroyableStructures();
+            if(enemyStructuresAtFlag.length > 0) {
+                melee.attack(enemyStructuresAtFlag[0]);
+                melee.say('⚔️')
+            }
+            else {
+                var nearbyEnemyClosestToDeath = melee.pos.getEnemyClosestToDeath();
+                if(nearbyEnemyClosestToDeath != null) {
+                    melee.attack(nearbyEnemyClosestToDeath);
+                    melee.say('⚔️')
+                }
+            }
         }
 
         else {
