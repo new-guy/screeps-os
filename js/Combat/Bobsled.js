@@ -224,6 +224,7 @@ class Bobsled extends Process {
     
             if(mostDamagedCreep.hits < mostDamagedCreep.hitsMax) {
                 healer.heal(mostDamagedCreep);
+                healer.say('💊')
             }
         }
     }
@@ -266,14 +267,19 @@ class Bobsled extends Process {
     }
     
     creepsAreSeparated(creeps) {
+        var creepsAreSeparated = false;
         for(var i = 0; i < creeps.length-1; i++) {
             var creepOne = creeps[i];
             var creepTwo = creeps[i+1];
-            var bothCreepsAreOnEdge = creepOne.pos.isEdge() && creepTwo.pos.isEdge();
-            if(creepOne.pos.getRangeTo(creepTwo) > 1 && !bothCreepsAreOnEdge) {
-                return true;
+            var creepIsOnEdge = creepOne.pos.isEdge() || creepTwo.pos.isEdge();
+            if(creepOne.pos.getRangeTo(creepTwo) > 1) {
+                creepsAreSeparated = true;
             }
+
+            if(creepIsOnEdge) return false;
         }
+
+        return creepsAreSeparated;
     }
 
     uniteCreeps(creeps) {

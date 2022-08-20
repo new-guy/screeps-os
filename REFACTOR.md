@@ -1,11 +1,12 @@
 ## Plan
-1. Attacking poorly defended bases
 2. Break bobsled into MultiCreep
 3. Minimum energy in storage needs to be scheduled
 3. Manual route planning & drawing on map
     - Either commands or flags - document these
 4. Need to be able to send energy to other base once we hit a threshold
 5. Ability to force spawns to use a minimum amount of energy
+    - Also bodyType min isn't respected
+    - Use this for bobsled to force it to use enough creeps
 3. Make CreepSpawner less verbose & cleaner to define
 4. Need ability to flush processes & creeps
 5. Dynamically calculate number of haulers
