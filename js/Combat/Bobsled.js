@@ -9,7 +9,7 @@ class Bobsled extends Process {
         this.targetFlagName = this.memory.targetFlagName;
         this.rallyFlagName = '!RALLY|' + this.memory.colonyName;
 
-        this.desiredCreeps = ['Healer', 'Melee'];
+        this.desiredCreeps = ['Melee', 'Healer'];
     }
 
     update() {
@@ -113,8 +113,45 @@ class Bobsled extends Process {
 
     mainBehavior() {
         var creeps = this.getDesiredCreeps();
+        this.moveCreeps(creeps);
+    }
+
+    moveCreeps(creeps) {
         if(this.creepsAreSeparated(creeps)) {
             this.uniteCreeps(creeps);
+        }
+
+        else {
+            var targetFlag = Game.flags[this.targetFlagName];
+
+            var lastCreep = creeps[creeps.length - 1];
+            if(lastCreep.pos.roomName != targetFlag.pos.roomName) {
+                this.moveCreepsTo(creeps, targetFlag.pos, true)
+            }
+        }
+    }
+
+    moveCreepsTo(creeps, pos, forward) {
+        var leadCreep = forward ? creeps[0] : creeps[creeps.length - 1];
+
+        leadCreep.moveTo(pos);
+        leadCreep.say('🚌 ');
+
+        if(forward) {
+            for(var i = 1; i < creeps.length; i++) {
+                var leader = creeps[i-1];
+                var follower = creeps[i];
+                follower.moveTo(leader.pos, {ignoreCreeps: true});
+                follower.say('🧘‍♀️');
+            }
+        }
+        else {
+            for(var i = creeps.length-2; i >= 0; i--) {
+                var leader = creeps[i+1];
+                var follower = creeps[i];
+                follower.moveTo(leader.pos, {ignoreCreeps: true});
+                follower.say('🧘‍♀️');
+            }
         }
     }
     
@@ -122,7 +159,8 @@ class Bobsled extends Process {
         for(var i = 0; i < creeps.length-1; i++) {
             var creepOne = creeps[i];
             var creepTwo = creeps[i+1];
-            if(creepOne.pos.getRangeTo(creepTwo) > 1) {
+            var bothCreepsAreOnEdge = creepOne.pos.isEdge() && creepTwo.pos.isEdge();
+            if(creepOne.pos.getRangeTo(creepTwo) > 1 && !bothCreepsAreOnEdge) {
                 return true;
             }
         }
@@ -134,6 +172,7 @@ class Bobsled extends Process {
             var creepTwo = creeps[i+1];
             if(creepOne.pos.getRangeTo(creepTwo) > 1) {
                 creepTwo.moveTo(creepOne);
+                creepOne.say('🚶')
             } else {
                 creepOne.say('⌚')
             }
