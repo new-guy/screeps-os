@@ -31,9 +31,6 @@ class CreepProcess extends Process {
     }
 
     updateStateTransitions() {
-        if(this.creep != null) {
-            this.creep.say('nostates');
-        }
     }
 
     performStateActions() {

@@ -1,14 +1,12 @@
 ## Plan
-1. Change undefined to null
-2. Expansion
-    - Send claimer, expansion bootstrappers, and create new colony once claimed
-    - Ensure that colonies only add rooms that aren't already owned to their colonyRoomInfo
-    - See what breaks :sunglasses:
+2. Break bobsled into MultiCreep
+3. Minimum energy in storage needs to be scheduled
 3. Manual route planning & drawing on map
     - Either commands or flags - document these
-3. Attacking poorly defended bases
-3. Minimum energy in storage needs to be scheduled
 4. Need to be able to send energy to other base once we hit a threshold
+5. Ability to force spawns to use a minimum amount of energy
+    - Also bodyType min isn't respected
+    - Use this for bobsled to force it to use enough creeps
 3. Make CreepSpawner less verbose & cleaner to define
 4. Need ability to flush processes & creeps
 5. Dynamically calculate number of haulers

@@ -93,6 +93,10 @@ class ColonyManager extends Process {
         if(this.colony.primaryRoom.controller.level >= 3) {
             this.checkForExpansionFlags();
         }
+
+        if(this.colony.primaryRoom.controller.level >= 5) {
+            this.ensureOffenseMonitor();
+        }
     }
 
     ensureSecondaryRoom() {
@@ -187,6 +191,10 @@ class ColonyManager extends Process {
 
     ensureRoadGeneration() {
         this.ensureChildProcess(this.name + '|roadGenerator', 'RoadGenerator', {'colonyName': this.name}, COLONY_NONESSENTIAL_PRIORITY);
+    }
+
+    ensureOffenseMonitor() {
+        this.ensureChildProcess(this.name + '|offenseMonitor', 'OffenseMonitor', {'colonyName': this.name}, COLONY_OFFENSE_PRIORITY);
     }
 
     checkForExpansionFlags() {

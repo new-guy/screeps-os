@@ -240,6 +240,18 @@ class Colony {
         });
     }
 
+    get offenseFlags() {
+        var flags = [];
+        var offenseFlagPrefix = '!OFFENSE|'+this.name;
+        for(var flagName in Game.flags) {
+            var flag = Game.flags[flagName];
+
+            if(flag.name.startsWith(offenseFlagPrefix)) flags.push(flag);
+        }
+
+        return flags;
+    }
+
     get roomsNeedingBuilder() {
         var rooms = [];
         for(var roomName in this.colonyRoomInfo) {
@@ -640,7 +652,7 @@ class Colony {
             
             else if(canSpawn === ERR_NOT_ENOUGH_ENERGY) {
                 //Draw the name of the creep your'e trying to spawn
-                console.log("Waiting for energy for creep " + creepName);
+                console.log(spawn.name + " Waiting for energy for creep " + creepName);
                 console.log('Creep Dump: ' + creepName + ' ' + body);
 
                 spawn.room.visual.text(creepName, spawn.pos.x, spawn.pos.y+1);
