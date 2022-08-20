@@ -46,6 +46,11 @@ class Colony {
                 continue;
             }
 
+            var roomColonyName = this.getColonyNameOfRoom(roomName);
+            if(roomColonyName != null && roomColonyName !== this.name) {
+                continue;
+            }
+
             if(colonyRoomInfo[roomName] == null) {
                 colonyRoomInfo[roomName] = {};
             }
@@ -59,6 +64,16 @@ class Colony {
                 colonyRoomInfo[roomName]['stepsToSecondary'] = Game.map.findRoute(roomName, this.secondaryRoom.name).length;
             }
 
+            if(Memory.rooms[roomName] == null) {
+                Memory.rooms[roomName] = {
+                    'colonyName': this.name
+                }
+            }
+
+            else {
+                Memory.rooms[roomName]['colonyName'] = this.name;
+            }
+
             var adjacentRooms = Object.values(Game.map.describeExits(roomName));
             roomsToEvaluate = roomsToEvaluate.concat(adjacentRooms);
 
@@ -66,6 +81,13 @@ class Colony {
         }
 
         this.memory.colonyRoomInfo = colonyRoomInfo;
+    }
+
+    getColonyNameOfRoom(roomName) {
+        if(Memory.rooms[roomName] == null) return null;
+        else {
+            return Memory.rooms[roomName]['colonyName'];
+        }
     }
 
     roomIsOutOfRange(roomName) {
@@ -288,8 +310,6 @@ class Colony {
 
         for(var i = 0; i < rooms.length; i++) {
             var room = rooms[i];
-            console.log(room.name + room.rampartsNeedingRepair)
-
             if((room.name === this.primaryRoom.name || room.name === this.secondaryRoom.name) && room.harvestDestination == null && room.constructionSites.length > 0) {
                 needyRoom = room;
                 console.log('Set most needed to ' + room.name + ' because harvestDest missing');
@@ -518,6 +538,7 @@ class Colony {
             if(room == null) continue;
 
             if(Game.recon.isRoomNameDangerous(roomName)) continue; //Avoid dangerous rooms
+            if(room.hasInvaders() || room.hasInvaderStructures()) continue; //Ignore invader rooms
 
             var sourcesInRoom = room.find(FIND_SOURCES);
 

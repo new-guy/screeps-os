@@ -17,6 +17,8 @@
 7. Create common library for creeps to talk with
 9. Get rid of link flags
 10. Error handling - catch error and throw it at the end of processing
+11. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
+12. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

@@ -38,8 +38,6 @@ class SecondaryRoomFinder extends Process {
 
             var room = Game.rooms[roomName];
 
-            console.log(roomName);
-
             if(room == null) {
                 continue;
             }
@@ -55,7 +53,7 @@ class SecondaryRoomFinder extends Process {
                     colonyRoomInfo['checkedForSecondary'] = true;
                 }
                 else {
-                    var isValidCandidate = this.tryToPlaceHeart(room);
+                    var isValidCandidate = room.canPlaceHeart();
     
                     colonyRoomInfo['isValidSecondary'] = isValidCandidate;
                     colonyRoomInfo['checkedForSecondary'] = true;
@@ -67,7 +65,6 @@ class SecondaryRoomFinder extends Process {
         }
 
         if(hasCheckedAll) {
-            console.log('hca');
             //Loop for selecting secondary room
             var currentCandidate = null;
             var currentPlainsPercent = 0.0;
@@ -84,43 +81,14 @@ class SecondaryRoomFinder extends Process {
             }
 
             if(currentCandidate != null) {
-                console.log('Would set candidate ' + currentCandidate + ' ' + currentPlainsPercent);
                 var candidateRoom = Game.rooms[currentCandidate];
 
                 if(candidateRoom != null) {
-                    if(this.placeHeart(candidateRoom)) {
+                    if(candidateRoom.placeHeart()) {
                         this.colony.memory['secondaryRoomName'] = currentCandidate;
                     }
                 }
             }
-        }
-    }
-
-    tryToPlaceHeart(room) {
-        var middleOfRoom = new RoomPosition(24, 24, room.name);
-        var flagPosition = room.findRootForChunk('heart', middleOfRoom, SECONDARY_HEART_MAX_DISTANCE);
-
-        if(flagPosition == null) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-
-    placeHeart(room) {
-        var middleOfRoom = new RoomPosition(24, 24, room.name);
-        var flagPosition = Game.rooms[room.name].findRootForChunk('heart', middleOfRoom, SECONDARY_HEART_MAX_DISTANCE);
-        
-        console.log(flagPosition.x + 'x ' + flagPosition.y + 'y ' + flagPosition.roomName);
-
-        if(flagPosition == null) {
-            console.log('CANNOT FIND PLACE FOR INTIAL HEART');
-            return false;
-        }
-        else {
-            flagPosition.createFlag('!CHUNK|heart|' + flagPosition.roomName, COLOR_RED);
-            return true;
         }
     }
 

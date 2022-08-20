@@ -181,3 +181,38 @@ Room.prototype.getSinkLinks = function() {
 
 	return sinkLinks;
 }
+
+Room.prototype.hasHeart = function() {
+	return Game.flags['!CHUNK|heart|' + this.name] != null;
+}
+
+Room.prototype.getHeartPos = function() {
+	if(Game.flags['!CHUNK|heart|' + this.name] == null) return null;
+	return Game.flags['!CHUNK|heart|' + this.name].pos;
+}
+
+Room.prototype.canPlaceHeart = function() {
+	var middleOfRoom = new RoomPosition(24, 24, this.name);
+	var flagPosition = this.findRootForChunk('heart', middleOfRoom, HEART_MAX_DISTANCE);
+
+	if(flagPosition == null) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+Room.prototype.placeHeart = function() {
+	var middleOfRoom = new RoomPosition(24, 24, this.name);
+	var flagPosition = this.findRootForChunk('heart', middleOfRoom, HEART_MAX_DISTANCE);
+
+	if(flagPosition == null) {
+		console.log('CANNOT FIND PLACE FOR INTIAL HEART IN ' + this.name);
+		return false;
+	}
+	else {
+		flagPosition.createFlag('!CHUNK|heart|' + this.name, COLOR_RED);
+		return true;
+	}
+}
