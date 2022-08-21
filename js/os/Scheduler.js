@@ -29,6 +29,7 @@ const BootstrapSpawner = require('BootstrapSpawner');
 
 const Bobsled = require('Bobsled');
 
+const MultiCreep = require('MultiCreep');
 const CreepProcess = require('CreepProcess');
 const BootStrapper = require('BootStrapper');
 const Scout = require('Scout');
@@ -88,6 +89,7 @@ var processTypeMap = {
     "InvaderMonitor": InvaderMonitor,
     "InvaderDefender": InvaderDefender,
     "Bobsled": Bobsled,
+    "MultiCreep": MultiCreep,
     "CreepProcess": CreepProcess
 };
 

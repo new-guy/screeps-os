@@ -3,8 +3,6 @@
 2. Minimum energy in storage needs to be scheduled
 3. Wall Mining
 4. Friggin display more information about the state of the room/creeps with roomVisuals
-5. Manual route planning & drawing on map
-    - Either commands or flags - document these
 6. Need to be able to send energy to other base once we hit a threshold
 7. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
