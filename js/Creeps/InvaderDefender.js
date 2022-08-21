@@ -92,7 +92,7 @@ class InvaderDefender extends CreepProcess {
         var targetArray = [];
 
         if(this.creep.room.hasInvaders()) {
-            targetArray.concat(this.creep.room.enemies);
+            targetArray = targetArray.concat(this.creep.room.enemies);
         }
         else if(this.creep.room.hasInvaderStructures()) {
             targetArray = this.creep.room.getInvaderStructures();
