@@ -28,7 +28,7 @@ class Claimer extends CreepProcess {
             }
             
             else {
-                if(targetController.owner == null && !targetController.my) {
+                if(targetController.owner != null && !targetController.my) {
                     this.creep.attackController(targetController);
                 }
                 else {
