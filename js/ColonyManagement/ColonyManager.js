@@ -216,7 +216,7 @@ class ColonyManager extends Process {
                 'colonyName': this.colony.name,
                 'creepCount': 1,
                 'creepNameBase': 'wallMiner|' + this.colony.name,
-                'creepBodyType': 'WallMiner',
+                'creepBodyType': 'ColonyBuilder',
                 'creepProcessClass': 'WallMiner',
                 'creepMemory': {
                     'targetFlag': wallMineRequestFlagName

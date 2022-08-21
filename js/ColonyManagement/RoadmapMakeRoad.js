@@ -54,7 +54,8 @@ class RoadmapMakeRoad extends SingleTickProcess {
                         var posToEvaluate = new RoomPosition(x, y, roomName);
                         // console.log(x + ', ' + y + ' | ' + roomName);
 
-                        var roadAtPos = roadmap.getPos(posToEvaluate) === 'road';
+                        var structAtPos = Memory.rooms[roomName] == null ? 'none' : Memory.rooms[roomName]['roadBuildPlan'][x][y];
+                        var roadAtPos = (structAtPos === 'road');
 
                         if(posToEvaluate.unwalkableStructureExists()) {
                             costs.set(x, y, 0xff);
