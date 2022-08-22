@@ -54,8 +54,11 @@ class Roadmap {
         for(var i = 0; i < roadmap.length; i++)  {
             roadmap[i] = new Array(50).fill('none');
         }
+        var roomMemory = Memory.rooms[roomName];
+        var colony = Game.colonies[roomMemory.colonyName];
+        if(colony == null) return null;
 
-        this.colony.colonyRoomInfo[roomName]['roadmap'] = roadmap;
+        colony.colonyRoomInfo[roomName]['roadmap'] = roadmap;
     }
 
     initAllMaps() {
@@ -65,7 +68,11 @@ class Roadmap {
     }
 
     getMap(roomName) {
-        return this.colony.colonyRoomInfo[roomName]['roadmap'];
+        var roomMemory = Memory.rooms[roomName];
+        var colony = Game.colonies[roomMemory.colonyName];
+        if(colony == null) return null;
+        var roadmap = colony.colonyRoomInfo[roomName]['roadmap'];
+        return roadmap;
     }
 
     setRoad(roomPosition) {
@@ -74,6 +81,8 @@ class Roadmap {
             this.initMap(roomPosition.roomName);
             roadmap = this.getMap(roomPosition.roomName);
         }
+
+        if(roadmap == null) return;
 
         roadmap[roomPosition.x][roomPosition.y] = 'road';
     }
@@ -84,6 +93,8 @@ class Roadmap {
             this.initMap(roomPosition.roomName);
             roadmap = this.getMap(roomPosition.roomName);
         }
+
+        if(roadmap == null) return null;
 
         return roadmap[roomPosition.x][roomPosition.y];
     }

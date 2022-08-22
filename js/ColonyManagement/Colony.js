@@ -530,7 +530,7 @@ class Colony {
             closestHarvestDestination = this.primaryRoom.harvestDestination;
         }
 
-        if(this.secondaryRoom.hasEnergyInHarvestDestination(energyNeeded, hasMinimum)) {
+        if(this.secondaryRoom != null && this.secondaryRoom.hasEnergyInHarvestDestination(energyNeeded, hasMinimum)) {
             var secondaryDistance = PathFinder.search(position, this.secondaryRoom.harvestDestination.pos).path.length;
 
             if(secondaryDistance < distance) {

@@ -69,7 +69,7 @@ class Swarm extends MultiCreep {
             var targetFlag = Game.flags[this.targetFlagName];
 
             var lastCreep = creeps[creeps.length - 1];
-            if(lastCreep.pos.roomName != targetFlag.pos.roomName) {
+            if(targetFlag != null && lastCreep.pos.roomName != targetFlag.pos.roomName) {
                 this.moveCreepsTo(creeps, targetFlag.pos, true)
             }
             else {
@@ -79,6 +79,10 @@ class Swarm extends MultiCreep {
     }
 
     combatMove(creeps, targetFlag) {
+        if(this.targetFlag == null) {
+            this.moveToClosestDestroyableStructure(creeps);
+            return;
+        }
         var enemyStructuresAtFlag = targetFlag.pos.getDestroyableStructures();
 
         if(enemyStructuresAtFlag.length > 0) {
@@ -87,13 +91,17 @@ class Swarm extends MultiCreep {
         }
 
         else {
-            var closestStructure = creeps[0].pos.getClosestDestroyableStructure();
-            if(closestStructure === null) {
-                creeps[0].say('NoTar');
-                return;
-            }
-            this.moveCreepsTo(creeps, closestStructure.pos, true);
+            this.moveToClosestDestroyableStructure(creeps);
         }
+    }
+
+    moveToClosestDestroyableStructure(creeps) {
+        var closestStructure = creeps[0].pos.getClosestDestroyableStructure();
+        if(closestStructure === null) {
+            creeps[0].say('NoTar');
+            return;
+        }
+        this.moveCreepsTo(creeps, closestStructure.pos, true);
     }
 
     fight(creeps, targetFlag) {
@@ -108,7 +116,7 @@ class Swarm extends MultiCreep {
     }
 
     meleeNearbyTargets(melee, targetFlag) {
-        if(targetFlag.room != null && melee.pos.isNearTo(targetFlag.pos)) {
+        if(targetFlag != null && targetFlag.room != null && melee.pos.isNearTo(targetFlag.pos)) {
             var enemyStructuresAtFlag = targetFlag.pos.getDestroyableStructures();
             if(enemyStructuresAtFlag.length > 0) {
                 melee.attack(enemyStructuresAtFlag[0]);

@@ -1,5 +1,6 @@
 ## Plan
 1. Wall Mining
+2. Roadmaps need to be saved and retrieved from room memory rather than colony memory
 2. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
 3. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
