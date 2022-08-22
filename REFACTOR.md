@@ -1,13 +1,15 @@
 ## Plan
-1. Break bobsled into MultiCreep
-2. Minimum energy in storage needs to be scheduled
-3. Wall Mining
-4. Friggin display more information about the state of the room/creeps with roomVisuals
-6. Need to be able to send energy to other base once we hit a threshold
-7. Ability to force spawns to use a minimum amount of energy
+1. Wall Mining
+2. Roadmaps need to be saved and retrieved from room memory rather than colony memory
+2. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
-    - Use this for bobsled to force it to use enough creeps
-8. Make CreepSpawner less verbose & cleaner to define
+3. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
+3. Make CreepSpawner less verbose & cleaner to define
+4. Minimum energy in storage needs to be scheduled
+5. Friggin display more information about the state of the room/creeps with roomVisuals
+6. Dynamically calculate number of haulers
+7. Make creeps move along road and ignore each other
+8. Need to be able to send energy to other base once we hit a threshold
 9. Need ability to flush processes & creeps
 10. Dynamically calculate number of haulers
 11. Allow more base designs
@@ -17,7 +19,6 @@
 15. Error handling - catch error and throw it at the end of processing
 16. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
 17. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
-18. Roadmap should exist at the room-level for memory and access
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

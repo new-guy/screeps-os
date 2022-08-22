@@ -81,10 +81,11 @@ class MultiCreep extends Process {
 
             if(creepTypesEnsured.includes(creepType)) continue;
             var creepName = this.getCreepNameBase(creepType);
+            var creepCount = this.getDesiredCreepTypeCount(creepType);
 
             var data = {
                 'colonyName': this.colony.name,
-                'creepCount': this.getDesiredCreepTypeCount(creepType),
+                'creepCount': creepCount,
                 'creepNameBase': creepName,
                 'creepBodyType': creepType,
                 'creepProcessClass': 'CreepProcess',
@@ -92,7 +93,7 @@ class MultiCreep extends Process {
                 'maxEnergyToSpend': this.colony.primaryRoom.energyCapacityAvailable
             };
             
-            var spawnPID = 'spawn|' + creepName;
+            var spawnPID = 'spawn|' + creepName + '|' + creepCount;
             this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_OFFENSE_PRIORITY);
 
             creepTypesEnsured.push(creepType);

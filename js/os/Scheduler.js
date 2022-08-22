@@ -28,6 +28,7 @@ const SpawnCreep = require('SpawnCreep');
 const BootstrapSpawner = require('BootstrapSpawner');
 
 const Bobsled = require('Bobsled');
+const Swarm = require('Swarm');
 
 const MultiCreep = require('MultiCreep');
 const CreepProcess = require('CreepProcess');
@@ -44,6 +45,7 @@ const Upgrader = require('Upgrader');
 const UpgradeFeeder = require('UpgradeFeeder');
 const TowerFiller = require('TowerFiller');
 const InvaderDefender = require('InvaderDefender');
+const WallMiner = require('WallMiner');
 
 const ExpansionBootstrap = require('ExpansionBootstrap');
 
@@ -90,6 +92,8 @@ var processTypeMap = {
     "InvaderDefender": InvaderDefender,
     "Bobsled": Bobsled,
     "MultiCreep": MultiCreep,
+    "WallMiner": WallMiner,
+    "Swarm": Swarm,
     "CreepProcess": CreepProcess
 };
 

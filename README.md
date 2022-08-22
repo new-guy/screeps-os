@@ -37,8 +37,12 @@ The overarching goal here is to build an AI that is driven around running indivi
 	- Chunks are placed automatically, but we can only place one new chunk per RCL because we don't include future building locations in our chunk calculations
 	- Force recalculation with Room.prototype.forceBuildingRegeneration()
 - Expansion - !EXPAND|[colony to expand from]
-- Offense - !OFFENSE|[colony to attack from]|bobsled (only bobsled is supported)
-    - We assume we wanna move toward and attack whatever is on the offense flag, then kill other targets
+- Offense - !OFFENSE|[SPAWN COLONY]|[UNIT_TYPE]|[COUNT]
+    - bobsled
+        - We assume we wanna move toward and attack whatever is on the offense flag, then kill other targets
+    - swarm
+        - Spawn N that attack in a wave
+    
 
 ## Tick Loop - sorta out of date
 

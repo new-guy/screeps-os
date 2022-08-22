@@ -151,6 +151,20 @@ exports.InvaderDefender = {
 	}
 }
 
+exports.ToughMelee = {
+	"segment": ["tough", "attack", "move", "move"],
+	"min": {
+		"tough": 5,
+		"attack": 5,
+		"move": 10
+	},
+	"max": {
+		"tough": 10,
+		"attack": 10,
+		"move": 20
+	}
+}
+
 exports.Melee = {
 	"segment": ["attack", "move"],
 	"min": {

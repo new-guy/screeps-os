@@ -80,6 +80,8 @@ class ColonyManager extends Process {
         //we only really wanna build roads if we can have a tower in the homeroom 'cause of repair time and cost
         if(this.colony.primaryRoom.controller.level >= 3) {
             this.ensureRoadGeneration();
+            this.checkForExpansionFlags();
+            this.checkForWallMiningFlags();
 
             if(this.colony.roomsNeedingBuilder.length > 0 && this.colony.hasNecessaryMinimumEnergy) {
                 this.ensureColonyBuilder();
@@ -88,10 +90,6 @@ class ColonyManager extends Process {
             if(this.colony.roomNeedingRoadRepairs != null && this.colony.hasNecessaryMinimumEnergy) {
                 this.ensureRoadRepairer();
             }
-        }
-
-        if(this.colony.primaryRoom.controller.level >= 3) {
-            this.checkForExpansionFlags();
         }
 
         if(this.colony.primaryRoom.controller.level >= 5) {
@@ -205,6 +203,28 @@ class ColonyManager extends Process {
             var targetRoom = colonyExpansionRequestFlag.pos.roomName;
             var expansionPID = 'ExpansionManager|' + this.name + targetRoom;
             this.ensureChildProcess(expansionPID, 'ExpansionManager', {'spawnColony': this.colony.name, 'targetRoom': targetRoom}, COLONY_EXPANSION_SUPPORT)
+        }
+    }
+
+    checkForWallMiningFlags() {
+        var wallMineRequestFlagName = '!WALLMINE|'+this.name;
+        var colonyWallMiningRequestFlag = Game.flags[wallMineRequestFlagName];
+        if(colonyWallMiningRequestFlag != null) {
+            colonyWallMiningRequestFlag.setColor(COLOR_PURPLE);
+
+            var data = {
+                'colonyName': this.colony.name,
+                'creepCount': 1,
+                'creepNameBase': 'wallMiner|' + this.colony.name,
+                'creepBodyType': 'ColonyBuilder',
+                'creepProcessClass': 'WallMiner',
+                'creepMemory': {
+                    'targetFlag': wallMineRequestFlagName
+                }
+            };
+        
+            var spawnPID = 'spawnWallMiner|' + this.colony.name;
+            this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
         }
     }
 
