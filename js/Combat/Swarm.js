@@ -8,18 +8,17 @@ class Swarm extends MultiCreep {
         this.rallyFlagName = '!RALLY|' + this.memory.colonyName;
 
         if(this.memory.state == null) {
-            this.memory.state == 'spawning';
+            this.memory.state = 'spawning';
         }
 
-        this.desiredCreeps = Array(this.memory.meleeCount).fill('ToughMelee');
+        this.desiredCreeps = [];
+
+        for(var i = 0; i < this.memory.meleeCount; i++) {
+            this.desiredCreeps.push('ToughMelee');
+        }
     }
 
     update() {
-        if(super.update() == 'exit') {
-            return 'exit';
-        }
-
-
         if(this.memory.state === 'spawning') {
             this.ensureDesiredCreeps();
             this.waitingBehavior();
@@ -63,7 +62,6 @@ class Swarm extends MultiCreep {
 
     moveCreeps(creeps) {
         if(this.creepsAreSeparated(creeps)) {
-            console.log('SEPARATED');
             this.uniteCreeps(creeps);
         }
 
@@ -101,7 +99,7 @@ class Swarm extends MultiCreep {
     fight(creeps, targetFlag) {
         //If targetFlag in range, prioritize targets there, otherwise just look for close targets
         //Healer just checks everyone and heals the most damaged creep
-        var melees = this.getCreepsByType(creeps, 'Melee');
+        var melees = this.getCreepsByType(creeps, 'ToughMelee');
 
         for(var i = 0 ; i < melees.length; i++) {
             var melee = melees[i];
@@ -151,7 +149,7 @@ class Swarm extends MultiCreep {
         for(var i = 0; i < creeps.length; i++) {
             var creep = creeps[i];
             creep.moveTo(pos);
-            follower.say('✌️');
+            creep.say('✌️');
         }
     }
     
@@ -161,7 +159,7 @@ class Swarm extends MultiCreep {
             var creepOne = creeps[i];
             var creepTwo = creeps[i+1];
             var creepIsOnEdge = creepOne.pos.isEdge() || creepTwo.pos.isEdge();
-            if(creepOne.pos.getRangeTo(creepTwo) > 1) {
+            if(creepOne.pos.getRangeTo(creepTwo) > 3) {
                 creepsAreSeparated = true;
             }
 
