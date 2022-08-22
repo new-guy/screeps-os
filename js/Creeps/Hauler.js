@@ -50,7 +50,14 @@ class Hauler extends CreepProcess {
         }
 
         else if(state === 'dropoffEnergy') {
-            this.creep.setTarget(this.targetHarvestDestination);
+            if(this.targetHarvestDestination == null) {
+                var targetRoom = Game.rooms[this.creep.memory['targetStorageRoom']];
+                var targetColony = Game.colonies[targetRoom.memory.colonyName];
+                this.creep.setTarget(targetColony.getClosestHarvestDestination(this.creep.pos))
+            }
+            else {
+                this.creep.setTarget(this.targetHarvestDestination);
+            }
             this.creep.putEnergyInTarget();
         }
     }
