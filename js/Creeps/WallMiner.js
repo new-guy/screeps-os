@@ -10,6 +10,7 @@ class WallMiner extends CreepProcess {
     }
 
     update() {
+        if(this.targetFlag == null) return;
         if(super.update() == 'exit') {
             return 'exit';
         }
