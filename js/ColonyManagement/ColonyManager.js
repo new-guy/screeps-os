@@ -92,7 +92,7 @@ class ColonyManager extends Process {
             }
         }
 
-        if(this.colony.primaryRoom.controller.level >= 5) {
+        if(this.colony.primaryRoom.controller.level >= 4) {
             this.ensureOffenseMonitor();
         }
     }
