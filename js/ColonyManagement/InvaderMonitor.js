@@ -13,6 +13,7 @@ class InvaderMonitor extends Process {
         }
         this.checkForInvaders();
         this.checkForLoneInvaderCores();
+        this.checkForEnemies();
     }
 
     checkForInvaders() {
@@ -42,6 +43,18 @@ class InvaderMonitor extends Process {
         }
     }
 
+    checkForEnemies() {
+        for(var roomName in this.colony.colonyRoomInfo) {
+            var room = Game.rooms[roomName];
+            if(room == null) continue;
+
+            if(room.enemies.length > 0) {
+                this.ensureDefender();
+                console.log("Detected enemies in " + roomName + " - ensuring defense")
+            }
+        }
+    }
+
     ensureDefender() {
         var data = {
             'colonyName': this.colony.name,
@@ -55,7 +68,7 @@ class InvaderMonitor extends Process {
         };
 
         var spawnPID ='spawnInvaderDefender|' + this.colony.name;
-        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_BUILDER_PRIORITY);
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_DEFENSE_PRIORITY);
     }
 
     processShouldDie() {

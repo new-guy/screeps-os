@@ -397,8 +397,9 @@ class Colony {
 
             var hasLoneInvaderCore = room.hasLoneInvaderCore();
             var hasInvaders = room.hasInvaders();
+            var hasEnemies = room.enemies.length > 0;
 
-            if(hasLoneInvaderCore || hasInvaders) {
+            if(hasLoneInvaderCore || hasInvaders || hasEnemies) {
                 console.log('Selected ' + room.name + ' for invader defense')
                 return room;
             }
@@ -657,6 +658,10 @@ class Colony {
 
                 spawn.room.visual.text(creepName, spawn.pos.x, spawn.pos.y+1);
                 this.removeCapableSpawn(creepBodyType, maxEnergyToSpend);
+                var newSpawn = this.getCapableSpawn(creepBodyType, maxEnergyToSpend);
+                if(newSpawn != null) {
+                    this.spawnCreep(creepName, creepPid, creepBodyType, creepProcessClass, creepMemory, creepProcessPriority, maxEnergyToSpend=null)
+                }
             }
 
             else {
