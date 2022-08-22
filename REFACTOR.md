@@ -17,6 +17,7 @@
 15. Error handling - catch error and throw it at the end of processing
 16. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
 17. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
+18. Roadmap should exist at the room-level for memory and access
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions
