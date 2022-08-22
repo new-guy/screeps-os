@@ -61,47 +61,42 @@ class Swarm extends MultiCreep {
     }
 
     moveCreeps(creeps) {
-        if(this.creepsAreSeparated(creeps)) {
-            this.uniteCreeps(creeps);
+        var targetFlag = Game.flags[this.targetFlagName];
+
+        var lastCreep = creeps[creeps.length - 1];
+        if(targetFlag != null && lastCreep.pos.roomName != targetFlag.pos.roomName) {
+            this.moveCreepsTo(creeps, targetFlag.pos);
         }
-
         else {
-            var targetFlag = Game.flags[this.targetFlagName];
-
-            var lastCreep = creeps[creeps.length - 1];
-            if(targetFlag != null && lastCreep.pos.roomName != targetFlag.pos.roomName) {
-                this.moveCreepsTo(creeps, targetFlag.pos, true)
-            }
-            else {
-                this.combatMove(creeps, targetFlag);
-            }
+            this.combatMove(creeps, targetFlag);
         }
     }
 
     combatMove(creeps, targetFlag) {
-        if(this.targetFlag == null) {
-            this.moveToClosestDestroyableStructure(creeps);
+        if(targetFlag == null) {
+            this.moveToClosestDestroyableStructure(creeps, targetFlag);
             return;
         }
         var enemyStructuresAtFlag = targetFlag.pos.getDestroyableStructures();
 
         if(enemyStructuresAtFlag.length > 0) {
             new RoomVisual(targetFlag.pos.roomName).circle(targetFlag.pos.x, targetFlag.pos.y, {opacity: 0.9, radius: 0.2, fill: '#ffcc00'});
-            this.moveCreepsTo(creeps, targetFlag.pos, true);
+            this.moveCreepsTo(creeps, targetFlag.pos);
         }
 
         else {
-            this.moveToClosestDestroyableStructure(creeps);
+            this.moveToClosestDestroyableStructure(creeps, targetFlag);
         }
     }
 
-    moveToClosestDestroyableStructure(creeps) {
+    moveToClosestDestroyableStructure(creeps, targetFlag) {
         var closestStructure = creeps[0].pos.getClosestDestroyableStructure();
         if(closestStructure === null) {
             creeps[0].say('NoTar');
+            this.moveCreepsTo(creeps, targetFlag.pos);
             return;
         }
-        this.moveCreepsTo(creeps, closestStructure.pos, true);
+        this.moveCreepsTo(creeps, closestStructure.pos);
     }
 
     fight(creeps, targetFlag) {

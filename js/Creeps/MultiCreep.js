@@ -47,7 +47,7 @@ class MultiCreep extends Process {
                 creepTypeCount[creepType] = creepTypeCount[creepType] + 1;
             }
 
-            if(creep != null) {
+            if(creep != null && !creep.spawning) {
                 creeps.push(creep);
             }
         }
