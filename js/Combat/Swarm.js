@@ -1,13 +1,39 @@
 const MultiCreep = require('MultiCreep');
 
-class Bobsled extends MultiCreep {
+class Swarm extends MultiCreep {
     constructor (...args) {
         super(...args);
 
         this.targetFlagName = this.memory.targetFlagName;
         this.rallyFlagName = '!RALLY|' + this.memory.colonyName;
 
-        this.desiredCreeps = ['Melee', 'Healer', 'Healer'];
+        if(this.memory.state == null) {
+            this.memory.state == 'spawning';
+        }
+
+        this.desiredCreeps = Array(this.memory.meleeCount).fill('ToughMelee');
+    }
+
+    update() {
+        if(super.update() == 'exit') {
+            return 'exit';
+        }
+
+
+        if(this.memory.state === 'spawning') {
+            this.ensureDesiredCreeps();
+            this.waitingBehavior();
+            if(this.hasDesiredCreeps()) {
+                this.memory.state = 'fighting'
+            }   
+        }
+
+        else {
+            this.mainBehavior();
+            if(this.getDesiredCreeps().length == 0) {
+                this.memory.state = 'spawning'
+            }
+        }
     }
 
     waitingBehavior() {
@@ -76,16 +102,10 @@ class Bobsled extends MultiCreep {
         //If targetFlag in range, prioritize targets there, otherwise just look for close targets
         //Healer just checks everyone and heals the most damaged creep
         var melees = this.getCreepsByType(creeps, 'Melee');
-        var healers = this.getCreepsByType(creeps, 'Healer');
 
         for(var i = 0 ; i < melees.length; i++) {
             var melee = melees[i];
             this.meleeNearbyTargets(melee, targetFlag);
-        }
-
-        for(var i = 0 ; i < healers.length; i++) {
-            var healer = healers[i];
-            this.healWoundedCreeps(healer, creeps);
         }
     }
 
@@ -114,26 +134,6 @@ class Bobsled extends MultiCreep {
         }
     }
 
-    healWoundedCreeps(healer, creeps) {
-        if(healer.hits < healer.hitsMax) healer.heal(healer);
-        else {
-            var mostDamagedCreep = creeps[0];
-            for(var i = 1; i < creeps.length; i++) {
-                var creep = creeps[i];
-                var mostDamageDelta = mostDamagedCreep.hitsMax - mostDamagedCreep.hits;
-                var newDamageDelta = creep.hitsMax - creep.hits;
-                if(newDamageDelta > mostDamageDelta) {
-                    mostDamagedCreep = creep;
-                }
-            }
-    
-            if(mostDamagedCreep.hits < mostDamagedCreep.hitsMax) {
-                healer.heal(mostDamagedCreep);
-                healer.say('💊')
-            }
-        }
-    }
-
     getCreepsByType(creeps, creepType) {
         var creepsByType = [];
 
@@ -147,27 +147,11 @@ class Bobsled extends MultiCreep {
         return creepsByType;
     }
 
-    moveCreepsTo(creeps, pos, forward=true) {
-        var leadCreep = forward ? creeps[0] : creeps[creeps.length - 1];
-
-        leadCreep.moveTo(pos);
-        leadCreep.say('🚌 ');
-
-        if(forward) {
-            for(var i = 1; i < creeps.length; i++) {
-                var leader = creeps[i-1];
-                var follower = creeps[i];
-                follower.moveTo(leader.pos, {ignoreCreeps: true});
-                follower.say('🧘‍♀️');
-            }
-        }
-        else {
-            for(var i = creeps.length-2; i >= 0; i--) {
-                var leader = creeps[i+1];
-                var follower = creeps[i];
-                follower.moveTo(leader.pos, {ignoreCreeps: true});
-                follower.say('🧘‍♀️');
-            }
+    moveCreepsTo(creeps, pos) {
+        for(var i = 0; i < creeps.length; i++) {
+            var creep = creeps[i];
+            creep.moveTo(pos);
+            follower.say('✌️');
         }
     }
     
@@ -201,4 +185,4 @@ class Bobsled extends MultiCreep {
     }
 }
 
-module.exports = Bobsled;
+module.exports = Swarm;

@@ -28,6 +28,7 @@ const SpawnCreep = require('SpawnCreep');
 const BootstrapSpawner = require('BootstrapSpawner');
 
 const Bobsled = require('Bobsled');
+const Swarm = require('Swarm');
 
 const MultiCreep = require('MultiCreep');
 const CreepProcess = require('CreepProcess');
@@ -92,6 +93,7 @@ var processTypeMap = {
     "Bobsled": Bobsled,
     "MultiCreep": MultiCreep,
     "WallMiner": WallMiner,
+    "Swarm": Swarm,
     "CreepProcess": CreepProcess
 };
 

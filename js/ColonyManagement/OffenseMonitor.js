@@ -21,19 +21,35 @@ class OffenseMonitor extends Process {
     }
 
     handleOffenseFlag(flag) {
-        if(!flag.name.endsWith('Bobsled')) {
-            console.log('ONLY BOBSLED COMBAT');
-            return;
+        var flagInfoArray = flag.name.split('|');
+        //0 - offense
+        //1 - spawn colony
+        //2 - unit type
+        //3 - count
+        var unitType = flagInfoArray[2];
+        var unitCount = flagInfoArray[3];
+        if(unitType === 'bobsled') {
+            var data = {
+                'colonyName': this.colony.name,
+                'creepNameBase': 'bobsled|' + this.colony.name,
+                'targetFlagName': flag.name
+            };
+            
+            var spawnPID = 'bobsled|' + this.colony.name + '|' + unitCount;
+            this.ensureChildProcess(spawnPID, 'Bobsled', data, COLONY_OFFENSE_PRIORITY);
         }
 
-        var data = {
-            'colonyName': this.colony.name,
-            'creepNameBase': 'bobsled|' + this.colony.name,
-            'targetFlagName': flag.name
-        };
-        
-        var spawnPID = 'bobsled|' + this.colony.name;
-        this.ensureChildProcess(spawnPID, 'Bobsled', data, COLONY_OFFENSE_PRIORITY);
+        if(unitType === 'swarm') {
+            var data = {
+                'colonyName': this.colony.name,
+                'creepNameBase': 'swarm|' + this.colony.name,
+                'targetFlagName': flag.name,
+                'meleeCount': unitCount
+            };
+            
+            var spawnPID = 'swarm|' + this.colony.name + '|' + unitCount;
+            this.ensureChildProcess(spawnPID, 'Swarm', data, COLONY_OFFENSE_PRIORITY);
+        }
     }
 }
 
