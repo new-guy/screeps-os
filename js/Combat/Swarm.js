@@ -118,6 +118,8 @@ class Swarm extends MultiCreep {
     }
 
     moveToClosestEnemyCreep(creeps) {
+        if(creeps.length === 0) return false;
+
         var enemies = creeps[0].room.enemies;
         if(enemies == null || enemies.length === 0) {
             return false;
