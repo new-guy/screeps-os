@@ -226,6 +226,7 @@ RoomPosition.prototype.findMyAdjacentCreeps = function() {
 
 RoomPosition.prototype.getEnemyClosestToDeath = function() {
 	var enemies = this.findAdjacentDestroyableStructures().concat(this.findAdjacentEnemyCreeps());
+	console.log(enemies);
 	if(enemies.length === 0) return null;
 
 	var lowestHealthEnemy = enemies[0];
