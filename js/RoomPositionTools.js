@@ -259,6 +259,7 @@ RoomPosition.prototype.findAdjacentDestroyableStructures = function() {
 
 	for(var i = 0; i < adjacentStructures.length; i++) {
 		var struct = adjacentStructures[i];
+		console.log(struct);
 		if(struct == null) continue;
 		if(!struct.my && struct.hits != null && struct.structureType !== STRUCTURE_CONTAINER && struct.structureType !== STRUCTURE_ROAD) structuresToReturn.push(struct);
 	}
@@ -288,7 +289,10 @@ RoomPosition.prototype.lookForAdjacent = function(lookType) {
 
 			var posBeingLookedAt = new RoomPosition(x_to_look_at, y_to_look_at, this.roomName);
 
-			results.push(posBeingLookedAt.lookFor(lookType)[0]);
+			var itemsAtLocation = posBeingLookedAt.lookFor(lookType);
+			for(var i = 0; i < itemsAtLocation.length; i++) {
+				results.push(itemsAtLocation[i]);
+			}
 		}
 	}
 

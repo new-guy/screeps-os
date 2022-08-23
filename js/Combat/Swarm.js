@@ -136,7 +136,6 @@ class Swarm extends MultiCreep {
 
         for(var i = 0 ; i < melees.length; i++) {
             var melee = melees[i];
-            melee.say('A')
             this.meleeNearbyTargets(melee, targetFlag);
         }
     }
