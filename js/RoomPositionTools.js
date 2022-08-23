@@ -259,7 +259,6 @@ RoomPosition.prototype.findAdjacentDestroyableStructures = function() {
 
 	for(var i = 0; i < adjacentStructures.length; i++) {
 		var struct = adjacentStructures[i];
-		console.log(struct);
 		if(struct == null) continue;
 		if(!struct.my && struct.hits != null && struct.structureType !== STRUCTURE_CONTAINER && struct.structureType !== STRUCTURE_ROAD) structuresToReturn.push(struct);
 	}
