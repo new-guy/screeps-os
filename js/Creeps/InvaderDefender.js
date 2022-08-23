@@ -72,7 +72,11 @@ class InvaderDefender extends CreepProcess {
         var target = this.determineTarget();
         var rangeToTarget = this.creep.pos.getRangeTo(target);
 
-        if(rangeToTarget > 3) {
+        if(this.creep.pos.isEdge()) {
+            this.creep.say('🤠');
+            this.creep.moveTo(target);
+        }
+        else if(rangeToTarget > 3) {
             this.creep.say('🤠');
             this.creep.moveTo(target);
         }
