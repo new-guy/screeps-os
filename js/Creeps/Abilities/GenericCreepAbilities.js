@@ -152,6 +152,7 @@ Creep.prototype.meleeMoveTo = function(pos) {
         {
             plainCost: 1,
             swampCost: 5,
+            maxRooms: 1,
     
             roomCallback: function(roomName) {
                 let room = Game.rooms[roomName];
@@ -171,7 +172,7 @@ Creep.prototype.meleeMoveTo = function(pos) {
                         costs.set(creep.pos.x, creep.pos.y, creep.hits/30); //30 HP per melee attack
                     }
                     else {
-                        costs.set(0xff)
+                        costs.set(creep.pos.x, creep.pos.y, 0xff)
                     }
                 });
         
