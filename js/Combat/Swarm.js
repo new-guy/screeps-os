@@ -107,6 +107,8 @@ class Swarm extends MultiCreep {
     }
 
     moveToClosestDestroyableStructure(creeps, targetFlag) {
+        if(creeps.length === 0) return false;
+
         var closestStructure = creeps[0].pos.getClosestDestroyableStructure();
         if(closestStructure === null) {
             return false;
