@@ -145,3 +145,40 @@ Creep.prototype.returnToTargetRoom = function() {
     this.moveToRoom(this.memory.targetRoom)
     this.sayInOrder(['Returning', 'to', 'target', 'room'])
 }
+
+Creep.prototype.meleeMoveTo = function(pos) {
+    var ret = PathFinder.search(
+        this.pos, goals,
+        {
+            plainCost: 1,
+            swampCost: 5,
+    
+            roomCallback: function(roomName) {
+                let room = Game.rooms[roomName];
+                if (!room) return;
+                let costs = new PathFinder.CostMatrix;
+        
+                room.find(FIND_STRUCTURES).forEach(function(struct) {
+                    if (struct.structureType === STRUCTURE_RAMPART && !struct.my) {
+                        // Can't walk through non-walkable buildings
+                        costs.set(struct.pos.x, struct.pos.y, struct.hits/30); //30 HP per melee attack
+                    }
+                });
+        
+                room.find(FIND_CREEPS).forEach(function(creep) {
+                    if (!creep.my) {
+                        // Can't walk through non-walkable buildings
+                        costs.set(struct.pos.x, struct.pos.y, struct.hits/30); //30 HP per melee attack
+                    }
+                    else {
+                        costs.set(0xff)
+                    }
+                });
+        
+                return costs;
+            },
+        }
+    );
+
+    creep.moveByPath(ret.path);
+}

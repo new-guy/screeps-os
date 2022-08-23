@@ -64,13 +64,24 @@ class Swarm extends MultiCreep {
 
     moveCreeps(creeps) {
         var targetFlag = Game.flags[this.targetFlagName];
+        var creepsInTargetRoom = [];
+        var creepsOutsideTargetRoom = [];
+
+        for(var i = 0; i < creeps.length; i++) {
+            if(creep.pos.roomName === targetFlag.pos.roomName) {
+                creepsInTargetRoom.push(creep);
+            }
+            else {
+                creepsOutsideTargetRoom.push(creep)
+            }
+        }
 
         var lastCreep = creeps[creeps.length - 1];
         if(targetFlag != null && lastCreep.pos.roomName != targetFlag.pos.roomName) {
-            this.moveCreepsTo(creeps, targetFlag.pos);
+            this.moveCreepsTo(creepsOutsideTargetRoom, targetFlag.pos);
         }
         else {
-            this.combatMove(creeps, targetFlag);
+            this.combatMove(creepsInTargetRoom, targetFlag);
         }
     }
 
@@ -83,7 +94,7 @@ class Swarm extends MultiCreep {
 
         if(enemyStructuresAtFlag.length > 0) {
             new RoomVisual(targetFlag.pos.roomName).circle(targetFlag.pos.x, targetFlag.pos.y, {opacity: 0.9, radius: 0.2, fill: '#ffcc00'});
-            this.moveCreepsTo(creeps, targetFlag.pos);
+            this.moveCreepsTo(creeps, targetFlag.pos, true);
         }
 
         else {
@@ -101,7 +112,7 @@ class Swarm extends MultiCreep {
             this.moveCreepsTo(creeps, targetFlag.pos);
             return false;
         }
-        this.moveCreepsTo(creeps, closestStructure.pos);
+        this.moveCreepsTo(creeps, closestStructure.pos, true);
         return true;
     }
 
@@ -109,7 +120,7 @@ class Swarm extends MultiCreep {
         var enemies = creeps[0].room.enemies;
         if(enemies == null || enemies.length === 0) return false;
         var closestEnemyCreep = creeps[0].pos.findClosestByPath(enemies);
-        this.moveCreepsTo(creeps, closestEnemyCreep.pos);
+        this.moveCreepsTo(creeps, closestEnemyCreep.pos, true);
     }
 
     fight(creeps, targetFlag) {
@@ -161,10 +172,11 @@ class Swarm extends MultiCreep {
         return creepsByType;
     }
 
-    moveCreepsTo(creeps, pos) {
+    moveCreepsTo(creeps, pos, combat=false) {
         for(var i = 0; i < creeps.length; i++) {
             var creep = creeps[i];
-            creep.moveTo(pos);
+            if(combat) creep.meleeMoveTo(pos);
+            else creep.moveTo(pos);
             creep.say('✌️');
         }
     }
