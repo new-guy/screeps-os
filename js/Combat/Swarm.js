@@ -179,7 +179,7 @@ class Swarm extends MultiCreep {
             var creep = creeps[i];
             if(combat) creep.meleeMoveTo(pos);
             else creep.moveTo(pos);
-            creep.say('✌️');
+            creep.say('✌️', true);
         }
     }
     

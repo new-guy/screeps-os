@@ -151,14 +151,14 @@ class Bobsled extends MultiCreep {
         var leadCreep = forward ? creeps[0] : creeps[creeps.length - 1];
 
         leadCreep.moveTo(pos);
-        leadCreep.say('🚌 ');
+        leadCreep.say('🚌 ', true);
 
         if(forward) {
             for(var i = 1; i < creeps.length; i++) {
                 var leader = creeps[i-1];
                 var follower = creeps[i];
                 follower.moveTo(leader.pos, {ignoreCreeps: true});
-                follower.say('🧘‍♀️');
+                follower.say('🧘‍♀️', true);
             }
         }
         else {
@@ -166,7 +166,7 @@ class Bobsled extends MultiCreep {
                 var leader = creeps[i+1];
                 var follower = creeps[i];
                 follower.moveTo(leader.pos, {ignoreCreeps: true});
-                follower.say('🧘‍♀️');
+                follower.say('🧘‍♀️', true);
             }
         }
     }
