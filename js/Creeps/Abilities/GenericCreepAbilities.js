@@ -159,7 +159,7 @@ Creep.prototype.meleeMoveTo = function(pos) {
                 let costs = new PathFinder.CostMatrix;
         
                 room.find(FIND_STRUCTURES).forEach(function(struct) {
-                    if (struct.structureType === STRUCTURE_RAMPART && !struct.my) {
+                    if ((struct.structureType === STRUCTURE_RAMPART && !struct.my) || struct.structureType === STRUCTURE_WALL) {
                         // Can't walk through non-walkable buildings
                         costs.set(struct.pos.x, struct.pos.y, struct.hits/30); //30 HP per melee attack
                     }
