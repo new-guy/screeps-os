@@ -28,9 +28,11 @@ class Swarm extends MultiCreep {
         }
 
         else {
-            this.mainBehavior();
             if(this.getDesiredCreeps().length == 0) {
                 this.memory.state = 'spawning'
+            }
+            else {
+                this.mainBehavior();
             }
         }
     }
@@ -85,7 +87,10 @@ class Swarm extends MultiCreep {
         }
 
         else {
-            this.moveToClosestDestroyableStructure(creeps, targetFlag);
+            var attackingStructure = this.moveToClosestDestroyableStructure(creeps, targetFlag);
+            if(!attackingStructure) {
+                this.moveToClosestEnemyCreep(creeps);
+            }
         }
     }
 
@@ -94,9 +99,17 @@ class Swarm extends MultiCreep {
         if(closestStructure === null) {
             creeps[0].say('NoTar');
             this.moveCreepsTo(creeps, targetFlag.pos);
-            return;
+            return false;
         }
         this.moveCreepsTo(creeps, closestStructure.pos);
+        return true;
+    }
+
+    moveToClosestEnemyCreep(creeps) {
+        var enemies = creeps[0].room.enemies;
+        if(enemies == null || enemies.length === 0) return false;
+        var closestEnemyCreep = creeps[0].pos.findClosestByPath(enemies);
+        this.moveCreepsTo(creeps, closestEnemyCreep.pos);
     }
 
     fight(creeps, targetFlag) {
