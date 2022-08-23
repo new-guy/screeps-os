@@ -5,6 +5,7 @@
     - Also bodyType min isn't respected
 3. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
 3. Make CreepSpawner less verbose & cleaner to define
+- Need to have a common method for naming creeps 
 4. Minimum energy in storage needs to be scheduled
 5. Friggin display more information about the state of the room/creeps with roomVisuals
 6. Dynamically calculate number of haulers
