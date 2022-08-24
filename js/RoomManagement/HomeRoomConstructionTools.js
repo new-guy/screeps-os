@@ -213,7 +213,7 @@ Room.prototype.recalculateBuildingPlan = function() {
 	var flagPlan = new Array(50);
 
 	for(var i = 0; i < flagPlan.length; i++)  {
-		flagPlan[i] = new Array(50).fill('none');
+		flagPlan[i] = new Array(50).fill(null);
 	}
 
 	var chunkFlags = _.filter(this.find(FIND_FLAGS), function(flag) { return flag.name.startsWith('!CHUNK|'); });
@@ -479,7 +479,7 @@ Room.prototype.createFunctionalFlags = function() {
 		for(var y = 0; y < column.length; y++) {
 			var flagName = column[y];
 
-			if(flagName === 'none') continue;
+			if(flagName == null) continue;
 			
 			var mapPosition = new RoomPosition(x, y, this.name);
 
