@@ -30,6 +30,7 @@ class ExpansionManager extends Process {
                 this.ensureHeart();
                 this.ensureSpawn();
                 this.ensureExpansionBootstrap();
+                this.drawOnMap();
             }
 
             if(this.targetRoom.storage != null) {
@@ -37,6 +38,13 @@ class ExpansionManager extends Process {
                 expansionFlag.remove();
             }
         }
+    }
+
+    drawOnMap() {
+        var sourceColonyPos = new RoomPosition(25, 25, this.spawnColony.primaryRoom.name);
+        var expansionTargetPos = new RoomPosition(25, 25, this.targetRoom.name);
+        Game.map.visual.circle(sourceColonyPos, {fill: '#9999ff', radius: 8, opacity: 0.5, stroke: "#999999", strokeWidth: 0.8});
+        Game.map.visual.line(sourceColonyPos, expansionTargetPos, {color: '#9999ff', opacity: 0.8, width: 0.8, lineStyle: 'dotted'});
     }
 
     ensureClaimer() {
