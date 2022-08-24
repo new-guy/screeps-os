@@ -27,7 +27,7 @@ class RampartPlanner extends Process {
 
             for(var y = 0; y < column.length; y++) {
                 var structureType = column[y];
-                if(structureType === 'none') continue;
+                if(structureType == null) continue;
                 else {
                     var pos = new RoomPosition(x, y, this.room.name);
                     rampartShouldBeCreated = this.ensureRampartForPos(pos, rampartShouldBeCreated);

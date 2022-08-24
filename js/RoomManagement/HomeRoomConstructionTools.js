@@ -207,7 +207,7 @@ Room.prototype.recalculateBuildingPlan = function() {
 	var buildingPlan = new Array(50);
 
 	for(var i = 0; i < buildingPlan.length; i++)  {
-		buildingPlan[i] = new Array(50).fill('none');
+		buildingPlan[i] = new Array(50).fill(null);
 	}
 
 	var flagPlan = new Array(50);

@@ -38,7 +38,7 @@ class RoomConstructionSiteManager extends Process {
             for(var y = 0; y < column.length; y++) {
                 var structureType = column[y];
 
-                if(structureType === 'none') {
+                if(structureType == null) {
                     if(roadBuildPlan != null && roadBuildPlan[x][y] === 'road') {
                         structureType = STRUCTURE_ROAD;
                     }

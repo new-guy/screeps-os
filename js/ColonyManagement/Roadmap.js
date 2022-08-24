@@ -13,7 +13,7 @@ class Roadmap {
         var roadmap = new Array(50);
     
         for(var i = 0; i < roadmap.length; i++)  {
-            roadmap[i] = new Array(50).fill('none');
+            roadmap[i] = new Array(50).fill(null);
         }
         var roomMemory = Memory.rooms[roomName];
 
