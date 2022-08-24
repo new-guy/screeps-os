@@ -1,6 +1,4 @@
 ## Plan
-1. Roadmaps need to be saved and retrieved from room memory rather than colony memory
-2. Make sure road repairer is running as long as one harvestDest has enough
 3. Command to transfer room from one colony to another
 4. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
