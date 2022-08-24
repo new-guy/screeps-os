@@ -14,6 +14,7 @@ class ExpansionManager extends Process {
         }
         
         var roomHasBeenClaimed = this.targetRoom != null && this.targetRoom.controller.my;
+        this.drawOnMap(roomHasBeenClaimed);
         if(!roomHasBeenClaimed) {
             this.ensureClaimer();
             console.log('Ensuring Claimer ' + this.memory.targetRoom)
@@ -30,7 +31,6 @@ class ExpansionManager extends Process {
                 this.ensureHeart();
                 this.ensureSpawn();
                 this.ensureExpansionBootstrap();
-                this.drawOnMap();
             }
 
             if(this.targetRoom.storage != null) {
@@ -40,11 +40,14 @@ class ExpansionManager extends Process {
         }
     }
 
-    drawOnMap() {
+    drawOnMap(roomHasBeenClaimed) {
         var sourceColonyPos = new RoomPosition(25, 25, this.spawnColony.primaryRoom.name);
-        var expansionTargetPos = new RoomPosition(25, 25, this.targetRoom.name);
-        Game.map.visual.circle(sourceColonyPos, {fill: '#9999ff', radius: 8, opacity: 0.5, stroke: "#999999", strokeWidth: 0.8});
+        var expansionTargetPos = new RoomPosition(25, 25, this.memory.targetRoom);
+        Game.map.visual.circle(sourceColonyPos, {fill: '#9999ff', radius: 8, opacity: 0.5, stroke: "#222222", strokeWidth: 0.8});
         Game.map.visual.line(sourceColonyPos, expansionTargetPos, {color: '#9999ff', opacity: 0.8, width: 0.8, lineStyle: 'dotted'});
+        if(!roomHasBeenClaimed) {
+            Game.map.visual.circle(expansionTargetPos, {fill: '#dddd22', radius: 5, opacity: 0.5, stroke: "#222222", strokeWidth: 0.8});
+        }
     }
 
     ensureClaimer() {
