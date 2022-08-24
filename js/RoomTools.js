@@ -227,3 +227,16 @@ Room.prototype.setColony = function(colonyName) {
 	}
 	this.memory.colonyName = colonyName;
 }
+
+Room.prototype.drawControllerInfo = function() {
+	//Print the level
+	//Next line is percent to next level
+
+	var firstLinePos = new RoomPosition(48, 2, this.name);
+	var secondLinePos = new RoomPosition(48, 6, this.name);
+
+	Game.map.visual.text(this.controller.level, firstLinePos, {color: '#CCCC22', fontSize: 4, align: 'right', opacity: 1.0});
+
+	var percentProgress = Math.trunc(((this.controller.progress/this.controller.progressTotal) * 100));
+	Game.map.visual.text(percentProgress + '%', secondLinePos, {color: '#CCCC22', fontSize: 4, align: 'right', opacity: 1.0});
+}

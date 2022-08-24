@@ -88,7 +88,6 @@ class BootStrapper extends CreepProcess {
             if(this.creep.hasTarget()) {
                 this.creep.clearTarget();
             }
-
             var colonyToHarvestFrom = this.mode === 'colony' ? this.targetColony : Game.colonies[this.targetRoom.memory.colonyName];
             var activeSources = colonyToHarvestFrom.activeSources;
 
