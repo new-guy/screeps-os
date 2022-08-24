@@ -42,6 +42,8 @@ The overarching goal here is to build an AI that is driven around running indivi
         - We assume we wanna move toward and attack whatever is on the offense flag, then kill other targets
     - swarm
         - Spawn N that attack in a wave
+
+- Manually set a room's colony - Game.rooms[ROOM_NAME].setColony(COLONY_NAME)
     
 
 ## Tick Loop - sorta out of date
