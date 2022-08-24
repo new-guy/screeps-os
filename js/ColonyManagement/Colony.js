@@ -135,7 +135,7 @@ class Colony {
                 var isDamagedRoad = s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax;
                 var isValidDamagedRoad = isDamagedRoad && roadmap.isRoad(s.pos); 
                 if(isDamagedRoad && !isValidDamagedRoad) {
-                    new RoomVisual(s.pos.roomName).circle(s.pos.x, s.pos.y, {opacity: 0.9, radius: 0.2, fill: '#ffaaaa'});
+                    new RoomVisual(s.pos.roomName).circle(s.pos.x, s.pos.y, {opacity: 0.9, radius: 0.1, fill: '#ff7777'});
                 }
                 return isValidDamagedRoad;
             }});

@@ -151,6 +151,8 @@ function initRooms() {
             room.spawns = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_SPAWN; 
             }});
+
+            room.drawControllerInfo()
         }
 
         room.enemies = room.find(FIND_CREEPS, {filter: function(c) { return c.isHostile(); }});

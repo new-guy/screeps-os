@@ -7,7 +7,7 @@
 6. Make CreepSpawner less verbose & cleaner to define
 - Need to have a common method for naming creeps 
 7. Minimum energy in storage needs to be scheduled
-8. Friggin display more information about the state of the room/creeps with roomVisuals
+8. Display information about attacks with mapvisuals
 9. Dynamically calculate number of haulers
 10. Make creeps move along road and ignore each other
 11. Need to be able to send energy to other base once we hit a threshold

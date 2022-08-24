@@ -27,7 +27,7 @@ class EnergyHarvestingManager extends Process {
             //If we are in coma, only ensure the interior ones
         if(this.memory.children != null) {
             this.ensureMiningRoutes();
-            this.drawMiningRoutes();
+            this.printMiningRoutes();
         }
 
         if(!this.allMiningRoutesAreOperational()) {
@@ -85,12 +85,13 @@ class EnergyHarvestingManager extends Process {
         return areOperational;
     }
 
-    drawMiningRoutes() {
-        this.drawRoutesInRoom(this.colony.primaryRoom);
-        if(this.colony.secondaryRoom != null) this.drawRoutesInRoom(this.colony.secondaryRoom);
+    printMiningRoutes() {
+        this.printRoutesInRoom(this.colony.primaryRoom);
+        if(this.colony.secondaryRoom != null) this.printRoutesInRoom(this.colony.secondaryRoom);
+        this.printMapInfo();
     }
 
-    drawRoutesInRoom(room) {
+    printRoutesInRoom(room) {
         var rootPosition = {
             x: 42,
             y: 3
@@ -112,12 +113,12 @@ class EnergyHarvestingManager extends Process {
 
             visual.text(childProcess.pid.split("|")[0], rootPosition['x'], rootPosition['y'] + 2 + i, visualStyle);
 
-            var fillColor = isOperational ? "#00ff00" : "#ff0000";
+            var fillColor = isOperational ? "#00ff00" : "#aa1111";
             visual.circle(rootPosition['x'] - 0.5, rootPosition['y'] + 1.8 + i, {fill: fillColor});
 
             var roomIsStorageTarget = childProcess.targetStorageRoom.name === room.name;
             if(roomIsStorageTarget)
-                visual.circle(rootPosition['x'] - 1.5, rootPosition['y'] + 1.8 + i, {fill: "#0000ff"});
+                visual.circle(rootPosition['x'] - 1.5, rootPosition['y'] + 1.8 + i, {fill: "#9999ff"});
         }
 
         var totalRoutes = this.memory.children.length;
@@ -130,6 +131,22 @@ class EnergyHarvestingManager extends Process {
 
         visual.text('Routes: ' + totalRoutes + ' | Target: ' + targetRoutes, rootPosition['x'], rootPosition['y'], visualStyle);
         visual.text('Ticks: ' + totalTicksUsed + ' | Max: ' + totalMaxTicks, rootPosition['x'], rootPosition['y'] + 1, visualStyle);
+    }
+
+    printMapInfo() {
+        for(var i = 0; i < this.memory.children.length; i++) {
+            var childProcess = this.scheduler.getProcess(this.memory.children[i]);
+            var isOperational = childProcess.isOperational();
+
+            var fillColor = isOperational ? "#00ff00" : "#aa1111";
+            Game.map.visual.circle(childProcess.targetSourcePos, {fill: fillColor, radius: 2, opacity: 0.7});
+            if(childProcess.targetStorageRoom != null && childProcess.targetStorageRoom.harvestDestination != null) {
+                var harvestDestPos = childProcess.targetStorageRoom.harvestDestination.pos;
+
+                var lineStyle = isOperational ? undefined : "dashed";
+                Game.map.visual.line(childProcess.targetSourcePos, harvestDestPos, {color: '#eeee22', opacity: 0.8, lineStyle: lineStyle});
+            }
+        }
     }
 
     canCreateNewMiningRoute() {
