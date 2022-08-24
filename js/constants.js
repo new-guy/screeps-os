@@ -70,6 +70,7 @@ BOOTSTRAPPER_SAVE_CONTROLLER_THRESHOLD = 3000;
 
 ROOM_NECESSARY_MINIMUM_ENERGY_CONTAINER = 1000;
 ROOM_NECESSARY_MINIMUM_ENERGY_STORAGE = 50000;
+HAUL_ENERGY_LOW_THRESHOLD_STORAGE = 10000; //If it's below this threshold, and the other room is above minimum energy storage threshold, then transfer from one to the other
 
 TICKS_BETWEEN_FULL_ROAD_RECALCULATION = 200;
 

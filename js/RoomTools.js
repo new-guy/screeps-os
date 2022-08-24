@@ -77,6 +77,17 @@ Room.prototype.hasNecessaryMinimumEnergy = function() {
 	}
 }
 
+Room.prototype.isAboveEnergyHaulThreshold = function() {
+	var harvestDest = this.harvestDestination;
+
+	if(harvestDest != null) {
+		return harvestDest.store[RESOURCE_ENERGY] > HAUL_ENERGY_LOW_THRESHOLD_STORAGE;
+	}
+	else {
+		return false;
+	}
+}
+
 Room.prototype.isInComa = function() {
 	if(this.controller == null || !this.controller.my) {
 		return false;

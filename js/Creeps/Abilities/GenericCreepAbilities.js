@@ -115,6 +115,19 @@ Creep.prototype.getEnergyFromHarvestDestination = function(room) {
     }
 }
 
+Creep.prototype.putEnergyInHarvestDestination = function(room) {
+    var harvestDestination = room.harvestDestination;
+    this.say('🚛')
+
+    if(this.pos.getRangeTo(harvestDestination) > 1) {
+        this.moveTo(harvestDestination, {visualizePathStyle: {stroke: "#881", opacity: .2}});
+    }
+
+    else {
+        this.transfer(harvestDestination, RESOURCE_ENERGY);
+    }
+}
+
 Creep.prototype.getEnergyFromClosestColonyHarvestDestination = function(colony, hasMinimum=false) {
     //hasMinimum checks your ROOM_NECESSARY_MINIMUM_ENERGY_CONTAINER
     var harvestDestination = colony.getClosestHarvestDestination(this.pos, this.carryCapacity, hasMinimum);

@@ -1,4 +1,6 @@
 ## Plan
+1. Need to be able to send energy to other base once we hit a threshold
+2. Colony builder should check if there are construction sites in its room instead of heading to another
 3. Command to transfer room from one colony to another
 4. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
@@ -10,7 +12,6 @@
 8. Display information about attacks with mapvisuals
 9. Dynamically calculate number of haulers
 10. Make creeps move along road and ignore each other
-11. Need to be able to send energy to other base once we hit a threshold
 12. Need ability to flush processes & creeps
 13. Dynamically calculate number of haulers
 14. Allow more base designs
@@ -20,6 +21,7 @@
 18. Error handling - catch error and throw it at the end of processing
 19. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
 20. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
+21. This.creep.memory comes from process.memory.creepmemory or some shit.  That means it's doubled up unnecessarily.  Potentially stop referencing creep memory
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

@@ -95,6 +95,37 @@ class ColonyManager extends Process {
         if(this.colony.primaryRoom.controller.level >= 4) {
             this.ensureOffenseMonitor();
         }
+
+        if(!this.colony.isPreStorage) {
+            this.checkForEnergyHaul();
+        }
+    }
+
+    checkForEnergyHaul() {
+        if(this.colony.primaryRoom.hasNecessaryMinimumEnergy() && !this.colony.secondaryRoom.isAboveEnergyHaulThreshold()) {
+            this.ensureEnergyHauler(this.colony.primaryRoom, this.colony.secondaryRoom);
+        }
+        else if(this.colony.secondaryRoom.hasNecessaryMinimumEnergy() && !this.colony.primaryRoom.isAboveEnergyHaulThreshold()) {
+            this.ensureEnergyHauler(this.colony.secondaryRoom, this.colony.primaryRoom);
+        }
+    }
+
+    ensureEnergyHauler(sourceRoom, sinkRoom) {
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': 1,
+            'creepNameBase': 'colonyHauler|' + this.colony.name,
+            'creepBodyType': 'Hauler',
+            'creepProcessClass': 'ColonyHauler',
+            'creepMemory': {
+                'sourceRoom': sourceRoom.name,
+                'sinkRoom': sinkRoom.name,
+                'resource': RESOURCE_ENERGY
+            }
+        };
+
+        var spawnPID ='spawnColonyHauler|' + this.colony.name + '|1';
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_NECESSARY_ENERGY_PRIORITY);
     }
 
     ensureSecondaryRoom() {
