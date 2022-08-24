@@ -17,22 +17,6 @@ class RoadGenerator extends Process {
             this.colony.memory['roadRegenerateTick'] = Game.time;
 
         }
-
-        if(Game.time % TICKS_BETWEEN_ROOM_ROADMAP_UPDATE === 0) {
-            for(var roomName in this.colony.colonyRoomInfo) {
-                var room = Game.rooms[roomName];
-                if(room == null) continue;
-                this.addRoadsToRoomMemory(room);
-            }
-        }
-    }
-
-    addRoadsToRoomMemory(room) {
-        var roadmap = this.colony.roadmap;
-        var roomRoadmap = roadmap.getMap(room.name);
-        if(roomRoadmap == null) return;
-
-        room.memory.roadBuildPlan = roomRoadmap;
     }
 
     regenerateRoads() {

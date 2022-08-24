@@ -26,7 +26,7 @@ class RoomConstructionSiteManager extends Process {
 
     getStructurePlanMap() {
         var buildingPlan = this.room.memory.buildingPlan;
-        var roadBuildPlan = this.room.memory.roadBuildPlan;
+        var roadBuildPlan = this.room.memory.roadmap;
         var structurePlanMap = {};
 
         //We want to build able to build roads in mining rooms, which don't always have buildingPlans.

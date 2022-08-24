@@ -7,45 +7,6 @@ class Roadmap {
         if(this.colony.memory.roadmap == null) {
             this.colony.memory.roadmap = {};
         }
-
-        this.memory = this.colony.memory.roadmap;
-
-        if(this.memory.shouldDraw == null) {
-            this.memory.shouldDraw = false;
-        }
-
-        if(this.memory.shouldDraw === true) {
-            this.drawMaps();
-        }
-    }
-
-    enableDrawing() {
-        this.memory.shouldDraw = true;
-    }
-
-    disableDrawing() {
-        this.memory.shouldDraw = false;
-    }
-
-    drawMaps() {
-        for(var roomName in this.colony.colonyRoomInfo) {
-            var roadmap = this.getMap(roomName);
-
-
-            if(roadmap == null) continue;
-
-            var visual = new RoomVisual(roomName);
-
-            for(var x = 0; x < roadmap.length; x++) {
-                for(var y = 0; y < roadmap[x].length; y++) {
-                    var tile = roadmap[x][y];
-
-                    if(tile === 'road') {
-                        visual.circle(x, y);
-                    }
-                }
-            }
-        }
     }
 
     initMap(roomName) {
@@ -55,10 +16,8 @@ class Roadmap {
             roadmap[i] = new Array(50).fill('none');
         }
         var roomMemory = Memory.rooms[roomName];
-        var colony = Game.colonies[roomMemory.colonyName];
-        if(colony == null) return null;
 
-        colony.colonyRoomInfo[roomName]['roadmap'] = roadmap;
+        roomMemory['roadmap'] = roadmap;
     }
 
     initAllMaps() {
@@ -69,9 +28,7 @@ class Roadmap {
 
     getMap(roomName) {
         var roomMemory = Memory.rooms[roomName];
-        var colony = Game.colonies[roomMemory.colonyName];
-        if(colony == null) return null;
-        var roadmap = colony.colonyRoomInfo[roomName]['roadmap'];
+        var roadmap = roomMemory['roadmap'];
         return roadmap;
     }
 
