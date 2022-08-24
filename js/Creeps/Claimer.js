@@ -14,7 +14,6 @@ class Claimer extends CreepProcess {
     performStateActions() {
         var targetRoom = Game.rooms[this.creep.memory.targetRoom];
         this.creep.say('🚩');
-        var targetController = targetRoom.controller;
 
         if(targetRoom == null) {
             var destination = new RoomPosition(25,25,this.creep.memory.targetRoom);
@@ -23,6 +22,7 @@ class Claimer extends CreepProcess {
         }
 
         else {
+            var targetController = targetRoom.controller;
             if(this.creep.pos.getRangeTo(targetController) > 1) {
                 this.creep.moveTo(targetController, {maxRooms: 1, visualizePathStyle: {stroke: "#d0d", opacity: .5}});
             }

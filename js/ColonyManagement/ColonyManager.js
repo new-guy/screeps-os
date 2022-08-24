@@ -197,6 +197,7 @@ class ColonyManager extends Process {
 
     checkForExpansionFlags() {
         var expansionRequestFlagName = '!EXPAND|'+this.name;
+        console.log(expansionRequestFlagName)
         var colonyExpansionRequestFlag = Game.flags[expansionRequestFlagName];
         if(colonyExpansionRequestFlag != null) {
             colonyExpansionRequestFlag.setColor(COLOR_PURPLE);
