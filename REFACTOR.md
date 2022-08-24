@@ -1,25 +1,26 @@
 ## Plan
 1. Roadmaps need to be saved and retrieved from room memory rather than colony memory
-2. Command to transfer room from one colony to another
-2. Ability to force spawns to use a minimum amount of energy
+2. Make sure road repairer is running as long as one harvestDest has enough
+3. Command to transfer room from one colony to another
+4. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
-3. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
-3. Make CreepSpawner less verbose & cleaner to define
+5. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
+6. Make CreepSpawner less verbose & cleaner to define
 - Need to have a common method for naming creeps 
-4. Minimum energy in storage needs to be scheduled
-5. Friggin display more information about the state of the room/creeps with roomVisuals
-6. Dynamically calculate number of haulers
-7. Make creeps move along road and ignore each other
-8. Need to be able to send energy to other base once we hit a threshold
-9. Need ability to flush processes & creeps
-10. Dynamically calculate number of haulers
-11. Allow more base designs
-12. Make creeps move along road and ignore each other
-13. Create common library for creeps to talk with
-14. Get rid of link flags
-15. Error handling - catch error and throw it at the end of processing
-16. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
-17. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
+7. Minimum energy in storage needs to be scheduled
+8. Friggin display more information about the state of the room/creeps with roomVisuals
+9. Dynamically calculate number of haulers
+10. Make creeps move along road and ignore each other
+11. Need to be able to send energy to other base once we hit a threshold
+12. Need ability to flush processes & creeps
+13. Dynamically calculate number of haulers
+14. Allow more base designs
+15. Make creeps move along road and ignore each other
+16. Create common library for creeps to talk with
+17. Get rid of link flags
+18. Error handling - catch error and throw it at the end of processing
+19. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
+20. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions
