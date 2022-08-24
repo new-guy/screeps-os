@@ -131,8 +131,13 @@ class Colony {
 
             this.addBuildingPlanRoadsToMap(roomName);
 
-            room.damagedRoads = room.find(FIND_STRUCTURES, {filter: function(s) { 
-                return s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax && roadmap.isRoad(s.pos); 
+            room.damagedRoads = room.find(FIND_STRUCTURES, {filter: function(s) {
+                var isDamagedRoad = s.structureType === STRUCTURE_ROAD && s.hits < s.hitsMax;
+                var isValidDamagedRoad = isDamagedRoad && roadmap.isRoad(s.pos); 
+                if(isDamagedRoad && !isValidDamagedRoad) {
+                    new RoomVisual(s.pos.roomName).circle(s.pos.x, s.pos.y, {opacity: 0.9, radius: 0.2, fill: '#ffaaaa'});
+                }
+                return isValidDamagedRoad;
             }});
     
             if(room.damagedRoads.length > 0) {

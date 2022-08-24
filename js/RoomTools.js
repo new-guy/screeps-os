@@ -216,3 +216,14 @@ Room.prototype.placeHeart = function() {
 		return true;
 	}
 }
+
+Room.prototype.setColony = function(colonyName) {
+	var currentColonyName = this.memory.colonyName;
+	if(currentColonyName != null) {
+		var colony = Game.colonies[currentColonyName];
+		if(colony != null) {
+			colony.colonyRoomInfo[this.name] = undefined;
+		}
+	}
+	this.memory.colonyName = colonyName;
+}
