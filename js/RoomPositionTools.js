@@ -226,6 +226,7 @@ RoomPosition.prototype.findMyAdjacentCreeps = function() {
 
 RoomPosition.prototype.getEnemyClosestToDeath = function() {
 	var enemies = this.findAdjacentDestroyableStructures().concat(this.findAdjacentEnemyCreeps());
+	console.log(enemies);
 	if(enemies.length === 0) return null;
 
 	var lowestHealthEnemy = enemies[0];
@@ -287,7 +288,10 @@ RoomPosition.prototype.lookForAdjacent = function(lookType) {
 
 			var posBeingLookedAt = new RoomPosition(x_to_look_at, y_to_look_at, this.roomName);
 
-			results.push(posBeingLookedAt.lookFor(lookType)[0]);
+			var itemsAtLocation = posBeingLookedAt.lookFor(lookType);
+			for(var i = 0; i < itemsAtLocation.length; i++) {
+				results.push(itemsAtLocation[i]);
+			}
 		}
 	}
 

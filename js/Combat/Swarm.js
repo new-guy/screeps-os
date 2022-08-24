@@ -64,14 +64,23 @@ class Swarm extends MultiCreep {
 
     moveCreeps(creeps) {
         var targetFlag = Game.flags[this.targetFlagName];
+        var creepsInTargetRoom = [];
+        var creepsOutsideTargetRoom = [];
 
-        var lastCreep = creeps[creeps.length - 1];
-        if(targetFlag != null && lastCreep.pos.roomName != targetFlag.pos.roomName) {
-            this.moveCreepsTo(creeps, targetFlag.pos);
+        for(var i = 0; i < creeps.length; i++) {
+            var creep = creeps[i]
+            if(targetFlag != null && creep.pos.roomName === targetFlag.pos.roomName) {
+                creepsInTargetRoom.push(creep);
+            }
+            else {
+                creepsOutsideTargetRoom.push(creep)
+            }
         }
-        else {
-            this.combatMove(creeps, targetFlag);
+
+        if(targetFlag != null) {
+            this.moveCreepsTo(creepsOutsideTargetRoom, targetFlag.pos);
         }
+        this.combatMove(creepsInTargetRoom, targetFlag);
     }
 
     combatMove(creeps, targetFlag) {
@@ -82,34 +91,42 @@ class Swarm extends MultiCreep {
         var enemyStructuresAtFlag = targetFlag.pos.getDestroyableStructures();
 
         if(enemyStructuresAtFlag.length > 0) {
-            new RoomVisual(targetFlag.pos.roomName).circle(targetFlag.pos.x, targetFlag.pos.y, {opacity: 0.9, radius: 0.2, fill: '#ffcc00'});
-            this.moveCreepsTo(creeps, targetFlag.pos);
+            new RoomVisual(targetFlag.pos.roomName).circle(targetFlag.pos.x, targetFlag.pos.y, {opacity: 0.9, radius: 0.2, fill: '#aaffff'});
+            this.moveCreepsTo(creeps, targetFlag.pos, true);
         }
 
         else {
             var attackingStructure = this.moveToClosestDestroyableStructure(creeps, targetFlag);
             if(!attackingStructure) {
-                this.moveToClosestEnemyCreep(creeps);
+                var attackingCreep = this.moveToClosestEnemyCreep(creeps);
+                if(!attackingCreep) {
+                    this.moveCreepsTo(creeps, targetFlag.pos, true);
+                }
             }
         }
     }
 
     moveToClosestDestroyableStructure(creeps, targetFlag) {
+        if(creeps.length === 0) return false;
+
         var closestStructure = creeps[0].pos.getClosestDestroyableStructure();
         if(closestStructure === null) {
-            creeps[0].say('NoTar');
-            this.moveCreepsTo(creeps, targetFlag.pos);
             return false;
         }
-        this.moveCreepsTo(creeps, closestStructure.pos);
+        this.moveCreepsTo(creeps, closestStructure.pos, true);
         return true;
     }
 
     moveToClosestEnemyCreep(creeps) {
+        if(creeps.length === 0) return false;
+
         var enemies = creeps[0].room.enemies;
-        if(enemies == null || enemies.length === 0) return false;
+        if(enemies == null || enemies.length === 0) {
+            return false;
+        }
         var closestEnemyCreep = creeps[0].pos.findClosestByPath(enemies);
-        this.moveCreepsTo(creeps, closestEnemyCreep.pos);
+        this.moveCreepsTo(creeps, closestEnemyCreep.pos, true);
+        return true;
     }
 
     fight(creeps, targetFlag) {
@@ -161,11 +178,12 @@ class Swarm extends MultiCreep {
         return creepsByType;
     }
 
-    moveCreepsTo(creeps, pos) {
+    moveCreepsTo(creeps, pos, combat=false) {
         for(var i = 0; i < creeps.length; i++) {
             var creep = creeps[i];
-            creep.moveTo(pos);
-            creep.say('✌️');
+            if(combat) creep.meleeMoveTo(pos);
+            else creep.moveTo(pos);
+            creep.say('✌️', true);
         }
     }
     

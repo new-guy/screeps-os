@@ -21,7 +21,10 @@ class ExpansionManager extends Process {
 
         else {
             if(Game.colonies[this.targetRoom.name] == null) {
-                Game.addColony(this.targetRoom.name);
+                Memory.colonies[this.targetRoom.name] = {
+                    'name': this.targetRoom.name,
+                    'primaryRoomName': this.targetRoom.name
+                }
             }
             else {
                 this.ensureHeart();
