@@ -1,4 +1,5 @@
 ## Plan
+1. Ability to explicitly add rooms to a colony
 3. Command to transfer room from one colony to another
 4. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
