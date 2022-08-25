@@ -1,10 +1,9 @@
 ## Plan
-1. Need to be able to send energy to other base once we hit a threshold
-2. Colony builder should check if there are construction sites in its room instead of heading to another
-3. Command to transfer room from one colony to another
-4. Ability to force spawns to use a minimum amount of energy
+1. Colony builder should check if there are construction sites in its room instead of heading to another
+2. Command to transfer room from one colony to another
+3. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
-3. Delete TEMP lines
+4. Delete TEMP lines
 5. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
 6. Make CreepSpawner less verbose & cleaner to define
 - Need to have a common method for naming creeps 
