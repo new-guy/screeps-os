@@ -54,7 +54,7 @@ EXPANSION_BOOTSTRAP_MAX_TICKS = 500
 EXPANSION_BOOTSTRAP_MAX_ENERGY = 5000
 
 //Stat tracking Configuration
-RCL_RECORD_FREQUENCY = 50 //Every N ticks, record the current RCL %
+RCL_RECORD_FREQUENCY = 100 //Every N ticks, record the current RCL %
 RCL_TICKS_TO_LOOK_BACK_1 = 500 //Number of ticks to look back when showing a delta line 1
 RCL_TICKS_TO_LOOK_BACK_2 = 5000 //Number of ticks to look back when showing a delta line 2
 
