@@ -31,6 +31,10 @@ class Colony {
         var secondaryIsDetermined = (this.secondaryRoom != null);
         var evaluatedRooms = [];
 
+        if(this.memory.manuallyAddedRooms != null) {
+            roomsToEvaluate.concat(this.memory.manuallyAddedRooms);
+        }
+
         while(roomsToEvaluate.length > 0) {
             var roomName = roomsToEvaluate.shift();
 
@@ -42,7 +46,7 @@ class Colony {
                 continue;
             }
 
-            if(this.roomIsOutOfRange(roomName)) {
+            if(this.roomIsOutOfRange(roomName) && !this.memory.manuallyAddedRooms.includes(roomName)) {
                 continue;
             }
 
@@ -81,6 +85,24 @@ class Colony {
         }
 
         this.memory.colonyRoomInfo = colonyRoomInfo;
+    }
+
+    manuallyAddRoom(roomName) {
+        if(this.memory.manuallyAddedRooms == null) {
+            this.memory.manuallyAddedRooms = [];
+        }
+
+        if(Memory.rooms[roomName] == null) {
+            Memory.rooms[roomName] = {};
+        }
+
+        Memory.rooms[roomName]['colonyName'] = this.name;
+
+        if(!this.memory.manuallyAddedRooms.includes(roomName)) {
+            this.memory.manuallyAddedRooms.push(roomName)
+        }
+
+        this.initColonyRoomInfo();
     }
 
     getColonyNameOfRoom(roomName) {
