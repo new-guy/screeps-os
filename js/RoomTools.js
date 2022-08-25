@@ -280,7 +280,7 @@ Room.prototype.drawControllerInfo = function() {
 	}
 
 	var delta1 = percentProgress - lookBackPercent1
-	var delta2 = percentProgress - lookBackPercent1
+	var delta2 = percentProgress - lookBackPercent2
 	Game.map.visual.text('Δ' + RCL_TICKS_TO_LOOK_BACK_1 + ': ' + delta1, thirdLinePos, {color: '#CCCC22', fontSize: 3, align: 'right', opacity: 0.5});
 	Game.map.visual.text('Δ' + RCL_TICKS_TO_LOOK_BACK_2 + ': ' + delta2, fourthLinePos, {color: '#CCCC22', fontSize: 3, align: 'right', opacity: 0.5});
 }
