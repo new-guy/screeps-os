@@ -32,7 +32,7 @@ class Colony {
         var evaluatedRooms = [];
 
         if(this.memory.manuallyAddedRooms != null) {
-            roomsToEvaluate.concat(this.memory.manuallyAddedRooms);
+            roomsToEvaluate = roomsToEvaluate.concat(this.memory.manuallyAddedRooms);
         }
 
         while(roomsToEvaluate.length > 0) {
