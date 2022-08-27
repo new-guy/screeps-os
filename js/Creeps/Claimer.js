@@ -30,6 +30,7 @@ class Claimer extends CreepProcess {
             else {
                 if(targetController.owner != null && !targetController.my) {
                     this.creep.attackController(targetController);
+                    this.creep.say('Attack')
                 }
                 else {
                     this.creep.claimController(targetController);
