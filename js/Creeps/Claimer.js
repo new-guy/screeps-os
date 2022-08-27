@@ -17,9 +17,8 @@ class Claimer extends CreepProcess {
         var centerOfTargetRoom = new RoomPosition(25,25,this.creep.memory.targetRoom);
 
         if(targetRoom == null) {
-            var centerOfTargetRoom = new RoomPosition(25,25,this.creep.memory.targetRoom);
-
             this.creep.moveTo(centerOfTargetRoom);
+            Game.map.visual.line(centerOfTargetRoom, this.creep.pos, {color: '#9999ff', opacity: 0.7, width: 0.7, lineStyle: 'dotted'});
         }
 
         else {
@@ -36,9 +35,8 @@ class Claimer extends CreepProcess {
                     this.creep.claimController(targetController);
                 }
             }
+            Game.map.visual.line(targetController.pos, this.creep.pos, {color: '#9999ff', opacity: 0.7, width: 0.7, lineStyle: 'dotted'});
         }
-
-        Game.map.visual.line(centerOfTargetRoom, this.creep.pos, {color: '#9999ff', opacity: 0.7, width: 0.7, lineStyle: 'dotted'});
     }
 }
 
