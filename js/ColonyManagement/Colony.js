@@ -5,6 +5,7 @@ class Colony {
     constructor(name) {
         this.name = name;
         this.memory = Memory.colonies[name];
+        if(this.memory['primaryRoomName'] == null) this.memory['primaryRoomName'] = this.name;
         this.primaryRoom = Game.rooms[this.memory['primaryRoomName']];
 
         if(this.memory['secondaryRoomName'] != null) {

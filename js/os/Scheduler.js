@@ -189,6 +189,8 @@ class Scheduler {
     }
 
     executeProcess(processClass, activeProcessMetadata) {
+        console.log(activeProcessMetadata['pid'])
+        console.log(processClass)
         var activeProcess = new processTypeMap[processClass](activeProcessMetadata['pid'], this);
         activeProcess.update();
         var processResult = activeProcess.finish();

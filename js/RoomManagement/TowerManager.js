@@ -35,7 +35,7 @@ class TowerManager extends Process {
             tower.heal(closestFriendly);
         }
 
-        else if(this.room.damagedRoads.length > 0) {
+        else if(this.room.damagedRoads != null && this.room.damagedRoads.length > 0) {
             var mostDamaged = this.room.damagedRoads[0];
 
             for(var i = 1; i < this.room.damagedRoads.length; i++) {

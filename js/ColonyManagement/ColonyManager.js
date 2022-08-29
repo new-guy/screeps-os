@@ -102,10 +102,10 @@ class ColonyManager extends Process {
     }
 
     checkForEnergyHaul() {
-        if(this.colony.primaryRoom.hasNecessaryMinimumEnergy() && !this.colony.secondaryRoom.isAboveEnergyHaulThreshold()) {
+        if(this.colony.primaryRoom.hasNecessaryMinimumEnergy() && this.colony.secondaryRoom != null && !this.colony.secondaryRoom.isAboveEnergyHaulThreshold()) {
             this.ensureEnergyHauler(this.colony.primaryRoom, this.colony.secondaryRoom);
         }
-        else if(this.colony.secondaryRoom.hasNecessaryMinimumEnergy() && !this.colony.primaryRoom.isAboveEnergyHaulThreshold()) {
+        else if(this.colony.secondaryRoom != null && this.colony.secondaryRoom.hasNecessaryMinimumEnergy() && !this.colony.primaryRoom.isAboveEnergyHaulThreshold()) {
             this.ensureEnergyHauler(this.colony.secondaryRoom, this.colony.primaryRoom);
         }
     }
