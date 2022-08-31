@@ -581,14 +581,17 @@ class Colony {
             if(Game.recon.isRoomNameDangerous(roomName)) continue; //Avoid dangerous rooms
             if(room.hasInvaders() || room.hasInvaderStructures()) continue; //Ignore invader rooms
 
+            var isSkRoom = (Memory.scouting.rooms[roomName] != null && Memory.scouting.rooms[roomName]['isSkRoom'] === true);
+            var isEnemyRoom = (room.controller != null && room.controller.owner != null && !room.controller.my);
+
+            if(isSkRoom || isEnemyRoom) continue;
+
             var sourcesInRoom = room.find(FIND_SOURCES);
 
             for(var i = 0; i < sourcesInRoom.length; i++) {
                 var source = sourcesInRoom[i];
 
-                var isSkRoom = (Memory.scouting.rooms[roomName] != null && Memory.scouting.rooms[roomName]['isSkRoom'] === true);
-
-                if(source.energy > 0 && source.pos.hasOpenAdjacentTile() && !isSkRoom) {
+                if(source.energy > 0 && source.pos.hasOpenAdjacentTile()) {
                     this.activeSources.push(source);
                 }
 
