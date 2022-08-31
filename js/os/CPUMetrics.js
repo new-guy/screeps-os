@@ -107,14 +107,15 @@ exports.printProcessStats = function(scheduler) {
     console.log("CPU Used: " + totalUsed + " Limit: " + Game.cpu.limit + " Tick Limit: " + Game.cpu.tickLimit);
     console.log("Overhead: " + overhead + " Process: " + totalUsedByProcesses);
     console.log("Bucket State: " + getBucketState() + " Level: " + Game.cpu.bucket);
-    console.log("Ticks Since Not Full: " + getTickSinceCPUNonFull());
+    console.log("Ticks Since Not Full: " + getTicksSinceCPUNonFull());
     console.log("Processes Runnable: " + scheduler.sortedProcesses.length);
     console.log("Processes Finished: " + processesFinished + " Slept: " + processesSlept + " Skipped: " + processesSkipped);
     console.log("=======================");
     //Calculate average and total for each process class
 }
 
-function getTickSinceCPUNonFull() {
+exports.getTicksSinceCPUNonFull = getTicksSinceCPUNonFull;
+function getTicksSinceCPUNonFull() {
     var bucketNotFull = Game.cpu.bucket < 10000;
     if(Memory.cpu.lastNonFullBucketTick == null || bucketNotFull) Memory.cpu.lastNonFullBucketTick = Game.time;
 

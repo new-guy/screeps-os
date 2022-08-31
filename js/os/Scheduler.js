@@ -183,6 +183,10 @@ class Scheduler {
         CPUMetrics.recordProcessMetrics(this);
         CPUMetrics.printProcessStats(this);
 
+        if(CPUMetrics.getTicksSinceCPUNonFull() > CPU_TICKS_SINCE_NOT_FULL_TO_GENERATE_PIXEL) {
+            Game.cpu.generatePixel();
+        }
+
         function shouldSleep(processMetadata) {
             return processMetadata['wakeTick'] != null && processMetadata['wakeTick'] > Game.time; //Are we before the wake tick?
         }
