@@ -96,6 +96,8 @@ class Process {
     }
 
     killAllChildren() {
+        if(this.memory.children == null) return;
+
         while(this.memory.children.length > 0) {
             var pid = this.memory.children.shift();
             this.scheduler.garbageCollectProcess(pid);

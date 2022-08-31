@@ -53,6 +53,12 @@ EXPANSION_BOOTSTRAP_MAX_COUNT = 5
 EXPANSION_BOOTSTRAP_MAX_TICKS = 500
 EXPANSION_BOOTSTRAP_MAX_ENERGY = 5000
 
+//Stat tracking Configuration
+RCL_RECORD_FREQUENCY = 100 //Every N ticks, record the current RCL %
+RCL_TICKS_TO_LOOK_BACK_1 = 700 //Number of ticks to look back when showing a delta line 1
+RCL_TICKS_TO_LOOK_BACK_2 = 9200 //Number of ticks to look back when showing a delta line 2
+APPROX_SEC_PER_TICK = 5 //Seconds per tick
+
 // Colony configuration
 VALID_STRUCTURES_TO_RAMPART = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_LINK, STRUCTURE_TERMINAL, STRUCTURE_TOWER, STRUCTURE_STORAGE];
 
@@ -70,6 +76,7 @@ BOOTSTRAPPER_SAVE_CONTROLLER_THRESHOLD = 3000;
 
 ROOM_NECESSARY_MINIMUM_ENERGY_CONTAINER = 1000;
 ROOM_NECESSARY_MINIMUM_ENERGY_STORAGE = 50000;
+HAUL_ENERGY_LOW_THRESHOLD_STORAGE = 10000; //If it's below this threshold, and the other room is above minimum energy storage threshold, then transfer from one to the other
 
 TICKS_BETWEEN_FULL_ROAD_RECALCULATION = 200;
 

@@ -77,6 +77,17 @@ Room.prototype.hasNecessaryMinimumEnergy = function() {
 	}
 }
 
+Room.prototype.isAboveEnergyHaulThreshold = function() {
+	var harvestDest = this.harvestDestination;
+
+	if(harvestDest != null) {
+		return harvestDest.store[RESOURCE_ENERGY] > HAUL_ENERGY_LOW_THRESHOLD_STORAGE;
+	}
+	else {
+		return false;
+	}
+}
+
 Room.prototype.isInComa = function() {
 	if(this.controller == null || !this.controller.my) {
 		return false;
@@ -234,9 +245,45 @@ Room.prototype.drawControllerInfo = function() {
 
 	var firstLinePos = new RoomPosition(48, 2, this.name);
 	var secondLinePos = new RoomPosition(48, 6, this.name);
+	var thirdLinePos = new RoomPosition(48, 10, this.name);
+	var fourthLinePos = new RoomPosition(48, 14, this.name);
 
 	Game.map.visual.text(this.controller.level, firstLinePos, {color: '#CCCC22', fontSize: 4, align: 'right', opacity: 1.0});
 
 	var percentProgress = Math.trunc(((this.controller.progress/this.controller.progressTotal) * 100));
 	Game.map.visual.text(percentProgress + '%', secondLinePos, {color: '#CCCC22', fontSize: 4, align: 'right', opacity: 1.0});
+
+	if(this.memory.rclPercentHistory == null) {
+		this.memory.rclPercentHistory = [];
+	}
+	if(Game.time % RCL_RECORD_FREQUENCY === 0) {
+		this.memory.rclPercentHistory.unshift(percentProgress)
+
+		var metricsToStore = RCL_TICKS_TO_LOOK_BACK_2/RCL_RECORD_FREQUENCY;
+		if(this.memory.rclPercentHistory.length > metricsToStore) {
+			this.memory.rclPercentHistory.pop();
+		}
+	}
+
+	var indexToLookBack1 = (RCL_TICKS_TO_LOOK_BACK_1/RCL_RECORD_FREQUENCY)-1;
+	var indexToLookBack2 = (RCL_TICKS_TO_LOOK_BACK_2/RCL_RECORD_FREQUENCY)-1;
+
+	var lookBackPercent1 = this.memory.rclPercentHistory[indexToLookBack1];
+	var lookBackPercent2 = this.memory.rclPercentHistory[indexToLookBack2];
+
+	if(lookBackPercent1 == null) {
+		lookBackPercent1 = this.memory.rclPercentHistory[this.memory.rclPercentHistory.length - 1];
+	}
+
+	if(lookBackPercent2 == null) {
+		lookBackPercent2 = this.memory.rclPercentHistory[this.memory.rclPercentHistory.length - 1];
+	}
+
+	var delta1 = percentProgress - lookBackPercent1
+	var delta2 = percentProgress - lookBackPercent2
+	
+	var minutes1 = Math.trunc((RCL_TICKS_TO_LOOK_BACK_1 * APPROX_SEC_PER_TICK)/60);
+	var hours2 = Math.trunc(((RCL_TICKS_TO_LOOK_BACK_2 * APPROX_SEC_PER_TICK)/60)/60);
+	Game.map.visual.text('Δ' + minutes1 + 'm: ' + delta1, thirdLinePos, {color: '#CCCC22', fontSize: 3, align: 'right', opacity: 0.5});
+	Game.map.visual.text('Δ' + hours2 + 'h: ' + delta2, fourthLinePos, {color: '#CCCC22', fontSize: 3, align: 'right', opacity: 0.5});
 }

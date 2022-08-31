@@ -1,9 +1,10 @@
 ## Plan
-1. Ability to explicitly add rooms to a colony
+1. Colony builder should check if there are construction sites in its room instead of heading to another
+2. Set a max number of road repairers
 3. Command to transfer room from one colony to another
-4. Ability to force spawns to use a minimum amount of energy
+3. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
-3. Delete TEMP lines
+4. Delete TEMP lines
 5. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
 6. Make CreepSpawner less verbose & cleaner to define
 - Need to have a common method for naming creeps 
@@ -11,7 +12,6 @@
 8. Display information about attacks with mapvisuals
 9. Dynamically calculate number of haulers
 10. Make creeps move along road and ignore each other
-11. Need to be able to send energy to other base once we hit a threshold
 12. Need ability to flush processes & creeps
 13. Dynamically calculate number of haulers
 14. Allow more base designs
@@ -21,6 +21,7 @@
 18. Error handling - catch error and throw it at the end of processing
 19. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
 20. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
+21. This.creep.memory comes from process.memory.creepmemory or some shit.  That means it's doubled up unnecessarily.  Potentially stop referencing creep memory
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions

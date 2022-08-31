@@ -14,11 +14,11 @@ class Claimer extends CreepProcess {
     performStateActions() {
         var targetRoom = Game.rooms[this.creep.memory.targetRoom];
         this.creep.say('🚩');
+        var centerOfTargetRoom = new RoomPosition(25,25,this.creep.memory.targetRoom);
 
         if(targetRoom == null) {
-            var destination = new RoomPosition(25,25,this.creep.memory.targetRoom);
-
-            this.creep.moveTo(destination);
+            this.creep.moveTo(centerOfTargetRoom);
+            Game.map.visual.line(centerOfTargetRoom, this.creep.pos, {color: '#9999ff', opacity: 0.7, width: 0.7, lineStyle: 'dotted'});
         }
 
         else {
@@ -30,11 +30,13 @@ class Claimer extends CreepProcess {
             else {
                 if(targetController.owner != null && !targetController.my) {
                     this.creep.attackController(targetController);
+                    this.creep.say('Attack')
                 }
                 else {
                     this.creep.claimController(targetController);
                 }
             }
+            Game.map.visual.line(targetController.pos, this.creep.pos, {color: '#9999ff', opacity: 0.7, width: 0.7, lineStyle: 'dotted'});
         }
     }
 }

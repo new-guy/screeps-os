@@ -84,6 +84,11 @@ class Swarm extends MultiCreep {
     }
 
     combatMove(creeps, targetFlag) {
+        if(targetFlag.room == null) {
+            var centerOfTargetRoom = new RoomPosition(targetFlag.pos.x, targetFlag.pos.y, targetFlag.pos.roomName);
+            this.moveCreepsTo(creeps, centerOfTargetRoom);
+            return;
+        }
         if(targetFlag == null) {
             this.moveToClosestDestroyableStructure(creeps, targetFlag);
             return;
