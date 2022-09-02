@@ -153,7 +153,7 @@ class ColonyManager extends Process {
     }
 
     ensureRoadRepairer() {
-        var roadRepairerCount = this.colony.roomsNeedingRoadRepairs.length;
+        var roadRepairerCount = Math.min(this.colony.roomsNeedingRoadRepairs.length, COLONY_MAX_ROAD_REPAIRERS);
 
         var data = {
             'colonyName': this.colony.name,
