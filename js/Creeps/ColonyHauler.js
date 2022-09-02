@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class ColonyHauler extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '🚚'
 
         if(this.creep != null) {
             this.sourceRoom = Game.rooms[this.creep.memory.sourceRoom];

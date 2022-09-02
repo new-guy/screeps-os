@@ -1,6 +1,9 @@
 ## Plan
-1. Colony builder should check if there are construction sites in its room instead of heading to another
+1. Display all creeps on map using lil emojis
 2. Set a max number of road repairers
+3. RoomHauler to manage terminal levels
+4. Mineral mining
+1. Colony builder should check if there are construction sites in its room instead of heading to another
 3. Command to transfer room from one colony to another
 3. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected

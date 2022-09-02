@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class RoadRepairer extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '🔧'
 
         if(this.creep != null) {
             this.targetColony = Game.colonies[this.creep.memory.targetColony];

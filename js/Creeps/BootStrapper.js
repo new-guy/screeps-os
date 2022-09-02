@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class BootStrapper extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '👢'
 
         if(this.creep != null) {
             var targetColonyName = this.creep.memory.targetColony;

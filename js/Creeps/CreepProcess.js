@@ -5,6 +5,7 @@ class CreepProcess extends Process {
         super(...args);
 
         this.creep = Game.creeps[this.memory.creepName];
+        this.creepEmoji = '🤖'
 
         if(this.creep != null) {
             this.spawningColony = Game.colonies[this.creep.memory.spawningColonyName];
@@ -25,9 +26,14 @@ class CreepProcess extends Process {
         }
 
         else {
+            this.drawMapLocation();
             this.updateStateTransitions();
             this.performStateActions();
         }
+    }
+
+    drawMapLocation() {
+	    Game.map.visual.text(this.creepEmoji, this.creep.pos, {color: '#CCCC22', fontSize: 4, align: 'center', opacity: 0.5});
     }
 
     updateStateTransitions() {
