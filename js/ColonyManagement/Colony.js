@@ -106,6 +106,18 @@ class Colony {
         this.initColonyRoomInfo();
     }
 
+    fullHardReset() {
+        Memory.processes = undefined;
+        Memory.creeps = undefined;
+
+        for(var creepName in Game.creeps) {
+            var creep = Game.creeps[creepName];
+            if(creep.my) {
+                creep.suicide();
+            }
+        }
+    }
+
     getColonyNameOfRoom(roomName) {
         if(Memory.rooms[roomName] == null) return null;
         else {
