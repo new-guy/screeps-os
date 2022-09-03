@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class Miner extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '⚡'
 
         if(this.creep != null) {
             this.targetSourcePos = new RoomPosition(this.creep.memory.targetSourcePos.x, this.creep.memory.targetSourcePos.y, this.creep.memory.targetSourcePos.roomName);

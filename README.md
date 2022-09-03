@@ -44,6 +44,7 @@ The overarching goal here is to build an AI that is driven around running indivi
         - Spawn N that attack in a wave
 
 - Manually set a room's colony - Game.rooms[ROOM_NAME].setColony(COLONY_NAME)
+- Kill all creeps and reset all processes - Game.colonies[COLONY_NAME].fullHardReset() (note: kills _every_ creep in the empire)
     
 
 ## Tick Loop - sorta out of date

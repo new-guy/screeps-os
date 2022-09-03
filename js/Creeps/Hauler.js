@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class Hauler extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '🚛'
 
         if(this.creep != null) {
             this.targetHarvestDestination = Game.rooms[this.creep.memory['targetStorageRoom']].harvestDestination;

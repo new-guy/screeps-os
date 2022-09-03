@@ -117,8 +117,6 @@ function initRooms() {
 
         room.constructionSites = room.find(FIND_MY_CONSTRUCTION_SITES);
 
-        if(Memory.rooms[roomName].roadBuildPlan != null) Memory.rooms[roomName].roadBuildPlan = undefined; //TEMP memory cleanup
-
         if(room.controller != null && room.controller.my) {
             if(room.energyAvailable < room.energyCapacityAvailable) {
                 room.nonFullFactories = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
