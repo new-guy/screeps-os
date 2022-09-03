@@ -37,7 +37,6 @@ Ticks remaining in Safe mode
     - Pass 1:
 
 ### Refactors
-- Either use Null or undefined - stop mixing
 - Make HomeRoomConstructionTools more DRY
 - Generic "move to target" function & state?  Would be good to not have to keep rewriting it
 - Do we differentiate between secondary and primary too much? Should we instead just be treating them the same in the code more?
