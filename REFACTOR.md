@@ -1,6 +1,7 @@
 ## Plan
-3. RoomHauler to manage terminal levels
-4. Mineral mining
+1. Mineral mining
+2. RoomHauler to manage terminal <-> storage
+3. Terminal "sell to market if over threshold" logic
 1. Colony builder should check if there are construction sites in its room instead of heading to another
 3. Command to transfer room from one colony to another
 3. Ability to force spawns to use a minimum amount of energy
@@ -12,7 +13,6 @@
 8. Display information about attacks with mapvisuals
 9. Dynamically calculate number of haulers
 10. Make creeps move along road and ignore each other
-12. Need ability to flush processes & creeps
 13. Dynamically calculate number of haulers
 14. Allow more base designs
 15. Make creeps move along road and ignore each other

@@ -47,6 +47,7 @@ MAX_TICKS_TO_USE_PER_SPAWN = 700;
 TARGET_ROUTES_PER_STORAGE = 5;
 TIME_BETWEEN_PURGES = 750;
 HAULER_COUNT = 2;
+DIST_PER_HAULER_POST_STORAGE = 100; //After we've gotten storage, scale the hauler count based upon distance?
 REMAINING_TICKS_TO_SPAWN_RESERVER = 3000;
 
 
@@ -60,6 +61,9 @@ RCL_RECORD_FREQUENCY = 100 //Every N ticks, record the current RCL %
 RCL_TICKS_TO_LOOK_BACK_1 = 700 //Number of ticks to look back when showing a delta line 1
 RCL_TICKS_TO_LOOK_BACK_2 = 9200 //Number of ticks to look back when showing a delta line 2
 APPROX_SEC_PER_TICK = 5 //Seconds per tick
+
+//Resource Management
+ROOM_OWN_MINERAL_MINING_TARGET = 50000 //Amount of mineral in the room that we should aim to harvest and put in the storage
 
 // Colony configuration
 VALID_STRUCTURES_TO_RAMPART = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_LINK, STRUCTURE_TERMINAL, STRUCTURE_TOWER, STRUCTURE_STORAGE];
