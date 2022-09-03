@@ -1,13 +1,14 @@
-Creep.prototype.putEnergyInTarget = function() {
+Creep.prototype.putResourceInTarget = function() {
     var target = this.getTarget();
+    var resourceType = this.memory.mineralType == null ? RESOURCE_ENERGY :this.memory.mineralType;
     this.say('🚛')
 
 
     if(target == null ||
        (target.store == null && target.carryCapacity == null && target.energy === target.energyCapacity) ||
-       (target.store != null && target.store[RESOURCE_ENERGY] == target.store.getCapacity(RESOURCE_ENERGY)) ||
-       (target.carryCapacity != null && target.carry[RESOURCE_ENERGY] === target.carryCapacity) ||
-       this.hasNoEnergy) {
+       (target.store != null && target.store[resourceType] == target.store.getCapacity(resourceType)) ||
+       (target.carryCapacity != null && target.carry[resourceType] === target.carryCapacity) ||
+       this.store.getUsedCapacity() === 0) {
         this.clearTarget();
     }
 
@@ -16,7 +17,7 @@ Creep.prototype.putEnergyInTarget = function() {
     }
 
     else {
-        var transferResult = this.transfer(target, RESOURCE_ENERGY);
+        var transferResult = this.transfer(target, resourceType);
 
         if(transferResult === 0) {
             this.clearTarget();

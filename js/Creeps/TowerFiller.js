@@ -50,7 +50,7 @@ class TowerFiller extends CreepProcess {
             }
 
             if(this.creep.getTarget() != null) {
-                this.creep.putEnergyInTarget();
+                this.creep.putResourceInTarget();
             }
 
             else {

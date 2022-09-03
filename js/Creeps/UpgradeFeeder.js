@@ -50,7 +50,7 @@ class UpgradeFeeder extends CreepProcess {
             }
 
             if(this.creep.getTarget() != null) {
-                this.creep.putEnergyInTarget();
+                this.creep.putResourceInTarget();
             }
 
             else if(this.creep.pos.getRangeTo(this.targetRoom.controller) > 5){

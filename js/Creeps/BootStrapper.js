@@ -133,7 +133,7 @@ class BootStrapper extends CreepProcess {
         }
 
         if(target instanceof StructureSpawn || target instanceof StructureExtension || target instanceof StructureStorage) {
-            this.creep.putEnergyInTarget();
+            this.creep.putResourceInTarget();
             this.creep.sayInOrder(['Knock', 'knock', 'delivery', 'here!']);
             if(!this.creep.hasTarget() && this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable) {
                 if(this.creep.room.constructionSites != null && this.creep.room.constructionSites.length > 0) {
@@ -144,7 +144,7 @@ class BootStrapper extends CreepProcess {
 
         else if(target instanceof StructureTower) {
             this.creep.say('♜');
-            this.creep.putEnergyInTarget();
+            this.creep.putResourceInTarget();
         }
 
         else if(target instanceof ConstructionSite) {

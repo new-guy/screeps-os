@@ -205,6 +205,7 @@ class HomeRoomManager extends RoomManager {
     ensureMineralMining() {
         //Ensure that the extractor exists & a container next to it
         var mineral = this.room.find(FIND_MINERALS)[0];
+        var mineralType = mineral.mineralType;
 		var extractor = mineral.pos.getStructure(STRUCTURE_EXTRACTOR);
         var container = mineral.pos.getAdjacentStructures(STRUCTURE_CONTAINER)[0];
 
@@ -221,8 +222,23 @@ class HomeRoomManager extends RoomManager {
                 openPos.createConstructionSite(STRUCTURE_CONTAINER);
             }
         }
-        if(extractor != null && container != null) {
-            console.log('Ready to mineral mine')
+
+        var structuresExist = (extractor != null && container != null);
+        var needMinerals = (this.room.storage.store[mineralType] < ROOM_OWN_MINERAL_MINING_TARGET);
+        var mineralsExist = mineral.mineralAmount > 0;
+
+        if(structuresExist && needMinerals && mineralsExist) {
+            var data = {
+                'targetMineralPos': {
+                    'x': mineral.pos.x,
+                    'y': mineral.pos.y,
+                    'roomName': mineral.pos.roomName
+                },
+                'targetStorageRoom': this.room.name,
+                'spawnColonyName': this.colony.name
+            };
+
+            this.ensureChildProcess(this.room.name + '|mineralRoute1', 'MineralRouteManager', data, COLONY_MINERAL_PRIORITY);
         }
         //If it does, and we are below the storage target, and the minerals are ready, ensure the harvest route
     }
