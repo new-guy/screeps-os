@@ -86,7 +86,7 @@ class Hauler extends CreepProcess {
                 this.creep.moveTo(this.container);
             }
 
-            else {
+            else if(this.container.store.getUsedCapacity() >= this.creep.store.getCapacity()) {
                 this.creep.withdraw(this.container, this.resourceType);
             }
         }
