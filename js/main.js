@@ -159,6 +159,10 @@ function initRooms() {
         room.damagedFriendlies = room.find(FIND_CREEPS, {filter: function(c) { return c.isFriendly() && c.hits < c.hitsMax; }});
 
         if(room.controller != null && room.controller.my) {
+            room.containersNeedingRepair = room.find(FIND_STRUCTURES, {filter: function(s) {
+                return s.structureType === STRUCTURE_CONTAINER && s.hits < s.hitsMax; 
+            }});
+
             room.rampartsNeedingRepair = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_RAMPART && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
             }});

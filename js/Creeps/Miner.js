@@ -6,12 +6,27 @@ class Miner extends CreepProcess {
         this.creepEmoji = '⚡'
 
         if(this.creep != null) {
-            this.targetSourcePos = new RoomPosition(this.creep.memory.targetSourcePos.x, this.creep.memory.targetSourcePos.y, this.creep.memory.targetSourcePos.roomName);
+            if(this.creep.memory.targetSourcePos != null) {
+                this.targetResourcePos = new RoomPosition(this.creep.memory.targetSourcePos.x, this.creep.memory.targetSourcePos.y, this.creep.memory.targetSourcePos.roomName);
+                this.mode = 'energy';
+
+                if(Game.rooms[this.targetResourcePos.roomName] != null) {
+                    this.targetResource = this.targetResourcePos.lookFor(LOOK_SOURCES)[0];
+                }
+            }
+            if(this.creep.memory.targetMineralPos != null) {
+                this.targetResourcePos = new RoomPosition(this.creep.memory.targetMineralPos.x, this.creep.memory.targetMineralPos.y, this.creep.memory.targetMineralPos.roomName);
+                this.mode = 'mineral';
+
+                if(Game.rooms[this.targetResourcePos.roomName] != null) {
+                    this.targetResource = this.targetResourcePos.lookFor(LOOK_MINERALS)[0];
+                }
+            }
+
             this.containerPos = new RoomPosition(this.creep.memory['containerPos']['x'], this.creep.memory['containerPos']['y'], this.creep.memory['containerPos']['roomName'])
 
             if(Game.rooms[this.containerPos.roomName] != null) {
                 this.container = this.containerPos.getStructure(STRUCTURE_CONTAINER);
-                this.targetSource = this.targetSourcePos.lookFor(LOOK_SOURCES)[0];
             }
         }
     }
@@ -23,8 +38,8 @@ class Miner extends CreepProcess {
     }
 
     performStateActions() {
-        if(this.targetSource == null) {
-            this.creep.moveTo(this.targetSourcePos);
+        if(this.targetResource == null) {
+            this.creep.moveTo(this.targetResourcePos);
         }
 
         else if(this.creep.pos.getRangeTo(this.containerPos) > 0) {
@@ -33,38 +48,57 @@ class Miner extends CreepProcess {
         }
 
         else {
-            if((this.container == null && this.creep.carry.energy < this.creep.carryCapacity/2) ||
-               (this.container != null && this.creep.carry.energy < this.creep.carryCapacity)) {
-                this.creep.harvest(this.targetSource);
-                this.creep.say('⚡');
+            if(this.mode === 'energy') {
+                this.harvestEnergy();
             }
+            else if(this.mode === 'mineral') {
+                this.harvestMineral();
+            }
+        }
+    }
 
-            else {
-                if(this.container == null) {
-                    var containerConstructionSite = this.containerPos.getConstructionSite(STRUCTURE_CONTAINER);
-                    if(containerConstructionSite == null) {
-                        this.containerPos.createConstructionSite(STRUCTURE_CONTAINER);
-                        this.creep.say('Create');
-                    }
+    harvestEnergy() {
+        if((this.container == null && this.creep.carry.energy < this.creep.carryCapacity/2) ||
+           (this.container != null && this.creep.carry.energy < this.creep.carryCapacity)) {
+            this.creep.harvest(this.targetResource);
+            this.creep.say('⚡');
+        }
 
-                    else {
-                        this.creep.say(this.creep.build(containerConstructionSite));
-                        this.creep.say('🔨');
-                    }
+        else {
+            if(this.container == null) {
+                var containerConstructionSite = this.containerPos.getConstructionSite(STRUCTURE_CONTAINER);
+                if(containerConstructionSite == null) {
+                    this.containerPos.createConstructionSite(STRUCTURE_CONTAINER);
+                    this.creep.say('Create');
                 }
 
                 else {
-                    if(this.container.hits < this.container.hitsMax) {
-                        this.creep.repair(this.container);
-                        this.creep.say('🔧');
-                    } 
-
-                    else {
-                        this.creep.drop(RESOURCE_ENERGY);
-                        this.creep.say('💰');
-                    }
+                    this.creep.say(this.creep.build(containerConstructionSite));
+                    this.creep.say('🔨');
                 }
             }
+
+            else {
+                if(this.container.hits < this.container.hitsMax) {
+                    this.creep.repair(this.container);
+                    this.creep.say('🔧');
+                } 
+
+                else {
+                    this.creep.drop(RESOURCE_ENERGY);
+                    this.creep.say('💰');
+                }
+            }
+        }
+    }
+
+    harvestMineral() {
+        if(this.creep.store.getFreeCapacity() === 0) {
+            this.creep.drop(this.creep.memory.mineralType);
+        }
+        else {
+            this.creep.harvest(this.targetResource);
+            this.creep.say('⚡');
         }
     }
 }

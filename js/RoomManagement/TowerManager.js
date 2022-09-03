@@ -63,6 +63,12 @@ class TowerManager extends Process {
 
             tower.repair(dangerousRampart);
         }
+
+        else if(this.room.containersNeedingRepair.length > 0) {
+            var containerToRepair = this.room.containersNeedingRepair[0];
+
+            tower.repair(containerToRepair);
+        }
     }
 }
 

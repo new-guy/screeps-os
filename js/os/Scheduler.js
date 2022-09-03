@@ -12,6 +12,7 @@ const RoadGenerator = require('RoadGenerator');
 const RoadmapMakeRoad = require('RoadmapMakeRoad');
 const EnergyHarvestingManager = require('EnergyHarvestingManager');
 const EnergyRouteManager = require('EnergyRouteManager');
+const MineralRouteManager = require('MineralRouteManager');
 const InvaderMonitor = require('InvaderMonitor');
 const ExpansionManager = require('ExpansionManager');
 const OffenseMonitor = require('OffenseMonitor');
@@ -65,6 +66,7 @@ var processTypeMap = {
     "RoadmapMakeRoad": RoadmapMakeRoad,
     "EnergyHarvestingManager": EnergyHarvestingManager,
     "EnergyRouteManager": EnergyRouteManager,
+    "MineralRouteManager": MineralRouteManager,
     "ExpansionManager": ExpansionManager,
     "OffenseMonitor": OffenseMonitor,
     "HomeRoomManager": HomeRoomManager,

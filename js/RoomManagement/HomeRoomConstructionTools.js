@@ -31,7 +31,6 @@ Room.prototype.updateBuildingPlans = function() {
 		this.recalculateBuildingPlan();
 		this.createFunctionalFlags();
 		this.generateControllerSinkLinkPlan();
-		this.generateMineralMiningPlan();
 		this.memory.latestRCLGenerated = this.controller.level;
 		
 		this.memory.planGenerationState = 'waiting';
@@ -458,16 +457,6 @@ Room.prototype.generateControllerSinkLinkPlan = function() {
 		console.log(sinkPos);
 		console.log('NEED TO ADD LINK TO BUILD PLAN')
 		sinkPos.createFlag("!LINKSINK|" + this.name + "|0");
-	}
-}
-
-Room.prototype.generateMineralMiningPlan = function() {
-	if(this.controller.level >= 6) {
-		var mineral = this.find(FIND_MINERALS)[0];
-	
-		mineral.pos.createFlag('!M|' + this.name + "|" + this.name + "|mineral");
-
-		console.log('NEED TO ADD MINERAL EXTRACTOR TO BUILDING PLAN')
 	}
 }
 

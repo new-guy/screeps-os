@@ -45,6 +45,10 @@ class HomeRoomManager extends RoomManager {
             this.ensureLinkManager();
         }
 
+        if(this.room.controller.level >= 6) {
+            this.ensureMineralMining();
+        }
+
         if(this.room.storage == null) {
             this.preStorageBootstrap();
         }
@@ -196,6 +200,47 @@ class HomeRoomManager extends RoomManager {
         
         var spawnPID = 'linkManager|' + this.room.name;
         this.ensureChildProcess(spawnPID, 'LinkManager', data, COLONY_MANAGEMENT_PRIORITY);
+    }
+
+    ensureMineralMining() {
+        //Ensure that the extractor exists & a container next to it
+        var mineral = this.room.find(FIND_MINERALS)[0];
+        var mineralType = mineral.mineralType;
+		var extractor = mineral.pos.getStructure(STRUCTURE_EXTRACTOR);
+        var container = mineral.pos.getAdjacentStructures(STRUCTURE_CONTAINER)[0];
+
+        if(extractor == null) {
+            var extractorConstructionSite = mineral.pos.getConstructionSite(STRUCTURE_EXTRACTOR);
+            if(extractorConstructionSite == null) {
+                mineral.pos.createConstructionSite(STRUCTURE_EXTRACTOR);
+            }
+        }
+        if(container == null) {
+            var containerConstructionSite = mineral.pos.getAdjacentConstructionSites(STRUCTURE_CONTAINER)[0];
+            if(containerConstructionSite == null) {
+                var openPos = mineral.pos.getOpenAdjacentPos();
+                openPos.createConstructionSite(STRUCTURE_CONTAINER);
+            }
+        }
+
+        var structuresExist = (extractor != null && container != null);
+        var needMinerals = (this.room.storage.store[mineralType] < ROOM_OWN_MINERAL_MINING_TARGET);
+        var mineralsExist = mineral.mineralAmount > 0;
+
+        if(structuresExist && needMinerals && mineralsExist) {
+            var data = {
+                'targetMineralPos': {
+                    'x': mineral.pos.x,
+                    'y': mineral.pos.y,
+                    'roomName': mineral.pos.roomName
+                },
+                'targetStorageRoom': this.room.name,
+                'spawnColonyName': this.colony.name
+            };
+
+            this.ensureChildProcess(this.room.name + '|mineralRoute1', 'MineralRouteManager', data, COLONY_MINERAL_PRIORITY);
+        }
+        //If it does, and we are below the storage target, and the minerals are ready, ensure the harvest route
     }
 
     preStorageBootstrap() {

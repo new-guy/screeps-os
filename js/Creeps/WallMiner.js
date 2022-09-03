@@ -48,7 +48,7 @@ class WallMiner extends CreepProcess {
         else if(state === 'dropoffEnergy') {
             var targetHarvestDestination = this.spawningColony.getClosestHarvestDestination(this.creep.pos);
             this.creep.setTarget(targetHarvestDestination);
-            this.creep.putEnergyInTarget();
+            this.creep.putResourceInTarget();
         }
     }
 

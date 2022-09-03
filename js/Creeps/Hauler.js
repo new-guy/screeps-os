@@ -12,6 +12,15 @@ class Hauler extends CreepProcess {
             if(Game.rooms[this.containerPos.roomName] != null) {
                 this.container = this.containerPos.getStructure(STRUCTURE_CONTAINER);
             }
+
+            if(this.creep.memory.mineralType != null) {
+                this.mode = 'mineral'
+                this.resourceType = this.creep.memory.mineralType;
+            }
+            else {
+                this.mode = 'energy'
+                this.resourceType = RESOURCE_ENERGY;
+            }
         }
     }
 
@@ -28,14 +37,14 @@ class Hauler extends CreepProcess {
         }
 
         if(state === 'pickupEnergy') {
-            if(this.creep.hasFullEnergy) {
+            if(this.creep.store.getFreeCapacity() === 0) {
                 state = 'dropoffEnergy'
                 this.creep.clearTarget();
             }
         }
 
         else if(state === 'dropoffEnergy') {
-            if(this.creep.hasNoEnergy) {
+            if(this.creep.store.getUsedCapacity() === 0) {
                 state = 'pickupEnergy'
                 this.creep.clearTarget();
             }
@@ -59,7 +68,7 @@ class Hauler extends CreepProcess {
             else {
                 this.creep.setTarget(this.targetHarvestDestination);
             }
-            this.creep.putEnergyInTarget();
+            this.creep.putResourceInTarget();
         }
     }
 
@@ -78,7 +87,7 @@ class Hauler extends CreepProcess {
             }
 
             else {
-                this.creep.withdraw(this.container, RESOURCE_ENERGY);
+                this.creep.withdraw(this.container, this.resourceType);
             }
         }
     }
