@@ -57,6 +57,12 @@ class EnergyRouteManager extends Process {
         new RoomVisual(this.memory.containerPos['roomName']).text('Dest: ' + this.targetStorageRoom.name, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'], format);
         new RoomVisual(this.memory.containerPos['roomName']).text('Dist: ' + this.memory.routeDistance, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'] + 1, format);
         new RoomVisual(this.memory.containerPos['roomName']).text('Haul: ' + this.haulerCount, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'] + 2, format);
+
+        var sourceContainerIsFull = this.sourceContainer.store.getFreeCapacity() == 0;
+
+        if(sourceContainerIsFull) {
+	        Game.map.visual.text('⛔️', this.sourceContainer.pos, {color: '#FFFF33', fontSize: 3, align: 'center', opacity: 1.0});
+        }
     }
 
     isOperational() {
