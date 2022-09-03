@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class Upgrader extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '🙏';
     }
 
     update() {

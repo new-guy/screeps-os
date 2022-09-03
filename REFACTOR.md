@@ -11,9 +11,6 @@
 - Need to have a common method for naming creeps 
 7. Minimum energy in storage needs to be scheduled
 8. Display information about attacks with mapvisuals
-9. Dynamically calculate number of haulers
-10. Make creeps move along road and ignore each other
-13. Dynamically calculate number of haulers
 14. Allow more base designs
 15. Make creeps move along road and ignore each other
 16. Create common library for creeps to talk with
