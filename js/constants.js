@@ -48,7 +48,7 @@ MAX_TICKS_TO_USE_PER_SPAWN = 700;
 TARGET_ROUTES_PER_STORAGE = 5;
 TIME_BETWEEN_PURGES = 3000;
 DEFAULT_ENERGY_HAULER_COUNT = 2;
-DIST_PER_HAULER_POST_STORAGE = 30; //After we've gotten storage, scale the hauler count based upon distance?
+DIST_PER_HAULER_POST_STORAGE = 33; //After we've gotten storage, scale the hauler count based upon distance?
 REMAINING_TICKS_TO_SPAWN_RESERVER = 3000;
 
 
