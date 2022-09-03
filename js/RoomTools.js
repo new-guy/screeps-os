@@ -239,6 +239,11 @@ Room.prototype.setColony = function(colonyName) {
 	this.memory.colonyName = colonyName;
 }
 
+Room.prototype.drawInfoOnMap = function () {
+	this.drawControllerInfo();
+	this.drawMiningInfo();
+}
+
 Room.prototype.drawControllerInfo = function() {
 	//Print the level
 	//Next line is percent to next level
@@ -286,4 +291,10 @@ Room.prototype.drawControllerInfo = function() {
 	var hours2 = Math.trunc(((RCL_TICKS_TO_LOOK_BACK_2 * APPROX_SEC_PER_TICK)/60)/60);
 	Game.map.visual.text('Δ' + minutes1 + 'm: ' + delta1, thirdLinePos, {color: '#CCCC22', fontSize: 3, align: 'right', opacity: 0.5});
 	Game.map.visual.text('Δ' + hours2 + 'h: ' + delta2, fourthLinePos, {color: '#CCCC22', fontSize: 3, align: 'right', opacity: 0.5});
+}
+
+Room.prototype.drawMiningInfo = function() {
+	var mineralPos = this.mineral.pos;
+	var mineralType = this.mineral.mineralType;
+	Game.map.visual.text(mineralType, mineralPos, {color: '#DDDDDD', fontSize: 4, align: 'center', opacity: 1.0});
 }

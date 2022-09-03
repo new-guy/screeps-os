@@ -150,7 +150,9 @@ function initRooms() {
                 return s.structureType === STRUCTURE_SPAWN; 
             }});
 
-            room.drawControllerInfo()
+            room.mineral = room.find(FIND_MINERALS)[0];
+
+            room.drawInfoOnMap();
         }
 
         room.enemies = room.find(FIND_CREEPS, {filter: function(c) { return c.isHostile(); }});
