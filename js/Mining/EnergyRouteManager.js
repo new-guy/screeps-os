@@ -5,12 +5,27 @@ class EnergyRouteManager extends Process {
     constructor (...args) {
         super(...args);
         
-        this.targetSourcePos = new RoomPosition(this.memory.targetSourcePos.x, this.memory.targetSourcePos.y, this.memory.targetSourcePos.roomName);
+        var targetSourcePos = new RoomPosition(this.memory.targetSourcePos.x, this.memory.targetSourcePos.y, this.memory.targetSourcePos.roomName);
+        this.targetSourcePos = targetSourcePos;
         this.targetStorageRoom = Game.rooms[this.memory.targetStorageRoom];
         this.spawnColony = Game.colonies[this.memory.spawnColonyName];
+        this.haulerCount = DEFAULT_ENERGY_HAULER_COUNT;
 
         if(this.memory.containerPos == null) {
             this.determineContainerPos();
+        }
+
+        if(!this.spawnColony.isPreStorage) {
+            var harvestDest = Game.rooms[this.memory.targetStorageRoom].harvestDestination;
+            if(this.memory.routeDistance == null && harvestDest != null) {
+                var routePath = this.spawnColony.roadmap.findRoadPath(harvestDest.pos, targetSourcePos, 'mining');
+                this.memory.routeDistance = routePath.length;
+            }
+
+            if(this.memory.routeDistance != null) {
+                var adjustedHaulerCount = Math.ceil(this.memory.routeDistance/DIST_PER_HAULER_POST_STORAGE);
+                this.haulerCount = adjustedHaulerCount;
+            }
         }
     }
 
@@ -40,6 +55,8 @@ class EnergyRouteManager extends Process {
     drawRouteInfo() {
         var format = {align: 'left'};
         new RoomVisual(this.memory.containerPos['roomName']).text('Dest: ' + this.targetStorageRoom.name, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'], format);
+        new RoomVisual(this.memory.containerPos['roomName']).text('Dist: ' + this.memory.routeDistance, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'] + 1, format);
+        new RoomVisual(this.memory.containerPos['roomName']).text('Haul: ' + this.haulerCount, this.memory.containerPos['x'] + 1, this.memory.containerPos['y'] + 2, format);
     }
 
     isOperational() {
@@ -59,7 +76,7 @@ class EnergyRouteManager extends Process {
 
     get allHaulersExist() {
         var allHaulersExist = true;
-        for(var i = 0; i < HAULER_COUNT; i++) {
+        for(var i = 0; i < this.haulerCount; i++) {
             var haulerName = this.targetSourcePos.readableString() +'|Hauler|' + i;
             allHaulersExist = (Game.creeps[haulerName] != null);
 
@@ -92,7 +109,7 @@ class EnergyRouteManager extends Process {
         }
 
         var haulerBody = BodyGenerator.generateBody('Hauler', energyCapacity);
-        var ticksToSpawn = HAULER_COUNT * BodyGenerator.getTicksToSpawn(haulerBody);
+        var ticksToSpawn = this.haulerCount * BodyGenerator.getTicksToSpawn(haulerBody);
 
         var minerBody = BodyGenerator.generateBody('Miner', energyCapacity);
         ticksToSpawn += BodyGenerator.getTicksToSpawn(minerBody);
@@ -129,7 +146,7 @@ class EnergyRouteManager extends Process {
     spawnHauler() {
         var data = {
             'colonyName': this.memory.spawnColonyName,
-            'creepCount': HAULER_COUNT,
+            'creepCount': this.haulerCount,
             'creepNameBase': this.targetSourcePos.readableString() +'|Hauler',
             'creepBodyType': 'Hauler',
             'creepProcessClass': 'Hauler',
