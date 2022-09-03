@@ -238,7 +238,7 @@ class HomeRoomManager extends RoomManager {
                 'spawnColonyName': this.colony.name
             };
 
-            this.ensureChildProcess(this.room.name + '|mineralRoute1', 'MineralRouteManager', data, COLONY_MINERAL_PRIORITY);
+            this.ensureChildProcess(this.room.name + '|mineralRoute', 'MineralRouteManager', data, COLONY_MINERAL_PRIORITY);
         }
         //If it does, and we are below the storage target, and the minerals are ready, ensure the harvest route
     }
