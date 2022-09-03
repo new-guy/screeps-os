@@ -1,24 +1,23 @@
 ## Plan
-1. Mineral mining
-2. RoomHauler to manage terminal <-> storage
-3. Terminal "sell to market if over threshold" logic
-1. Colony builder should check if there are construction sites in its room instead of heading to another
-3. Command to transfer room from one colony to another
-3. Ability to force spawns to use a minimum amount of energy
+1. RoomHauler to manage terminal <-> storage
+2. Terminal "sell to market if over threshold" logic
+3. Keep track of profit made by room and allow it to spend some percentage of that on energy imports
+4. Colony builder should check if there are construction sites in its room instead of heading to another
+5. Command to transfer room from one colony to another
+6. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
-5. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
-6. Make CreepSpawner less verbose & cleaner to define
+7. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
+8. Make CreepSpawner less verbose & cleaner to define
 - Need to have a common method for naming creeps 
-7. Minimum energy in storage needs to be scheduled
-8. Display information about attacks with mapvisuals
-14. Allow more base designs
-15. Make creeps move along road and ignore each other
-16. Create common library for creeps to talk with
-17. Get rid of link flags
-18. Error handling - catch error and throw it at the end of processing
-19. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
-20. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
-21. This.creep.memory comes from process.memory.creepmemory or some shit.  That means it's doubled up unnecessarily.  Potentially stop referencing creep memory
+9. Display information about attacks with mapvisuals
+10. Allow more base designs
+11. Make creeps move along road and ignore each other
+12. Create common library for creeps to talk with
+13. Get rid of link flags
+14. Error handling - catch error and throw it at the end of processing
+15. Get rid of primary/secondary room distinction - just have an array of rooms that are claimed in the colony
+16. Make generic state machine process that Colony, RoomManager, CreepProcess, and MultiCreepProcess inherit from
+17. This.creep.memory comes from process.memory.creepmemory or some shit.  That means it's doubled up unnecessarily.  Potentially stop referencing creep memory
 
 ### ColonyManager Refactor Plan
 - Separate colony-leve logic and room-level logic into different functions
