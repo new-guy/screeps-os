@@ -1,5 +1,7 @@
 ## Plan
 1. RoomHauler to manage terminal <-> storage
+    - Should also fill towers
+    - Should fill linksource
 2. Terminal "sell to market if over threshold" logic
 3. Keep track of profit made by room and allow it to spend some percentage of that on energy imports
 4. Colony builder should check if there are construction sites in its room instead of heading to another

@@ -48,8 +48,20 @@ class ColonyBuilder extends CreepProcess {
         var target = this.creep.getTarget();
 
         if(target == null) {
-            this.determineTarget();
-            target = this.creep.getTarget();
+            var waited = this.creep.memory['waited'];
+            if((waited == null || waited == 0) && this.creep.store.getFreeCapacity() > 0 && this.creep.store.getUsedCapacity() > 0) {
+                this.sleep(2);
+                this.creep.memory['waited'] = 1;
+                this.creep.say('Wait');
+                //In this scenario there's a chance it means that the creep just finished building and still has energy
+                //We sleep for 3 ticks here to give the building computer time to add a site
+                return;
+            }
+            else {
+                this.determineTarget();
+                target = this.creep.getTarget();
+                this.creep.memory['waited'] = 0;
+            }
         }
 
         //Need to get target.  If we have no target, we need to determine a target
