@@ -64,7 +64,16 @@ RCL_TICKS_TO_LOOK_BACK_2 = 9200 //Number of ticks to look back when showing a de
 APPROX_SEC_PER_TICK = 5 //Seconds per tick
 
 //Resource Management
-ROOM_OWN_MINERAL_MINING_TARGET = 50000 //Amount of mineral in the room that we should aim to harvest and put in the storage
+ROOM_OWN_MINERAL_STORAGE_TARGET = 20000 //Amount of mineral in the room that we should aim to harvest and put in the storage
+ROOM_OWN_MINERAL_TERMINAL_TARGET = 20000
+DEFAULT_RESOURCE_STORAGE_TARGET = 1000
+DEFAULT_RESOURCE_TERMINAL_TARGET = 1000
+GLOBAL_STORAGE_RESOURCE_TARGET_OVERRIDES = {
+    'energy': 50000
+}
+GLOBAL_TERMINAL_RESOURCE_TARGET_OVERRIDES = {
+    'energy': 20000
+}
 
 // Colony configuration
 VALID_STRUCTURES_TO_RAMPART = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_LINK, STRUCTURE_TERMINAL, STRUCTURE_TOWER, STRUCTURE_STORAGE];

@@ -224,7 +224,7 @@ class HomeRoomManager extends RoomManager {
         }
 
         var structuresExist = (extractor != null && container != null);
-        var needMinerals = (this.room.storage.store[mineralType] < ROOM_OWN_MINERAL_MINING_TARGET);
+        var needMinerals = (this.room.storage.store[mineralType] < ROOM_OWN_MINERAL_STORAGE_TARGET);
         var mineralsExist = mineral.mineralAmount > 0;
 
         if(structuresExist && needMinerals && mineralsExist) {

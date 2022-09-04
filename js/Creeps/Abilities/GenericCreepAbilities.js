@@ -89,6 +89,25 @@ Creep.prototype.moveRandom = function() {
     this.move(moveDirection);
 }
 
+Creep.prototype.getResourceFromStorage = function(room, resourceType) {
+    var storage = room.storage;
+
+    if(storage == null) {
+        this.say('NoStorage');
+        return;
+    }
+
+    else {
+        if(this.pos.getRangeTo(storage) > 1) {
+            this.moveTo(storage);
+        }
+
+        else {
+            this.withdraw(storage, resourceType);
+        }
+    }
+}
+
 Creep.prototype.getEnergyFromHarvestDestination = function(room) {
     var harvestDestination = room.harvestDestination;
 

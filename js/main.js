@@ -17,6 +17,8 @@ require('RoomTools');
 
 //RoomPosition
 require('RoomPositionTools');
+require('StorageTools');
+require('TerminalTools');
 
 const ReconTools = require('ReconTools');
 const Scheduler = require('Scheduler');
@@ -101,9 +103,13 @@ function initCreeps() {
     for(var creepName in Game.creeps) {
         var creep = Game.creeps[creepName];
 
-        creep.hasNoEnergy = (creep.carry[RESOURCE_ENERGY] === 0);
-        creep.hasEnergy = (creep.carry[RESOURCE_ENERGY] > 0);
-        creep.hasFullEnergy = (creep.carry[RESOURCE_ENERGY] === creep.carryCapacity);
+        creep.hasNoEnergy = (creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0);
+        creep.hasEnergy = (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0);
+        creep.hasFullEnergy = (creep.store.getFreeCapacity(RESOURCE_ENERGY) === 0);
+
+        creep.hasNoResources = (creep.store.getUsedCapacity() === 0);
+        creep.hasResources = (creep.store.getUsedCapacity() > 0);
+        creep.hasFullResources = (creep.store.getFreeCapacity() === 0);
     }
 }
 
