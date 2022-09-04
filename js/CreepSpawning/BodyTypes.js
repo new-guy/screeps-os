@@ -134,8 +134,8 @@ exports.MineralHauler = {
 		"move": 2
 	},
 	"max": {
-		"carry": 8,
-		"move": 4
+		"carry": 6,
+		"move": 3
 	}
 }
 
