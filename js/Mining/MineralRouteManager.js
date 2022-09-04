@@ -80,7 +80,7 @@ class MineralRouteManager extends Process {
             'colonyName': this.memory.spawnColonyName,
             'creepCount': 1,
             'creepNameBase': creepNameBase,
-            'creepBodyType': 'Miner',
+            'creepBodyType': 'MineralMiner',
             'creepProcessClass': 'Miner',
             'creepMemory': {
                 'targetMineralPos': {
@@ -93,7 +93,7 @@ class MineralRouteManager extends Process {
             }
         };
         
-        var spawnPID = 'SpawnMiner|' + creepNameBase + '|' + this.memory.spawnColonyName;
+        var spawnPID = 'SpawnMineralMiner|' + creepNameBase + '|' + this.memory.spawnColonyName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, this.metadata.defaultPriority);
     }
 
@@ -103,7 +103,7 @@ class MineralRouteManager extends Process {
             'colonyName': this.memory.spawnColonyName,
             'creepCount': this.haulerCount,
             'creepNameBase': creepNameBase,
-            'creepBodyType': 'Hauler',
+            'creepBodyType': 'MineralHauler',
             'creepProcessClass': 'Hauler',
             'creepMemory': {
                 'targetStorageRoom': this.targetStorageRoom.name,
@@ -112,7 +112,7 @@ class MineralRouteManager extends Process {
             }
         };
         
-        var spawnPID = 'SpawnHauler|' + creepNameBase + '|' + this.memory.spawnColonyName;
+        var spawnPID = 'SpawnMineralHauler|' + creepNameBase + '|' + this.memory.spawnColonyName;
         this.ensureChildProcess(spawnPID, 'SpawnCreep', data, this.metadata.defaultPriority);
     }
 

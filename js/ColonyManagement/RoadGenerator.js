@@ -62,6 +62,20 @@ class RoadGenerator extends Process {
 
             this.colony.roadmap.makeRoad(harvestDestination.pos, containerPos, 'mining');
         }
+
+        if(this.colony.primaryRoom != null && this.colony.primaryRoom.controller.level >= 6) {
+            var mineral = this.colony.primaryRoom.find(FIND_MINERALS)[0];
+            var harvestDestination = this.colony.primaryRoom.harvestDestination;
+            
+            this.colony.roadmap.makeRoad(harvestDestination.pos, mineral.pos, 'mining');
+        }
+
+        if(this.colony.secondaryRoom != null && this.colony.secondaryRoom.controller.level >= 6) {
+            var mineral = this.colony.secondaryRoom.find(FIND_MINERALS)[0];
+            var harvestDestination = this.colony.secondaryRoom.harvestDestination;
+            
+            this.colony.roadmap.makeRoad(harvestDestination.pos, mineral.pos, 'mining');
+        }
     }
 
     processShouldDie() {

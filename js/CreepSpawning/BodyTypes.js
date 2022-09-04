@@ -113,6 +113,32 @@ exports.Hauler = {
 	}
 }
 
+exports.MineralMiner = {
+	"segment": ["work", "carry", "move"],
+	"min": {
+		"work": 2,
+		"carry": 1,
+		"move": 1
+	},
+	"max": {
+		"work": 24,
+		"carry": 2,
+		"move": 13
+	}
+}
+
+exports.MineralHauler = {
+	"segment": ["carry", "move"],
+	"min": {
+		"carry": 4,
+		"move": 2
+	},
+	"max": {
+		"carry": 8,
+		"move": 4
+	}
+}
+
 exports.TowerFiller = {
 	"segment": ["carry", "move"],
 	"min": {
