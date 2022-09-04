@@ -44,8 +44,8 @@ SMALL_BALANCER_CARRY_PARTS = 4; //If it's less than or equal to this, the balanc
 
 
 // Mining route configuration
-MAX_TICKS_TO_USE_PER_SPAWN = 700;
-TARGET_ROUTES_PER_STORAGE = 5;
+MAX_TICKS_TO_USE_PER_SPAWN = 900;
+TARGET_ROUTES_PER_STORAGE = 10;
 TIME_BETWEEN_PURGES = 3000;
 DEFAULT_ENERGY_HAULER_COUNT = 2;
 DIST_PER_HAULER_POST_STORAGE = 33; //After we've gotten storage, scale the hauler count based upon distance?
