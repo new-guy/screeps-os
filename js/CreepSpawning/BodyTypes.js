@@ -71,7 +71,7 @@ exports.Claimer = {
 	},
 	"max": {
 		"move": 5,
-		"claim": 1
+		"claim": 5
 	}
 }
 
