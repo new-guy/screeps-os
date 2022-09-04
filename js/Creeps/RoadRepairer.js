@@ -62,11 +62,7 @@ class RoadRepairer extends CreepProcess {
 
         var targetRoom = this.getTargetRoom();
 
-        if(targetRoom == null) {
-            this.creep.say('NoRoom');
-        }
-
-        else {
+        if(targetRoom != null) {
             this.creep.say(targetRoom.name);
             if(targetRoom.mostDamagedRoad != null) {
                 this.creep.setTarget(targetRoom.mostDamagedRoad);

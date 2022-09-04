@@ -113,6 +113,18 @@ exports.Hauler = {
 	}
 }
 
+exports.RoomHauler = {
+	"segment": ["carry", "move"],
+	"min": {
+		"carry": 4,
+		"move": 2
+	},
+	"max": {
+		"carry": 10,
+		"move": 2
+	}
+}
+
 exports.MineralMiner = {
 	"segment": ["work", "carry", "move"],
 	"min": {

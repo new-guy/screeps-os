@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class UpgradeFeeder extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '🛺';
 
         if(this.creep != null) {
             this.targetRoom = Game.rooms[this.creep.memory.targetRoom];

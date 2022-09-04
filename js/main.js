@@ -7,6 +7,7 @@ require('whitelist');
 //Creep abilities
 require('Targets');
 require('Mining');
+require('Hauling');
 require('GenericCreepAbilities');
 require('Upgrading');
 require('CreepTools');

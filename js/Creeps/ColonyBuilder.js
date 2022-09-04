@@ -84,11 +84,7 @@ class ColonyBuilder extends CreepProcess {
 
         var targetRoom = this.getTargetRoom();
 
-        if(targetRoom == null) {
-            this.creep.say('NoRoom');
-        }
-
-        else {
+        if(targetRoom != null) {
             this.creep.say(targetRoom.name);
             if(targetRoom.constructionSites != null && targetRoom.constructionSites.length > 0) {
                 this.creep.setTarget(targetRoom.getMostBuiltConstructionSite());
