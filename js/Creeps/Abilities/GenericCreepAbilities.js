@@ -61,7 +61,6 @@ Creep.prototype.repairTarget = function() {
 
     if(this.pos.getRangeTo(target) === 0) {
         this.moveRandom();
-        this.say('🚶');
     }
 
     else {
@@ -72,7 +71,6 @@ Creep.prototype.repairTarget = function() {
 
         if(this.pos.getRangeTo(target) > 1) {
             this.moveTo(target, {visualizePathStyle: {stroke: "#333", opacity: .3}});
-            this.say('🛻')
         }
 
         if(this.pos.getRangeTo(target) <= 3) {
@@ -80,10 +78,6 @@ Creep.prototype.repairTarget = function() {
     
             if(repairResult === 0 && this.hasNoEnergy) {
                 this.clearTarget();
-            }
-    
-            else {
-                this.say('🔧');
             }
         }
     }
@@ -118,7 +112,6 @@ Creep.prototype.getEnergyFromHarvestDestination = function(room) {
 
 Creep.prototype.putEnergyInHarvestDestination = function(room) {
     var harvestDestination = room.harvestDestination;
-    this.say('🚛')
 
     if(this.pos.getRangeTo(harvestDestination) > 1) {
         this.moveTo(harvestDestination, {visualizePathStyle: {stroke: "#881", opacity: .2}});
