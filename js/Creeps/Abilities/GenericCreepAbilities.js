@@ -1,8 +1,6 @@
 Creep.prototype.putResourceInTarget = function() {
     var target = this.getTarget();
     var resourceType = this.memory.mineralType == null ? RESOURCE_ENERGY :this.memory.mineralType;
-    this.say('🚛')
-
 
     if(target == null ||
        (target.store == null && target.carryCapacity == null && target.energy === target.energyCapacity) ||
