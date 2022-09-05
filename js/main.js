@@ -20,6 +20,7 @@ require('RoomTools');
 require('RoomPositionTools');
 require('StorageTools');
 require('TerminalTools');
+require('MineralTools');
 
 const ReconTools = require('ReconTools');
 const Scheduler = require('Scheduler');
