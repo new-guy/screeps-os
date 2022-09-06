@@ -26,6 +26,20 @@ exports.ColonyBuilder = {
 	}
 };
 
+exports.WallMiner = {
+	"segment": ["work", "carry", "move"],
+	"min": {
+		"work": 2,
+		"carry": 1,
+		"move": 1
+	},
+	"max": {
+		"work": 20,
+		"carry": 10,
+		"move": 15
+	}
+};
+
 exports.Upgrader = {
 	"segment": ["work", "carry", "move"],
 	"min": {

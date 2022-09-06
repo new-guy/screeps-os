@@ -81,7 +81,6 @@ class ColonyManager extends Process {
         if(this.colony.primaryRoom.controller.level >= 3) {
             this.ensureRoadGeneration();
             this.checkForExpansionFlags();
-            this.checkForWallMiningFlags();
 
             if(this.colony.roomsNeedingBuilder.length > 0 && this.colony.hasNecessaryMinimumEnergy) {
                 this.ensureColonyBuilder();
@@ -94,6 +93,10 @@ class ColonyManager extends Process {
 
         if(this.colony.primaryRoom.controller.level >= 4) {
             this.ensureOffenseMonitor();
+        }
+
+        if(this.colony.primaryRoom.controller.level >= 6) {
+            this.ensureNoWalls();
         }
 
         if(!this.colony.isPreStorage) {
@@ -237,26 +240,34 @@ class ColonyManager extends Process {
         }
     }
 
-    checkForWallMiningFlags() {
-        var wallMineRequestFlagName = '!WALLMINE|'+this.name;
-        var colonyWallMiningRequestFlag = Game.flags[wallMineRequestFlagName];
-        if(colonyWallMiningRequestFlag != null) {
-            colonyWallMiningRequestFlag.setColor(COLOR_PURPLE);
+    ensureNoWalls() {
+        for(var roomName in this.colony.colonyRoomInfo) {
+            var room = Game.rooms[roomName];
+            if(room == null) continue;
 
-            var data = {
-                'colonyName': this.colony.name,
-                'creepCount': 1,
-                'creepNameBase': 'wallMiner|' + this.colony.name,
-                'creepBodyType': 'ColonyBuilder',
-                'creepProcessClass': 'WallMiner',
-                'creepMemory': {
-                    'targetFlag': wallMineRequestFlagName
-                }
-            };
-        
-            var spawnPID = 'spawnWallMiner|' + this.colony.name;
-            this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
+            if(room.walls == null || room.walls.length == 0) continue;
+            else {
+                Game.map.visual.text('WallMine', new RoomPosition(2, 48, room.name), {color: '#CCCCCC', fontSize: 5, align: 'left', opacity: 1.0});
+                this.ensureWallMiner(room);
+                break;
+            }
         }
+    }
+
+    ensureWallMiner(room) {
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': 1,
+            'creepNameBase': 'wallMiner|' + this.colony.name + '|' + room.name,
+            'creepBodyType': 'WallMiner',
+            'creepProcessClass': 'WallMiner',
+            'creepMemory': {
+                'targetRoom': room.name
+            }
+        };
+    
+        var spawnPID = 'spawnWallMiner|' + this.colony.name + '|' + room.name;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
     processShouldDie() {

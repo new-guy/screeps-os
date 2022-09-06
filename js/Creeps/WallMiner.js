@@ -5,12 +5,12 @@ class WallMiner extends CreepProcess {
         super(...args);
 
         if(this.creep != null) {
-            this.targetFlag = Game.flags[this.creep.memory['targetFlag']]
+            this.targetRoom = Game.rooms[this.creep.memory['targetRoom']]
         }
     }
 
     update() {
-        if(this.targetFlag == null) return;
+        if(this.targetRoom == null) return;
         if(super.update() == 'exit') {
             return 'exit';
         }
@@ -53,12 +53,13 @@ class WallMiner extends CreepProcess {
     }
 
     mineFromNearestWall() {
-        if(this.creep.room.name !== this.targetFlag.pos.roomName) {
-            this.creep.moveTo(this.targetFlag);
+        var roomMiddle = new RoomPosition(this.targetRoom.name, 24, 24);
+        if(this.creep.room.name !== this.targetRoom.name) {
+            this.creep.moveTo(roomMiddle);
         }
         else if(!this.creep.hasTarget()) {
             var target = this.findNearestWall();
-            this.creep.moveTo(this.targetFlag);
+            this.creep.moveTo(roomMiddle);
             if(target == null) {
                 this.creep.say('NoWall');
                 return;

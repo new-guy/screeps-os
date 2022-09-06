@@ -301,8 +301,7 @@ class Colony {
 
             else {
                 if( room.constructionSites != null && room.constructionSites.length > 0 || 
-                    room.rampartsNeedingRepair != null && room.rampartsNeedingRepair.length > 0 || 
-                    room.wallsNeedingRepair != null && room.wallsNeedingRepair.length > 0) {
+                    room.rampartsNeedingRepair != null && room.rampartsNeedingRepair.length > 0) {
                     rooms.push(room);
                 }
             }
@@ -374,11 +373,9 @@ class Colony {
             }
 
             else if( needyRoom == null && (
-                     room.rampartsNeedingRepair != null && room.rampartsNeedingRepair.length > 0 || 
-                     room.wallsNeedingRepair != null && room.wallsNeedingRepair.length > 0)) {
+                     room.rampartsNeedingRepair != null && room.rampartsNeedingRepair.length > 0)) {
                 var roomRepairSites = 0;
                 if(room.rampartsNeedingRepair != null) roomRepairSites += room.rampartsNeedingRepair.length;
-                if(room.wallsNeedingRepair != null) roomRepairSites += room.wallsNeedingRepair.length;
 
                 if(roomRepairSites > repairSites) {
                     repairSites = roomRepairSites;

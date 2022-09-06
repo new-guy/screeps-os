@@ -3,7 +3,7 @@
 2. Terminal -> Terminal Transfer
 3. Use generic haulResourceFromSourceToSink wherever possible
 4. Terminal "sell to market if over threshold" logic
-5. Make RoomHauler handle link filling and terminal filling
+5. Make RoomHauler handle link filling, terminal filling, tower filling
 6. Keep track of profit made by room and allow it to spend some percentage of that on energy imports
 7. Command to transfer room from one colony to another
 8. Ability to force spawns to use a minimum amount of energy

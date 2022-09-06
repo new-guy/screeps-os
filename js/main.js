@@ -157,6 +157,10 @@ function initRooms() {
             room.spawns = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_SPAWN; 
             }});
+    
+            room.walls = room.find(FIND_STRUCTURES, {filter: function(s) { 
+                return s.structureType === STRUCTURE_WALL; 
+            }});
 
             room.mineral = room.find(FIND_MINERALS)[0];
 
@@ -184,21 +188,6 @@ function initRooms() {
                     var rampart = room.rampartsNeedingRepair[i];
                     if(rampart.hits < room.leastBuiltRampart.hits) {
                         room.leastBuiltRampart = rampart;
-                    }
-                }
-            }
-    
-            room.wallsNeedingRepair = room.find(FIND_STRUCTURES, {filter: function(s) { 
-                return s.structureType === STRUCTURE_WALL && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
-            }});
-    
-            if(room.wallsNeedingRepair.length > 0) {
-                room.leastBuiltWall = room.wallsNeedingRepair[0];
-        
-                for(var i = 1 ; i < room.wallsNeedingRepair.length; i++) {
-                    var wall = room.wallsNeedingRepair[i];
-                    if(wall.hits < room.leastBuiltWall.hits) {
-                        room.leastBuiltWall = wall;
                     }
                 }
             }
