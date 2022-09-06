@@ -31,64 +31,24 @@ class Hauler extends CreepProcess {
     }
 
     updateStateTransitions() {
-        var state = this.creep.memory.state;
-        if(state == null) {
-            state = 'pickupEnergy';
-        }
-
-        if(state === 'pickupEnergy') {
-            if(this.creep.store.getFreeCapacity() === 0) {
-                state = 'dropoffEnergy'
-                this.creep.clearTarget();
-            }
-        }
-
-        else if(state === 'dropoffEnergy') {
-            if(this.creep.store.getUsedCapacity() === 0) {
-                state = 'pickupEnergy'
-                this.creep.clearTarget();
-            }
-        }
-
+        var state = 'haul';
         this.creep.memory.state = state;
     }
 
     performStateActions() {
         var state = this.creep.memory.state;
-        if(state === 'pickupEnergy') {
-            this.pickupFromContainer();
-        }
-
-        else if(state === 'dropoffEnergy') {
-            if(this.targetHarvestDestination == null) {
-                var targetRoom = Game.rooms[this.creep.memory['targetStorageRoom']];
-                var targetColony = Game.colonies[targetRoom.memory.colonyName];
-                this.creep.setTarget(targetColony.getClosestHarvestDestination(this.creep.pos))
-            }
-            else {
-                this.creep.setTarget(this.targetHarvestDestination);
-            }
-            this.creep.putResourceInTarget();
+        if(state === 'haul') {
+            this.haul();
         }
     }
 
-    pickupFromContainer() {
-        if(this.container == null) {
-            this.creep.moveTo(this.containerPos);
-        }
-
-        else if(this.container == null && this.creep.pos.getRangeTo(this.containerPos) > 4) {
+    haul() {
+        if(this.container == null && this.creep.pos.getRangeTo(this.containerPos) > 2) {
             this.creep.moveTo(this.containerPos);
         }
 
         else {
-            if(this.creep.pos.getRangeTo(this.container) > 1) {
-                this.creep.moveTo(this.container);
-            }
-
-            else if(this.container.store.getUsedCapacity() >= this.creep.store.getCapacity()) {
-                this.creep.withdraw(this.container, this.resourceType);
-            }
+            this.creep.haulResourceFromSourceToSink(this.resourceType, this.container, this.targetHarvestDestination);
         }
     }
 }
