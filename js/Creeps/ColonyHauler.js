@@ -19,39 +19,14 @@ class ColonyHauler extends CreepProcess {
     }
 
     updateStateTransitions() {
-        var state = this.creep.memory.state;
-        if(state == null) {
-            state = 'pickupResource';
-        }
-
-        if(state === 'pickupResource') {
-            if(this.creep.hasFullEnergy) {
-                state = 'dropoffResource'
-                this.creep.clearTarget();
-            }
-        }
-
-        else if(state === 'dropoffResource') {
-            if(this.creep.hasNoEnergy) {
-                state = 'pickupResource'
-                this.creep.clearTarget();
-            }
-        }
-
+        var state = 'haul';
         this.creep.memory.state = state;
     }
 
     performStateActions() {
-        if(this.resourceType !== RESOURCE_ENERGY) this.creep.say('NoSupport')
-
-        var state = this.creep.memory.state;
-        if(state === 'pickupResource') {
-            this.creep.getEnergyFromHarvestDestination(this.sourceRoom);
-        }
-
-        else if(state === 'dropoffResource') {
-            this.creep.putEnergyInHarvestDestination(this.sinkRoom)
-        }
+        var source = this.sourceRoom.harvestDestination;
+        var sink = this.sinkRoom.harvestDestination;
+        this.creep.haulResourceFromSourceToSink(this.resourceType, source, sink);
     }
 }
 

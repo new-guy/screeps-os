@@ -115,7 +115,7 @@ class ColonyManager extends Process {
             'colonyName': this.colony.name,
             'creepCount': 1,
             'creepNameBase': 'colonyHauler|' + this.colony.name,
-            'creepBodyType': 'Hauler',
+            'creepBodyType': 'BigHauler',
             'creepProcessClass': 'ColonyHauler',
             'creepMemory': {
                 'sourceRoom': sourceRoom.name,

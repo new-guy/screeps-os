@@ -101,6 +101,18 @@ exports.Miner = {
 	}
 }
 
+exports.BigHauler = {
+	"segment": ["carry", "move"],
+	"min": {
+		"carry": 4,
+		"move": 2
+	},
+	"max": {
+		"carry": 24,
+		"move": 12
+	}
+}
+
 exports.Hauler = {
 	"segment": ["carry", "move"],
 	"min": {

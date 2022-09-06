@@ -1,18 +1,19 @@
 ## Plan
-1. RoomHauler to manage terminal <-> storage
-2. Use generic haulResourceFromSourceToSink wherever possible
-2. Terminal "sell to market if over threshold" logic
-3. Make RoomHauler handle link filling and terminal filling
-3. Keep track of profit made by room and allow it to spend some percentage of that on energy imports
-5. Command to transfer room from one colony to another
-6. Ability to force spawns to use a minimum amount of energy
+1. Terminal -> Storage Transfer
+2. Terminal -> Terminal Transfer
+3. Use generic haulResourceFromSourceToSink wherever possible
+4. Terminal "sell to market if over threshold" logic
+5. Make RoomHauler handle link filling and terminal filling
+6. Keep track of profit made by room and allow it to spend some percentage of that on energy imports
+7. Command to transfer room from one colony to another
+8. Ability to force spawns to use a minimum amount of energy
     - Also bodyType min isn't respected
-7. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
-8. Make CreepSpawner less verbose & cleaner to define
+9. Actually frickin define creep abilities in the abilities dir & use them.  The "advanced do this thing" pattern is neat
+10. Make CreepSpawner less verbose & cleaner to define
 - Need to have a common method for naming creeps 
 9. Display information about attacks with mapvisuals
 10. Allow more base designs
-11. Make creeps move along road and ignore each other
+11. Use the cartographer library
 12. Create common library for creeps to talk with
 13. Get rid of link flags
 14. Error handling - catch error and throw it at the end of processing
