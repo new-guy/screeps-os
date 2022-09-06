@@ -3,6 +3,7 @@ const Process = require('Process');
 class RoomConstructionSiteManager extends Process {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '🚚';
 
         this.room = Game.rooms[this.memory.roomName];
     }
@@ -129,7 +130,7 @@ class RoomConstructionSiteManager extends Process {
             var structPos = new RoomPosition(posXY.x, posXY.y, this.room.name);
 
             if(!structPos.structureExists(structureType) && !structPos.constructionSiteExists(structureType)) {
-                if(structPos.structureExists() && structPos.getStructure().structureType !== STRUCTURE_RAMPART) {
+                if(structPos.structureExists() && structPos.getStructure().structureType !== STRUCTURE_RAMPART && this.room.controller != null && this.room.controller.my && this.room.controller.level >= 1) {
                     var struct = structPos.getStructure();
                     struct.destroy();
                     console.log('Destroyed ' + structureType + ' in ' + this.room.name + ' at ' + posXY.x + ', ' + posXY.y);

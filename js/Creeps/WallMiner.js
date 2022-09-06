@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class WallMiner extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '👷';
 
         if(this.creep != null) {
             this.targetRoom = Game.rooms[this.creep.memory['targetRoom']]
@@ -53,7 +54,7 @@ class WallMiner extends CreepProcess {
     }
 
     mineFromNearestWall() {
-        var roomMiddle = new RoomPosition(this.targetRoom.name, 24, 24);
+        var roomMiddle = new RoomPosition(24, 24, this.targetRoom.name);
         if(this.creep.room.name !== this.targetRoom.name) {
             this.creep.moveTo(roomMiddle);
         }

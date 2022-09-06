@@ -247,7 +247,7 @@ class ColonyManager extends Process {
 
             if(room.walls == null || room.walls.length == 0) continue;
             else {
-                Game.map.visual.text('WallMine', new RoomPosition(2, 48, room.name), {color: '#CCCCCC', fontSize: 5, align: 'left', opacity: 1.0});
+                Game.map.visual.text('WallMine', new RoomPosition(2, 47, room.name), {color: '#EEEEEE', fontSize: 5, align: 'left', opacity: 0.8});
                 this.ensureWallMiner(room);
                 break;
             }
