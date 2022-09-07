@@ -3,7 +3,6 @@ const Process = require('Process');
 class RoomConstructionSiteManager extends Process {
     constructor (...args) {
         super(...args);
-        this.creepEmoji = '🚚';
 
         this.room = Game.rooms[this.memory.roomName];
     }

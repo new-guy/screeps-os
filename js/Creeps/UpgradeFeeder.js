@@ -29,7 +29,7 @@ class UpgradeFeeder extends CreepProcess {
             }
 
             if(this.creep.getTarget() != null) {
-                this.creep.putResourceInTarget();
+                this.creep.haulResourceFromSourceToSink(RESOURCE_ENERGY, this.targetRoom.harvestDestination, this.creep.getTarget());
             }
 
             else if(this.creep.pos.getRangeTo(this.targetRoom.controller) > 5){
