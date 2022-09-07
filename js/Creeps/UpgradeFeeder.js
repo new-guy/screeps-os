@@ -24,12 +24,12 @@ class UpgradeFeeder extends CreepProcess {
     performStateActions() {
         var state = this.creep.memory.state;
         if(state === 'feedUpgraders') {
-            if(this.creep.getTarget() == null) {
+            if(this.creep.getTarget() == null || this.creep.getTarget().hasFullEnergy) {
                 this.findUpgraderToFeed();
             }
 
             if(this.creep.getTarget() != null) {
-                this.creep.haulResourceFromSourceToSink(RESOURCE_ENERGY, this.targetRoom.harvestDestination, this.creep.getTarget());
+                this.creep.haulResourceFromSourceToSink(RESOURCE_ENERGY, this.targetRoom.harvestDestination, this.creep.getTarget(), {haulUntilEmpty: true});
             }
 
             else if(this.creep.pos.getRangeTo(this.targetRoom.controller) > 5){

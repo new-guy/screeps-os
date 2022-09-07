@@ -39,7 +39,7 @@ class RoomHauler extends CreepProcess {
 
                 this.creep.say(resourceToHaul)
 
-                this.creep.haulResourceFromSourceToSink(resourceToHaul, storage, terminal, delta);
+                this.creep.haulResourceFromSourceToSink(resourceToHaul, storage, terminal, {amount: delta});
             }
         }
     }

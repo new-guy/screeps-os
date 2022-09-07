@@ -1,5 +1,12 @@
-Creep.prototype.haulResourceFromSourceToSink = function(resourceType, source, sink, amount=undefined) {
-    if(this.store[resourceType] < this.store.getCapacity(resourceType)) {
+Creep.prototype.haulResourceFromSourceToSink = function(resourceType, source, sink, opts={amount: undefined, haulUntilEmpty: false}) {
+    //Opts:
+    var amount = opts.amount;
+    //haulUntilEmpty
+    var haulUntilEmpty = opts.haulUntilEmpty;
+
+    var shouldGetResource = haulUntilEmpty === true ? this.store[resourceType] == 0 : this.store[resourceType] < this.store.getCapacity(resourceType);
+
+    if(shouldGetResource) {
         if(this.pos.getRangeTo(source) > 1) {
             this.moveTo(source);
         }
