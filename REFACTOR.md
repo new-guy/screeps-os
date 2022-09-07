@@ -1,8 +1,12 @@
 ## Plan
 1. Terminal -> Storage Transfer
 2. Terminal -> Terminal Transfer
+- Empire-level process
 3. Use generic haulResourceFromSourceToSink wherever possible
 4. Terminal "sell to market if over threshold" logic
+- Need some empire-level logic to control this
+- Start off by just selling 10% of pixels
+- Keep track of profits by colony and empire
 5. Make RoomHauler handle link filling, terminal filling, tower filling
 6. Keep track of profit made by room and allow it to spend some percentage of that on energy imports
 7. Command to transfer room from one colony to another

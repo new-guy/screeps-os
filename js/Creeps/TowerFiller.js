@@ -24,7 +24,8 @@ class TowerFiller extends CreepProcess {
     performStateActions() {
         var state = this.creep.memory.state;
         if(state === 'fillTowers') {
-            var target = this.findTowerToFill();
+            this.findTowerToFill();
+            var target = this.creep.getTarget();
             if(target != null) {
                 this.creep.haulResourceFromSourceToSink(RESOURCE_ENERGY, this.targetRoom.harvestDestination, target);
             }
