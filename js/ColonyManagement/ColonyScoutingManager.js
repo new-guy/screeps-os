@@ -102,9 +102,7 @@ class ColonyScoutingManager extends Process {
             scoutingInfo.sourceInfo = fullSourceInfo;
         }
 
-        if(scoutingInfo.skLairs == null) {    
-            scoutingInfo.isSkRoom = room.hasSourceKeepers;
-        }
+        scoutingInfo.isSkRoom = room.isSkRoom;
 
         scoutingInfo.lastColonyScout = Game.time;
     }

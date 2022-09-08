@@ -125,6 +125,8 @@ function initRooms() {
 
         room.constructionSites = room.find(FIND_MY_CONSTRUCTION_SITES);
 
+        room.isSkRoom = isSkRoom(room);
+
         if(room.controller != null && room.controller.my) {
             if(room.energyAvailable < room.energyCapacityAvailable) {
                 room.nonFullFactories = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
@@ -194,5 +196,17 @@ function initRooms() {
         }
 
         room.hasSourceKeepers = room.find(FIND_HOSTILE_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_KEEPER_LAIR }}).length > 0;
+    }
+
+    function isSkRoom(room) {
+        let parsed = /^[WE]([0-9]+)[NS]([0-9]+)$/.exec(room.name);
+        let fMod = parsed[1] % 10;
+        let sMod = parsed[2] % 10;
+        let isSK =
+            !(fMod === 5 && sMod === 5) &&
+            (fMod >= 4 && fMod <= 6) &&
+            (sMod >= 4 && sMod <= 6);
+        if(isSK) console.log(room.name);
+        return isSK;
     }
 }

@@ -21,6 +21,7 @@ class InvaderMonitor extends Process {
             var room = Game.rooms[roomName];
             if(room == null) continue;
             if(room.enemies == null) continue;
+            if(room.isSkRoom) continue;
             var invaders = _.filter(Game.rooms[roomName].enemies, function(r) { 
                 return r.owner.username === 'Invader' });
 
@@ -35,6 +36,7 @@ class InvaderMonitor extends Process {
         for(var roomName in this.colony.colonyRoomInfo) {
             var room = Game.rooms[roomName];
             if(room == null) continue;
+            if(room.isSkRoom) continue;
 
             if(room.hasLoneInvaderCore()) {
                 this.ensureDefender();
@@ -47,6 +49,7 @@ class InvaderMonitor extends Process {
         for(var roomName in this.colony.colonyRoomInfo) {
             var room = Game.rooms[roomName];
             if(room == null) continue;
+            if(room.isSkRoom) continue;
 
             if(room.enemies.length > 0) {
                 this.ensureDefender();

@@ -431,6 +431,7 @@ class Colony {
         for(var roomName in this.colonyRoomInfo) {
             var room = Game.rooms[roomName];
             if(room == null) continue;
+            if(room.isSkRoom) continue;
 
             var hasLoneInvaderCore = room.hasLoneInvaderCore();
             var hasInvaders = room.hasInvaders();

@@ -22,7 +22,7 @@ class InvaderDefender extends CreepProcess {
             state = 'relocating';
         }
 
-        var hasInvadersToFight = (this.creep.room.hasInvaders() || this.creep.room.hasInvaderStructures() || this.creep.room.enemies.length > 0);
+        var hasInvadersToFight = !this.creep.room.isSkRoom && (this.creep.room.hasInvaders() || this.creep.room.hasInvaderStructures() || this.creep.room.enemies.length > 0);
 
         if(state === 'relocating') {
             if(hasInvadersToFight) {
