@@ -22,7 +22,7 @@ class InvaderDefender extends CreepProcess {
             state = 'relocating';
         }
 
-        var hasInvadersToFight = (this.creep.room.hasInvaders() || this.creep.room.hasInvaderStructures() || this.creep.room.enemies.length > 0);
+        var hasInvadersToFight = !this.creep.room.isSkRoom && (this.creep.room.hasInvaders() || this.creep.room.hasInvaderStructures() || this.creep.room.enemies.length > 0);
 
         if(state === 'relocating') {
             if(hasInvadersToFight) {
@@ -56,7 +56,6 @@ class InvaderDefender extends CreepProcess {
     relocate() {
         var roomToDefend = this.targetColony.invadedRoomToDefend;
         if(roomToDefend == null) {
-            this.creep.say('🛡️');
             if(this.creep.room.name !== this.targetColony.primaryRoom.name) {
                 var primaryRoom = new RoomPosition(25, 25, this.targetColony.primaryRoom.name);
         

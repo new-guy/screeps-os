@@ -44,7 +44,6 @@ class Miner extends CreepProcess {
 
         else if(this.creep.pos.getRangeTo(this.containerPos) > 0) {
             this.creep.moveTo(this.containerPos);
-            this.creep.say('🚶')
         }
 
         else {
@@ -61,7 +60,6 @@ class Miner extends CreepProcess {
         if((this.container == null && this.creep.carry.energy < this.creep.carryCapacity/2) ||
            (this.container != null && this.creep.carry.energy < this.creep.carryCapacity)) {
             this.creep.harvest(this.targetResource);
-            this.creep.say('⚡');
         }
 
         else {
@@ -98,7 +96,6 @@ class Miner extends CreepProcess {
         }
         else {
             this.creep.harvest(this.targetResource);
-            this.creep.say('⚡');
         }
     }
 }

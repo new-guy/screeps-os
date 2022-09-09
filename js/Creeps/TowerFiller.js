@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class TowerFiller extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '🏰';
 
         if(this.creep != null) {
             this.targetRoom = Game.rooms[this.creep.memory.targetRoom];
@@ -16,45 +17,21 @@ class TowerFiller extends CreepProcess {
     }
 
     updateStateTransitions() {
-        var state = this.creep.memory.state;
-        if(state == null) {
-            state = 'pickupEnergy';
-        }
-
-        if(state === 'pickupEnergy') {
-            if(this.creep.hasFullEnergy) {
-                state = 'fillTowers'
-                this.creep.clearTarget();
-            }
-        }
-
-        else if(state === 'fillTowers') {
-            if(this.creep.hasNoEnergy) {
-                state = 'pickupEnergy'
-                this.creep.clearTarget();
-            }
-        }
-
+        var state = 'fillTowers';
         this.creep.memory.state = state;
     }
 
     performStateActions() {
         var state = this.creep.memory.state;
-        if(state === 'pickupEnergy') {
-            this.creep.getEnergyFromHarvestDestination(this.targetRoom);
-        }
-
-        else if(state === 'fillTowers') {
-            if(this.creep.getTarget() == null) {
-                this.findTowerToFill();
-            }
-
-            if(this.creep.getTarget() != null) {
-                this.creep.putResourceInTarget();
+        if(state === 'fillTowers') {
+            this.findTowerToFill();
+            var target = this.creep.getTarget();
+            if(target != null) {
+                this.creep.haulResourceFromSourceToSink(RESOURCE_ENERGY, this.targetRoom.harvestDestination, target);
             }
 
             else {
-                var heartFlag = Game.flags['!CHUNK|heart|' + this.creep.room.name];
+                var heartFlag = Game.flags['!CHUNK|heart|' + this.targetRoom.name];
                 var waitingSpot = new RoomPosition(heartFlag.pos.x-1, heartFlag.pos.y, heartFlag.room.name);
                 if(this.creep.pos.getRangeTo(waitingSpot) != 0) {
                     this.creep.moveTo(waitingSpot);

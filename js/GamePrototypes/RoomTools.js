@@ -298,3 +298,55 @@ Room.prototype.drawMiningInfo = function() {
 	var mineralType = this.mineral.mineralType;
 	Game.map.visual.text(mineralType, mineralPos, {color: '#DDDDDD', fontSize: 4, align: 'center', opacity: 1.0});
 }
+
+Room.prototype.getStorageToTerminalTransferDeltas = function() {
+	var deltas = {};
+
+	if(this.terminal == null || this.storage == null) return deltas;
+
+	var terminalTargets = this.terminal.getResourceTargets();
+
+	for(var resourceType in terminalTargets) {
+		var delta = this.getResourceSourceSinkDelta(resourceType, this.storage, this.terminal);
+
+		if(delta > 0) {
+			deltas[resourceType] = delta;
+		}
+	}
+
+	return deltas;
+}
+
+Room.prototype.getResourceSourceSinkDelta = function(resourceType, source, sink) {
+	var delta = 0;
+
+	var sourceTargets = source.getResourceTargets();
+	var sinkTarget = sink.getResourceTargets();
+
+	var amountInSink = sink.store[resourceType];
+	var targetSinkAmount = sinkTarget[resourceType];
+
+	if(amountInSink < targetSinkAmount) {
+		var amountInSource = source.store[resourceType];
+		var targetSourceAmount = sourceTargets[resourceType];
+
+		if(amountInSource > targetSourceAmount) {
+			var amountUnderSinkTarget = targetSinkAmount - amountInSink;
+			var amountOverSourceTarget = amountInSource - targetSourceAmount;
+
+			delta = Math.min(amountUnderSinkTarget, amountOverSourceTarget);
+		}
+	}
+
+	return delta;
+}
+
+Room.prototype.getResourceTypeToHaulFromStorageToTerminal = function() {
+	var deltas = this.getStorageToTerminalTransferDeltas();
+	
+	for(var resourceType in deltas) {
+		return resourceType;
+	}
+
+	return null;
+}

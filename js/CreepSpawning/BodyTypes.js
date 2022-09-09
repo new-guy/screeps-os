@@ -26,6 +26,20 @@ exports.ColonyBuilder = {
 	}
 };
 
+exports.WallMiner = {
+	"segment": ["work", "carry", "move"],
+	"min": {
+		"work": 2,
+		"carry": 1,
+		"move": 1
+	},
+	"max": {
+		"work": 20,
+		"carry": 10,
+		"move": 15
+	}
+};
+
 exports.Upgrader = {
 	"segment": ["work", "carry", "move"],
 	"min": {
@@ -101,6 +115,18 @@ exports.Miner = {
 	}
 }
 
+exports.BigHauler = {
+	"segment": ["carry", "move"],
+	"min": {
+		"carry": 4,
+		"move": 2
+	},
+	"max": {
+		"carry": 24,
+		"move": 12
+	}
+}
+
 exports.Hauler = {
 	"segment": ["carry", "move"],
 	"min": {
@@ -110,6 +136,18 @@ exports.Hauler = {
 	"max": {
 		"carry": 12,
 		"move": 6
+	}
+}
+
+exports.RoomHauler = {
+	"segment": ["carry", "move"],
+	"min": {
+		"carry": 4,
+		"move": 2
+	},
+	"max": {
+		"carry": 10,
+		"move": 2
 	}
 }
 

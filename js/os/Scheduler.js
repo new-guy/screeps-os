@@ -40,6 +40,7 @@ const Reserver = require('Reserver');
 const Miner = require('Miner');
 const Hauler = require('Hauler');
 const ColonyHauler = require('ColonyHauler');
+const RoomHauler = require('RoomHauler');
 const Balancer = require('Balancer');
 const ColonyBuilder = require('ColonyBuilder');
 const RoadRepairer = require('RoadRepairer');
@@ -83,6 +84,7 @@ var processTypeMap = {
     "Reserver": Reserver,
     "Miner": Miner,
     "Hauler": Hauler,
+    "RoomHauler": RoomHauler,
     "ColonyHauler": ColonyHauler,
     "Balancer": Balancer,
     "ColonyBuilder": ColonyBuilder,

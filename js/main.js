@@ -7,6 +7,7 @@ require('whitelist');
 //Creep abilities
 require('Targets');
 require('Mining');
+require('Hauling');
 require('GenericCreepAbilities');
 require('Upgrading');
 require('CreepTools');
@@ -17,6 +18,9 @@ require('RoomTools');
 
 //RoomPosition
 require('RoomPositionTools');
+require('StorageTools');
+require('TerminalTools');
+require('MineralTools');
 
 const ReconTools = require('ReconTools');
 const Scheduler = require('Scheduler');
@@ -101,9 +105,13 @@ function initCreeps() {
     for(var creepName in Game.creeps) {
         var creep = Game.creeps[creepName];
 
-        creep.hasNoEnergy = (creep.carry[RESOURCE_ENERGY] === 0);
-        creep.hasEnergy = (creep.carry[RESOURCE_ENERGY] > 0);
-        creep.hasFullEnergy = (creep.carry[RESOURCE_ENERGY] === creep.carryCapacity);
+        creep.hasNoEnergy = (creep.store.getUsedCapacity(RESOURCE_ENERGY) === 0);
+        creep.hasEnergy = (creep.store.getUsedCapacity(RESOURCE_ENERGY) > 0);
+        creep.hasFullEnergy = (creep.store.getFreeCapacity(RESOURCE_ENERGY) === 0);
+
+        creep.hasNoResources = (creep.store.getUsedCapacity() === 0);
+        creep.hasResources = (creep.store.getUsedCapacity() > 0);
+        creep.hasFullResources = (creep.store.getFreeCapacity() === 0);
     }
 }
 
@@ -116,6 +124,8 @@ function initRooms() {
         room.state = room.memory.state;
 
         room.constructionSites = room.find(FIND_MY_CONSTRUCTION_SITES);
+
+        room.isSkRoom = isSkRoom(room);
 
         if(room.controller != null && room.controller.my) {
             if(room.energyAvailable < room.energyCapacityAvailable) {
@@ -149,6 +159,10 @@ function initRooms() {
             room.spawns = room.find(FIND_MY_STRUCTURES, {filter: function(s) { 
                 return s.structureType === STRUCTURE_SPAWN; 
             }});
+    
+            room.walls = room.find(FIND_STRUCTURES, {filter: function(s) { 
+                return s.structureType === STRUCTURE_WALL; 
+            }});
 
             room.mineral = room.find(FIND_MINERALS)[0];
 
@@ -179,23 +193,20 @@ function initRooms() {
                     }
                 }
             }
-    
-            room.wallsNeedingRepair = room.find(FIND_STRUCTURES, {filter: function(s) { 
-                return s.structureType === STRUCTURE_WALL && s.hits < DEFENSE_UPGRADE_SCHEDULE[s.room.controller.level.toString()]; 
-            }});
-    
-            if(room.wallsNeedingRepair.length > 0) {
-                room.leastBuiltWall = room.wallsNeedingRepair[0];
-        
-                for(var i = 1 ; i < room.wallsNeedingRepair.length; i++) {
-                    var wall = room.wallsNeedingRepair[i];
-                    if(wall.hits < room.leastBuiltWall.hits) {
-                        room.leastBuiltWall = wall;
-                    }
-                }
-            }
         }
 
         room.hasSourceKeepers = room.find(FIND_HOSTILE_STRUCTURES, {filter: function(s) { return s.structureType === STRUCTURE_KEEPER_LAIR }}).length > 0;
+    }
+
+    function isSkRoom(room) {
+        let parsed = /^[WE]([0-9]+)[NS]([0-9]+)$/.exec(room.name);
+        let fMod = parsed[1] % 10;
+        let sMod = parsed[2] % 10;
+        let isSK =
+            !(fMod === 5 && sMod === 5) &&
+            (fMod >= 4 && fMod <= 6) &&
+            (sMod >= 4 && sMod <= 6);
+        if(isSK) console.log(room.name);
+        return isSK;
     }
 }

@@ -10,8 +10,8 @@ COLONY_SCOUTING_PRIORITY = 91;
 COLONY_BUILDER_PRIORITY = 90;
 COLONY_EXPANSION_SUPPORT = 75;
 ROOM_UPGRADE_CREEPS_PRIORITY = 65;
+COLONY_MINERAL_PRIORITY = 61;
 COLONY_EXTRA_ENERGY_PRIORITY = 60;
-COLONY_MINERAL_PRIORITY = 59;
 COLONY_NONESSENTIAL_PRIORITY = 50;
 DEFAULT_PRIORITY = 10;
 
@@ -44,8 +44,8 @@ SMALL_BALANCER_CARRY_PARTS = 4; //If it's less than or equal to this, the balanc
 
 
 // Mining route configuration
-MAX_TICKS_TO_USE_PER_SPAWN = 700;
-TARGET_ROUTES_PER_STORAGE = 5;
+MAX_TICKS_TO_USE_PER_SPAWN = 900;
+TARGET_ROUTES_PER_STORAGE = 10;
 TIME_BETWEEN_PURGES = 3000;
 DEFAULT_ENERGY_HAULER_COUNT = 2;
 DIST_PER_HAULER_POST_STORAGE = 33; //After we've gotten storage, scale the hauler count based upon distance?
@@ -64,7 +64,16 @@ RCL_TICKS_TO_LOOK_BACK_2 = 9200 //Number of ticks to look back when showing a de
 APPROX_SEC_PER_TICK = 5 //Seconds per tick
 
 //Resource Management
-ROOM_OWN_MINERAL_MINING_TARGET = 50000 //Amount of mineral in the room that we should aim to harvest and put in the storage
+ROOM_OWN_MINERAL_STORAGE_TARGET = 20000 //Amount of mineral in the room that we should aim to harvest and put in the storage
+ROOM_OWN_MINERAL_TERMINAL_TARGET = 20000
+DEFAULT_RESOURCE_STORAGE_TARGET = 1000
+DEFAULT_RESOURCE_TERMINAL_TARGET = 1000
+GLOBAL_STORAGE_RESOURCE_TARGET_OVERRIDES = {
+    'energy': 50000
+}
+GLOBAL_TERMINAL_RESOURCE_TARGET_OVERRIDES = {
+    'energy': 20000
+}
 
 // Colony configuration
 VALID_STRUCTURES_TO_RAMPART = [STRUCTURE_SPAWN, STRUCTURE_EXTENSION, STRUCTURE_LINK, STRUCTURE_TERMINAL, STRUCTURE_TOWER, STRUCTURE_STORAGE];
@@ -84,7 +93,7 @@ BOOTSTRAPPER_SAVE_CONTROLLER_THRESHOLD = 3000;
 
 ROOM_NECESSARY_MINIMUM_ENERGY_CONTAINER = 1000;
 ROOM_NECESSARY_MINIMUM_ENERGY_STORAGE = 50000;
-HAUL_ENERGY_LOW_THRESHOLD_STORAGE = 10000; //If it's below this threshold, and the other room is above minimum energy storage threshold, then transfer from one to the other
+HAUL_ENERGY_LOW_THRESHOLD_STORAGE = 20000; //If it's below this threshold, and the other room is above minimum energy storage threshold, then transfer from one to the other
 
 TICKS_BETWEEN_FULL_ROAD_RECALCULATION = 3000;
 

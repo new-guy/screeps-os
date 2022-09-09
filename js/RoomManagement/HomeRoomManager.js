@@ -47,6 +47,7 @@ class HomeRoomManager extends RoomManager {
 
         if(this.room.controller.level >= 6) {
             this.ensureMineralMining();
+            this.ensureRoomHauler();
         }
 
         if(this.room.storage == null) {
@@ -224,10 +225,11 @@ class HomeRoomManager extends RoomManager {
         }
 
         var structuresExist = (extractor != null && container != null);
-        var needMinerals = (this.room.storage.store[mineralType] < ROOM_OWN_MINERAL_MINING_TARGET);
+        var needMinerals = (this.room.storage.store[mineralType] < ROOM_OWN_MINERAL_STORAGE_TARGET);
+        var mineralIsPartiallyMined = mineral.mineralAmount < mineral.getMineralAmountCapacity();
         var mineralsExist = mineral.mineralAmount > 0;
 
-        if(structuresExist && needMinerals && mineralsExist) {
+        if(structuresExist && (needMinerals || mineralIsPartiallyMined) && mineralsExist) {
             var data = {
                 'targetMineralPos': {
                     'x': mineral.pos.x,
@@ -238,9 +240,25 @@ class HomeRoomManager extends RoomManager {
                 'spawnColonyName': this.colony.name
             };
 
-            this.ensureChildProcess(this.room.name + '|mineralRoute', 'MineralRouteManager', data, COLONY_MINERAL_PRIORITY);
+            this.ensureChildProcess(this.room.name + '|mineralRouteManager', 'MineralRouteManager', data, COLONY_MINERAL_PRIORITY);
         }
         //If it does, and we are below the storage target, and the minerals are ready, ensure the harvest route
+    }
+
+    ensureRoomHauler() {
+        var data = {
+            'colonyName': this.colony.name,
+            'creepCount': 1,
+            'creepNameBase': 'roomHauler|' + this.room.name,
+            'creepBodyType': 'RoomHauler',
+            'creepProcessClass': 'RoomHauler',
+            'creepMemory': {
+                'targetRoom': this.room.name
+            }
+        };
+
+        var spawnPID ='spawnRoomHauler1|' + this.room.name;
+        this.ensureChildProcess(spawnPID, 'SpawnCreep', data, COLONY_MANAGEMENT_PRIORITY);
     }
 
     preStorageBootstrap() {

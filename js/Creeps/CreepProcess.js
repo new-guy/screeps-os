@@ -34,6 +34,7 @@ class CreepProcess extends Process {
 
     drawMapLocation() {
 	    Game.map.visual.text(this.creepEmoji, this.creep.pos, {color: '#CCCC22', fontSize: 4, align: 'center', opacity: 0.5});
+        new RoomVisual(this.creep.room.name).text(this.creepEmoji, this.creep.pos, {color: '#CCCC22', fontSize: 2, align: 'center', opacity: 0.8});
     }
 
     updateStateTransitions() {

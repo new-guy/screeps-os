@@ -3,6 +3,7 @@ const CreepProcess = require('CreepProcess');
 class UpgradeFeeder extends CreepProcess {
     constructor (...args) {
         super(...args);
+        this.creepEmoji = '🛺';
 
         if(this.creep != null) {
             this.targetRoom = Game.rooms[this.creep.memory.targetRoom];
@@ -16,41 +17,19 @@ class UpgradeFeeder extends CreepProcess {
     }
 
     updateStateTransitions() {
-        var state = this.creep.memory.state;
-        if(state == null) {
-            state = 'pickupEnergy';
-        }
-
-        if(state === 'pickupEnergy') {
-            if(this.creep.hasFullEnergy) {
-                state = 'feedUpgraders'
-                this.creep.clearTarget();
-            }
-        }
-
-        else if(state === 'feedUpgraders') {
-            if(this.creep.hasNoEnergy) {
-                state = 'pickupEnergy'
-                this.creep.clearTarget();
-            }
-        }
-
+        var state = 'feedUpgraders';
         this.creep.memory.state = state;
     }
 
     performStateActions() {
         var state = this.creep.memory.state;
-        if(state === 'pickupEnergy') {
-            this.creep.getEnergyFromHarvestDestination(this.targetRoom);
-        }
-
-        else if(state === 'feedUpgraders') {
-            if(this.creep.getTarget() == null) {
+        if(state === 'feedUpgraders') {
+            if(this.creep.getTarget() == null || this.creep.getTarget().hasFullEnergy) {
                 this.findUpgraderToFeed();
             }
 
             if(this.creep.getTarget() != null) {
-                this.creep.putResourceInTarget();
+                this.creep.haulResourceFromSourceToSink(RESOURCE_ENERGY, this.targetRoom.harvestDestination, this.creep.getTarget(), {haulUntilEmpty: true});
             }
 
             else if(this.creep.pos.getRangeTo(this.targetRoom.controller) > 5){

@@ -67,7 +67,6 @@ class Balancer extends CreepProcess {
 
     performStateActions() {
         if(this.creep.room.name !== this.targetRoom.name) {
-            this.creep.say('🚌');
             this.creep.moveTo(new RoomPosition(25, 25, this.targetRoom.name));
             return;
         }
@@ -79,13 +78,11 @@ class Balancer extends CreepProcess {
     
         if(this.creep.memory.state === "pickup")
         {
-            this.creep.say('🚶');
             this.pickupEnergy();
         }
 
         if(this.creep.memory.state === "fill")
         {
-            this.creep.say('⚡');
             var roomIsFull = (this.creep.room.energyAvailable === this.creep.room.energyCapacityAvailable);
             if(roomIsFull) {
                 var energySource = Game.getObjectById(this.creep.memory.energySourceId);
