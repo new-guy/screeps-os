@@ -102,27 +102,27 @@ Room.prototype.calculateChunkPositions = function(rclString) {
 
 		if(chunkType === 'heart') continue;
 
-		var chunkRoot = this.findRootForChunk(chunkType, heartPosition, searchDistance=20);
+		var typeCount = (typeCountDict[chunkType] == null ? 0 : typeCountDict[chunkType]);
+		var flagName = "!CHUNK|" + chunkType + "|" + this.name + "|" + typeCount;
+		console.log('finding flag ' + flagName);
 
-		if(chunkRoot == null) {
-			continue;
+		if(Game.flags[flagName] != null) {
+			console.log('Found chunk ' + flagName);
 		}
 
-		var typeCount = (typeCountDict[chunkType] == null ? 0 : typeCountDict[chunkType]);
-
-		var flagName = "!CHUNK|" + chunkType + "|" + this.name + "|" + typeCount;
-
-		if(Game.flags[flagName] == null)  {
+		else {
+			var chunkRoot = this.findRootForChunk(chunkType, heartPosition, searchDistance=20);
+	
+			if(chunkRoot == null) {
+				continue;
+			}
+	
 			chunkFlagsToPlace.push({
 				"flagName": "!CHUNK|" + chunkType + "|" + this.name + "|" + typeCount,
 				"pos": chunkRoot
 			});
-
+	
 			console.log('Would place chunk ' + chunkType + ' at ' + chunkRoot.x + 'x ' + chunkRoot.y + 'y ');
-		}
-
-		else {
-			console.log('Found chunk ' + flagName);
 		}
 
 		typeCountDict[chunkType] = typeCount + 1;
